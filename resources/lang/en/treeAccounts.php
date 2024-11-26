@@ -1,0 +1,26 @@
+<?php 
+ return [ 
+      "accounts_tree" => "accounts tree ",
+      "accounts_list" => "accounts list ",
+      "accounts_add" => "accounts_add",
+      "assets" => "assets  ",
+      "Fixed_origin" => "Fixed origin  ",
+      "furniture" => "furniture ",
+      "Buildings_Real_Estate " => "Buildings & Real Estate ",
+      "Devices_Equipment  " => "Devices & Equipment  ",
+      "Traded_asset" => "Traded asset  ",
+      "antagonists" => "antagonists  ",
+      "Fixed_liabilities" => "Fixed liabilities",
+      "Current_Liabilities" => "Current Liabilities",
+      "Capital " => "Capital ",
+      "purchases" => "purchases  ",
+      "sells" => "sells  ",
+      "expenses" => "expenses   ",
+      "imports" => "imports   ",
+      "budget" => "budget    ",
+      "Profit_&_Loss " => "Profit & Loss     ",
+      "Credit " => "Credit      ",
+      "indebted  " => "indebted       ",
+      "quantety  " => "quantety       ",
+
+];

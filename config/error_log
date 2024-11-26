@@ -1,0 +1,4 @@
+[21-May-2024 20:31:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/u8bbk73qxrvv/public_html/aljazira/config/database.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/u8bbk73qxrvv/public_html/aljazira/config/database.php on line 18

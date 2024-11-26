@@ -1,0 +1,54 @@
+   //  .. List of users
+    public function index() {
+        // if(auth()->user()-can("user_list.show") ){
+        //     abort(403,"UnAuthentication actions");   
+        // }
+        return view(); 
+    }
+    //  .. Create new customers
+    public function create(Request $request) {
+        // if(auth()->user()-can("user_create.create") ){
+        //     abort(403,"UnAuthentication actions");   
+        // }
+        return view();
+    }
+    //  .. Save new user 
+    public function store(Request $request) {
+        // if(auth()->user()-can("user_save.create") ){
+        //     abort(403,"UnAuthentication actions");   
+        // }
+        $output = [
+                "success" => 1,
+                "msg" => __("messages.add_successfully")
+        ];
+        return $output;
+    }
+    //  .. Edit old user
+    public function edit($id,Request $request) {
+        // if(auth()->user()-can("user_update.edit") ){
+        //     abort(403,"UnAuthentication actions");   
+        // }
+        return view();
+    }
+    //  .. update the changes on user
+    public function  update($id,Request $request) {
+        // if(auth()->user()-can("user_save_change.edit") ){
+        //     abort(403,"UnAuthentication actions");   
+        // }
+        $output = [
+                "success" => 1,
+                "msg" => __("messages.update_successfully")
+        ];
+        return $output;
+    }
+    //  .. Delete the user
+    public function  delete($id,Request $request) {
+        // if(auth()->user()-can("user_delete.delete") ){
+        //     abort(403,"UnAuthentication actions");   
+        // }
+        $output = [
+                "success" => 1,
+                "msg" => __("messages.delete_successfully")
+        ];
+        return $output;
+    }

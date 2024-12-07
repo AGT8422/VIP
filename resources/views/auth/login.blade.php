@@ -29,7 +29,7 @@
         }
         $subdomain     = $subdomain;  
         $domain_url    = request()->session()->get('user_main.domain_url');
-        $database_name = (parse_url(request()->root(),PHP_URL_HOST) == $domain_url)?request()->session()->get('user_main.database'):"albasee2_da";
+        $database_name = (parse_url(request()->root(),PHP_URL_HOST) == $domain_url)?request()->session()->get('user_main.database'):"izocloud";
         $database_user = (parse_url(request()->root(),PHP_URL_HOST) == $domain_url)?request()->session()->get('user_main.database_user'):"";
         $domain_name   = (parse_url(request()->root(),PHP_URL_HOST) == $domain_url)?request()->session()->get('user_main.domain'):$subdomain;
         

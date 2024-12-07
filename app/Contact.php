@@ -293,7 +293,16 @@ class Contact extends Authenticatable
         return $arr;
     }
     
-    
+    public static function customersSuppliers()
+    {
+        $business_id = request()->session()->get('user.business_id');
+        $allData     = Contact::where('business_id',$business_id)->get();
+        $arr         = [];
+        foreach ($allData  as $data) {
+            $arr[$data->id] =  $data->name . "( " . $data->contact_id . " )";
+        }
+        return $arr;
+    }
     // contact .php 
     public static function add_account($id,$business_id=null,$account_name=null)
     {

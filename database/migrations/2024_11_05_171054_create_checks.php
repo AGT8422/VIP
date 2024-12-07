@@ -18,7 +18,7 @@ class CreateChecks extends Migration
             $table->integer("collect_account_id")->nullable();
             $table->integer("business_id")->unsigned();
             $table->foreign("business_id")->on("business")->references("id")->onDelete("cascade")->onUpdate("cascade");
-            $table->integer("transaction_id")->unsigned();
+            $table->integer("transaction_id")->unsigned()->nullable();
             $table->foreign("transaction_id")->on("transactions")->references("id")->onDelete("cascade")->onUpdate("cascade");
             $table->string("ref_no",255)->nullable();
             $table->integer("location_id")->unsigned();

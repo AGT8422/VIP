@@ -128,15 +128,17 @@
                     <td>@format_currency($total_bill) 
                         <br>
                         @if(!empty($payment))
-                        @if($transaction->type == "sale")
-                            <button class="btn btn-primery btn-link btn-modal" data-container=".view_modal" data-href="{{action("SellController@show",[$transaction->id])}}" >
-                                {{$transaction->invoice_no}}
-                            </button>
-                        @elseif($transaction->type == "purchase")
-                            <button class="btn btn-primery btn-link btn-modal" data-container=".view_modal" data-href="{{action("PurchaseController@show",[$transaction->id])}}" >
-                                {{$transaction->ref_no}}
-                             </button>
-                        @endif
+                            @if(!empty($transaction))
+                                @if($transaction->type == "sale")
+                                    <button class="btn btn-primery btn-link btn-modal" data-container=".view_modal" data-href="{{action("SellController@show",[$transaction->id])}}" >
+                                        {{$transaction->invoice_no}}
+                                    </button>
+                                @elseif($transaction->type == "purchase")
+                                    <button class="btn btn-primery btn-link btn-modal" data-container=".view_modal" data-href="{{action("PurchaseController@show",[$transaction->id])}}" >
+                                        {{$transaction->ref_no}}
+                                    </button>
+                                @endif
+                            @endif
                         @endif
                     </td>
                     <td>{{ $item->account?$item->account->name:'--' }}</td>
@@ -152,16 +154,16 @@
                                 </li>
                                 <li>
                                 </li>
+                                    {{-- TODO CHECK TYPE OF VOUCHER --}}
                                  @if($item->return_voucher == 0 || $item->return_voucher == null)
                                     <li>
-                                        
-                                         @php  $types_s = ($item->contact->type == "customer")?0:1  @endphp
+                                         @php  $types_s = ($item->account_type == 0)?(($item->contact->type == "customer")?0:1):0;  @endphp
                                         <a href="{{ URL::to('payment-voucher/edit/'.$item->id.'&type='.$types_s) }}"><i class="fas fa-edit"></i>@lang('home.Edit')</a>
                                          
                                     </li>
                                 @endif
                                 <li>
-                                    @php  $types_s = ($item->contact->type == "customer")?0:1  @endphp
+                                    @php  $types_s = ($item->account_type == 0)?(($item->contact->type == "customer")?0:1):0;  @endphp
                                     @if($types_s == 0)
                                         <a href="{{ URL::to('reports/r-vh/'.$item->id) }}" target="_blank"><i class="fas fa-print"></i>@lang('messages.print')</a>
                                     @else

@@ -13,6 +13,9 @@
 
 
 <!DOCTYPE html>
+@php 
+    
+@endphp 
 <html lang="{{ session()->get('user.language', config('app.locale')) }}" dir="{{in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'rtl' : 'ltr'}}">
    
     <head>
@@ -25,6 +28,7 @@
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="icon" type="image/x-icon" href="{{ asset('/public/uploads/POS.ico') }}">
+        <link rel="stylesheet" href="{{asset('assets/vendor/libs/apex-charts/apex-charts.css')}}">
 
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -64,37 +68,39 @@
          
         }
         </style>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     </head>
 
 
     <body class=" @if($pos_layout) hold-transition lockscreen @else hold-transition skin-@if(!empty(session('business.theme_color'))){{session('business.theme_color')}}@else{{'black-light'}}@endif sidebar-mini @endif">
-        @php $moduleUtil = new \App\Utils\ModuleUtil; $package =  \Modules\Superadmin\Entities\Subscription::first();   @endphp 
-        @if(!$moduleUtil->isSubscribed(request()->session()->get('user.business_id')))
-        <div class="waring_message text-center" >
-            {{-- {!! __("lang_v1.subscribe_wrang") !!} {!! "<br> During " . $package["permitted_period"]      !!} --}}
-        </div>
-        @endif 
-        @php $moduleUtil = new \App\Utils\ModuleUtil; $package =  \Modules\Superadmin\Entities\Subscription::first();   @endphp 
-        @if($package)
+            {{-- @php $moduleUtil = new \App\Utils\ModuleUtil; $package =  \Modules\Superadmin\Entities\Subscription::first();   @endphp 
             @if(!$moduleUtil->isSubscribed(request()->session()->get('user.business_id')))
+            <div class="waring_message text-center" > --}}
+                {{-- {!! __("lang_v1.subscribe_wrang") !!} {!! "<br> During " . $package["permitted_period"]      !!} --}}
+            {{-- </div>
+            @endif 
+            @php $moduleUtil = new \App\Utils\ModuleUtil; $package =  \Modules\Superadmin\Entities\Subscription::first();   @endphp 
+            @if($package)
+                @if(!$moduleUtil->isSubscribed(request()->session()->get('user.business_id')))
 
-                @if(\Carbon::createFromFormat('Y-m-d', $package->permitted_period) > \Carbon::now())
-                <div class="waring_message text-center" >
-                    {!! __("lang_v1.subscribe_wrang") !!} {!! "<br> During " . $package["permitted_period"]      !!}
-                </div>
-                @else
-                @php $now = \Carbon::now();  @endphp 
-                    @if($package->end_date < $now ) 
-                <div class="waring_message text-center" >
-                        <b>Your Subscribe is Expired </b> <br>
-                        <p>hurry up to renew your subscribe</p> 
+                    @if(\Carbon::createFromFormat('Y-m-d', $package->permitted_period) > \Carbon::now())
+                    <div class="waring_message text-center" >
+                        {!! __("lang_v1.subscribe_wrang") !!} {!! "<br> During " . $package["permitted_period"]      !!}
                     </div>
-                    @endif     
+                    @else
+                    @php $now = \Carbon::now();  @endphp 
+                        @if($package->end_date < $now ) 
+                    <div class="waring_message text-center" >
+                            <b>Your Subscribe is Expired </b> <br>
+                            <p>hurry up to renew your subscribe</p> 
+                        </div>
+                        @endif     
+                    @endif
+                    
                 @endif
-                
-            @endif
-        @endif
-    <div class="wrapper thetop">
+            @endif --}}
+            {{-- <div class="wrapper thetop"> --}}
             <script type="text/javascript">
             // alert(localStorage.getItem("upos_sidebar_collapse"));
                 if(localStorage.getItem("upos_sidebar_collapse") == 'true'){
@@ -103,11 +109,9 @@
                 }
             </script>
             @if(!$pos_layout)
-             
-                @include('layouts.partials.header')
-                @include('layouts.partials.sidebar')
+                @include('layouts.partials.header_new_style')
+                @include('layouts.partials.sidebar_new_style')
             @else
-                
                 @include('layouts.partials.header-pos')
             @endif
 
@@ -131,8 +135,9 @@
                 @if(session('status'))
                     <input type="hidden" id="status_span" data-status="{{ session('status.success') }}" data-msg="{{ session('status.msg') }}">
                 @endif
-                
-                @yield('content')
+                <div class="sec">
+                    @yield('content')
+                </div>
 
                 <div class='scrolltop no-print'>
                     <div class='scroll icon'><i class="fas fa-angle-up"></i></div>
@@ -147,11 +152,12 @@
                 </section>
 
             </div>
+            
             @include('home.todays_profit_modal')
             <!-- /.content-wrapper -->
 
             @if(!$pos_layout)
-                @include('layouts.partials.footer')
+                @include('layouts.partials.footer_new_style')
             @else
                 @include('layouts.partials.footer_pos')
             @endif
@@ -186,24 +192,46 @@
         @endif
         <script src="{{ asset('/sw.js') }}"></script>
         <script>
-        if ("serviceWorker" in navigator) {
-            // Register a service worker hosted at the root of the
-            // site using the default scope.
-            navigator.serviceWorker.register("/sw.js").then(
-            (registration) => {
-                console.log("Service worker registration succeeded:", registration);
-            },
-            (error) => {
-                console.error(`Service worker registration failed: ${error}`);
-            },
-            );
-        } else {
-            console.error("Service workers are not supported.");
-        }
+            if ("serviceWorker" in navigator) {
+                // Register a service worker hosted at the root of the
+                // site using the default scope.
+                navigator.serviceWorker.register("/sw.js").then(
+                (registration) => {
+                    console.log("Service worker registration succeeded:", registration);
+                },
+                (error) => {
+                    console.error(`Service worker registration failed: ${error}`);
+                },
+                );
+            } else {
+                console.error("Service workers are not supported.");
+            }
         </script>
     </body>
 
     <script>
+        $(document).ready(function(){
+            // .. scroll window
+            $("#inside-content").scroll(function(){
+                if ($(this).scrollTop() > 10) {
+                    $('.main-header-new').css({"top":"-8.5%","background-color":"black"});
+                    $('.main-header-new').hover(
+                        function(){
+                            $(this).css({"top":"0%","background-color":"white"});
+                        },function(){
+                            $(this).css({"top":"-8.5%","transaction":"5s ","background-color":"black"});
+                    });
+                }else{
+                    $('.main-header-new').css({"top":"0%","background-color":"white"});
+                    $('.main-header-new').hover(
+                        function(){
+                            $(this).css({"top":"0%","background-color":"white"});
+                        },function(){
+                            $(this).css({"top":"0%","transaction":"5s ","background-color":"white"});
+                    });
+                } 
+            });
+        });
          setInterval(function() {
             $('meta[name="csrf-token"]').attr('content', '{{ csrf_token() }}');
         }, 300000); 

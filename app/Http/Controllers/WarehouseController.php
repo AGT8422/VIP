@@ -372,6 +372,44 @@ class WarehouseController extends Controller
      *  
      * @return Response
      */ 
+    public function update_id(Request $request,$id)
+    {
+        
+        if (!auth()->user()->can('warehouse.create')   && !auth()->user()->can('warehouse.Edit')) {
+            abort(403, 'Unauthorized action.');
+        }
+        try{
+            \DB::beginTransaction();
+
+            $store              = Warehouse::find($id);
+            $store->name        = $request->store_name;
+            $store->description = $request->descript;
+            $store->status      = ($request->parent_id)?1:0;
+            $store->parent_id   = $request->parent_id;
+            $store->update();
+            
+            \DB::commit();
+            $output = [
+                    'success' => true,
+                    'msg'     => __('Store Updated Successfully')
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
+            $output = [     
+                'success' => false,
+                'msg'     => __('messages.something_went_wrong')
+            ];
+        }
+     
+        return redirect('warehouse/index')->with('status', $output);
+        
+    }
+    /**
+     * Update Information Store.
+     *  
+     * @return Response
+     */ 
     public function update(Request $request,$id)
     {
         

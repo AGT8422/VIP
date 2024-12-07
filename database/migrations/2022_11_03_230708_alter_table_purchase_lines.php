@@ -17,7 +17,7 @@ class AlterTablePurchaseLines extends Migration
         Schema::table('purchase_lines', function($table)
         {
             $table->integer('transaction_id')->unsigned();
-            $table->foreign('transaction_id')->references('id')->on('purchase_lines')->onDelete('cascade');
+            $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
         });
        
     }

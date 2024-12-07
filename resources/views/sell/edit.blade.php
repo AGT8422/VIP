@@ -551,7 +551,7 @@
 																								'sub_units'              => $sub_units, 
 																								'action'                 => 'edit', 
 																								'is_direct_sell'         => true ,
-																								"currency"               => $transaction->exchange_price,
+																								"currency"               => ($transaction->exchange_price>1)?$transaction->exchange_price:null,
 																								'list_of_prices'         => $list_of_prices,
 																								'list_of_prices_in_unit' => $list_of_prices_in_unit 
 																							])

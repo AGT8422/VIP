@@ -291,6 +291,7 @@ class ProductController extends Controller
             // '@if($enable_stock == 1) {{@number_format($current_stock)}} @else -- @endif {{$unit}}' 
             //........................................
             $products->whereNull("products.deleted_at");
+            
             return Datatables::of($products)
                 ->addColumn(
                     'product_locations',
@@ -305,7 +306,7 @@ class ProductController extends Controller
                         $id = $row->id;
                         $html =
                         '<div class="btn-group"><button type="button" class="btn btn-info dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">'. __("messages.actions") . '<span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button><ul class="dropdown-menu dropdown-menu-left" role="menu">';
-                        
+                         
                         // if (auth()->user()->can('product.view')   ) {
                         //     $html .=
                         //     '<li><a href="' . action('LabelsController@show') . '?product_id=' . $row->id . '" data-toggle="tooltip" title="' . __('lang_v1.label_help') . '"><i class="fa fa-barcode"></i> ' . __('barcode.labels') . '</a></li>';
@@ -319,7 +320,7 @@ class ProductController extends Controller
                             $html .=
                             '<li><a href="' . action('ProductController@edit', [$row->id]) . '"><i class="glyphicon glyphicon-edit"></i> ' . __("messages.edit") . '</a></li>';
                         }
-
+                        
                         if ( request()->session()->get("user.id") == 1) {
                             $html .=
                             '<li><a href="' . action('ProductController@destroy', [$row->id]) . '" class="delete-product"><i class="fa fa-trash"></i> ' . __("messages.delete") . '</a></li>';
@@ -354,7 +355,7 @@ class ProductController extends Controller
                             $html .=
                             '<li><a href="' . action('ItemMoveController@index', [$row->id]) . '"><i class="fas fa-history"></i> ' . __("lang_v1.product_stock_history") . '</a></li>';
                         }
-
+                        
                         if (auth()->user()->hasRole('Admin#' . session('business.id')) && request()->session()->get("user.id") == 2 && request()->session()->get("user.id") == 1) {
 
                             if ($selling_price_group_count > 0) {
@@ -367,7 +368,7 @@ class ProductController extends Controller
                             $html .=
                                 '<li><a href="' . action('ProductController@create', ["d" => $row->id]) . '"><i class="fa fa-copy"></i> ' . __("lang_v1.duplicate_product") . '</a></li>';
                         }
-
+                        
                         if (!empty($row->media->first())) {
 
                             $html .=
@@ -379,7 +380,7 @@ class ProductController extends Controller
                             // $html .=
                             //     '<li><a data-href="' . \URL::to("/products/unChangeFeature?id=$id") . '" class="btn-modal"><i class="fa fa-trash"></i> ' . __("Remove From Ecommerce") . '</a></li>';
                         $html .= '</ul></div>';
-
+                        
                         return $html;
                     }
                 )
@@ -387,11 +388,12 @@ class ProductController extends Controller
                     $product = $row->is_inactive     == 1 ? $row->product . ' <span class="label bg-gray">' . __("lang_v1.inactive") .'</span>' : $row->product;
                     $product = $row->not_for_selling == 1 ? $product . ' <span class="label bg-gray">' . __("lang_v1.not_for_selling") .
                         '</span>' : $product;
-
+                        
                     return $product;
                 })
                 ->editColumn('image', function ($row) {
                      
+                    
                     if($row->image_url){
                             $image = $row->image_url;
                     }else {
@@ -689,7 +691,7 @@ class ProductController extends Controller
             $product_details['warranty_id'] = !empty($request->input('warranty_id')) ? $request->input('warranty_id') : null;
 
             DB::beginTransaction();
-
+            $company_name = request()->session()->get("user_main.domain");
             if($request->hasFile('vedio')){
                 // save step up
                 $request->validate([
@@ -699,7 +701,7 @@ class ProductController extends Controller
                 $path_name   =  \time() . $request->file('vedio')->getClientOriginalName();
                 if ($request->hasFile('vedio')) {
                     $video         = $request->file('vedio');
-                    $path          = $video->store('vedios','public');
+                    $path          = $video->store('/../public/uploads/companies/'.$company_name.'/video','public');
                     $array_vedio[] = $path;
                     // For example, you can store the path and other details in the 'videos' table.
                     // You can also store the video information in your database if needed.
@@ -905,8 +907,7 @@ class ProductController extends Controller
 
             Media::uploadMedia($product->business_id, $product, $request, 'product_brochure', true);
 
-
-           
+             
             /*
              * add more barcode edit eng mohmaed ali
              */
@@ -1614,55 +1615,55 @@ class ProductController extends Controller
                        '=',
                        'T.id'
                     )
-                                   ->where('T.type', 'opening_stock')
-                                   ->where('T.business_id', $business_id)
-                                   ->where('purchase_lines.product_id', $id)
-                                   ->where('purchase_lines.quantity_sold', '>', 0)
-                                   ->count();
-               $count2 = \App\TransactionSellLine::where("product_id",$id)->count();
-               if ($count > 0) {
-                   $can_be_deleted = false;
-                   $error_msg = __('lang_v1.purchase_already_exist');
-               } else {
-                   if($count2>0){
-                       $can_be_deleted = false;
-                       $error_msg = __('lang_v1.purchase_already_exist');
-                   }else{
-                       //Check if any opening stock sold
-                       $count = PurchaseLine::join(
-                           'transactions as T',
-                           'purchase_lines.transaction_id',
-                           '=',
-                           'T.id'
-                       )
-                                       ->where('T.type', 'opening_stock')
-                                       ->where('T.business_id', $business_id)
-                                       ->where('purchase_lines.product_id', $id)
-                                       ->where('purchase_lines.quantity_sold', '>', 0)
-                                       ->count();
-                       if ($count > 0) {
-                           $can_be_deleted = false;
-                           $error_msg = __('lang_v1.opening_stock_sold');
-                       } else {
-                           //Check if any stock is adjusted
-                           $count = PurchaseLine::join(
-                               'transactions as T',
-                               'purchase_lines.transaction_id',
-                               '=',
-                               'T.id'
-                           )
-                                       ->where('T.business_id', $business_id)
-                                       ->where('purchase_lines.product_id', $id)
-                                       ->where('purchase_lines.quantity_adjusted', '>', 0)
-                                       ->count();
-                           if ($count > 0) {
-                               $can_be_deleted = false;
-                               $error_msg = __('lang_v1.stock_adjusted');
-                           }
-                       }
-                   }
-                   
-               }
+                        ->where('T.type', 'opening_stock')
+                        ->where('T.business_id', $business_id)
+                        ->where('purchase_lines.product_id', $id)
+                        ->where('purchase_lines.quantity_sold', '>', 0)
+                        ->count();
+                    $count2 = \App\TransactionSellLine::where("product_id",$id)->count();
+                    if ($count > 0) {
+                        $can_be_deleted = false;
+                        $error_msg = __('lang_v1.purchase_already_exist');
+                    } else {
+                        if($count2>0){
+                            $can_be_deleted = false;
+                            $error_msg = __('lang_v1.purchase_already_exist');
+                        }else{
+                            //Check if any opening stock sold
+                            $count = PurchaseLine::join(
+                                'transactions as T',
+                                'purchase_lines.transaction_id',
+                                '=',
+                                'T.id'
+                            )
+                                            ->where('T.type', 'opening_stock')
+                                            ->where('T.business_id', $business_id)
+                                            ->where('purchase_lines.product_id', $id)
+                                            ->where('purchase_lines.quantity_sold', '>', 0)
+                                            ->count();
+                            if ($count > 0) {
+                                $can_be_deleted = false;
+                                $error_msg = __('lang_v1.opening_stock_sold');
+                            } else {
+                                //Check if any stock is adjusted
+                                $count = PurchaseLine::join(
+                                    'transactions as T',
+                                    'purchase_lines.transaction_id',
+                                    '=',
+                                    'T.id'
+                                )
+                                            ->where('T.business_id', $business_id)
+                                            ->where('purchase_lines.product_id', $id)
+                                            ->where('purchase_lines.quantity_adjusted', '>', 0)
+                                            ->count();
+                                if ($count > 0) {
+                                    $can_be_deleted = false;
+                                    $error_msg = __('lang_v1.stock_adjusted');
+                                }
+                            }
+                        }
+                        
+                    }
                }
 
                $product = Product::where('id', $id)

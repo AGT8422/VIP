@@ -64,12 +64,13 @@ class DailyPaymentController extends Controller
        $ref_count        = $this->productUtil->setAndGetReferenceCount("daily_payment");
        $ref_no           = $this->productUtil->generateReferenceNumber("daily_payment" , $ref_count);
        # .................................................
+       $company_name      = request()->session()->get("user_main.domain");
        $document_expense = [];
        if ($request->hasFile('document_expense')) { $count_doc1 = 1;
            foreach ($request->file('document_expense') as $file) {
                $file_name        =  time().'_'.$count_doc1++.'.'.$file->getClientOriginalExtension();
-               $source_file_name =  'public/uploads/documents/'. $file_name;
-               $file->move('public/uploads/documents',$file_name);
+               $source_file_name =  'uploads/companies/'.$company_name.'/documents/journal-voucher/'. $file_name;
+               $file->move('uploads/companies/'.$company_name.'/documents/journal-voucher',$file_name);
                array_push($document_expense,$source_file_name);
            }
        }
@@ -167,12 +168,13 @@ class DailyPaymentController extends Controller
         $data->currency_id     =  $request->currency_id;
        $data->exchange_price  =  $request->currency_id_amount;
         # ................................................
+        $company_name      = request()->session()->get("user_main.domain");
         $old_document    =  $data->document;
         if($old_document == null){ $old_document = []; }
         if ($request->hasFile('document_expense')) {  $id_s = 1;
             foreach ($request->file('document_expense') as $file) {
-                $file_name =  'public/uploads/documents/'.time().'_'.$id_s++.'.'.$file->getClientOriginalExtension();
-                $file->move('public/uploads/documents',$file_name);
+                $file_name =  'uploads/companies/'.$company_name.'/documents/journal-voucher/'.time().'_'.$id_s++.'.'.$file->getClientOriginalExtension();
+                $file->move('uploads/companies/'.$company_name.'/documents/journal-voucher',$file_name);
                 array_push($old_document,$file_name);
             }
         }

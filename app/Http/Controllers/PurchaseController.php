@@ -567,7 +567,7 @@ class PurchaseController extends Controller
             $transaction_data['shipping_charges']         = $this->productUtil->num_uf(0, $currency_details)*$exchange_rate;
             $transaction_data["ship_amount"]              = 0;
             $transaction_data["currency_id"]              = ($request->currency_id!=null)?$request->currency_id:null;
-            $transaction_data["exchange_price"]           = ($request->currency_id!=null)?$request->currency_id_amount:null;
+            $transaction_data["exchange_price"]           = ($request->currency_id!=null)?$request->currency_id_amount:1;
             $transaction_data["amount_in_currency"]       = ($request->currency_id_amount != "" && $request->currency_id_amount != 0 && $request->currency_id != null)? $request->final_total / $request->currency_id_amount:null;
             $transaction_data['final_total']              = $this->productUtil->num_uf($transaction_data['final_total']+floatVal($transaction_data['ADD_SHIP']), $currency_details)*$exchange_rate;
             $transaction_data['store']                    = $transaction_data['store_id'];
@@ -579,12 +579,13 @@ class PurchaseController extends Controller
             $transaction_data['discount_type']            = $request->discount_type;
             $transaction_data['transaction_date']         = $this->productUtil->uf_date($transaction_data['transaction_date'], true);
             //upload document
+            $company_name      = request()->session()->get("user_main.domain");
             $document_purchase = [];
             if ($request->hasFile('document_purchase')) {
                 $id_sf = 1;
                 foreach ($request->file('document_purchase') as $file) {
-                    $file_name =  'public/uploads/documents/'.time().'_'.$id_sf++.'.'.$file->getClientOriginalExtension();
-                    $file->move('public/uploads/documents',$file_name);
+                    $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/'.time().'_'.$id_sf++.'.'.$file->getClientOriginalExtension();
+                    $file->move('uploads/companies/'.$company_name.'/documents/purchase',$file_name);
                     array_push($document_purchase,$file_name);
                 }
             }
@@ -620,11 +621,13 @@ class PurchaseController extends Controller
                 'contact_id','shipping_amount','shipping_vat','shipping_total','shipping_account_id','shiping_text','add_currency_id','add_currency_id_amount',
                 'shiping_date','shipping_contact_id','shipping_cost_center_id','cost_center_id','line_currency_id','line_currency_id_amount','currency_id','currency_id_amount',
             ]);
+
             $document_expense = [];
             if ($request->hasFile('document_expense')) {
                 foreach ($request->file('document_expense') as $file) {
-                    $file_name =  'public/uploads/documents/'.time().'.'.$file->getClientOriginalExtension();
-                    $file->move('public/uploads/documents',$file_name);
+                    
+                    $file_name    =  'uploads/companies/'.$company_name.'/documents/purchase/expense/'.time().'.'.$file->getClientOriginalExtension();
+                    $file->move('uploads/companies/'.$company_name.'/documents/purchase/expense',$file_name);
                     array_push($document_expense,$file_name);
                 }
             }
@@ -1114,12 +1117,12 @@ class PurchaseController extends Controller
             $update_data['list_price']               = $request->list_price;
             //unFormat input values ends 
             //upload document
-            
+            $company_name      = request()->session()->get("user_main.domain");
             if ($request->hasFile('document_purchase')) {
                 $id_cv = 1;
                 foreach ($request->file('document_purchase') as $file) {
-                    $file_name =  'public/uploads/documents/'.time().'_'.$id_cv++.'.'.$file->getClientOriginalExtension();
-                    $file->move('public/uploads/documents',$file_name);
+                    $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/'.time().'_'.$id_cv++.'.'.$file->getClientOriginalExtension();
+                    $file->move('uploads/companies/'.$company_name.'/documents/purchase',$file_name);
                     array_push($old_document,$file_name);
                 }
             }
@@ -1134,13 +1137,13 @@ class PurchaseController extends Controller
                 'old_shiping_text','old_shiping_date','old_shipping_contact_id','shipping_contact_id','old_shipping_cost_center_id','cost_center_id','line_currency_id_amount',
                 'currency_id','currency_id_amount','add_currency_id','add_currency_id_amount',
             ]);
-            $additional_inputs['contact_id']=$request->supplier_id;
+            $additional_inputs['contact_id'] = $request->supplier_id;
             $document_expense = $request->old_document??[];
             if ($request->hasFile('document_expense')) {
                 $id_cc = 1;
                 foreach ($request->file('document_expense') as $file) {
-                    $file_name =  'public/uploads/documents/'.time().'_'.$id_cc++.'.'.$file->getclientoriginalextension();
-                    $file->move('public/uploads/documents',$file_name);
+                    $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/expense/'.time().'_'.$id_cc++.'.'.$file->getclientoriginalextension();
+                    $file->move('uploads/companies/'.$company_name.'/documents/purchase/expense',$file_name);
                     array_push($document_expense,$file_name);
                 }
             } 

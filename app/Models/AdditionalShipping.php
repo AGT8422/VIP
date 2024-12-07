@@ -652,6 +652,7 @@ class AdditionalShipping extends Model
                                                 })
                                                 ->first();
         $entry  = \App\Models\Entry::orderBy("id","desc")->where('account_transaction',$id)->first();
+        $entry_id = ($entry)?$entry->id:null;
         if (empty($pay)) {
             $credit_data = [
                 'amount'                      => $amount,

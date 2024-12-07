@@ -103,6 +103,7 @@
     <script src="{{ asset('js/lang/en.js?v=' . $asset_v) }}"></script>
 @endif
 
+<script src="{{ asset('js/style_new.js?v=' . $asset_v) }}"></script>
 <script src="{{ asset('js/functions.js?v=' . $asset_v) }}"></script>
 <script src="{{ asset('js/common.js?v=' . $asset_v) }}"></script>
 <script src="{{ asset('js/app.js?v=' . $asset_v) }}"></script>
@@ -128,7 +129,9 @@
 @if(Module::has('Essentials'))
   @includeIf('essentials::layouts.partials.footer_part')
 @endif
-
+        
+<script src="{{asset('assets/vendor/libs/apex-charts/apexcharts.js')}}"></script>
+<script src="{{asset('assets/js/dashboards-analytics.js')}}"></script>
 <script type="text/javascript">
     $(document).ready( function(){
         var locale = "{{session()->get('user.language', config('app.locale'))}}";

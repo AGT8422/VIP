@@ -23,7 +23,7 @@ class StatusLive extends Model
             $item->reference_no        = $transaction->ref_no;
             $item->state               = "Purchase ".$state;
             $item->price               = $transaction->final_total;
-            $item->t_received          = ($receve!= null)?$receve->id:null;
+            $item->t_received          = ($receive!= null)?$receive->id:null;
             $item->num_serial          = 1;
             $item->save();
         }else{
@@ -39,7 +39,7 @@ class StatusLive extends Model
                 $item->reference_no        = $transaction->ref_no;
                 $item->state               = "Purchase ".$state;
                 $item->price               = $transaction->final_total;
-                $item->t_received          = ($receve!= null)?$receve->id:null;
+                $item->t_received          = ($receive!= null)?$receive->id:null;
                 $item->num_serial          = $data->num_serial+1;
                 $item->save();
             }

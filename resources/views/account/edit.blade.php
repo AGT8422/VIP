@@ -21,8 +21,8 @@
 
             <div class="form-group">
                 {!! Form::label('account_type_id', __( 'account.account_type' ) .":") !!}
-                <select name="account_type_id" class="form-control select2">
-                    <option>@lang('messages.please_select')</option>
+                {{-- <select name="account_type_id" class="form-control select2">
+                    <option>@lang('messages.please_select')</option> --}}
                     {{-- @foreach($account_types as $account_type)
                         <optgroup label="{{$account_type->name}}"> --}}
                             {{-- <option value="{{$account_type->id}}" @if($account->account_type_id == $account_type->id) selected @endif >{{$account_type->name}}</option> --}}

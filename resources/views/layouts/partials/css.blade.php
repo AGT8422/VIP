@@ -69,6 +69,13 @@
 	  -webkit-transform: rotate(315deg);
 	  transform: rotate(315deg);
 	}
+	#inside-content{
+		/* position: fixed; */
+		padding-bottom:100px !important;
+		overflow-y: scroll;
+		height: 100vh !important;
+		width: 84% !important;
+	}
 </style>
 @if(!empty($__system_settings['additional_css']))
     {!! $__system_settings['additional_css'] !!}

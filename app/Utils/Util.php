@@ -256,15 +256,30 @@ class Util
      */
     public function uf_date($date, $time = false)
     {
-        $date_format = session('business.date_format');
+        // $date_format = session('business.date_format');
+        // $mysql_format = 'Y-m-d';
+        // if ($time) {
+        //     if (session('business.time_format') == 12) {
+        //         $date_format = $date_format . ' h:i A';
+        //     } else {
+        //         $date_format = $date_format . ' H:i';
+        //     }
+        //     $mysql_format = 'Y-m-d H:i:s';
+        // }
+        $date_format  = session('business.date_format');
         $mysql_format = 'Y-m-d';
         if ($time) {
             if (session('business.time_format') == 12) {
-                $date_format = $date_format . ' h:i A';
+                $date_format  = (strlen($date) > 10)?$date_format:($date_format . ' h:i A');
             } else {
-                $date_format = $date_format . ' H:i';
+                $date_format  = (strlen($date) > 10)?$date_format:($date_format . ' H:i');
             }
-            $mysql_format = 'Y-m-d H:i:s';
+            $mysql_format = (strlen($date) > 10)?'Y-m-d':('Y-m-d H:i:s');
+            // dd($date_format);
+        }
+        if(strlen($date) > 10){
+            $old     = $date;
+            $date    = substr($date,0,10);  
         }
         return !empty($date_format) ? \Carbon::createFromFormat($date_format, $date)->format($mysql_format) : null;
     }
@@ -772,8 +787,9 @@ class Util
                 $half_width  = $width/2;
                 $half_height = $height/2;
                 // dd($data);
+                $company_name = request()->session()->get("user_main.domain");
                 $imgs = \Image::make($request->$file_name)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
-                if ($imgs->save(public_path("uploads\img\\$new_file_name"),20)) {
+                if ($imgs->save(public_path("uploads\companies\\$company_name\img\\$new_file_name"),20)) {
                     $uploaded_file_name = $new_file_name;
                 }
             }else{

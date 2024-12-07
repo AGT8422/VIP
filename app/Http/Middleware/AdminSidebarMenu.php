@@ -28,7 +28,7 @@ class AdminSidebarMenu
             }else{
                 \App::setlocale('ar');
             }
-           Menu::create('admin-sidebar-menu', function ($menu) {
+            Menu::create('admin-sidebar-menu', function ($menu) {
             $enabled_modules = !empty(session('business.enabled_modules')) ? session('business.enabled_modules') : [];
 
 

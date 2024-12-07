@@ -23,6 +23,7 @@ class CreateDailyPayments extends Migration
             $table->text('document')->nullable();  
             $table->decimal("amount_in_currency",22,4)->nullable();  
             $table->decimal("exchange_price",22,4)->nullable();  
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -137,7 +137,7 @@
             
             .loading{
                 display: none;
-                position: absolute;
+                position: fixed;
                 left: 0px;
                 right: 0px;
                 width: 100%;
@@ -1048,7 +1048,7 @@
                 <h1>IZO <small>waiting.....</small></h1>
             </div>
         </div>
-        <form hidden action="https://izocloud.com/register-account" id="go-home" method="GET">
+        <form hidden action="https://localhost:8000/register-account" id="go-home" method="GET">
             <button id="go_home"  type="submit">Go Home</button>
         </form>
         <div class="container mainbox">
@@ -1063,7 +1063,8 @@
                         </div> 
                         <br>
                         {!! Form::open(['url' => route('izoSaveAccount'), 'method' => 'post', 'id' => 'first_register_form','files' => true ]) !!}
-                        {!! Anhskohbo\NoCaptcha\Facades\NoCaptcha::display() !!}
+                        
+                        
                         <input type="hidden" id="domain_name_array" value="{{json_encode($list_domains)}}">
                         <input type="hidden" id="domain_name_current" value="{{parse_url(request()->root(),PHP_URL_HOST)}}">
                             <div class="col-xl-12 col-md-12 field_icon">
@@ -1080,6 +1081,11 @@
                                 <i class="fas fa-spinner fa-spin spinner hide_icon"></i>
                                 <i class="fas fa-check success-icon hide_icon"></i>
                                 <i class="fa fa-times-circle hide_icon"></i>
+                                @if ($errors->has('email'))
+                                    <span class="text-danger">
+                                        {{ $errors->first('email') }}
+                                    </span>
+                                @endif
                             </div>
 
                             <div class="col-xl-12 col-md-12 field_icon_domain ">
@@ -1105,6 +1111,11 @@
                                     {!! Form::number('mobile',null,['class' => 'izo-form-input',  'id'=>'mobile' ,'data-max' => "9" , 'min'=>0,'max'=>9999999999 ,'style' => 'width:80%' , 'placeholder' => __('00 0000 000')  ]) !!}
                                 </div>
                                 <span class="error" id="mobileError"></span>
+                                @if ($errors->has('mobile'))
+                                    <span class="text-danger">
+                                        {{ $errors->first('mobile') }}
+                                    </span>
+                                @endif
                             </div>
 
                             <div class="col-xl-12 col-md-12 field_icon">
@@ -1122,6 +1133,16 @@
                                 <i class="fa fa-times-circle hide_icon"></i>
                                 <span class="error" id="passwordConfirmError"></span>
                             </div> 
+                            <div class="col-xl-12 col-md-12">
+                                {{-- <div class="g-recaptcha" data-sitekey="6LczVIkqAAAAADNyyHb1kHh9okAGJuqAOG9YgUM3" data-action="LOGIN"></div>
+                                <br/> --}}
+                                {!! NoCaptcha::display() !!}
+                                @if ($errors->has('g-recaptcha-response'))
+                                    <span class="text-danger">
+                                        {{ $errors->first('g-recaptcha-response') }}
+                                    </span>
+                                @endif
+                            </div> 
 
                             <div class="col-xl-12 col-md-12">
                                 {{-- <div class="izo-form-input-save">Sign Up</div> --}}
@@ -1134,11 +1155,7 @@
                                 </p>
                             </div>
                             <div class="clearfix"></div>
-                            @if ($errors->has('g-recaptcha-response'))
-                                <span class="text-danger">
-                                    {{ $errors->first('g-recaptcha-response') }}
-                                </span>
-                            @endif
+                            
                         {!! Form::close(); !!}
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 right_form_first_login">
@@ -1151,6 +1168,7 @@
                 {{-- </div> --}}
             </div>
         </div>
+        {!! NoCaptcha::renderJs() !!}
         <script src="{{ asset('/sw.js') }}"></script>
         <script>
         if ("serviceWorker" in navigator) {

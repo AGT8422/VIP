@@ -37,8 +37,9 @@ class Product extends Model
     public function getImageUrlAttribute()
     {
         $image_url ='';
+        $company_name = request()->session()->get("user_main.domain");
         if (!empty($this->image)) {
-            $image_url = asset('public/uploads/img/' . rawurlencode($this->image));
+            $image_url = asset('public/uploads/'.$company_name.'/img/' . rawurlencode($this->image));
         } 
         return $image_url;
     }

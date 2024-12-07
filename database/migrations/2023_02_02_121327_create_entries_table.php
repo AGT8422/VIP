@@ -19,7 +19,7 @@ class CreateEntriesTable extends Migration
             $table->foreign("business_id")->references("id")->on("business")->onDelete("cascade")->onUpdate("cascade");
             $table->string("refe_no_e",191)->nullable();
             $table->integer("account_transaction")->unsigned();
-            $table->foreign("account_transaction")->references("id")->on("transactions")->onDelete("cascade")->onUpdate("cascade");
+            $table->foreign("account_transaction")->references("id")->on("transactions")->onDelete("cascade")->onUpdate("cascade")->nullable();
             $table->string("ref_no_e",191)->nullable();
             $table->double("debit");
             $table->double("vat");
@@ -34,7 +34,9 @@ class CreateEntriesTable extends Migration
             $table->integer("payment_id")->nullable();
             $table->string("state",191)->nullable();
             $table->date("deleted_at_date")->nullable();
+            $table->softDeletes();
             $table->timestamps();
+            
         });
     }
 

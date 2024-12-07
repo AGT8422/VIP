@@ -62,6 +62,7 @@ class HomeController extends Controller
         if ($request->purchases) {
             DB::beginTransaction();
             $business_id         = request()->session()->get('user.business_id');
+            $user_id             = request()->session()->get('user.id');
             $ref_count           = $this->productUtil->setAndGetReferenceCount('Open Quantity');
             $ref_no              = $this->productUtil->generateReferenceNumber('Open Quantity', $ref_count);
             $location            = \App\BusinessLocation::where('business_id',$business_id)->first();
@@ -71,6 +72,7 @@ class HomeController extends Controller
                                         'status'            => 'received',
                                         'list_price'        => $request->list_price,
                                         'business_id'       => $business_id,
+                                        'created_by'        => $user_id,
                                         'store'             => $request->store_id,
                                         'location_id'       => $location->id,  
                                         'transaction_date'  => ($request->date)?\Carbon\Carbon::parse($request->date):date('Y-m-d h:i:s',time())
@@ -104,6 +106,7 @@ class HomeController extends Controller
                 $pr->order_id                  = ($request->line_sort)?$request->line_sort[$key]:null;
                 $pr->variation_id              = ($product->type == "single")?(isset($product->variations[0]->id)?$product->variations[0]->id:NULL):(($product->type == "variable")?($single['variation_id']):(($product->type == "combo")?$single['variation_id']:(isset($product->variations[0]->id)?$product->variations[0]->id:NULL)));
                 $pr->save();
+               
                 //  end
                 $data                          =  new OpeningQuantity;
                 $data->warehouse_id            =  $store;

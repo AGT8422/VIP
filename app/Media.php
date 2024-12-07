@@ -37,6 +37,18 @@ class Media extends Model
     /**
      * Get display link for the media
      */
+    public function getUrlAttribute()
+    {
+        $path ='';
+        if (!empty($this->file_name)) {
+            $company_name = request()->session()->get("user_main.domain");
+             $path = asset('public/uploads/media/'.$company_name.'/' . rawurlencode($this->file_name));
+        } 
+        return $path;
+    }
+    /**
+     * Get display link for the media
+     */
     public function getDisplayUrlAttribute()
     {
         $path ='';
@@ -97,7 +109,7 @@ class Media extends Model
         if (config('app.env') == 'demo') {
             return null;
         }
-
+ 
         if ($request->hasFile($file_name)) {
             $files = $request->file($file_name);
             $uploaded_files = [];
@@ -138,11 +150,14 @@ class Media extends Model
             $new_file_name = time() . '_' . mt_rand() . '_' . $file->getClientOriginalName();
             $data        = getimagesize($file);
             $width       = $data[0];
-            $height      = $data[1];
+            $height      = $data[1];    
             $half_width  = $width/2;
             $half_height = $height/2;
             $imgs = \Image::make($file)->resize($half_width,$half_height);//$file->storeAs('/media', $new_file_name)
-            if ($imgs->save(base_path("uploads\media\\$new_file_name"),20)) {
+            // if ($imgs->save(public_path("uploads\\".."\media\\$new_file_name"),20)) {
+            $company_name = request()->session()->get("user_main.domain");
+        
+            if ($imgs->save(public_path("uploads\companies\\$company_name\media\\$new_file_name"),20)) {
                 $file_name = $new_file_name;
             }
         }

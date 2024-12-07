@@ -14,7 +14,7 @@ class AddDeliveredWrongIdToMovementWarehousesTable extends Migration
     public function up()
     {
         Schema::table('movement_warehouses', function (Blueprint $table) {
-            $table->integer('delivered_wrong_id')->unsigned();
+            $table->integer('delivered_wrong_id')->unsigned()->nullable();
         });
     }
 

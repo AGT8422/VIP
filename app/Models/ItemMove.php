@@ -824,8 +824,8 @@ class ItemMove extends Model
         
         $array           = [] ;
         $array_unique_id = [] ;
-        // $received        = \App\Models\RecievedPrevious::where("transaction_id",$id)->where("transaction_deliveries_id",$tr_recieve)->get();
-        $received        = \App\Models\RecievedPrevious::where("transaction_id",$id)->where("transaction_deliveries_id",$tr_recieve->id)->get();
+        $received        = \App\Models\RecievedPrevious::where("transaction_id",$id)->where("transaction_deliveries_id",$tr_recieve)->get();
+        // $received        = \App\Models\RecievedPrevious::where("transaction_id",$id)->where("transaction_deliveries_id",$tr_recieve->id)->get();
         foreach($received as $it){
             if(!in_array($it->product_id,$array_unique_id)){
                 array_push($array_unique_id,$it->product_id);
@@ -834,8 +834,8 @@ class ItemMove extends Model
         
         foreach($array_unique_id as $it){
             $array_item      = [] ;
-            // $receive         = \App\Models\RecievedPrevious::where("transaction_id",$id)->where("transaction_deliveries_id",$tr_recieve)->where("product_id",$it)->sum("current_qty");
-            $receive         = \App\Models\RecievedPrevious::where("transaction_id",$id)->where("transaction_deliveries_id",$tr_recieve->id)->where("product_id",$it)->sum("current_qty");
+            $receive         = \App\Models\RecievedPrevious::where("transaction_id",$id)->where("transaction_deliveries_id",$tr_recieve)->where("product_id",$it)->sum("current_qty");
+            // $receive         = \App\Models\RecievedPrevious::where("transaction_id",$id)->where("transaction_deliveries_id",$tr_recieve->id)->where("product_id",$it)->sum("current_qty");
             if($return != null){
                 $row = ItemMove::one_Item($id,$it,"return");
             }else{
@@ -3327,7 +3327,8 @@ class ItemMove extends Model
             $item->current_qty                = $total_qty ;
             $item->transaction_id             = $source->id ;
             $item->line_id                    = $line ;
-            $item->variation_id               = ($variation_id!=null)?$variation_id:null ;
+            $variation_instead                = \App\Variation::where("product_id",$item->product_id)->first();
+            $item->variation_id               = ($variation_id!=null)?$variation_id:$variation_instead->id ;
             if($type == "create_open"){
                 $item->order_id               = $pli->order_id ;
             }
@@ -4068,17 +4069,20 @@ class ItemMove extends Model
                                 #.... effect on unit cost & QTY (+) from stock
                                 $total_qty         = ($firstQtyBalance+$qty) ;
                                 $total_cost        = $firstTotalBalance + $total_row ;
-                                $firstBalance      = ($total_qty!=0)?$total_cost/$total_qty:0;
+                                $firstBalance      = ($total_qty!=0)?$total_cost/$total_qty:$total_row;
                                 $line->current_qty = $total_qty;
                                 $line->unit_cost   = $firstBalance ;
                                 $firstQtyBalance   = $total_qty; 
-                                $firstTotalBalance = $total_cost;
+                                $firstTotalBalance = ($total_qty!=0)?$total_cost:0;
                                 break;
                             }
                             case "sale":{
                                 #.... XXX don't effect on unit cost  & QTY (-) from stock XXX
                                 $total_qty         = ($firstQtyBalance-$qty) ;
-                                $total_cost        = $firstTotalBalance  - (($qty)*($firstTotalBalance/$firstQtyBalance)) ;
+                                if($firstQtyBalance == 0){
+                                    // dd($line->unit_cost);
+                                }
+                                $total_cost        = ($firstQtyBalance!=0)?($firstTotalBalance  - (($qty)*($firstTotalBalance/$firstQtyBalance))):0 ;
                                 $firstBalance      = ($firstQtyBalance!=0)?$total_cost/$firstQtyBalance:0;
                                 $line->current_qty = $total_qty;
                                 $line->out_price   = ($firstQtyBalance!=0)?($firstTotalBalance/$firstQtyBalance):0 ;

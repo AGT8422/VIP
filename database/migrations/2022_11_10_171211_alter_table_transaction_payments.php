@@ -15,7 +15,7 @@ class AlterTableTransactionPayments extends Migration
     {
         Schema::table('transaction_payments', function (Blueprint $table) {
             $table->integer('store_id')->unsigned();
-            $table->foreign('store_id')->references('id')->on('warehouses')->onDelete('cascade');        
+            $table->foreign('store_id')->references('id')->on('warehouses')->onDelete('cascade')->nullable();        
         });
     }
 

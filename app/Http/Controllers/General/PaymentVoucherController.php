@@ -87,11 +87,12 @@ class PaymentVoucherController extends Controller
         # note 0=> supplier , 1 =>customer
         $business_id      = request()->session()->get('user.business_id');
         DB::beginTransaction();
+        $company_name      = request()->session()->get("user_main.domain");
         $document_expense = [];
         if ($request->hasFile('document_expense')) { $count_doc1 = 1;
             foreach ($request->file('document_expense') as $file) {
-                $file_name =  'public/uploads/documents/'.time().'.'.$count_doc1++.'.'.$file->getClientOriginalExtension();
-                $file->move('public/uploads/documents',$file_name);
+                $file_name =  'uploads/companies/'.$company_name.'/documents/voucher/'.time().'.'.$count_doc1++.'.'.$file->getClientOriginalExtension();
+                $file->move('uploads/companies/'.$company_name.'/documents/voucher',$file_name);
                 array_push($document_expense,$file_name);
             }
         }
@@ -141,6 +142,7 @@ class PaymentVoucherController extends Controller
             $contacts       = Contact::customers();
             $ID_TYPE        = 0;
         }
+        $contacts = Contact::customersSuppliers();
         # Accounts 
         $banks              = ContactBank::items();
         $title              = ($data->type == 1)?trans('home.Receipt voucher'):trans('home.Payment voucher'); 
@@ -177,11 +179,12 @@ class PaymentVoucherController extends Controller
         $data->account_type    =  1;
         $old_document          =  $data->document;
         #..........................................
+        $company_name      = request()->session()->get("user_main.domain");
         if($old_document == null){  $old_document = [];  } 
         if ($request->hasFile('document_expense')) { $count_doc2 = 1;
             foreach ($request->file('document_expense') as $file) {
-                $file_name =  'public/uploads/documents/'.time().'_'.$count_doc2++.'.'.$file->getClientOriginalExtension();
-                $file->move('public/uploads/documents',$file_name);
+                $file_name =  'uploads/companies/'.$company_name.'/documents/voucher/'.time().'_'.$count_doc2++.'.'.$file->getClientOriginalExtension();
+                $file->move('uploads/companies/'.$company_name.'/documents/voucher',$file_name);
                 array_push($old_document,$file_name);
             }
         }

@@ -116,7 +116,7 @@ class Account extends Model
         
         return $arr;
     }
-    public static function main($type='cash',$business_id=null,$bank=null)
+    public static function main($type='cash',$business_id=null,$bank=null,$balance=null)
     {
         if($business_id == null){
             $business_id = request()->session()->get('user.business_id');
@@ -147,7 +147,15 @@ class Account extends Model
         }
         $arr         = [];
         foreach ($allData as $data) {
-            $arr[$data->id] =  $data->account_number . " | " .$data->name;
+            if($balance == null){
+                $arr[$data->id] =  $data->account_number . " | " .$data->name;
+            }else{
+                if($balance == 1){
+                    $arr[$data->account_number . " | " .$data->name] = $data->balance ;
+                }else{
+                    $arr[$data->account_number . " | " .$data->name] = $data->id ;
+                }
+            }
         }
         return $arr;
     }

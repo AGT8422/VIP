@@ -742,7 +742,7 @@ class ProductGallery extends Controller
             }
             
              //........... 
-            $product_  = [] ;
+            $product_  = [] ;$total =0;
             $pr        = \App\Product::select()->get();
             if(request()->product_available != 0){
                $available = request()->product_available;

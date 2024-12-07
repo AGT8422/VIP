@@ -27,6 +27,7 @@ class CreateDeliveredPreviousesTable extends Migration
             $table->integer('line_id')->nullable();
             $table->integer('is_returned')->nullable();
             $table->string('note');
+            $table->softDeletes();
             $table->timestamps();
 
         });

@@ -257,7 +257,7 @@
 									<th @can('edit_product_price_from_sale_screen')) hide @endcan>
 										@lang('sale.unit_price_inc')
 									</th>
-									<th @if($transaction_return->exchange_price > 0)  class="curr_column br_dis  cur_check  " @else class="curr_column br_dis  cur_check hide"  @endif >@lang( 'lang_v1.Cost before without Tax' ) @if($transaction_return->exchange_price > 0)  {{ $transaction_return->currency->symbol }} @endif</th>
+									<th @if($transaction_return->exchange_price > 1)  class="curr_column br_dis  cur_check  " @else class="curr_column br_dis  cur_check hide"  @endif >@lang( 'lang_v1.Cost before without Tax' ) @if($transaction_return->exchange_price > 1)  {{ $transaction_return->currency->symbol }} @endif</th>
 
 									<th @can('edit_product_discount_from_sale_screen') hide @endcan>
 										@lang('receipt.discount')
@@ -279,7 +279,7 @@
 									<th class="text-center  ">
 										@lang('sale.cost_inc')
 									</th>
-									<th @if($transaction_return->exchange_price > 0)   class="curr_column ar_dis  cur_check  " @else  class="curr_column ar_dis  cur_check hide" @endif >@lang( 'home.Cost without Tax currency' ) @if($transaction_return->exchange_price > 0)  {{ $transaction_return->currency->symbol }} @endif</th>
+									<th @if($transaction_return->exchange_price > 1)   class="curr_column ar_dis  cur_check  " @else  class="curr_column ar_dis  cur_check hide" @endif >@lang( 'home.Cost without Tax currency' ) @if($transaction_return->exchange_price > 1)  {{ $transaction_return->currency->symbol }} @endif</th>
 
 									<th class="text-center">
 										{{-- @lang('sale.subtotal') --}}
@@ -295,7 +295,7 @@
 																						'product'                 => $it, 
 																						'row_count'               => $loop->index, 
 																						'tax_dropdown'            => $taxes,
-																						'currency'                => $currency, 
+																						'currency'                => ($currency>1)?$currency:null, 
 																						  
 																					])
 									@php $count++; @endphp 
@@ -322,9 +322,9 @@
 									</td>
 								</tr>
 								<tr>
-									<th  @if($transaction_return->exchange_price > 0)  class="col-md-7 text-right   cur_symbol" @else  class="col-md-7 text-right hide cur_symbol" @endif >@lang('purchase.sub_total_amount' ) @if($transaction_return->exchange_price > 0)  {{ $transaction_return->currency->symbol }} @endif:</th>
+									<th  @if($transaction_return->exchange_price > 1)  class="col-md-7 text-right   cur_symbol" @else  class="col-md-7 text-right hide cur_symbol" @endif >@lang('purchase.sub_total_amount' ) @if($transaction_return->exchange_price > 1)  {{ $transaction_return->currency->symbol }} @endif:</th>
 									<td class="col-md-5 text-left">
-										<span id="total_subtotal_cur" @if($transaction_return->exchange_price > 0) class="display_currency  "  @else  class="display_currency hide"  @endif></span>
+										<span id="total_subtotal_cur" @if($transaction_return->exchange_price > 1) class="display_currency  "  @else  class="display_currency hide"  @endif></span>
 										<!-- This is total before purchase tax-->
 										<input type="hidden" id="total_subtotal_input_cur" value=0  name="total_before_tax_cur">
 									</td>
@@ -375,8 +375,8 @@
 								</div>
 							</td>
 							<td class="col-md-3 pull-right">
-								<b  @if($transaction_return->exchange_price > 0) class="i_curr  " @else class="i_curr hide" @endif > @lang( 'purchase.discount' ) @if($transaction_return->exchange_price > 0)  {{ $transaction_return->currency->symbol }} @endif: (-)</b>   
-								 <span id="discount_calculated_amount_cur" @if($transaction_return->exchange_price > 0) class="display_currency  "@else  class="display_currency hide"@endif >0</span>
+								<b  @if($transaction_return->exchange_price > 1) class="i_curr  " @else class="i_curr hide" @endif > @lang( 'purchase.discount' ) @if($transaction_return->exchange_price > 1)  {{ $transaction_return->currency->symbol }} @endif: (-)</b>   
+								 <span id="discount_calculated_amount_cur" @if($transaction_return->exchange_price > 1) class="display_currency  "@else  class="display_currency hide"@endif >0</span>
 							</td>
 							<td class="col-md-3 text-right">
 								<b>@lang( 'purchase.discount' ):</b>(-) 
@@ -404,8 +404,8 @@
 							</td>
 							<td class="col-sm-3">&nbsp;</td>
 							<td class="col-sm-3 pull-right" >
-								<b @if($transaction_return->exchange_price > 0) class="t_curr  " @else class="t_curr hide" @endif  >@lang( 'purchase.purchase_tax' ) @if($transaction_return->exchange_price > 0)  {{ $transaction_return->currency->symbol }} @endif: (+)</b> 
-								<span id="tax_calculated_amount_curr" @if($transaction_return->exchange_price > 0) class="display_currency  " @else class="display_currency hide" @endif  >0</span></td>
+								<b @if($transaction_return->exchange_price > 1) class="t_curr  " @else class="t_curr hide" @endif  >@lang( 'purchase.purchase_tax' ) @if($transaction_return->exchange_price > 1)  {{ $transaction_return->currency->symbol }} @endif: (+)</b> 
+								<span id="tax_calculated_amount_curr" @if($transaction_return->exchange_price > 1) class="display_currency  " @else class="display_currency hide" @endif  >0</span></td>
 							</td>
 							<td class="col-sm-3   text-right">
 								<b>@lang( 'purchase.purchase_tax' ):</b>(+) 
@@ -426,8 +426,8 @@
 					</div>
 					<div  class="col-sm-3 pull-left"  >
 						<br>
-						<b @if($transaction_return->exchange_price > 0) class="z_curr  " @else class="z_curr hide" @endif >@lang('purchase.purchase_total_') @if($transaction_return->exchange_price > 0)  {{ $transaction_return->currency->symbol }} @endif: </b>
-						<span id="total_final_i_curr" @if($transaction_return->exchange_price > 0) class="display_currency  " @else class="display_currency hide" @endif >0</span>
+						<b @if($transaction_return->exchange_price > 1) class="z_curr  " @else class="z_curr hide" @endif >@lang('purchase.purchase_total_') @if($transaction_return->exchange_price > 1)  {{ $transaction_return->currency->symbol }} @endif: </b>
+						<span id="total_final_i_curr" @if($transaction_return->exchange_price > 1) class="display_currency  " @else class="display_currency hide" @endif >0</span>
 					</div>
 					<div class="pull-right">
 						 <b>@lang('purchase.purchase_pay'): </b><span id="total_final_" class="display_currency" data-currency_symbol='true'>{{$transaction_return->final_total}}</span>

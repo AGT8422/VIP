@@ -289,7 +289,7 @@
                         } ],
                         columns: [
                                 { data: 'mass_delete'  },
-                                { data: 'mass_deletes' ,class:'hide'  },
+                                { data: 'mass_deletes' ,class: 'hide'   },
                                 { data: 'image', name: 'products.image'  },
                                 { data: 'action', name: 'action'},
                                 { data: 'product', name: 'products.name'  },
@@ -309,6 +309,7 @@
                                 { data: 'brand', name: 'brands.name'},
                                 { data: 'tax', name: 'tax_rates.name', searchable: false},
                                 { data: 'sku', name: 'products.sku'},
+                                { data: 'product_description', name: 'products.product_description'},
                                 { data: 'product_custom_field1', name: 'products.product_custom_field1'  },
                                 { data: 'product_custom_field2', name: 'products.product_custom_field2'  },
                                 { data: 'product_custom_field3', name: 'products.product_custom_field3'  },

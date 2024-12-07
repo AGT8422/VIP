@@ -32,7 +32,7 @@ class HomeController extends Controller
             'sell_document.mimes'=>trans('home.Please insert  valid document type ')
         ]);
         DB::beginTransaction();
-
+        $company_name      = request()->session()->get("user_main.domain");
         $data      =    Transaction::find($id);
         if(isset($request->separate_sell)){
             $new_separate                     =  $data->replicate();
@@ -84,8 +84,8 @@ class HomeController extends Controller
             }
             $check_for_wrong = 0 ;
             
+            
             if ($request->products) {
-                
                 $total       = 0 ;
                 $type        = 'trans_delivery';
                 $ref_count   = $this->productUtil->setAndGetReferenceCount($type,$new_separate->business_id);
@@ -94,9 +94,10 @@ class HomeController extends Controller
                 if ($request->sell_document) {
                     foreach ($request->file('sell_document') as $key => $file) {
                         $mime =  $file->getClientOriginalExtension();
+                        
                         if (in_array($mime,['jpeg','png','jpg','pdf']))  {
-                            $filename =  'uploads/documents/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
-                            $file->move('uploads/documents',$filename);
+                            $filename =  'uploads/companies/'.$company_name.'/documents/delivery/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
+                            $file->move('uploads/companies/'.$company_name.'/documents/delivery',$filename);
                             array_push($arr,$filename);
                         }
                     }
@@ -172,8 +173,8 @@ class HomeController extends Controller
                             $arr  =  [];
                             $mime =  $file->getClientOriginalExtension();
                             if (in_array($mime,['jpeg','png','jpg','pdf']))  {
-                                $filename =  'uploads/documents/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
-                                $file->move('uploads/documents',$filename);
+                                $filename =  'uploads/companies/'.$company_name.'/documents/delivery/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
+                                $file->move('uploads/companies/'.$company_name.'/documents/delivery',$filename);
                                 array_push($arr,$filename);
                             }
                             $trd->document = json_encode($arr);
@@ -264,8 +265,8 @@ class HomeController extends Controller
                     foreach ($request->file('sell_document') as $key => $file) {
                         $mime =  $file->getClientOriginalExtension();
                         if (in_array($mime,['jpeg','png','jpg','pdf']))  {
-                            $filename =  'uploads/documents/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
-                            $file->move('uploads/documents',$filename);
+                            $filename =  'uploads/companies/'.$company_name.'/documents/delivery/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
+                            $file->move('uploads/companies/'.$company_name.'/documents/delivery',$filename);
                             array_push($arr,$filename);
                         }
                     }
@@ -292,7 +293,9 @@ class HomeController extends Controller
                         $diff     =  $margin -  $single['quantity'];
                         $product  =  Product::find($single['product_id']);
                         $line     =  TransactionSellLine::where('transaction_id',$id)
-                                                        ->where('product_id',$single['product_id'])->where("id",$single['price_from_bill'])->first();
+                                                        ->where('product_id',$single['product_id'])
+                                                        // ->where("id",$single['price_from_bill'])
+                                                        ->first();
                           // if(!in_array($line->id,$unique_id)){
                         //     $unique_id[] = $line->id;
                         // }else{
@@ -301,7 +304,7 @@ class HomeController extends Controller
                         //                                 ->where('product_id',$single['product_id'])
                         //                                 ->first();
                         // }
-                            
+                       
                         if ($diff > 0) {
                             $date =  $request->date;
                             $this->recieve($data,$product,$single['quantity'],$request->stores_id[$x],$tr_recieved,$line,$date);
@@ -332,8 +335,8 @@ class HomeController extends Controller
                             $arr  =  [];
                             $mime =  $file->getClientOriginalExtension();
                             if (in_array($mime,['jpeg','png','jpg','pdf']))  {
-                                $filename =  'uploads/documents/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
-                                $file->move('uploads/documents',$filename);
+                                $filename =  'uploads/companies/'.$company_name.'/documents/delivery/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
+                                $file->move('uploads/companies/'.$company_name.'/documents/delivery',$filename);
                                 array_push($arr,$filename);
                             }
                             $trd->document = json_encode($arr);
@@ -380,11 +383,11 @@ class HomeController extends Controller
         DB::beginTransaction();
         
         $td        =    TransactionDelivery::find($id);
-        
+        $company_name      = request()->session()->get("user_main.domain");
         if($td->is_invoice != null){
-            $data      =    Transaction::find($td->transaction_id);
-
-            $taxes_amount                     = \App\TaxRate::find($data->tax_id);
+            
+            $data                             =  Transaction::find($td->transaction_id);
+            $taxes_amount                     =  \App\TaxRate::find($data->tax_id);
             $value_tax                        =  ($taxes_amount)?$taxes_amount->amount:0;
             /** START  */
             if($data->discount_type == "fixed_before_vat"){
@@ -397,8 +400,7 @@ class HomeController extends Controller
             }
             $before_sub_total                 = $data->total_before_tax;
             $before_percentage                = $before_total_discount / $data->total_before_tax;
-            /** END */
-
+            /** END */ 
             $prev_ids  =  $request->delivered_previouse_id?$request->delivered_previouse_id:[];
 
             $remove    =  DeliveredPrevious::where('transaction_id',$data->id)
@@ -451,10 +453,6 @@ class HomeController extends Controller
                     $sel_line           = \App\TransactionSellLine::find($product_line);
                     $sel_line->quantity = $product_qty;
                     $sel_line->save();
-
-                    
-                   
-
                     /** END */
 
 
@@ -473,11 +471,11 @@ class HomeController extends Controller
                                                 ->where('product_id',$prev->product_id)
                                                 ->first();
                     MovementWarehouse::where('delivered_previouse_id',$prev->id)
-                                        ->update([
-                                                    'store_id'    => $prev->store_id,
-                                                    'minus_qty'   => $prev->current_qty,
-                                                    'current_qty' => $info->product_qty,
-                                                    'date'        => $request->date_old
+                                            ->update([
+                                                'store_id'    => $prev->store_id,
+                                                'minus_qty'   => $prev->current_qty,
+                                                'current_qty' => $info->product_qty,
+                                                'date'        => $request->date_old
                                             ]);
                     $this->update_variation($prev->product_id,$diff,$prev->transaction->location_id);
 
@@ -532,8 +530,8 @@ class HomeController extends Controller
                 foreach ($request->file('sell_document') as $key => $file) {
                     $mime =  $file->getClientOriginalExtension();
                     if (in_array($mime,['jpeg','png','jpg','pdf']))  {
-                        $filename =  'uploads/documents/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
-                        $file->move('uploads/documents',$filename);
+                        $filename =  'uploads/companies/'.$company_name.'/documents/delivery/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
+                        $file->move('uploads/companies/'.$company_name.'/documents/delivery',$filename);
                         array_push($arr,$filename);
                     }
                 }
@@ -546,19 +544,19 @@ class HomeController extends Controller
                 $total     = 0 ;
                 $type      = 'trans_delivery';
                 $arr       = [];
-                $tr_recieved                  =  TransactionDelivery::find($id);
-                if ($request->sell_document) {
-                    foreach ($request->file('sell_document') as $key => $file) {
-                        $mime =  $file->getClientOriginalExtension();
-                        if (in_array($mime,['jpeg','png','jpg','pdf']))  {
-                            $filename =  'uploads/documents/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
-                            $file->move('uploads/documents',$filename);
-                            array_push($arr,$filename);
-                        }
-                    }
-                $tr_recieved->document        =  json_encode($arr);
-                $tr_recieved->save();
-                } 
+                // $tr_recieved                  =  TransactionDelivery::find($id);
+                // if ($request->sell_document) {
+                //     foreach ($request->file('sell_document') as $key => $file) {
+                //         $mime =  $file->getClientOriginalExtension();
+                //         if (in_array($mime,['jpeg','png','jpg','pdf']))  {
+                //             $filename =  'uploads/companies/'.$company_name.'/documents/delivery/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
+                //             $file->move('uploads/companies/'.$company_name.'/documents/delivery',$filename);
+                //             array_push($arr,$filename);
+                //         }
+                //     }
+                // $tr_recieved->document        =  json_encode($arr);
+                // $tr_recieved->save();
+                // } 
                 $x =  0;
                 
                 foreach ($request->products  as $key => $single) {
@@ -596,9 +594,7 @@ class HomeController extends Controller
                     }
                     $x++;
                 }
-            }else{
-                
-            }
+            } 
 
             //.......... start eb
             if($request->sell_document_ != null){
@@ -609,8 +605,8 @@ class HomeController extends Controller
                             $arr  =  [];
                             $mime =  $file->getClientOriginalExtension();
                             if (in_array($mime,['jpeg','png','jpg','pdf']))  {
-                                $filename =  'uploads/documents/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
-                                $file->move('uploads/documents',$filename);
+                                $filename =  'uploads/companies/'.$company_name.'/documents/delivery/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
+                                $file->move('uploads/companies/'.$company_name.'/documents/delivery',$filename);
                                 array_push($arr,$filename);
                             }
                             $trd->document = json_encode($arr);
@@ -802,19 +798,19 @@ class HomeController extends Controller
                 $total     = 0 ;
                 $type      = 'trans_delivery';
                 $arr       = [];
-                $tr_recieved                  =  TransactionDelivery::find($id);
-                if ($request->sell_document) {
-                    foreach ($request->file('sell_document') as $key => $file) {
-                        $mime =  $file->getClientOriginalExtension();
-                        if (in_array($mime,['jpeg','png','jpg','pdf']))  {
-                            $filename =  'uploads/documents/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
-                            $file->move('uploads/documents',$filename);
-                            array_push($arr,$filename);
-                        }
-                    }
-                $tr_recieved->document        =  json_encode($arr);
-                $tr_recieved->save();
-                } 
+                // $tr_recieved                  =  TransactionDelivery::find($id);
+                // if ($request->sell_document) {
+                //     foreach ($request->file('sell_document') as $key => $file) {
+                //         $mime =  $file->getClientOriginalExtension();
+                //         if (in_array($mime,['jpeg','png','jpg','pdf']))  {
+                //             $filename =  'uploads/documents/'.time().'_'.$key.'.'.$file->getClientOriginalExtension();
+                //             $file->move('uploads/documents',$filename);
+                //             array_push($arr,$filename);
+                //         }
+                //     }
+                // $tr_recieved->document        =  json_encode($arr);
+                // $tr_recieved->save();
+                // } 
                 $x =  0;
                 
                 foreach ($request->products  as $key => $single) {
@@ -914,6 +910,7 @@ class HomeController extends Controller
          if($date != null){
             $prev->created_at             =  $date;
         }
+         
         $prev->save();
         WarehouseInfo::deliver_stoct($product->id,$store_id,$quantity,null,$data->business_id);
         MovementWarehouse::movemnet_warehouse_sell($data,$product,$quantity,$store_id,$line,$prev->id);

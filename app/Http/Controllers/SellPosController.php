@@ -340,7 +340,7 @@ class SellPosController extends Controller
                 $input['sub_status']  = 'proforma';
                 $sub_status_          = 'proforma';
             }  
-
+            $company_name      = request()->session()->get("user_main.domain");
             # Check Customer credit limit 
             $is_credit_limit_exeeded       = $this->transactionUtil->isCustomerCreditLimitExeeded($input);
             if ($is_credit_limit_exeeded !== false) {
@@ -468,8 +468,8 @@ class SellPosController extends Controller
                 $document_sell = [];
                 if ($request->hasFile('document_sell')) { $id_sf = 1;
                     foreach ($request->file('document_sell') as $file) {
-                        $file_name =  'public/uploads/documents/'.time().'_'.$id_sf++.'.'.$file->getClientOriginalExtension();
-                        $file->move('public/uploads/documents',$file_name);
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/sale/'.time().'_'.$id_sf++.'.'.$file->getClientOriginalExtension();
+                        $file->move('uploads/companies/'.$company_name.'/documents/sale',$file_name);
                         array_push($document_sell,$file_name);
                     }
                 } 
@@ -681,7 +681,8 @@ class SellPosController extends Controller
             \Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
             // if (get_class($e) == \App\Exceptions\AdvanceBalanceNotAvailable::class) { $msg = $e->getMessage(); }
             // if (get_class($e) == \App\Exceptions\PurchaseSellMismatch::class) { $msg = $e->getMessage();  }
-            $msg    = trans("messages.something_went_wrong");
+            // $msg    = trans("messages.something_went_wrong");
+            $msg    = "File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage();
             $output = [
                 'success' => 0,
                 'msg'     => $msg
@@ -1111,7 +1112,7 @@ class SellPosController extends Controller
         
         try {
             $input = $request->except('_token');
-            // dd($request);    
+              
             $input['is_quotation'] = 0;
             //status is send as quotation from edit sales screen.
             $sub_status_ = "";
@@ -1294,17 +1295,17 @@ class SellPosController extends Controller
                         //     $input['res_waiter_id'] = request()->get('res_waiter_id');
                         // }
                         
-                  
+                $company_name      = request()->session()->get("user_main.domain");
                 if ($request->hasFile('document_sell')) {
                     $id_ss = 1;
                     foreach ($request->file('document_sell') as $file) {
-                        $file_name =  'public/uploads/documents/'.time().'_'.$id_ss++.'.'.$file->getClientOriginalExtension();
-                        $file->move('public/uploads/documents',$file_name);
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/sale/'.time().'_'.$id_ss++.'.'.$file->getClientOriginalExtension();
+                        $file->move('uploads/companies/'.$company_name.'/documents/sale',$file_name);
                         array_push($old_document,$file_name);
                     }
                 } 
 
-                
+              
                 if(json_encode($old_document)!="[]"){
                     $input['document'] = json_encode($old_document);
                 }
@@ -1540,6 +1541,7 @@ class SellPosController extends Controller
                     }
                 }
               }
+                DB::commit();
                 $output = ['success' => 1, 'msg' => $msg, 'receipt' => $receipt];
             } else {
                 $output = [
@@ -2884,6 +2886,7 @@ class SellPosController extends Controller
         }
         if (request()->ajax()) {
             try {
+                   
                 $business_id = request()->session()->get('user.business_id');
                 $transaction = Transaction::with([
                     'sell_lines',
@@ -2893,7 +2896,7 @@ class SellPosController extends Controller
                 ])
                 ->where('business_id', $business_id)
                 ->findOrFail($id);
-
+                
                 $transaction_before = $transaction->replicate();
                 $is_direct_sale     = $transaction->is_direct_sale;
                 # Check Customer credit limit
@@ -2905,7 +2908,6 @@ class SellPosController extends Controller
                     'status'        => $info_status,
                     'sub_status'    => $info_sub_status
                 ];
-        
                 $is_credit_limit_exeeded       = $this->transactionUtil->isCustomerCreditLimitExeeded($data, $id);
                 if ($is_credit_limit_exeeded !== false) {
                     $credit_limit_amount = $this->transactionUtil->num_f($is_credit_limit_exeeded, true);

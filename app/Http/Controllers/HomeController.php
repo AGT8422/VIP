@@ -13,12 +13,16 @@ use App\Utils\TransactionUtil;
 use App\VariationLocationDetails;
 use Datatables;
 use DB;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use App\Utils\Util;
 use App\Utils\RestaurantUtil;
 use App\User;
 use Illuminate\Notifications\DatabaseNotification;
-use App\Media;
+use App\Media; 
+use App\Charts\SampleChart;
+
 
 class HomeController extends Controller
 {
@@ -64,9 +68,9 @@ class HomeController extends Controller
         $fy = $this->businessUtil->getCurrentFinancialYear($business_id);
         $date_filters['this_fy'] = $fy;
         $date_filters['this_month']['start'] = date('Y-m-01');
-        $date_filters['this_month']['end'] = date('Y-m-t');
-        $date_filters['this_week']['start'] = date('Y-m-d', strtotime('monday this week'));
-        $date_filters['this_week']['end'] = date('Y-m-d', strtotime('sunday this week'));
+        $date_filters['this_month']['end']   = date('Y-m-t');
+        $date_filters['this_week']['start']  = date('Y-m-d', strtotime('monday this week'));
+        $date_filters['this_week']['end']    = date('Y-m-d', strtotime('sunday this week'));
         
         //.1.//.... warehouse permissions 
          
@@ -145,7 +149,7 @@ class HomeController extends Controller
         $months = [];
         $date   = strtotime($fy['start']);
         $last   = date('m-Y', strtotime($fy['end']));
-
+        
         $fy_months = [];
         do {
             $month_year = date('m-Y', $date);
@@ -185,8 +189,6 @@ class HomeController extends Controller
             $fy_sells_by_location_data[$loc_id]['values'] = $values_data;
         }
 
-
-
         //Get Dashboard widgets from module
         $module_widgets = $this->moduleUtil->getModuleData('dashboard_widget');
 
@@ -199,84 +201,434 @@ class HomeController extends Controller
         }
 
 
-
-
-
         $date_range =[]; //$request->input('date_range');
         
         if (!empty($date_range)) {
             $date_range_array = explode('~', $date_range);
             $filters['start_date'] = $this->transactionUtil->uf_date(trim($date_range_array[0]));
-            $filters['end_date'] = $this->transactionUtil->uf_date(trim($date_range_array[1]));
+            $filters['end_date']   = $this->transactionUtil->uf_date(trim($date_range_array[1]));
         } else {
             $filters['start_date'] = \Carbon::now()->startOfYear()->format('Y-m-d');
             $filters['end_date']   = \Carbon::now()->endOfYear()->format('Y-m-d');
         }
+      
+        // $expenses = $this->transactionUtil->getExpenseReport($business_id, $filters);
 
-        $expenses = $this->transactionUtil->getExpenseReport($business_id, $filters);
+        // $values = [];
+        // $labels = [];
+        // foreach ($expenses as $expense) {
+        //     $values[] = (float) $expense->total_expense;
+        //     $labels[] = !empty($expense->category) ? $expense->category : __('report.others');
+        // }
 
-        $values = [];
-        $labels = [];
-        foreach ($expenses as $expense) {
-            $values[] = (float) $expense->total_expense;
-            $labels[] = !empty($expense->category) ? $expense->category : __('report.others');
-        }
-
-
-
-        $categories = ExpenseCategory::where('business_id', $business_id)
-                            ->pluck('name', 'id');
-        
-        $business_locations = BusinessLocation::forDropdown($business_id, true);
+        // $categories         = ExpenseCategory::where('business_id', $business_id)->pluck('name', 'id');
+        // $business_locations = BusinessLocation::forDropdown($business_id, true);
 
        //recent transaction==========================================================
-        $transaction_status ='final'; //$request->get('status');
+        // $transaction_status ='final'; //$request->get('status');
 
        // $register = $this->cashRegisterUtil->getCurrentCashRegister($user_id);
 
-        $query = Transaction::where('business_id', $business_id)
-                       // ->where('transactions.created_by', $user_id)
-                        ->where('transactions.type', 'sale')
-                        ->where('is_direct_sale', 0);
+        // $query = Transaction::where('business_id', $business_id)
+        //                // ->where('transactions.created_by', $user_id)
+        //                 ->where('transactions.type', 'sale')
+        //                 ->where('is_direct_sale', 0);
 
-        if ($transaction_status == 'final') {
-            //Commented as credit sales not showing
-            // if (!empty($register->id)) {
-            //     $query->leftjoin('cash_register_transactions as crt', 'transactions.id', '=', 'crt.transaction_id')
-            //     ->where('crt.cash_register_id', $register->id);
-            // }
+        // if ($transaction_status == 'final') {
+        //     //Commented as credit sales not showing
+        //     // if (!empty($register->id)) {
+        //     //     $query->leftjoin('cash_register_transactions as crt', 'transactions.id', '=', 'crt.transaction_id')
+        //     //     ->where('crt.cash_register_id', $register->id);
+        //     // }
+        // }
+
+        // if ($transaction_status == 'quotation') {
+        //     $query->where('transactions.status', 'draft')
+        //         ->where('is_quotation', 1);
+        // } elseif ($transaction_status == 'draft') {
+        //     $query->where('transactions.status', 'draft')
+        //         ->where('is_quotation', 0);
+        // } else {
+        //     $query->where('transactions.status', $transaction_status);
+        // }
+
+        // $transaction_sub_type =''; //$request->get('transaction_sub_type');
+        // if (!empty($transaction_sub_type)) {
+        //     $query->where('transactions.sub_type', $transaction_sub_type);
+        // } else {
+        //     $query->where('transactions.sub_type', null);
+        // }
+
+        // $transactions = $query->orderBy('transactions.created_at', 'desc')
+        //                     ->groupBy('transactions.id')
+        //                     ->select('transactions.*')
+        //                     ->with(['contact', 'table'])
+        //                     ->limit(10)
+        //                     ->get();
+
+        #.........................
+        #.........................
+        #.........................
+        $months                  =  [""];
+        $values                  =  [""];           
+        $values2                 =  [""];           
+        $numberOfReceipt         =  200; 
+        $business                = \App\Business::find($business_id);
+        $customerParent          = $business->customer_type_id;
+        $supplierParent          = $business->supplier_type_id;
+        #...................balance..
+        $totalCustomer           = \App\Contact::whereIn("type",["customer","both"])->count();
+        $totalBalanceCustomer    = \App\Account::whereHas("account_type",function($query) use($customerParent){ $query->where("id",$customerParent); })->sum('balance');
+        $totalBalanceSupplier    = \App\Account::whereHas("account_type",function($query) use($supplierParent){  $query->where("id",$supplierParent);  })->sum('balance');
+        #.........................
+        $contactOfInvoice        = \App\Transaction::where('business_id', $business_id)
+                                                      ->where('type', 'sale')
+                                                      ->whereIn('status', ['final','delivered'])
+                                                      ->whereIn('sub_status', ['final','f'])
+                                                      ->whereDate("transaction_date",">=",$filters['start_date'])                  
+                                                      ->whereDate("transaction_date","<=",$filters['end_date']  )                  
+                                                      ->groupBy('contact_id')->pluck('contact_id')->count();
+        $idsOfInvoice            = \App\Transaction::where('business_id', $business_id)
+                                                      ->where('type', 'sale')
+                                                      ->whereIn('status', ['final','delivered'])
+                                                      ->whereDate("transaction_date",">=",$filters['start_date'])                  
+                                                      ->whereDate("transaction_date","<=",$filters['end_date']  )  
+                                                      ->whereIn('sub_status', ['final','f'])->pluck('id');
+        $numberOfInvoice         = \App\Transaction::where('business_id', $business_id)
+                                                      ->where('type', 'sale')
+                                                      ->whereIn('status', ['final','delivered'])
+                                                      ->whereDate("transaction_date",">=",$filters['start_date'])                  
+                                                      ->whereDate("transaction_date","<=",$filters['end_date']  )  
+                                                      ->whereIn('sub_status', ['final','f'])->count();
+              
+        $partialInvoices         = \App\TransactionPayment::whereIn("transaction_id", $idsOfInvoice)
+                                                   ->whereHas('transaction',function($query) use($filters){
+                                                         $query->where("payment_status","partial");;
+                                                         $query->whereDate("transaction_date",">=",$filters['start_date']);                  
+                                                         $query->whereDate("transaction_date","<=",$filters['end_date']  );  
+                                                    })
+                                                   ->sum('amount');
+        #.........................
+        
+        #...........delivered
+        $idSales                 = \App\Transaction::where('business_id', $business_id)
+                                            ->where('type', 'sale')
+                                            ->whereIn('status', ['final','delivered'])
+                                            ->whereDate("transaction_date",">=",$filters['start_date'])                  
+                                            ->whereDate("transaction_date","<=",$filters['end_date']  )  
+                                            ->whereIn('sub_status', ['final','f'])->pluck('id');
+
+        $trSales                 = \App\TransactionSellLine::whereIn('transaction_id',$idSales)->pluck("product_id","id");
+        $productId               = \App\TransactionSellLine::whereIn('transaction_id',$idSales)->groupBy('product_id')->pluck("product_id");
+        #..................................1.
+        $productIDNotDelivered   = [];
+        $productIDDelivered      = [];
+        $costOfDeliveredSale     = 0;$AmOfUnDeliveredSale = 0;
+        $amountOfDeliveredSale   = 0;$CoOfUnDeliveredSale = 0;
+        foreach($productId as $iD){
+            $moves = \App\Models\ItemMove::whereIn('state',["sale","sell_return"])->whereIn('transaction_id',$idSales)->where("product_id",$iD)->get();
+            foreach($moves as $move){
+                $delivered             = \App\Models\DeliveredPrevious::find($move->recieve_id);
+                $lineSel               = \App\TransactionSellLine::find($move->line_id);
+                $margin                = $lineSel->quantity-$delivered->current_qty;
+                $amountOfDeliveredSale = $amountOfDeliveredSale + ($move->qty * $move->row_price_inc_exp);   
+                $costOfDeliveredSale   = $costOfDeliveredSale   + ($move->qty * $move->out_price);   
+                if($margin!=0){
+                    $AmOfUnDeliveredSale = $AmOfUnDeliveredSale + (abs($margin) * $move->row_price_inc_exp); 
+                    $CoOfUnDeliveredSale = $CoOfUnDeliveredSale + (abs($margin) * $move->out_price);
+                }
+            }
+            if(count($moves)==0){
+                $productIDNotDelivered[] = $iD;
+            }else{
+                 
+            }
         }
-
-        if ($transaction_status == 'quotation') {
-            $query->where('transactions.status', 'draft')
-                ->where('is_quotation', 1);
-        } elseif ($transaction_status == 'draft') {
-            $query->where('transactions.status', 'draft')
-                ->where('is_quotation', 0);
-        } else {
-            $query->where('transactions.status', $transaction_status);
+        #..................................1.
+        #........................Not delivered yet.....2.
+        $amountOfUnDeliveredSale = floatVal(\App\TransactionSellLine::whereIn('transaction_id',$idSales)->whereIn("product_id",$productIDNotDelivered)->select(\DB::raw('SUM(quantity*unit_price) as total'))->first()->total);
+        $productCost             = \App\Models\ItemMove::whereIn("product_id",$productIDNotDelivered)
+                                                    ->orderByRaw('ISNULL(date), date desc, created_at desc')
+                                                    ->orderBy("id","desc")
+                                                    ->orderBy("order_id","desc")
+                                                    ->groupBy("product_id")
+                                                    ->pluck('unit_cost','product_id');
+        $listOfQuantityProduct   = \App\TransactionSellLine::whereIn('transaction_id',$idSales)->whereIn("product_id",$productIDNotDelivered)->select('quantity','product_id')->get();
+        $array_of_product_qty    = [];  $array_of_product  = [];
+        foreach($listOfQuantityProduct as $key => $value){
+            if(!in_array($value->product_id,$array_of_product)){
+                $array_of_product[]                       = $value->product_id;
+                $array_of_product_qty[$value->product_id] = $value->quantity;
+            }else{     
+                $array_of_product_qty[$value->product_id] = $array_of_product_qty[$value->product_id] + $value->quantity;
+            }
         }
-
-        $transaction_sub_type =''; //$request->get('transaction_sub_type');
-        if (!empty($transaction_sub_type)) {
-            $query->where('transactions.sub_type', $transaction_sub_type);
-        } else {
-            $query->where('transactions.sub_type', null);
+        $costOfUnDeliveredSale = 0;
+        foreach($productCost as $ky => $val){
+            $costOfUnDeliveredSale = $costOfUnDeliveredSale + ($array_of_product_qty[$ky]*$val) ;
         }
+        $amountOfUnDeliveredSale = $amountOfUnDeliveredSale + $AmOfUnDeliveredSale ; 
+        $costOfUnDeliveredSale   = $costOfUnDeliveredSale   + $CoOfUnDeliveredSale ; 
+        #..................................2.
+        #......................
+        #.......................                             
+        #.......................
+        $patterns           = [];
+        $pattern            = \App\Models\Pattern::where("business_id", $business_id)->get();
+        foreach($pattern as $pat){
+            $patterns[$pat->id] = $pat->name;
+        }
+        #.......................
+        #.......................
+        $cash              = \App\Account::main('cash',null,null,1);
+        $bank              = \App\Account::main('bank',null,null,1);
+        $cashId            = \App\Account::main('cash',null,null,2);
+        $bankId            = \App\Account::main('bank',null,null,2);
+        #....................... 
+        #.......................
+        $totalPaidSales    = \App\TransactionPayment::whereIn("transaction_id", $idsOfInvoice)->whereDate('paid_on',">=",$filters['start_date'])->whereDate('paid_on',"<=", $filters['end_date'])->sum('amount');
+        
+        #.......................
+        $totalSales        = \App\Transaction::where('business_id', $business_id)
+                                        ->where('type', 'sale')
+                                        ->whereIn('status', ['final','delivered'])
+                                        ->whereDate("transaction_date",">=",$filters['start_date'])                  
+                                        ->whereDate("transaction_date","<=",$filters['end_date']  )  
+                                        ->whereIn('sub_status', ['final','f'])->sum('final_total');
 
-        $transactions = $query->orderBy('transactions.created_at', 'desc')
-                            ->groupBy('transactions.id')
-                            ->select('transactions.*')
-                            ->with(['contact', 'table'])
-                            ->limit(10)
-                            ->get();
+        $totalSalesExclude = \App\Transaction::where('business_id', $business_id)
+                                        ->where('type', 'sale')
+                                        ->whereIn('status', ['final','delivered'])
+                                        ->whereDate("transaction_date",">=",$filters['start_date'])                  
+                                        ->whereDate("transaction_date","<=",$filters['end_date']  )  
+                                        ->whereIn('sub_status', ['final','f'])->sum('total_before_tax');
 
-         
-         
+        $totalSalesTax     = \App\Transaction::where('business_id', $business_id)
+                                        ->where('type', 'sale')
+                                        ->whereIn('status', ['final','delivered'])
+                                        ->whereDate("transaction_date",">=",$filters['start_date'])                  
+                                        ->whereDate("transaction_date","<=",$filters['end_date']  )  
+                                        ->whereIn('sub_status', ['final','f'])->sum('tax_amount');
+        
+        $totalUnPaidSales  = (($totalSales - $totalPaidSales)<0)?abs($totalSales - $totalPaidSales):$totalSales - $totalPaidSales ;
+        $grossProfit       = $totalSalesExclude   - ($costOfDeliveredSale + $costOfUnDeliveredSale);
+        $costOfSales       = $costOfDeliveredSale + $costOfUnDeliveredSale ;
+        
+        #.......................
+        $chart             = new SampleChart(); 
+        // // Parse the start and end dates using Carbon
+        $start   = Carbon::parse($filters['start_date'])->startOfMonth();
+        $end     = Carbon::parse($filters['end_date'])->endOfMonth();
+ 
+        // Generate the period between the start    and end dates
+        $period  = CarbonPeriod::create($start, '1 month', $end);
+        foreach ($period as $date) { 
+            #......................................date section
+            $months[]               = $date->format('M Y');
+            $new_format             = $date->format('Y-m-d'); 
+            $firstDate              = $date;
+            $secondDate             = \Carbon::parse($new_format)->startOfMonth()->subMonth(-1);
+            #.................................................end
+           
+            $idsOfInvoiceChart      = \App\Transaction::where('business_id', $business_id)
+                                                        ->where('type', 'sale')
+                                                        ->whereDate('transaction_date',">=", $firstDate)
+                                                        ->whereDate('transaction_date',"<=", $secondDate)
+                                                        ->whereIn('status', ['final','delivered'])
+                                                        ->whereIn('sub_status', ['final','f'])
+                                                        ->pluck('id');
+             
 
+            $totalSalesChart        = \App\Transaction::where('business_id', $business_id)
+                                                        ->where('type', 'sale')
+                                                        ->whereDate('transaction_date',">=", $firstDate)
+                                                        ->whereDate('transaction_date',"<=", $secondDate)
+                                                        ->whereIn('status', ['final','delivered'])
+                                                        ->whereIn('sub_status', ['final','f'])
+                                                        ->sum('final_total');
+             
+           
+            $totalPaid              = \App\TransactionPayment::whereIn("transaction_id", $idsOfInvoiceChart)->whereDate('paid_on',">=", $firstDate)->whereDate('paid_on',"<=", $secondDate)->sum('amount');
+            $totalUnPaid            = (($totalSalesChart - $totalPaid)<0)?abs($totalSalesChart - $totalPaid):$totalSalesChart - $totalPaid ;
+                
+            $values[]               = $totalPaid;
+            $values2[]              = $totalUnPaid;
 
+            $totalPaidSales         = $totalPaidSales + $totalPaid;
+            $totalUnPaidSales       = $totalUnPaidSales + $totalUnPaid;
+             
+        }
+        if(request()->ajax()){
+            $startDate        =  request()->input('start_date');
+            $endDate          =  request()->input('end_date');  
+            if($startDate != null){
+                $yearStartDate            =  \Carbon::createFromFormat('m/d/Y', $startDate)->subYear(0)->year ;
+                $monthStartDate           =  \Carbon::createFromFormat('m/d/Y', $startDate)->month;
+                $monthEndDate             =  \Carbon::createFromFormat('m/d/Y', $endDate)->month;
+                // // Parse the start and end dates using Carbon
+                $start   = Carbon::parse($startDate)->startOfMonth();
+                $end     = Carbon::parse($endDate)->endOfMonth();
+                // Generate the period between the start    and end dates
+                $period  = CarbonPeriod::create($start, '1 month', $end);
+                // Initialize an array to hold the month names
+                $months  = [""];
+                $values  = [""];
+                $values2 = [""];
+                #.................................
+             
+                #...........delivered 
+                $idSales                 = \App\Transaction::where('business_id', $business_id)
+                                                        ->where('type', 'sale')
+                                                        ->whereDate("transaction_date",">=",$start)                  
+                                                        ->whereDate("transaction_date","<=",$end  )  
+                                                        ->whereIn('status', ['final','delivered'])
+                                                        ->whereIn('sub_status', ['final','f'])->pluck('id');
+               
+                $trSales                 = \App\TransactionSellLine::whereIn('transaction_id',$idSales)->pluck("product_id","id");
+                $productId               = \App\TransactionSellLine::whereIn('transaction_id',$idSales)->groupBy('product_id')->pluck("product_id");
+                #..................................1.
+                $productIDNotDelivered   = [];
+                $productIDDelivered      = [];
+                $costOfDeliveredSale     = 0;$AmOfUnDeliveredSale = 0;
+                $amountOfDeliveredSale   = 0;$CoOfUnDeliveredSale = 0;
+                foreach($productId as $iD){
+                $moves = \App\Models\ItemMove::whereIn('state',["sale","sell_return"])->whereIn('transaction_id',$idSales)->where("product_id",$iD)->get();
+                foreach($moves as $move){
+                $delivered             = \App\Models\DeliveredPrevious::find($move->recieve_id);
+                $lineSel               = \App\TransactionSellLine::find($move->line_id);
+                $margin                = $lineSel->quantity-$delivered->current_qty;
+                $amountOfDeliveredSale = $amountOfDeliveredSale + ($move->qty * $move->row_price_inc_exp);   
+                $costOfDeliveredSale   = $costOfDeliveredSale   + ($move->qty * $move->out_price);   
+                if($margin!=0){
+                $AmOfUnDeliveredSale = $AmOfUnDeliveredSale + (abs($margin) * $move->row_price_inc_exp); 
+                $CoOfUnDeliveredSale = $CoOfUnDeliveredSale + (abs($margin) * $move->out_price);
+                }
+                }
+                if(count($moves)==0){
+                    $productIDNotDelivered[] = $iD;
+                }else{
 
-        return view('home.index', compact('transaction_sub_type'  ,'currency_detail','user','languages','transactions','expenses','date_filters', 'widgets', 'all_locations'));
+                }
+                }
+
+                #..................................1.
+                #........................Not delivered yet.....2.
+                $amountOfUnDeliveredSale = floatVal(\App\TransactionSellLine::whereIn('transaction_id',$idSales)->whereIn("product_id",$productIDNotDelivered)->select(\DB::raw('SUM(quantity*unit_price) as total'))->first()->total);
+                $productCost             = \App\Models\ItemMove::whereIn("product_id",$productIDNotDelivered)
+                                                                ->orderByRaw('ISNULL(date), date desc, created_at desc')
+                                                                ->orderBy("id","desc")
+                                                                ->orderBy("order_id","desc")
+                                                                ->groupBy("product_id")
+                                                                ->pluck('unit_cost','product_id');
+                $listOfQuantityProduct   = \App\TransactionSellLine::whereIn('transaction_id',$idSales)->whereIn("product_id",$productIDNotDelivered)->select('quantity','product_id')->get();
+                $array_of_product_qty    = [];  $array_of_product  = [];
+                foreach($listOfQuantityProduct as $key => $value){
+                if(!in_array($value->product_id,$array_of_product)){
+                $array_of_product[]                       = $value->product_id;
+                $array_of_product_qty[$value->product_id] = $value->quantity;
+                }else{     
+                $array_of_product_qty[$value->product_id] = $array_of_product_qty[$value->product_id] + $value->quantity;
+                }
+                }
+                $costOfUnDeliveredSale = 0;
+                foreach($productCost as $ky => $val){
+                $costOfUnDeliveredSale = $costOfUnDeliveredSale + ($array_of_product_qty[$ky]*$val) ;
+                }
+                $amountOfUnDeliveredSale = $amountOfUnDeliveredSale + $AmOfUnDeliveredSale ; 
+                $costOfUnDeliveredSale   = $costOfUnDeliveredSale   + $CoOfUnDeliveredSale ; 
+                #.................................
+              
+                $contactOfInvoice  = \App\Transaction::where('business_id', $business_id)
+                                                    ->where('type', 'sale')
+                                                    ->whereDate('transaction_date',">=", $start)
+                                                    ->whereDate('transaction_date',"<=", $end)
+                                                    ->whereIn('status', ['final','delivered'])
+                                                    ->whereIn('sub_status', ['final','f'])->groupBy('contact_id')->pluck('contact_id')->count();
+
+                $idsOfInvoice      = \App\Transaction::where('business_id', $business_id)
+                                                    ->where('type', 'sale')
+                                                    ->whereDate('transaction_date',">=", $start)
+                                                    ->whereDate('transaction_date',"<=", $end)
+                                                    ->whereIn('status', ['final','delivered'])
+                                                    ->whereIn('sub_status', ['final','f'])->pluck('id');
+
+                $numberOfInvoice   = \App\Transaction::where('business_id', $business_id)
+                                                    ->where('type', 'sale')
+                                                    ->whereIn('status', ['final','delivered'])
+                                                    ->whereDate("transaction_date",">=",$start)                  
+                                                    ->whereDate("transaction_date","<=",$end  )  
+                                                    ->whereIn('sub_status', ['final','f'])->count();
+
+                $totalSales        = \App\Transaction::where('business_id', $business_id)
+                                                    ->where('type', 'sale')
+                                                    ->whereDate('transaction_date',">=", $start)
+                                                    ->whereDate('transaction_date',"<=", $end)
+                                                    ->whereIn('status', ['final','delivered'])
+                                                    ->whereIn('sub_status', ['final','f'])
+                                                    ->sum('final_total');
+
+                $totalSalesExclude = \App\Transaction::where('business_id', $business_id)
+                                                    ->where('type', 'sale')
+                                                    ->whereIn('status', ['final','delivered'])
+                                                    ->whereDate("transaction_date",">=",$start)                  
+                                                    ->whereDate("transaction_date","<=",$end  )  
+                                                    ->whereIn('sub_status', ['final','f'])->sum('total_before_tax');
+
+                $totalSalesTax     = \App\Transaction::where('business_id', $business_id)
+                                                    ->where('type', 'sale')
+                                                    ->whereIn('status', ['final','delivered'])
+                                                    ->whereDate("transaction_date",">=",$start)                  
+                                                    ->whereDate("transaction_date","<=",$end  )  
+                                                    ->whereIn('sub_status', ['final','f'])->sum('tax_amount');
+                $grossProfit            = $totalSalesExclude   - ($costOfDeliveredSale + $costOfUnDeliveredSale);
+                $costOfSales            = $costOfDeliveredSale + $costOfUnDeliveredSale ;
+                $totalPaidSales         = 0;
+                $totalUnPaidSales       = 0;
+                // Iterate over the period and format each month
+                foreach ($period as $date) { 
+                    #......................................date section
+                    $months[]               = $date->format('M Y');
+                    $new_format             = $date->format('Y-m-d'); 
+                    $firstDate              = $date;
+                    $secondDate             = \Carbon::parse($new_format)->startOfMonth()->subMonth(-1);
+                    #.................................................end
+                   
+                    $idsOfInvoiceChart      = \App\Transaction::where('business_id', $business_id)
+                                                                ->where('type', 'sale')
+                                                                ->whereDate('transaction_date',">=", $firstDate)
+                                                                ->whereDate('transaction_date',"<=", $secondDate)
+                                                                ->whereIn('status', ['final','delivered'])
+                                                                ->whereIn('sub_status', ['final','f'])
+                                                                ->pluck('id');
+                     
+ 
+                    $totalSalesChart        = \App\Transaction::where('business_id', $business_id)
+                                                                ->where('type', 'sale')
+                                                                ->whereDate('transaction_date',">=", $firstDate)
+                                                                ->whereDate('transaction_date',"<=", $secondDate)
+                                                                ->whereIn('status', ['final','delivered'])
+                                                                ->whereIn('sub_status', ['final','f'])
+                                                                ->sum('final_total');
+                     
+                   
+                    $totalPaid              = \App\TransactionPayment::whereIn("transaction_id", $idsOfInvoiceChart)->whereDate('paid_on',">=", $firstDate)->whereDate('paid_on',"<=", $secondDate)->sum('amount');
+                    $totalUnPaid            = (($totalSalesChart - $totalPaid)<0)?abs($totalSalesChart - $totalPaid):$totalSalesChart - $totalPaid ;
+                        
+                    $values[]               = $totalPaid;
+                    $values2[]              = $totalUnPaid;
+    
+                    $totalPaidSales         = $totalPaidSales + $totalPaid;
+                    $totalUnPaidSales       = $totalUnPaidSales + $totalUnPaid;
+                     
+                }
+                 
+            }      
+            
+            return  response()->json(compact('costOfSales','grossProfit','costOfUnDeliveredSale','amountOfUnDeliveredSale','costOfDeliveredSale','amountOfDeliveredSale','totalSales','totalSalesExclude','totalSalesTax','numberOfInvoice','months', 'values', 'values2','totalPaidSales','totalUnPaidSales','contactOfInvoice')); 
+            
+        }   
+        $closing          = \App\Product::closing_stock($business_id);
+        return view('home.index', compact('closing','cashId','bankId','amountOfUnDeliveredSale','costOfUnDeliveredSale','amountOfDeliveredSale','costOfDeliveredSale','trSales','totalBalanceCustomer','totalBalanceSupplier','cash','bank','patterns', 'chart','values2','months','values','contactOfInvoice','totalSalesTax','totalCustomer','totalSales','totalSalesExclude','totalPaidSales','totalUnPaidSales','numberOfInvoice','partialInvoices','numberOfReceipt'     ));
     }
 
     /**

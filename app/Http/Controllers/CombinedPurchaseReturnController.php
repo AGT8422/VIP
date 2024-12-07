@@ -118,6 +118,7 @@ class CombinedPurchaseReturnController extends Controller
                     return $this->moduleUtil->expiredResponse();
                 } 
             }
+            $company_name                   = request()->session()->get("user_main.domain");
             // dd($request);
             $user_id                        = $request->session()->get('user.id');
             $input_data['store']            = $input_data['store_id'];
@@ -131,7 +132,7 @@ class CombinedPurchaseReturnController extends Controller
             $input_data['ship_amount']      = 0;
             $input_data['payment_status']   = 2;
             $input_data['currency_id']      = $input_data['currency_id'];
-            $input_data['exchange_price']   = ($input_data['currency_id']!= null && $input_data['currency_id_amount'] != 0)?($input_data['currency_id_amount']):null;
+            $input_data['exchange_price']   = ($input_data['currency_id']!= null && $input_data['currency_id_amount'] != 0)?($input_data['currency_id_amount']):1;
             $input_data['amount_in_currency']   = ($input_data['currency_id']!= null && $input_data['currency_id_amount'] != 0)?($input_data['final_total'] / $input_data['currency_id_amount']):null ;
             $input_data['discount_amount']  = $input_data['discount_amount2'];
             # Update reference count
@@ -203,8 +204,8 @@ class CombinedPurchaseReturnController extends Controller
             if ($request->hasFile('document_expense')) {
                 $i =1;
                 foreach ($request->file('document_expense') as $file) {
-                    $file_name =  'public/uploads/documents/'.time().'_'.$i++.'.'.$file->getClientOriginalExtension();
-                    $file->move('public/uploads/documents',$file_name);
+                    $file_name =  'uploads/companies/'.$company_name.'/documents/'.time().'_'.$i++.'.'.$file->getClientOriginalExtension();
+                    $file->move('uploads/companies/'.$company_name.'/documents',$file_name);
                     array_push($document_expense,$file_name);
                 }
             }
@@ -514,6 +515,7 @@ class CombinedPurchaseReturnController extends Controller
                     return $this->moduleUtil->expiredResponse();
                 } 
             } 
+            $company_name                       = request()->session()->get("user_main.domain");
             $input_data['transaction_date']     = $this->productUtil->uf_date($input_data['transaction_date'], true);
             $input_data['total_before_tax']     = $this->productUtil->num_uf($input_data['final_total']) - $this->productUtil->num_uf($input_data['tax_amount2']);
             $input_data['currency_id']          = $input_data['currency_id'];
@@ -525,8 +527,8 @@ class CombinedPurchaseReturnController extends Controller
             if ($request->hasFile('document_purchase')) {
                 $i = 1;
                 foreach ($request->file('document_purchase') as $file) {
-                    $file_name =  'public/uploads/documents/'.time().'_'.$i++.'.'.$file->getClientOriginalExtension();
-                    $file->move('public/uploads/documents',$file_name);
+                    $file_name =  'uploads/companies/'.$company_name.'/documents/'.time().'_'.$i++.'.'.$file->getClientOriginalExtension();
+                    $file->move('uploads/companies/'.$company_name.'/documents',$file_name);
                     array_push($document_purchase,$file_name);
                 }
             }
@@ -678,8 +680,8 @@ class CombinedPurchaseReturnController extends Controller
             if ($request->hasFile('document_expense')) {
                 $id = 1;
                 foreach ($request->file('document_expense') as $file) {
-                    $file_name =  'public/uploads/documents/'.time().'_'.$id++.'.'.$file->getclientoriginalextension();
-                    $file->move('public/uploads/documents',$file_name);
+                    $file_name =  'uploads/companies/'.$company_name.'/documents/'.time().'_'.$id++.'.'.$file->getclientoriginalextension();
+                    $file->move('uploads/companies/'.$company_name.'/documents',$file_name);
                     array_push($document_expense,$file_name);
                 }
             } 

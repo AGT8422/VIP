@@ -17,6 +17,7 @@
 
             @if(request()->input("type") != "" || request()->input("type") != null)
                 @php
+                    $account_parent = \App\AccountType::find(request()->input("type"));
                     $account_number = \App\Account::orderBy("account_number","desc")->whereHas("account_type",function($query){
                                                                  $query->where("id",request()->input("type"));
                                                     })->first();
@@ -24,7 +25,7 @@
                 @endphp
                 <div class="form-group">
                     {!! Form::label('account_number', __( 'account.account_number' ) .":*") !!}
-                    {!! Form::text('account_number', intVal($account_number->account_number)+1, ['class' => 'form-control',"id"=>"account_number", 'required',"readOnly",'placeholder' => __( 'account.account_number' ) ]); !!}
+                    {!! Form::text('account_number', ($account_number)?(intVal($account_number->account_number)+1):($account_parent->code."01"), ['class' => 'form-control',"id"=>"account_number", 'required',"readOnly",'placeholder' => __( 'account.account_number' ) ]); !!}
                 </div>
             @else
                 <div class="form-group">

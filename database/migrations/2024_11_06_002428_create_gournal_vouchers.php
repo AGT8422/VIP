@@ -22,7 +22,7 @@ class CreateGournalVouchers extends Migration
             $table->foreign("business_id")->on("business")->references("id")->onDelete("cascade")->onUpdate("cascade");
             $table->integer("main_account_id")->nullable();
             $table->integer("cost_center_id")->nullable();
-            $table->integer("currency_id")->unsigned();
+            $table->integer("currency_id")->unsigned()->nullable();
             $table->decimal("amount_in_currency",22,4)->nullable();
             $table->decimal("exchange_price",22,4)->nullable();
             $table->decimal("total_credit",22,4)->nullable(); 

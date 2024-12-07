@@ -14,6 +14,8 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Anhskohbo\NoCaptcha\Facades\NoCaptcha;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
+
 
 class IzoUserController extends Controller
 {
@@ -660,7 +662,7 @@ class IzoUserController extends Controller
 
             // The remaining parts are the subdomain
             $subdomain = implode('.', $hostParts);
-        } else if(count($hostParts) == 3){
+        } else if(count($hostParts) == 2){
             // Remove the last two parts (domain and TLD)
             array_pop($hostParts); // TLD
 
@@ -714,9 +716,14 @@ class IzoUserController extends Controller
         // DD($request);
         Config::set('database.connections.mysql.database', "izocloud");
         DB::purge('mysql');
-        DB::reconnect('mysql');
+        DB::reconnect('mysql'); 
+        
+       
+
         $request->validate([
-            'g-recaptcha-response' => 'required|captcha',
+            // 'g-recaptcha-response' => 'required|captcha',
+            'email'                => 'required|email',
+            'mobile'               => 'required|min:7|max:9',
             // Other validation rules...
         ]);
         $data = $request->only(['company_name','email','domain_name','mobile','mobile_code','password']);
@@ -761,7 +768,7 @@ class IzoUserController extends Controller
 
             // The remaining parts are the subdomain
             $subdomain = implode('.', $hostParts);
-        } else if(count($hostParts) == 3){
+        } else if(count($hostParts) == 2){
             // Remove the last two parts (domain and TLD)
             array_pop($hostParts); // TLD
 
@@ -917,7 +924,8 @@ class IzoUserController extends Controller
     public function logoutIzo(Request $request)
     {
         //  
-        session()->forget('user_main');
+        session()->flush();
+        // session()->forget('user_main');
         return redirect('/login-account');
      
     }

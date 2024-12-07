@@ -30,10 +30,10 @@
 		justagain , pharmacy , drugs , ERP , store , customers , clients , suppliers , sales , stores , store , point of sale , pos , pos system , supermarket system ,
 		" />
     <title>@yield('title',"login-first-time") - {{ config('app.name', 'POS') }}</title>
-     
+    <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
     @include('layouts.partials.css')
     @yield('app_css')
-
+    
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>

@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
+
+require '../vendor/autoload.php';
+require_once  '../vendor/autoload.php';
+
 class IzoUser extends Model
 {
     use HasFactory,SoftDeletes;
@@ -39,7 +44,7 @@ class IzoUser extends Model
             $register->device_id               = $device;
             $register->ip                      = $ip;
             $register->domain_name             = $data['domain_name'];
-            $register->domain_url              = $data['domain_name'].".izocloud.com";
+            $register->domain_url              = $data['domain_name'].".localhost:8000";
             $register->seats                   = 3; # number of user allowed
             $register->subscribe_date          = \Carbon::now();
             $register->subscribe_expire_date   = \Carbon::now()->addWeeks(3);
@@ -93,6 +98,55 @@ class IzoUser extends Model
                 'domain'         => $register->domain_name
             ];
             session(['user_main'  => $payload]);
+
+            // $save = false;
+            $to         = 'iebrahemsai944@gmail.com' ;
+            // $to         = 'albaseetcompany8422@gmail.com' ;
+            $subject = "Verify Account IzoCloud";
+            // $Now   = \Carbon::parse(\Carbon::now()->format('Y-m-d'));
+            // $UNTIL = \Carbon::parse(\Carbon::createFromTimestamp($T)->format('Y-m-d'));
+            // $day   = $Now->diffInDays($UNTIL)  ;  
+            $message = "
+                <html>
+                <head>
+                <title>FUTURE VISION COMPUTERS TR LLC S.P</title>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                </head>
+                <header>
+                    <h1>IZOCLOUD Version 1.0.1 Verification</h1> <br>
+                    <h2>Title : <b>Verification Your Email</b> : ".$data['email']." </h2><br>
+                    <img width='100' height='100' alt='izo pos'  src='https://agt.izocloud.com/public/uploads/POS.ico'>
+                </header>
+                <body style='text-align:left'>
+                    <div style='width:100%; border-bottom:3px solid #ee8600; border-radius:0px;padding:10px;' style='text-align:left'>
+                        <h3> Company Details :  </h3>
+                        <h4> - Name :  ".$data['company_name']."</h4>
+                        <h4> - Mobile :  ".$data['mobile_code'].$data['mobile']."</h4>
+                        <h4> - email :  ".$data['email']."</h4> 
+                        <h3> Verify Email </h3>
+                        <b><button>Verify</button></b> 
+                    </div>
+                </body>
+                <footer>
+                    <h6>
+                        <b>".config('app.name', 'IZO CLOUD ')." - V".config('author.app_version')." | Powered By AGT</b>
+                        <b><br> All Rights Reserved | Copyright  &copy; ".date('Y')."  </b>
+                        <b><br>Website : izo.ae </b>
+                        <b><br>Customer Service : +971-50-1770-199  ,  +971-6-70-44-218</b>
+                        
+                    </h6>
+                </footer>
+            
+                </html>
+            ";
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+            
+            // More headers
+            $headers .= 'From: <alhamwi.agt@gmail.com>' . "\r\n";
+            mail($to,$subject,$message,$headers) ;
+
             return true;
         }catch(Exception $e){
             return false;

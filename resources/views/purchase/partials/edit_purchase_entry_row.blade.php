@@ -17,8 +17,8 @@
                 <th>@lang( 'home.Quantity' )</th>
                 <th>@lang( 'lang_v1.unit_cost_before_discount' ). {{isset($symbol)?$symbol:""}}</th>
                 <th>@lang( 'home.Price Including Tax' ) . {{isset($symbol)?$symbol:""}}</th>
-                <th @if($purchase->exchange_price > 0) class="curr_column br_dis  cur_check  " @else class="curr_column br_dis cur_check hide " @endif>@lang( 'lang_v1.Cost before without Tax' ) @if($purchase->exchange_price > 0 && $purchase->exchange_price != null)  {{ $purchase->currency->symbol }} @endif</th>
-				<th @if($purchase->exchange_price > 0) class="  hide" @else class=" hide " @endif>@lang( 'home.Cost before with Tax' )</th>
+                <th @if($purchase->exchange_price > 1) class="curr_column br_dis  cur_check  " @else class="curr_column br_dis cur_check hide " @endif>@lang( 'lang_v1.Cost before without Tax' ) @if($purchase->exchange_price > 1 && $purchase->exchange_price != 1)  {{ ($purchase->currency)?$purchase->currency->symbol:"" }} @endif</th>
+				<th @if($purchase->exchange_price > 1) class="  hide" @else class=" hide " @endif>@lang( 'home.Cost before with Tax' )</th>
 							 
                 <th >
                     <input name="dis_type" id="Discount"  type="radio" value="0" {{ ($purchase->dis_type == 0)?'checked':'' }}  >
@@ -28,10 +28,10 @@
                 </th>
                 <th>@lang( 'home.Cost without Tax' ). {{isset($symbol)?$symbol:""}}</th>
                 <th>@lang( 'home.Cost After Tax' ). {{isset($symbol)?$symbol:""}}</th>
-                <th @if($purchase->exchange_price > 0) class="curr_column ar_dis  cur_check  " @else class="curr_column ar_dis cur_check hide " @endif>@lang( 'home.Cost without Tax currency' ) @if($purchase->exchange_price > 0 && $purchase->exchange_price != null)  {{ $purchase->currency->symbol }} @endif</th>
-				<th @if($purchase->exchange_price > 0) class="  hide" @else class=" hide " @endif>@lang( 'home.Cost After Tax currency' )</th>
+                <th @if($purchase->exchange_price > 1) class="curr_column ar_dis  cur_check  " @else class="curr_column ar_dis cur_check hide " @endif>@lang( 'home.Cost without Tax currency' ) @if($purchase->exchange_price > 1 && $purchase->exchange_price != 1)  {{ ($purchase->currency)?$purchase->currency->symbol:"" }} @endif</th>
+				<th @if($purchase->exchange_price > 1) class="  hide" @else class=" hide " @endif>@lang( 'home.Cost After Tax currency' )</th>
                 <th>@lang( 'home.Total' ). {{isset($symbol)?$symbol:""}}</th>
-                <th @if($purchase->exchange_price > 0) class="curr_column ar_dis_total cur_check  " @else class="curr_column ar_dis_total cur_check hide " @endif>@lang( 'home.Total Currency' ) @if($purchase->exchange_price > 0 && $purchase->exchange_price != null)  {{ $purchase->currency->symbol }} @endif</th>
+                <th @if($purchase->exchange_price > 1) class="curr_column ar_dis_total cur_check  " @else class="curr_column ar_dis_total cur_check hide " @endif>@lang( 'home.Total Currency' ) @if($purchase->exchange_price > 1 && $purchase->exchange_price != 1)  {{ ($purchase->currency)?$purchase->currency->symbol:"" }} @endif</th>
                 {{-- <th>@lang( 'lang_v1.discount_percent' )</th>
                 <th>@lang( 'purchase.unit_cost_before_tax' )</th> --}}
                 <th class="{{$hide_tax}}">@lang( 'purchase.subtotal_before_tax' )</th>
@@ -198,11 +198,11 @@
                     @php
                         $currency = $purchase->exchange_price; 
                     @endphp
-                    <td @if($purchase->exchange_price > 0) class="curr_column  cur_check  " @else class="curr_column  cur_check hide " @endif>
+                    <td @if($purchase->exchange_price > 1) class="curr_column  cur_check  " @else class="curr_column  cur_check hide " @endif>
                         {!! Form::text('purchases[' . $loop->index . '][purchase_unit_cost_new_currency]', number_format(($currency!= null && $currency != 0)?( $purchase_line->pp_without_discount/$purchase->exchange_rate)/$currency:0, $currency_precision, $currency_details->decimal_separator, $currency_details->thousand_separator),
                         ['class' => 'form-control input-sm purchase_pos_inc  purchase_unit_cost_new_currency  input_number', "data-number" =>  $loop->index , 'required']); !!}
                     </td>
-                    <td @if($purchase->exchange_price > 0) class=" hide" @else class=" hide " @endif>
+                    <td @if($purchase->exchange_price > 1) class=" hide" @else class=" hide " @endif>
                         {!! Form::text('purchases[' . $loop->index . '][purchase_unit_cost_with_tax_new_currency]', number_format(($currency!= null && $currency != 0)?($before_dis_inc_vat/$purchase->exchange_rate)/$currency:0, $currency_precision, $currency_details->decimal_separator, $currency_details->thousand_separator),
                         ['class' => 'form-control input-sm purchase_pos_inc  purchase_unit_cost_with_tax_new_currency  input_number', "data-number" =>  $loop->index , 'required']); !!}
                     </td>
@@ -237,12 +237,12 @@
                         number_format($After_dis_inc_vat/$purchase->exchange_rate, $currency_precision, $currency_details->decimal_separator, $currency_details->thousand_separator), 
                         ['class' => 'form-control input-sm cost_pos_inc total_unit_cost_with_tax   input_number','readonly', "data-number" =>  $loop->index , 'required' ]); !!}
                     </td>
-                    <td @if($purchase->exchange_price > 0) class="curr_column  cur_check  " @else class="curr_column  cur_check hide " @endif>
+                    <td @if($purchase->exchange_price > 1) class="curr_column  cur_check  " @else class="curr_column  cur_check hide " @endif>
                         {!! Form::text('purchases[' . $loop->index . '][unit_cost_after_new_currency]', 
                         number_format(($currency!= null && $currency != 0)?($purchase_line->purchase_price/$purchase->exchange_rate)/$currency:0, $currency_precision, $currency_details->decimal_separator, $currency_details->thousand_separator), 
                         ['class' => 'form-control input-sm cost_pos_inc unit_cost_after_new_currency   input_number','readonly', "data-number" =>  $loop->index , 'required' ]); !!}
                     </td>
-                    <td @if($purchase->exchange_price > 0) class="  hide" @else class="  hide " @endif>
+                    <td @if($purchase->exchange_price > 1) class="  hide" @else class="  hide " @endif>
                         {!! Form::text('purchases[' . $loop->index . '][unit_cost_after_tax_new_currency]', 
                         number_format(($currency!= null && $currency != 0)?($After_dis_inc_vat/$purchase->exchange_rate)/$currency:0, $currency_precision, $currency_details->decimal_separator, $currency_details->thousand_separator), 
                         ['class' => 'form-control input-sm cost_pos_inc unit_cost_after_tax_new_currency   input_number','readonly', "data-number" =>  $loop->index , 'required' ]); !!}
@@ -285,7 +285,7 @@
                             $total_eb = $After_dis_inc_vat * $purchase_line->quantity; 
                         }
                     @endphp
-                    <td  @if($purchase->exchange_price > 0) class="curr_column  cur_check  " @else class="curr_column  cur_check hide " @endif>
+                    <td  @if($purchase->exchange_price > 1) class="curr_column  cur_check  " @else class="curr_column  cur_check hide " @endif>
                         <input class="form-control input-sm row_total_cost_new_currency input_number"  readonly required="" name="{{ 'purchases[' . $loop->index . '][total_cost_after_tax]' }}" type="text" 
                         value="{{$total_eb}}">
                     </td>
@@ -294,11 +294,7 @@
                         <input class="form-control input-sm row_total_cost input_number"  readonly required="" name="{{ 'purchases[' . $loop->index . '][total_cost_after_tax]' }}" type="text" 
                         value="{{ $total_eb }}">
                     </td>
-                    <td >
-                
-                        <input class="form-control input-sm row_total_cost_new_currency input_number"  readonly required="" name="{{ 'purchases[' . $loop->index . '][total_cost_after_tax]' }}" type="text" 
-                        value="{{$total_eb}}">
-                    </td>
+                     
 
                     
 

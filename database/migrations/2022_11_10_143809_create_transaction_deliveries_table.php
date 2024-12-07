@@ -28,6 +28,7 @@ class CreateTransactionDeliveriesTable extends Migration
             $table->tinyInteger('is_returned')->nullable()->default(0);
             $table->integer('is_invoice')->nullable();
             $table->date('date')->nullable();
+            $table->softDeletes();
             $table->timestamps();
             
         });

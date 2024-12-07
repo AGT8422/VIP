@@ -96,29 +96,98 @@
 						</div>
 					</div>
 				</div> 
-				<div class="col-md-7 col-sm-12 " style="background-color:#f7f7f7;padding:10px;border-radius:10px;box-shadow:1px 1px 10px grey; margin:10px 2%;">
+				<div class="col-md-7 col-sm-6 " style="background-color:#f7f7f7;padding:10px;border-radius:10px;box-shadow:1px 1px 10px grey; margin:10px 2%;">
 					@php 
 						$default_location =  array_key_first($business_locations->toArray());
 					@endphp
-					<div class="col-sm-12 hide">
+					<div class="col-sm-6 hide">
 						<div class="form-group">
 							{!! Form::label('location_id', __('purchase.business_location').':*') !!}
 							{!! Form::select('location_id', $business_locations, $default_location, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'required']); !!}
 						</div>
 					</div>
-					<div class="col-sm-12 hide">
+					<div class="col-sm-6 hide">
 						<div class="form-group">
 							{!! Form::label('ref_no', __('purchase.ref_no').':') !!}
 							{!! Form::text('ref_no', $purchase_return->ref_no, ['class' => 'form-control']); !!}
 						</div>
 					</div>
-					<div class="col-sm-12">
+					
+					@if($purchase_return->status == "received" || !empty($TranRecieved))       
+						<div class="col-sm-6 hide">
+							<div class="form-group">
+								{!! Form::label('status', __('purchase.purchase_status') . ':*') !!}
+								@show_tooltip(__('tooltip.order_status'))
+								{!! Form::select('status', $orderStatuses, $purchase_return->status, ['class' => 'form-control select2   ', 'placeholder' => __('messages.please_select') ,  'required' ]); !!}
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								{!! Form::label('status', __('purchase.purchase_status') . ':*') !!}
+								@show_tooltip(__('tooltip.order_status'))
+								{!! Form::text('s',   $purchase_return->status, ['class' => 'form-control ', 'readOnly', 'placeholder' => __('messages.please_select')    ]); !!}
+							</div>
+						</div>
+					@else
+						<div class="col-sm-6  ">
+								<div class="form-group">
+								{!! Form::label('status', __('purchase.purchase_status') . ':*') !!}
+								@show_tooltip(__('tooltip.order_status'))
+								{!! Form::select('status', $orderStatuses, $purchase_return->status, ['class' => 'form-control select2   ', 'placeholder' => __('messages.please_select') ,  'required' ]); !!}
+							</div>
+						</div>
+					@endif
+					{!! Form::hidden('old_sts',$purchase_return->status, ['class' => 'form-control ',"id" => "old_sts"]); !!}
+					<div class="col-sm-6">
+						<div class="form-group">
+							{!! Form::label('transaction_date', __('messages.date') . ':*') !!}
+							<div class="input-group">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+								{!! Form::text('transaction_date', @format_datetime($purchase_return->transaction_date), ['class' => 'form-control', 'readonly', 'required']); !!}
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							{!! Form::label('store_id', __('warehouse.warehouse').':*') !!}
+							{!! Form::select('store_id', $mainstore_categories, $purchase_return->store, ['class' => 'form-control select2', 'required' , 'placeholder' => __('messages.please_select') ] ); !!}
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							{!! Form::label('cost_center_id', __('home.Cost Center').':*') !!}
+							{{-- @show_tooltip(__('tooltip.purchase_location')) --}}
+							{!! Form::select('cost_center_id', $cost_centers, $purchase_return->cost_center_id, ['class' => 'form-control select2','id'=>'cost_center_id', 'placeholder' => __('messages.please_select')] ); !!}
+						</div>
+					</div>
+					<div class="clearfix"></div>
+					{{-- #2024-8-6 --}}
+					<div class="col-sm-6 col-6">
+						<div class="form-group">
+							{!! Form::label('list_price', __('List  Of Prices').':') !!}
+							{!! Form::select('list_price',$list_of_prices,null, ['class' => 'form-control select2' , 'id' => 'list_price' ]); !!}
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+						{!! Form::label('document_purchase[]', __('purchase.attach_document') . ':') !!}
+						{!! Form::file('document_purchase[]', ['multiple','id' => 'upload_document', 'accept' =>
+						implode(',', array_keys(config('constants.document_upload_mimes_types')))]); !!}
+						<p class="help-block">
+						@lang('purchase.max_file_size', ['size' => (config('constants.document_size_limit') / 1000000)])
+						@includeIf('components.document_help_text')
+						</p>
+						</div>
+					</div>
+					<div class="col-sm-6">
 						<div class="form-group">
 							{!! Form::label('sup_ref_no', __('purchase.sup_refe').':') !!}
 							{!! Form::text('sup_ref_no', $purchase_return->sup_refe, ['class' => 'form-control']); !!}
 						</div>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-6">
 						<div class="form-group">
 							<div class="multi-input">
 							{!! Form::label('currency_id', __('business.currency') . ':') !!}  
@@ -133,74 +202,6 @@
 							</div>
 							<br/> 
 							<div class="check_dep_curr  hide"><input  type="checkbox" name="dis_currency" value="1"> <b>Discount</b> @show_tooltip(__('tooltip.dis_currency'))<br ></div>
-						</div>
-					</div>
-					@if($purchase_return->status == "received" || !empty($TranRecieved))       
-						<div class="col-sm-12 hide">
-							<div class="form-group">
-								{!! Form::label('status', __('purchase.purchase_status') . ':*') !!}
-								@show_tooltip(__('tooltip.order_status'))
-								{!! Form::select('status', $orderStatuses, $purchase_return->status, ['class' => 'form-control select2   ', 'placeholder' => __('messages.please_select') ,  'required' ]); !!}
-							</div>
-						</div>
-						<div class="col-sm-12">
-							<div class="form-group">
-								{!! Form::label('status', __('purchase.purchase_status') . ':*') !!}
-								@show_tooltip(__('tooltip.order_status'))
-								{!! Form::text('s',   $purchase_return->status, ['class' => 'form-control ', 'readOnly', 'placeholder' => __('messages.please_select')    ]); !!}
-							</div>
-						</div>
-					@else
-						<div class="col-sm-12  ">
-								<div class="form-group">
-								{!! Form::label('status', __('purchase.purchase_status') . ':*') !!}
-								@show_tooltip(__('tooltip.order_status'))
-								{!! Form::select('status', $orderStatuses, $purchase_return->status, ['class' => 'form-control select2   ', 'placeholder' => __('messages.please_select') ,  'required' ]); !!}
-							</div>
-						</div>
-					@endif
-					{!! Form::hidden('old_sts',$purchase_return->status, ['class' => 'form-control ',"id" => "old_sts"]); !!}
-					<div class="col-sm-12">
-						<div class="form-group">
-							{!! Form::label('transaction_date', __('messages.date') . ':*') !!}
-							<div class="input-group">
-								<span class="input-group-addon">
-									<i class="fa fa-calendar"></i>
-								</span>
-								{!! Form::text('transaction_date', @format_datetime($purchase_return->transaction_date), ['class' => 'form-control', 'readonly', 'required']); !!}
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-12">
-						<div class="form-group">
-							{!! Form::label('store_id', __('warehouse.warehouse').':*') !!}
-							{!! Form::select('store_id', $mainstore_categories, $purchase_return->store, ['class' => 'form-control select2', 'required' , 'placeholder' => __('messages.please_select') ] ); !!}
-						</div>
-					</div>
-					<div class="col-sm-12">
-						<div class="form-group">
-							{!! Form::label('cost_center_id', __('home.Cost Center').':*') !!}
-							{{-- @show_tooltip(__('tooltip.purchase_location')) --}}
-							{!! Form::select('cost_center_id', $cost_centers, $purchase_return->cost_center_id, ['class' => 'form-control select2','id'=>'cost_center_id', 'placeholder' => __('messages.please_select')] ); !!}
-						</div>
-					</div>
-					<div class="clearfix"></div>
-					{{-- #2024-8-6 --}}
-					<div class="col-sm-6 col-12">
-						<div class="form-group">
-							{!! Form::label('list_price', __('List  Of Prices').':') !!}
-							{!! Form::select('list_price',$list_of_prices,null, ['class' => 'form-control select2' , 'id' => 'list_price' ]); !!}
-						</div>
-					</div>
-					<div class="col-sm-12">
-						<div class="form-group">
-						{!! Form::label('document_purchase[]', __('purchase.attach_document') . ':') !!}
-						{!! Form::file('document_purchase[]', ['multiple','id' => 'upload_document', 'accept' =>
-						implode(',', array_keys(config('constants.document_upload_mimes_types')))]); !!}
-						<p class="help-block">
-						@lang('purchase.max_file_size', ['size' => (config('constants.document_size_limit') / 1000000)])
-						@includeIf('components.document_help_text')
-						</p>
 						</div>
 					</div>
 					</div>
@@ -288,7 +289,7 @@
 									<th class="text-center  ">
 										@lang('sale.cost_inc')
 									</th>
-									<th @if($purchase_return->currency_id != null ) class="curr_column ar_dis  cur_check  " @else class="curr_column ar_dis  cur_check hide" @endif >@lang( 'home.Cost without Tax currency' ) @if($purchase_return->exchange_price > 0) {{  $purchase_return->currency->symbol }} @endif</th>
+									<th @if($purchase_return->currency_id != null ) class="curr_column ar_dis  cur_check  " @else class="curr_column ar_dis  cur_check hide" @endif >@lang( 'home.Cost without Tax currency' ) @if($purchase_return->exchange_price > 1) {{  ($purchase_return->currency)?$purchase_return->currency->symbol:"" }} @endif</th>
 									@if(session('business.enable_product_expiry'))
 										<th>
 											@lang('product.exp_date')
@@ -301,7 +302,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								@php $count = -1; $currency = $purchase_return->exchange_price @endphp 
+								@php $count = -1; $currency = ($purchase_return->exchange_price>1)?$purchase_return->exchange_price:null @endphp 
 								@foreach($purchase_lines as $purchase_line)
 									@include('purchase_return.partials.edit_product_table_row', ['product' => $purchase_line, 'row_index' => $loop->index, 'edit' => true ,"currency"=>$currency])
 										@php
@@ -333,7 +334,7 @@
 								</td>
 							</tr>
 							<tr>
-								<th  @if($purchase_return->exchange_price > 0) class="col-md-7 text-right  cur_symbol" @else class="col-md-7 text-right hide cur_symbol" @endif  >@lang('purchase.sub_total_amount' ) @if($purchase_return->exchange_price > 0) {{  $purchase_return->currency->symbol }} @endif:</th>
+								<th  @if($purchase_return->exchange_price > 0) class="col-md-7 text-right  cur_symbol" @else class="col-md-7 text-right hide cur_symbol" @endif  >@lang('purchase.sub_total_amount' ) @if($purchase_return->exchange_price > 0) {{  ($purchase_return->currency)?$purchase_return->currency->symbol:"" }} @endif:</th>
 								<td class="col-md-5 text-left">
 									<span id="total_subtotal_cur" @if($purchase_return->exchange_price > 0) class="display_currency " @else class="display_currency hide" @endif ></span>
 									<!-- This is total before purchase tax-->
@@ -385,7 +386,7 @@
 								</div>
 							</td>
 							<td class="col-md-3 pull-right">
-								<b  @if($purchase_return->exchange_price > 0) class="i_curr  " @else class="i_curr hide" @endif > @lang( 'purchase.discount' ) @if($purchase_return->exchange_price > 0)  {{ $purchase_return->currency->symbol }} @endif: (-)</b>   
+								<b  @if($purchase_return->exchange_price > 0) class="i_curr  " @else class="i_curr hide" @endif > @lang( 'purchase.discount' ) @if($purchase_return->exchange_price > 0)  {{ ($purchase_return->currency)?$purchase_return->currency->symbol:"" }} @endif: (-)</b>   
 								 <span id="discount_calculated_amount_cur" @if($purchase_return->exchange_price > 0) class="display_currency  "@else  class="display_currency hide"@endif >0</span>
 							</td>
 							<td class="col-md-3 text-right">
@@ -413,8 +414,8 @@
 							</td>
 							<td></td>
 							<td class="col-sm-3 pull-right" >
-								<b @if($purchase_return->exchange_price > 0) class="t_curr  " @else class="t_curr hide" @endif  >@lang( 'purchase.purchase_tax' ) @if($purchase_return->exchange_price > 0)  {{ $purchase_return->currency->symbol }} @endif: (+)</b> 
-								<span id="tax_calculated_amount_curr" @if($purchase_return->exchange_price > 0) class="display_currency  " @else class="display_currency hide" @endif  >0</span></td>
+								<b @if($purchase_return->exchange_price > 1) class="t_curr  " @else class="t_curr hide" @endif  >@lang( 'purchase.purchase_tax' ) @if($purchase_return->exchange_price > 1)  {{ ($purchase_return->currency)?$purchase_return->currency->symbol:"" }} @endif: (+)</b> 
+								<span id="tax_calculated_amount_curr" @if($purchase_return->exchange_price > 1) class="display_currency  " @else class="display_currency hide" @endif  >0</span></td>
 							</td>
 					 
 							<td class="col-sm-3   text-right">
@@ -431,8 +432,8 @@
 					<td></td>
 					<td  class="col-sm-3 pull-left"  >
 						<br>
-						<b @if($purchase_return->exchange_price > 0) class="z_curr  " @else class="z_curr hide" @endif >@lang('purchase.purchase_total_') @if($purchase_return->exchange_price > 0)  {{ $purchase_return->currency->symbol }} @endif: </b>
-						<span id="total_final_i_curr" @if($purchase_return->exchange_price > 0) class="display_currency  " @else class="display_currency hide" @endif >0</span>
+						<b @if($purchase_return->exchange_price > 0) class="z_curr  " @else class="z_curr hide" @endif >@lang('purchase.purchase_total_') @if($purchase_return->exchange_price > 1)  {{ ($purchase_return->currency)?$purchase_return->currency->symbol:"" }} @endif: </b>
+						<span id="total_final_i_curr" @if($purchase_return->exchange_price > 1	) class="display_currency  " @else class="display_currency hide" @endif >0</span>
 					</td>
 					<td class="pull-right">
 						<br>
@@ -477,8 +478,8 @@
 					 
 					 
 					<td class=" col-sm-4  pull-left">
-						<b @if($purchase_return->exchange_price > 0) class="o_curr  " @else class="o_curr hide" @endif  >@lang('purchase.purchase_total') @if($purchase_return->exchange_price > 0)  {{ $purchase_return->currency->symbol }} @endif: </b>
-						<span id="grand_total_cur" @if($purchase_return->exchange_price > 0) class="display_currency  " @else class="display_currency hide" @endif    >0</span>
+						<b @if($purchase_return->exchange_price > 1) class="o_curr  " @else class="o_curr hide" @endif  >@lang('purchase.purchase_total') @if($purchase_return->exchange_price > 0)  {{ ($purchase_return->currency)?$purchase_return->currency->symbol:"" }} @endif: </b>
+						<span id="grand_total_cur" @if($purchase_return->exchange_price > 1) class="display_currency  " @else class="display_currency hide" @endif    >0</span>
 					 
 						 
 					</td>
@@ -517,8 +518,8 @@
 					<td>&nbsp;</td>
 					<td class="pull-left">
 						<br>
-						<b  @if($purchase_return->exchange_price > 0)   class="c_curr  " @else class="c_curr hide" @endif>@lang('purchase.purchase_pay') @if($purchase_return->exchange_price > 0)  {{ $purchase_return->currency->symbol }} @endif: </b>
-						<span id="total_final_curr" @if($purchase_return->exchange_price > 0)    class="display_currency " @else  class="display_currency hide" @endif   >0</span>
+						<b  @if($purchase_return->exchange_price > 1)   class="c_curr  " @else class="c_curr hide" @endif>@lang('purchase.purchase_pay') @if($purchase_return->exchange_price > 1)  {{ ($purchase_return->currency)?$purchase_return->currency->symbol:"" }} @endif: </b>
+						<span id="total_final_curr" @if($purchase_return->exchange_price > 1)    class="display_currency " @else  class="display_currency hide" @endif   >0</span>
 					</td>
 					<td class="pull-right">
 						<br>

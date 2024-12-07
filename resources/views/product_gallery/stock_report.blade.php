@@ -52,14 +52,14 @@
                             <div class="col-md-3 "  >
                                 <div class="form-group">
                                     {!! Form::label('price', __('lang_v1.price') . ':') !!}
-                                    {!! Form::select('price', ["0"=>__("home.sale_price")], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'price', 'placeholder' => __('lang_v1.all')]); !!}
+                                    {!! Form::select('price', ["0"=>__("home.sale_price")], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'price' ]); !!}
                                 </div>
                             </div>
                         @else
                             <div class="col-md-3 "  >
                                 <div class="form-group">
                                     {!! Form::label('price', __('lang_v1.price') . ':') !!}
-                                    {!! Form::select('price', ["0"=>__("home.sale_price"),"1"=>__("home.cost_price")], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'price', 'placeholder' => __('lang_v1.all')]); !!}
+                                    {!! Form::select('price', ["1"=>__("home.cost_price"),"0"=>__("home.sale_price")], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'price']); !!}
                                 </div>
                             </div>
                         @endcan
@@ -67,14 +67,14 @@
                         <div class="col-md-3 "  >
                             <div class="form-group">
                                 {!! Form::label('price', __('lang_v1.price') . ':') !!}
-                                {!! Form::select('price', ["0"=>__("home.sale_price"),"1"=>__("home.cost_price")], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'price', 'placeholder' => __('lang_v1.all')]); !!}
+                                {!! Form::select('price', ["1"=>__("home.cost_price"),"0"=>__("home.sale_price")], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'price']); !!}
                             </div>
                         </div>
                     @endif
                     <div class="col-md-3">
                         <div class="form-group">
                             {!! Form::label('product_available', __('lang_v1.Available') . ':') !!}
-                            {!! Form::select('product_available', [ -1 =>__("all"),0=>__("lang_v1.Not Available"),1=>__("lang_v1.Available"),2=>__("recieved.should_delivery"),3=>__("recieved.should_recieved")], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_available' ]); !!}
+                            {!! Form::select('product_available', [ 1=>__("lang_v1.Available"),0=>__("lang_v1.Not Available"),2=>__("recieved.should_delivery"),3=>__("recieved.should_recieved")], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_available' ]); !!}
                         </div>
                     </div>
                     <div class="col-md-3">

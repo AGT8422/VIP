@@ -36,7 +36,7 @@
 			</div>
 			<div class="col-md-4">
 			<div class="well">
-				<strong>@lang("purchase.ref_no") :  </strong> {{ $transaction->invoice_no }} <br>
+				<strong>@lang("purchase.ref_no") :  </strong> {{  $transaction->invoice_no }} <br>
 				<strong>@lang("purchase.location") :</strong> {{  $transaction->location?$transaction->location->name:' '  }}
 			</div>
 			</div>
@@ -1785,23 +1785,23 @@
 	});
 	}
 	}
+	 
+		 
 	function insert_item(){
-		 
-		function insert_item(){
-		 
-		 if($(".product_id").val()){
-			 $(".product_id").each(function(){ 
-					 pos_product_row($(this).val(),null,null,null,1,$(this).closest(".parent_product_id").find(".product_id2").val());
-			 });
-			 $("#items_all").remove(); 
-		 }else{
-			 $(".pro_id").each(function(){
-				 pos_product_row($(this).val(),null,null,null,1,$(this).closest(".parent_product_id").find(".pro_id2").val());
-			 })
-			 $("#items_all").remove();
-		 }
-	 }
+		
+		if($(".product_id").val()){
+			$(".product_id").each(function(){ 
+					pos_product_row($(this).val(),null,null,null,1,$(this).closest(".parent_product_id").find(".product_id2").val());
+			});
+			$("#items_all").remove(); 
+		}else{
+			$(".pro_id").each(function(){
+				pos_product_row($(this).val(),null,null,null,1,$(this).closest(".parent_product_id").find(".pro_id2").val());
+			})
+			$("#items_all").remove();
+		}
 	}
+ 
 
 	function changies(){
  		$(".pos_quantity").each(function(){

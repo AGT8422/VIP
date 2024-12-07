@@ -5,7 +5,7 @@
  <style>
 
         .loading2{
-            position: absolute;
+            position: fixed;
             left: 0px ;
             right: 0px ;
             width: 100%;
@@ -36,7 +36,7 @@
         padding: 0px;
     }
     .loading{
-        position: absolute;
+        position: fixed;
         left: 50%;
         font-size: xx-large;
         transform: translateX(-50%);
@@ -3224,7 +3224,7 @@
 @section('content')
    
     @php   
-        $domain_name = "http://".session()->get('user_main.domain').".izocloud.com";
+        $domain_name = "http://".session()->get('user_main.domain').".localhost:8000";
         $domain_name = $domain_name??"";
         $text        = "email=".request()->session()->get("login_info.email")."_password=".request()->session()->get("login_info.password");
         $text        =  Illuminate\Support\Facades\Crypt::encryptString($text);

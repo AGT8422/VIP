@@ -31,11 +31,11 @@ class CreateContactsTable extends Migration
             $table->string('alternate_number')->nullable();
             $table->integer('pay_term_number')->nullable();
             $table->enum('pay_term_type', ['days', 'months'])->nullable();
-            $table->decimal('credit_limit',22,4);
+            $table->decimal('credit_limit',22,4)->nullable();
             $table->integer('created_by')->unsigned(); 
             $table->tinyInteger('is_default')->default(0); 
              $table->string('landmark')->nullable(); 
-            $table->integer('customer_group_id')->nallable(); 
+            $table->integer('customer_group_id')->nullable(); 
             $table->string('custom_field1')->nullable();
             $table->string('custom_field2')->nullable();
             $table->string('custom_field3')->nullable();

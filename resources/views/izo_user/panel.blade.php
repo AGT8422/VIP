@@ -11,7 +11,7 @@
         padding: 0px;
     }
     .loading{
-        position: absolute;
+        position: fixed;
         left: 50%;
         font-size: xx-large;
         transform: translateX(-50%);
@@ -3223,7 +3223,7 @@
                     </div>
                     <div class="col-md-4 text-right">
                         @php   
-                            $domain_name = "http://".session()->get('user_main.domain').".izocloud.com/login-account";
+                            $domain_name = "http://".session()->get('user_main.domain').".localhost:8000/login-account";
                             $domain_name = $domain_name??"";
                         @endphp 
                         <br>

@@ -2232,7 +2232,7 @@ class SellController extends Controller
                 ->whereIn('transactions.type', ['sale',"sell"])
                 ->where("ecommerce",0)
                 ->whereIn('transactions.status', ['ApprovedQuotation' ,"draft" , "delivered", "final"])
-                ->whereIn('transactions.sub_status', ['proforma',"f","final"])
+                ->whereIn('transactions.sub_status', ['proforma',"f"])
                 ->select(
                     'transactions.id',
                     'transactions.agent_id',

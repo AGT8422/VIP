@@ -14,7 +14,7 @@ class AddDocumentColumnToTransactionsTable extends Migration
     public function up()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->string('document')->nullable()->after('expense_for');
+            $table->text('document')->nullable()->after('expense_for');
         });
     }
 

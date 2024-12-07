@@ -38,7 +38,7 @@ class CreateParentArchivesTable extends Migration
             $table->Integer('t_recieved')->nullable();
             $table->string('text')->nullable();
             $table->string('note',255)->nullable();
-            $table->string('document')->nullable();
+            $table->text('document')->nullable();
             $table->string('status',255)->nullable();
             $table->string('method',255)->nullable();
             $table->string('card_transaction_number',255)->nullable();

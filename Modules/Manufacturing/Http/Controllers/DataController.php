@@ -68,6 +68,7 @@ class DataController extends Controller
             $module_util = new ModuleUtil();
             $is_mfg_enabled = (boolean)$module_util->hasThePermissionInSubscription($business_id, 'manufacturing_module', 'superadmin_package');
         }
+       
         if ($is_mfg_enabled && (auth()->user()->can('manufacturing.access_recipe') || auth()->user()->can('manufacturing.access_production'))) {
             Menu::modify('admin-sidebar-menu', function ($menu) {
                 $menu->dropdown(

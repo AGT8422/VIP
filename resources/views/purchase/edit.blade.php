@@ -174,8 +174,8 @@
                                 {!! Form::text('currency_id_amount', $purchase->exchange_price, ['class' => 'form-control width-40 pull-right currency_id_amount'   ]); !!}
                               </div>
                               <br/>
-    						  <div @if($purchase->exchange_price > 0)   class="check_dep_curr hide"  @else   class="check_dep_curr hide"    @endif >
-    						 @if($purchase->exchange_price > 0) 
+    						  <div @if($purchase->exchange_price > 1)   class="check_dep_curr hide"  @else   class="check_dep_curr hide"    @endif >
+    						 @if($purchase->exchange_price > 1) 
     							 {!! Form::checkbox('depending_curr',null, 0, ['class' => 'depending_curr' , "checked" => "checked",'id'=>'depending_curr'   ]); !!}
     							 {!! Form::label('depending_curr', __('Depending On Currency Column') . '') !!}  
     						  @else
@@ -184,7 +184,7 @@
     						  @endif
     						  </div>
     						  <br/> 
-							 <div @if($purchase->exchange_price > 0)  class="curr_column   cur_check   hide"  @else  class="curr_column   cur_check hide"    @endif  > <input  type="checkbox" @if($purchase->exchange_price > 0) checked  @endif name="dis_currency" value="1"> <b>Discount</b> @show_tooltip(__('tooltip.dis_currency'))<br ></div>
+							 <div @if($purchase->exchange_price > 1)  class="curr_column   cur_check   hide"  @else  class="curr_column   cur_check hide"    @endif  > <input  type="checkbox" @if($purchase->exchange_price > 1) checked  @endif name="dis_currency" value="1"> <b>Discount</b> @show_tooltip(__('tooltip.dis_currency'))<br ></div>
 										
                       </div>
                     </div>
@@ -287,9 +287,9 @@
                             </td>
                           </tr>
                           <tr>
-                            <th @if($purchase->exchange_price > 0) class="col-md-7 text-right  cur_symbol" @else class="col-md-7 text-right hide cur_symbol" @endif >@lang('purchase.sub_total_amount' ) @if($purchase->exchange_price > 0) {{  $purchase->currency->symbol }} @endif :</th>
+                            <th @if($purchase->exchange_price > 1) class="col-md-7 text-right  cur_symbol" @else class="col-md-7 text-right hide cur_symbol" @endif >@lang('purchase.sub_total_amount' ) @if($purchase->exchange_price > 1) {{  $purchase->currency->symbol }} @endif :</th>
                             <td class="col-md-5 text-left">
-                              <span id="total_subtotal_cur_edit" @if($purchase->exchange_price > 0)  class="display_currency " @else class="display_currency hide"  @endif ></span>
+                              <span id="total_subtotal_cur_edit" @if($purchase->exchange_price > 1)  class="display_currency " @else class="display_currency hide"  @endif ></span>
                               <!-- This is total before purchase tax-->
                               <input type="hidden" id="total_subtotal_input_cur_edit" value=0  name="total_before_tax_cur">
                             </td>
@@ -345,8 +345,8 @@
                           </td>
                           <td>&nbsp;</td>
                           <td class="  pull-left "  >
-                            <b  @if($purchase->exchange_price > 0)   class="i_curr  " @else  class="i_curr hide "  @endif > @lang( 'purchase.discount' ) @if($purchase->exchange_price > 0) {{  $purchase->currency->symbol }} @endif  : (-)</b>   
-                            <span id="discount_calculated_amount_cur" @if($purchase->exchange_price > 0)  class="display_currency " @else class="display_currency hide"     @endif  >0</span>
+                            <b  @if($purchase->exchange_price > 1)   class="i_curr  " @else  class="i_curr hide "  @endif > @lang( 'purchase.discount' ) @if($purchase->exchange_price > 1) {{  $purchase->currency->symbol }} @endif  : (-)</b>   
+                            <span id="discount_calculated_amount_cur" @if($purchase->exchange_price > 1)  class="display_currency " @else class="display_currency hide"     @endif  >0</span>
                           </td>
                           <td class="  pull-right" >
                             <b>@lang( 'purchase.discount' ) . {{$currency_details->symbol}}:</b>(-) 
@@ -373,8 +373,8 @@
                           <td  >&nbsp;</td>
                           <td>&nbsp;</td>
                           <td class="  pull-left" >
-                            <b  @if($purchase->exchange_price > 0)   class="t_curr  "  @else   class="t_curr hide"    @endif>@lang( 'purchase.purchase_tax' ) @if($purchase->exchange_price > 0) {{  $purchase->currency->symbol }} @endif : (+)</b> 
-                            <span id="tax_calculated_amount_curr" @if($purchase->exchange_price > 0)  class="display_currency " @else class="display_currency hide"     @endif>0</span>
+                            <b  @if($purchase->exchange_price > 1)   class="t_curr  "  @else   class="t_curr hide"    @endif>@lang( 'purchase.purchase_tax' ) @if($purchase->exchange_price > 1) {{  $purchase->currency->symbol }} @endif : (+)</b> 
+                            <span id="tax_calculated_amount_curr" @if($purchase->exchange_price > 1)  class="display_currency " @else class="display_currency hide"     @endif>0</span>
                           </td>
                           <td class="   pull-right" >
                             <b>@lang( 'purchase.purchase_tax' ) . {{$currency_details->symbol}}:</b>(+) 
@@ -388,8 +388,8 @@
                           <td>&nbsp;</td>
                           <td class="pull-left" >
                             <br>
-                            <b  @if($purchase->exchange_price > 0)   class="z_curr "  @else   class="z_curr hide"     @endif>@lang('purchase.purchase_total_') @if($purchase->exchange_price > 0) {{  $purchase->currency->symbol }} @endif : </b>
-                            <span id="total_final_i_curr"  @if($purchase->exchange_price > 0)  class="display_currency " @else class="display_currency hide"     @endif>0</span>
+                            <b  @if($purchase->exchange_price > 1)   class="z_curr "  @else   class="z_curr hide"     @endif>@lang('purchase.purchase_total_') @if($purchase->exchange_price > 1) {{  $purchase->currency->symbol }} @endif : </b>
+                            <span id="total_final_i_curr"  @if($purchase->exchange_price > 1)  class="display_currency " @else class="display_currency hide"     @endif>0</span>
                           </td>
                           <td class="pull-right" >
                             <br>
@@ -408,8 +408,8 @@
                           <td class="col-md-4">
                             <div class="form-group">
                               <div class="form-group">
-                                <b  @if($purchase->exchange_price > 0) class="oss_curr " @else class="oss_curr hide" @endif>@lang('Additional Supplier Cost In Currency'): </b>
-		                        <span id="cost_amount_supplier_curr"  @if($purchase->exchange_price > 0) class="display_currency" @else class="display_currency hide" @endif  >0</span> 
+                                <b  @if($purchase->exchange_price > 1) class="oss_curr " @else class="oss_curr hide" @endif>@lang('Additional Supplier Cost In Currency'): </b>
+		                        <span id="cost_amount_supplier_curr"  @if($purchase->exchange_price > 1) class="display_currency" @else class="display_currency hide" @endif  >0</span> 
                                 {!! Form::label('shipping_charges','(+) ' . __( 'purchase.supplier_shipping_charges' ) . ':') !!}
                                 <div class="input-group">
                                   <span class="input-group-btn">
@@ -436,11 +436,11 @@
                           <td>&nbsp;</td>
                           <td class="pull-left" >
 
-                            {{-- <b  @if($purchase->exchange_price > 0)   class="o_curr "  @else   class="o_curr hide"     @endif>@lang('purchase.purchase_total') @if($purchase->exchange_price > 0) {{  $purchase->currency->symbol }} @endif : </b>
+                            {{-- <b  @if($purchase->exchange_price > 1)   class="o_curr "  @else   class="o_curr hide"     @endif>@lang('purchase.purchase_total') @if($purchase->exchange_price > 1) {{  $purchase->currency->symbol }} @endif : </b>
                             {!! Form::hidden('grand_total_cur_hidden', 0 , ['id' => 'grand_total_cur_hidden']); !!} --}}
-                            <b  @if($purchase->exchange_price > 0)   class="o_curr "  @else   class="o_curr hide"     @endif>@lang('purchase.purchase_total') @if($purchase->exchange_price > 0) {{  $purchase->currency->symbol }} @endif : </b>
+                            <b  @if($purchase->exchange_price > 1)   class="o_curr "  @else   class="o_curr hide"     @endif>@lang('purchase.purchase_total') @if($purchase->exchange_price > 1) {{  $purchase->currency->symbol }} @endif : </b>
                             {!! Form::hidden('grand_total_hidden_curr', 0 , ['id' => 'grand_total_hidden_curr']); !!}
-                            <span id="grand_total_cur" @if($purchase->exchange_price > 0)  class="display_currency " @else class="display_currency hide"     @endif >0</span>
+                            <span id="grand_total_cur" @if($purchase->exchange_price > 1)  class="display_currency " @else class="display_currency hide"     @endif >0</span>
                           </td>
                           <td class="pull-right" >
                             {!! Form::hidden('final_total', 0 , ['id' => 'grand_total_hidden']); !!}
@@ -457,8 +457,8 @@
                           <td>&nbsp;</td>
                           <td>
                             <div class="form-group">
-                              <b  @if($purchase->exchange_price > 0)  class="os_curr " @else  class="os_curr hide"    @endif >@lang('Additional Cost In Currency'): </b>
-		                        <span id="cost_amount_curr" @if($purchase->exchange_price > 0)  class="display_currency os_curr  " @else class="display_currency os_curr  hide"  @endif >0</span> 
+                              <b  @if($purchase->exchange_price > 1)  class="os_curr " @else  class="os_curr hide"    @endif >@lang('Additional Cost In Currency'): </b>
+		                        <span id="cost_amount_curr" @if($purchase->exchange_price > 1)  class="display_currency os_curr  " @else class="display_currency os_curr  hide"  @endif >0</span> 
                             {!! Form::label('shipping_charges','(+) ' . __( 'purchase.cost_shipping_charges' ) . ':') !!}
                             <div class="input-group">
                               <span class="input-group-btn">
@@ -481,8 +481,8 @@
                           <td>&nbsp;</td>
                           <td class="pull-left" >
                             <br>
-                            <b  @if($purchase->exchange_price > 0)   class="c_curr " @else  class="c_curr hide"     @endif>@lang('purchase.purchase_pay') @if($purchase->exchange_price > 0) {{  $purchase->currency->symbol }} @endif : </b>
-                            <span id="total_final_curr" @if($purchase->exchange_price > 0)  class="display_currency " @else class="display_currency hide"     @endif  >0</span>
+                            <b  @if($purchase->exchange_price > 1)   class="c_curr " @else  class="c_curr hide"     @endif>@lang('purchase.purchase_pay') @if($purchase->exchange_price > 1) {{  $purchase->currency->symbol }} @endif : </b>
+                            <span id="total_final_curr" @if($purchase->exchange_price > 1)  class="display_currency " @else class="display_currency hide"     @endif  >0</span>
                           </td>
                           <td class="pull-right" >
 

@@ -32,7 +32,7 @@ class CreateArchivePurchaseLinesTable extends Migration
             $table->decimal("mfg_quantity_used",22,4)->default(0);
             $table->date("mfg_date")->nullable();
             $table->date("exp_date")->nullable();
-            $table->string("lot_number")->index();
+            $table->string("lot_number")->index()->nullable();
             $table->integer("sub_unit_id")->nullable();
             $table->integer("sub_unit_qty")->nullable();
             $table->string("purchase_note")->nullable();

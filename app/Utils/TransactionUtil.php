@@ -141,7 +141,7 @@ class TransactionUtil extends Util
             'currency_id' => (!empty($input['currency_id'])) ? $input['currency_id'] : null,
             'amount_in_currency' => (!empty($input['amount_in_currency'])) ? $input['amount_in_currency'] : null,
             'ecommerce' => (!empty($input['ecommerce'])) ? $input['ecommerce'] : 0,
-            'exchange_price' => (!empty($input['exchange_price'])) ? $input['exchange_price'] : null,
+            'exchange_price' => (!empty($input['exchange_price'])) ? $input['exchange_price'] : 1,
             // 'oo' => (!empty($input['is_export']) && !empty($input['export_custom_fields_info'])) ? $input['export_custom_fields_info'] : null
             
         ]);
@@ -268,9 +268,9 @@ class TransactionUtil extends Util
         if (!empty($input['transaction_date'])) {
             $update_date['transaction_date'] = $input['transaction_date'];
         }
-        
         $transaction->fill($update_date);
         $transaction->update();
+        
 
         return $transaction;
     }

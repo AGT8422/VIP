@@ -14,7 +14,7 @@ class AddDocumentsToTransactionDeliveriesToTable extends Migration
     public function up()
     {
         Schema::table('transaction_deliveries', function (Blueprint $table) {
-            $table->char('document')->nullable();
+            $table->text('document')->nullable();
         });
     }
 

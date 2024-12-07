@@ -14,7 +14,7 @@ class AddDocumentColumnToTransactionPaymentsTable extends Migration
     public function up()
     {
         Schema::table('transaction_payments', function (Blueprint $table) {
-            $table->string('document')->nullable()->after('note');
+            $table->text('document')->nullable()->after('note');
         });
 
         $dirs = ['img', 'documents', 'business_logos', 'invoice_logos'];

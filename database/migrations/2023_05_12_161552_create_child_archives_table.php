@@ -49,7 +49,7 @@ class CreateChildArchivesTable extends Migration
             $table->integer('is_returned')->nullable();
             $table->string('text')->nullable();
             $table->string('note',255)->nullable();
-            $table->string('document')->nullable();
+            $table->text('document')->nullable();
             $table->integer('ch_status',0)->nullable();
             $table->integer('created_by')->nullable();
             $table->integer('check_id')->nullable();

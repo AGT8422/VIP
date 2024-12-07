@@ -128,7 +128,7 @@ class DataController extends Controller
                         action('\Modules\Project\Http\Controllers\ProjectController@index') . '?project_view=list_view',
                         __('project::lang.project'),
                         ['icon' => 'fa fa-project-diagram', 'active' => 
-                        request()->segment(1) == 'project' || request()->get('type') == 'project', 'style' => config('app.env') == 'demo' ? 'background-color: #000 !important;' : 'background-color:#000']
+                        request()->segment(1) == 'project' || request()->get('type') == 'project', 'style' => config('app.env') == 'demo' ? ' ' : ' ']
                     )
                     ->order(86);
                 }

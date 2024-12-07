@@ -1,12 +1,13 @@
 @php
-    $colspan = 16;
+    $colspan = 17;
     $custom_labels = json_decode(session('business.custom_labels'), true);
 @endphp
 <table class="table table-bordered table-striped ajax_view hide-footer" id="product_table">
     <thead>
         <tr>
             <th><input type="checkbox" id="select-all-row" data-table-id="product_table"></th>
-            <th>&nbsp;</th>
+            <th >&nbsp;</th> 
+            <th >image</th> 
             <th>@lang('messages.action')</th>
             <th>@lang('sale.product')</th>
             <th>@lang('purchase.business_location') @show_tooltip(__('lang_v1.product_business_location_tooltip'))</th>

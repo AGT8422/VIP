@@ -369,7 +369,7 @@ class SellReturnController extends Controller
         //$walk_in_customer   = $this->contactUtil->getWalkInCustomer($business_id);
         $currency_details     = $this->transactionUtil->purchaseCurrencyDetails($business_id);
         $mainstore_categories = \App\Models\Warehouse::childs($business_id);
-        $cost_centers         =  \App\Account::cost_centers();
+        $cost_centers         = \App\Account::cost_centers();
         $taxes                = \App\TaxRate::where('business_id', $business_id)
                                 ->ExcludeForTaxGroup()
                                 ->get();
@@ -531,23 +531,16 @@ class SellReturnController extends Controller
             $business_id = $request->session()->get('user.business_id');
  
             DB::beginTransaction();
-
+            $company_name      = request()->session()->get("user_main.domain");
             if (!empty($input['products'])) {
                 $document_expense   = [];$idxx = 1;
                 $document_sell      = [];$idx  = 1;
-                #........................................
-                if ($request->hasFile('document_expense')) {
-                    foreach ($request->file('document_expense') as $file) {
-                        $file_name =  'public/uploads/documents/'.time().'_'.$idxx++.'.'.$file->getClientOriginalExtension();
-                        $file->move('public/uploads/documents',$file_name);
-                        array_push($document_expense,$file_name);
-                    }
-                }
+                $company_name      = request()->session()->get("user_main.domain");
                 #........................................
                 if ($request->hasFile('document_sell')) {
                     foreach ($request->file('document_sell') as $file) {
-                        $file_name =  'public/uploads/documents/'.time().'_'.$idx++.'.'.$file->getClientOriginalExtension();
-                        $file->move('public/uploads/documents',$file_name);
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/sale_return/'.time().'_'.$idx++.'.'.$file->getClientOriginalExtension();
+                        $file->move('uploads/companies/'.$company_name.'/documents/sale_return',$file_name);
                         array_push($document_sell,$file_name);
                     }
                 } 
@@ -766,7 +759,7 @@ class SellReturnController extends Controller
             $input_data['ship_amount']      = 0;
             $input_data['payment_status']   = 2;
             $input_data['currency_id']      = $input_data['currency_id'];
-            $input_data['exchange_price']   = ($input_data['currency_id']!= null)?$input_data['currency_id_amount']:null;
+            $input_data['exchange_price']   = ($input_data['currency_id']!= null)?$input_data['currency_id_amount']:1;
             $input_data['amount_in_currency']   = ($input_data['currency_id']!= null)?($input_data['total_final_input'] / $input_data['currency_id_amount']):null;
             // $input_data['discount_amount']  = $input_data['discount_amount2'];
 
@@ -786,11 +779,12 @@ class SellReturnController extends Controller
                 $input_data['invoice_no'] = $PATTERN_INVOICE . $this->productUtil->generateReferenceNumber('sell_return', $ref_count);
             }
             $document_sell = [];
+            $company_name      = request()->session()->get("user_main.domain");
                 if ($request->hasFile('document_sell')) {
                     $id_return = 1;
                     foreach ($request->file('document_sell') as $file) {
-                        $file_name =  'public/uploads/documents/'.time()."_".$id_return++.'.'.$file->getClientOriginalExtension();
-                        $file->move('public/uploads/documents',$file_name);
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/sale_return/'.time()."_".$id_return++.'.'.$file->getClientOriginalExtension();
+                        $file->move('uploads/companies/'.$company_name.'/documents/sale_return',$file_name);
                         array_push($document_sell,$file_name);
                     }
                 } 
@@ -1023,11 +1017,12 @@ class SellReturnController extends Controller
                     } 
                 }
             }
+            $company_name      = request()->session()->get("user_main.domain");
             $document_sell =  \App\Transaction::find($request->transaction_id)->document;
                 if ($request->hasFile('document_sell')) { $ids=1;
                     foreach ($request->file('document_sell') as $file) {
-                        $file_name =  'public/uploads/documents/'.time().'_'.$ids++.'.'.$file->getClientOriginalExtension();
-                        $file->move('public/uploads/documents',$file_name);
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/sale_return/'.time().'_'.$ids++.'.'.$file->getClientOriginalExtension();
+                        $file->move('uploads/companies/'.$company_name.'/documents/sale_return',$file_name);
                         array_push($document_sell,$file_name);
                     }
                 } 
@@ -1058,7 +1053,7 @@ class SellReturnController extends Controller
             $trans->final_total           = $request->input('total_final_input');
             $trans->cost_center_id        = $request->input('cost_center_id');
             $trans->currency_id           = $input_data['currency_id'];
-            $trans->exchange_price        = ($input_data['currency_id']!= null)?$input_data['currency_id_amount']:null;
+            $trans->exchange_price        = ($input_data['currency_id']!= null)?$input_data['currency_id_amount']:1;
             $trans->amount_in_currency    = ($input_data['currency_id']!= null)?($request->input('total_final_input') / $input_data['currency_id_amount']):null;
             # $trans->tax_amount         = $request->input('tax_calculation_amount');
             $trans->pattern_id            = $request->pattern_id;

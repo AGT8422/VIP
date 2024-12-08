@@ -778,26 +778,42 @@ class Util
                     throw new \Exception("Invalid document file");
                 }
             }
-             
-            if ($request->$file_name->getSize() <= config('constants.document_size_limit')) {
-                $new_file_name = time() . '_' . $request->$file_name->getClientOriginalName();
-                $data        = getimagesize($request->$file_name);
-                $width       = $data[0];
-                $height      = $data[1];
-                $half_width  = $width/2;
-                $half_height = $height/2;
-                // dd($data);
-                $company_name = request()->session()->get("user_main.domain");
-                $imgs = \Image::make($request->$file_name)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
-                if ($imgs->save(public_path("uploads\companies\\$company_name\img\\$new_file_name"),20)) {
-                    $uploaded_file_name = $new_file_name;
+            
+            $company_name  = request()->session()->get("user_main.domain");
+            if(!in_array($request->$file_name->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                if ($request->$file_name->getSize() <= config('constants.document_size_limit')){ 
+                    $file_name    =   time().'_'.$file->getClientOriginalName();
+                    if($file_name == 'business_logo'){
+                        $request->$file_name->move('uploads/companies/'.$company_name.'/documents/business_logo',$file_name);
+                    }else{
+                        $request->$file_name->move('uploads/companies/'.$company_name.'/img',$file_name);
+                    }
                 }
             }else{
-                $output = ['success' => 0,
-                            'msg' => __("messages.something_went_wrong")
-                            ];
-                return redirect('products')->with('status', $output);
-            }
+                if ($request->$file_name->getSize() <= config('constants.document_size_limit')) {
+                    $new_file_name = time() . '_' . $request->$file_name->getClientOriginalName();
+                    $data          = getimagesize($request->$file_name);
+                    $width         = $data[0];
+                    $height        = $data[1];
+                    $half_width    = $width/2;
+                    $half_height   = $height/2; 
+                    $imgs = \Image::make($request->$file_name)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                    if($file_name=='business_logo'){
+                        if ($imgs->save(public_path("uploads\companies\\$company_name\business_logo\\$new_file_name"),20)) {
+                            $uploaded_file_name = $new_file_name;
+                        }
+                    }else{
+                        if ($imgs->save(public_path("uploads\companies\\$company_name\img\\$new_file_name"),20)) {
+                            $uploaded_file_name = $new_file_name;
+                        }
+                    }
+                }else{
+                    $output = ['success' => 0,
+                                'msg' => __("messages.something_went_wrong")
+                                ];
+                    return redirect('products')->with('status', $output);
+                }
+            } 
              
         }
          return $uploaded_file_name;

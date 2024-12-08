@@ -435,7 +435,9 @@
             
 
         </div>
-        
+        @php
+            
+        @endphp
         <div class="col-md-6 parent_right_header" dir="rtl">
                  <div class="item-one">
                     <ul class="nav navbar-nav">
@@ -453,16 +455,19 @@
                                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
                                 <span>{{ Auth::User()->first_name }} {{ Auth::User()->last_name }}</span>
                             </a>
+                            @php 
+                            $company_name = request()->session()->get("user_main.domain");
+                            @endphp
                             <ul class="dropdown-menu">
                                 <!-- The user image in the menu -->
                                 <li class="user-header">
                                 @if(!empty(Session::get('business.logo')))
-                                    <img src="{{ asset( 'public/uploads/business_logos/' . Session::get('business.logo') ) }}" alt="Logo">
+                                    <img src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
                                 @endif
                                 
                                 </li>
                                 <li>
-                                <p>
+                                <p class="text-center">
                                     {{ Auth::User()->first_name }} {{ Auth::User()->last_name }}
                                 </p>
                                 </li>

@@ -16,8 +16,7 @@
     {{-- *2* section body of page --}}
     {{-- ****************************** --}}
         <section class="content">
-            {{-- */1/* section tables --}}
-            <div class="row" style="margin:0px 10%">
+            {{-- */1/* section tables --}} 
                 @component('components.widget', ['class' => 'box-primary', 'title' => __( 'unit.all_your_units' )])
                     {{-- *//1//* section permissions for create --}}
                     @can('unit.create') 
@@ -44,8 +43,7 @@
                             </table>
                         </div>
                     @endif
-                @endcomponent
-            </div>
+                @endcomponent 
             {{-- */2/* section modals --}}
             <div class="modal fade unit_modal" tabindex="-1" role="dialog" 
                 aria-labelledby="gridSystemModalLabel">

@@ -578,19 +578,6 @@ class PurchaseController extends Controller
             $transaction_data['dis_type']                 = $request->dis_type; 
             $transaction_data['discount_type']            = $request->discount_type;
             $transaction_data['transaction_date']         = $this->productUtil->uf_date($transaction_data['transaction_date'], true);
-            //upload document
-            $company_name      = request()->session()->get("user_main.domain");
-            $document_purchase = [];
-            if ($request->hasFile('document_purchase')) {
-                $id_sf = 1;
-                foreach ($request->file('document_purchase') as $file) {
-                    $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/'.time().'_'.$id_sf++.'.'.$file->getClientOriginalExtension();
-                    $file->move('uploads/companies/'.$company_name.'/documents/purchase',$file_name);
-                    array_push($document_purchase,$file_name);
-                }
-            }
-            $transaction_data['document']         = json_encode($document_purchase);
-            // $transaction_data['document']         = $this->transactionUtil->uploadFile($request, 'document', 'documents');
 
             DB::beginTransaction();
 
@@ -600,6 +587,43 @@ class PurchaseController extends Controller
             if (empty($transaction_data['ref_no'])) {
                 $transaction_data['ref_no']       = $this->productUtil->generateReferenceNumber($transaction_data['type'], $ref_count);
             }
+            //upload document
+            $company_name      = request()->session()->get("user_main.domain");
+            $document_purchase = [];
+            if ($request->hasFile('document_purchase')) {
+                $id_sf = 1;
+                $referencesNewStyle = str_replace('/', '-', $transaction_data['ref_no']);
+                foreach ($request->file('document_purchase') as $file) {
+                    #................
+                    if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                        if ($file->getSize() <= config('constants.document_size_limit')){ 
+                            $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$id_sf++.'_'.$file->getClientOriginalName();
+                            $file->move('uploads/companies/'.$company_name.'/documents/purchase',$file_name_m);
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/'. $file_name_m;
+                        }
+                    }else{
+                        if ($file->getSize() <= config('constants.document_size_limit')) {
+                            $new_file_name = time().'_'.$referencesNewStyle.'_'.$id_sf++.'_'.$file->getClientOriginalName();
+                            $Data         = getimagesize($file);
+                            $width         = $Data[0];
+                            $height        = $Data[1];
+                            $half_width    = $width/2;
+                            $half_height   = $height/2; 
+                            $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/'. $new_file_name;
+                            if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\purchase\\$new_file_name"),20)) {
+                                $uploaded_file_name = $new_file_name;
+                            }
+                                
+                        }
+                    }
+                    #................
+                    array_push($document_purchase,$file_name);
+                }
+            }
+            $transaction_data['document']         = json_encode($document_purchase);
+            // $transaction_data['document']         = $this->transactionUtil->uploadFile($request, 'document', 'documents');
+            
             $transaction_data['cost_center_id']   = $request->cost_center_id;
             $transaction_data['list_price']       = $request->list_price;
             $transaction_data['sup_refe']         = $transaction_data['sup_ref_no'];
@@ -624,10 +648,33 @@ class PurchaseController extends Controller
 
             $document_expense = [];
             if ($request->hasFile('document_expense')) {
+                $oo_id = 1;
+                $referencesNewStyle = str_replace('/', '-', $transaction_data['ref_no']);
                 foreach ($request->file('document_expense') as $file) {
-                    
-                    $file_name    =  'uploads/companies/'.$company_name.'/documents/purchase/expense/'.time().'.'.$file->getClientOriginalExtension();
-                    $file->move('uploads/companies/'.$company_name.'/documents/purchase/expense',$file_name);
+                    #................
+                    if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                        if ($file->getSize() <= config('constants.document_size_limit')){ 
+                            $file_name_m    =   time().'_'.$referencesNewStyle.'_Expense_'.$oo_id++.'_'.$file->getClientOriginalName();
+                            $file->move('uploads/companies/'.$company_name.'/documents/purchase/expense',$file_name_m);
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/expense/'. $file_name_m;
+                        }
+                    }else{
+                        if ($file->getSize() <= config('constants.document_size_limit')) {
+                            $new_file_name = time().'_'.$referencesNewStyle.'_Expense_'.$oo_id++.'_'.$file->getClientOriginalName();
+                            $Data         = getimagesize($file);
+                            $width         = $Data[0];
+                            $height        = $Data[1];
+                            $half_width    = $width/2;
+                            $half_height   = $height/2; 
+                            $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/expense/'. $new_file_name;
+                            if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\purchase\\expense\\$new_file_name"),20)) {
+                                $uploaded_file_name = $new_file_name;
+                            }
+                                
+                        }
+                    }
+                    #................
                     array_push($document_expense,$file_name);
                 }
             }
@@ -1059,7 +1106,7 @@ class PurchaseController extends Controller
             $old_account            = $transaction->contact_id;
             $old_discount           = $transaction->discount_amount;
             $old_tax                = $transaction->tax_amount;
-            $old_document           = $transaction->document;
+            $old_document           = $transaction->document; 
             $before_status          = $transaction->status;
             $business_id            = request()->session()->get('user.business_id');
             $enable_product_editing = $request->session()->get('business.enable_editing_product_from_purchase');
@@ -1120,9 +1167,32 @@ class PurchaseController extends Controller
             $company_name      = request()->session()->get("user_main.domain");
             if ($request->hasFile('document_purchase')) {
                 $id_cv = 1;
-                foreach ($request->file('document_purchase') as $file) {
-                    $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/'.time().'_'.$id_cv++.'.'.$file->getClientOriginalExtension();
-                    $file->move('uploads/companies/'.$company_name.'/documents/purchase',$file_name);
+                $referencesNewStyle = str_replace('/', '-', $transaction->ref_no);
+                foreach ($request->file('document_purchase') as $file) { 
+                    #................
+                    if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                        if ($file->getSize() <= config('constants.document_size_limit')){ 
+                            $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$id_cv++.'_'.$file->getClientOriginalName();
+                            $file->move('uploads/companies/'.$company_name.'/documents/purchase',$file_name_m);
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/'. $file_name_m;
+                        }
+                    }else{
+                        if ($file->getSize() <= config('constants.document_size_limit')) {
+                            $new_file_name = time().'_'.$referencesNewStyle.'_'.$id_cv++.'_'.$file->getClientOriginalName();
+                            $Data         = getimagesize($file);
+                            $width         = $Data[0];
+                            $height        = $Data[1];
+                            $half_width    = $width/2;
+                            $half_height   = $height/2; 
+                            $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/'. $new_file_name;
+                            if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\purchase\\$new_file_name"),20)) {
+                                $uploaded_file_name = $new_file_name;
+                            }
+                                
+                        }
+                    }
+                    #................
                     array_push($old_document,$file_name);
                 }
             }
@@ -1141,9 +1211,32 @@ class PurchaseController extends Controller
             $document_expense = $request->old_document??[];
             if ($request->hasFile('document_expense')) {
                 $id_cc = 1;
+                $referencesNewStyle = str_replace('/', '-', $transaction->ref_no);
                 foreach ($request->file('document_expense') as $file) {
-                    $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/expense/'.time().'_'.$id_cc++.'.'.$file->getclientoriginalextension();
-                    $file->move('uploads/companies/'.$company_name.'/documents/purchase/expense',$file_name);
+                    #................
+                    if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                        if ($file->getSize() <= config('constants.document_size_limit')){ 
+                            $file_name_m    =   time().'_'.$referencesNewStyle.'_Expense_'.$id_cc++.'_'.$file->getClientOriginalName();
+                            $file->move('uploads/companies/'.$company_name.'/documents/purchase/expense',$file_name_m);
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/expense/'. $file_name_m;
+                        }
+                    }else{
+                        if ($file->getSize() <= config('constants.document_size_limit')) {
+                            $new_file_name = time().'_'.$referencesNewStyle.'_Expense_'.$id_cc++.'_'.$file->getClientOriginalName();
+                            $Data         = getimagesize($file);
+                            $width         = $Data[0];
+                            $height        = $Data[1];
+                            $half_width    = $width/2;
+                            $half_height   = $height/2; 
+                            $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/expense/'. $new_file_name;
+                            if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\purchase\\expense\\$new_file_name"),20)) {
+                                $uploaded_file_name = $new_file_name;
+                            }
+                                
+                        }
+                    }
+                    #................
                     array_push($document_expense,$file_name);
                 }
             } 

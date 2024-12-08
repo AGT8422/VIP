@@ -24,7 +24,7 @@ class Language
         // }
         // App::setLocale($locale);
         $locale =  'ar';
-        // dd(Auth::id());
+        
         if(Auth::id()){
             $locale =  Auth::User()->language;
         }

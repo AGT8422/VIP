@@ -19,7 +19,7 @@
 	<input type="hidden" id="p_symbol" value="{{$currency_details->symbol}}">
 	<input type="hidden" id="p_thousand" value="{{$currency_details->thousand_separator}}">
 	<input type="hidden" id="p_decimal" value="{{$currency_details->decimal_separator}}">
-        <div class="row" style="margin:0px 10%">
+        <div class="row" >
             <div class="col-md-12">
                 @component('components.filters', ['title' => __('report.filters') , 'class' =>  "box-primary"])
                     <div class="col-md-3 hide" id="location_filter">
@@ -212,10 +212,8 @@
 
 
 
-    </section>
-    <div class="row" style="margin:0px 10% ;background-color:#ffffff">
-        <div class="col-sm-12">
-         <section class="content" style="width:100% !important">
+    </section>  
+         <section class="content" style="width:100% !important background-color:#ffffff">
                 <table class="table table-stripted table-bordered dataTable" id="stock_product" style="width:100% !important">
                     <thead>
                         <tr>
@@ -244,8 +242,7 @@
                         </tr>
                     </tfoot>
                 </table>
-            </section>
-        </div>
+            </section> 
      <!-- /.content -->
 
 @endsection

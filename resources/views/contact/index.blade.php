@@ -20,131 +20,130 @@
 
 <!-- Main content -->
 <section class="content">
-    <input type="hidden" value="{{$type}}" id="contact_type">
-    <div class="row" style="margin:0px 10%">
-        @component('components.widget', ['class' => 'box-primary', 'title' => __( 'contact.all_your_contact', ['contacts' => __('lang_v1.'.$type.'s') ])])
-            @if(auth()->user()->can('supplier.create') || auth()->user()->can('customer.create')||auth()->user()->can('supplier.view_own') || auth()->user()->can('customer.view_own')  )
-                @slot('tool')
-                    <div class="box-tools">
-                        <button type="button" class="create_contact btn btn-block btn-primary btn-modal" 
-                        data-href="{{action('ContactController@create', ['type' => $type])}}" 
-                        data-container=".contact_modal">
-                        <i class="fa fa-plus"></i> @lang('messages.add')</button>
-                    </div>
-                @endslot
-            @endif
-            @if(auth()->user()->can('supplier.view') ||auth()->user()->can('ReadOnly.views')||auth()->user()->can('SalesMan.views')||auth()->user()->can('admin_supervisor.views')|| auth()->user()->can('customer.view') ||  auth()->user()->can('warehouse.views') || auth()->user()->can('supplier.view_own') || auth()->user()->can('customer.view_own'))
-                <table class="table table-bordered table-striped" id="contact_table">
-                    <thead>
-                        <tr>
-                            <th>@lang('messages.action')</th>
-                            <th>@lang('lang_v1.contact_id')</th>
-                            @if($type == 'supplier') 
-                                <th>@lang('business.business_name')</th>
-                                <th>@lang('business.email')</th>
-                                <th>@lang('contact.tax_no')</th>
-                                <th>@lang('contact.pay_term')</th>
-                                <th>@lang('account.opening_balance')</th>
-                                <th>@lang('lang_v1.advance_balance')</th>
-                                <th>@lang('lang_v1.added_on')</th>
-                                <th>@lang('business.address')</th>
-                                <th>@lang('contact.mobile')</th>
-                                <th>@lang('contact.total_purchase_due')</th>
-                                <th>@lang('lang_v1.total_purchase_return_due')</th>
-                            @elseif( $type == 'customer')
-                                <!--<th>@lang('user.name')</th>-->
-                                <th>@lang('business.business_name')</th>
-                                <th>@lang('business.email')</th>
-                                <th>@lang('contact.tax_no')</th>
-                                <th>@lang('lang_v1.credit_limit')</th>
-                                <th>@lang('contact.pay_term')</th>
-                                <th>@lang('account.opening_balance')</th>
-                                <th>@lang('lang_v1.advance_balance')</th>
-                                <th>@lang('lang_v1.added_on')</th>
-                                @if($reward_enabled)
-                                    <th id="rp_col">{{session('business.rp_name')}}</th>
-                                @endif
-                                <th>@lang('lang_v1.customer_group')</th>
-                                <th>@lang('business.address')</th>
-                                <th>@lang('contact.mobile')</th>
-                                <th>@lang('contact.total_sale_due')</th>
-                                <th>@lang('lang_v1.total_sell_return_due')</th>
+    <input type="hidden" value="{{$type}}" id="contact_type"> 
+    @component('components.widget', ['class' => 'box-primary', 'title' => __( 'contact.all_your_contact', ['contacts' => __('lang_v1.'.$type.'s') ])])
+        @if(auth()->user()->can('supplier.create') || auth()->user()->can('customer.create')||auth()->user()->can('supplier.view_own') || auth()->user()->can('customer.view_own')  )
+            @slot('tool')
+                <div class="box-tools">
+                    <button type="button" class="create_contact btn btn-block btn-primary btn-modal" 
+                    data-href="{{action('ContactController@create', ['type' => $type])}}" 
+                    data-container=".contact_modal">
+                    <i class="fa fa-plus"></i> @lang('messages.add')</button>
+                </div>
+            @endslot
+        @endif
+        @if(auth()->user()->can('supplier.view') ||auth()->user()->can('ReadOnly.views')||auth()->user()->can('SalesMan.views')||auth()->user()->can('admin_supervisor.views')|| auth()->user()->can('customer.view') ||  auth()->user()->can('warehouse.views') || auth()->user()->can('supplier.view_own') || auth()->user()->can('customer.view_own'))
+            <table class="table table-bordered table-striped" id="contact_table">
+                <thead>
+                    <tr>
+                        <th>@lang('messages.action')</th>
+                        <th>@lang('lang_v1.contact_id')</th>
+                        @if($type == 'supplier') 
+                            <th>@lang('business.business_name')</th>
+                            <th>@lang('business.email')</th>
+                            <th>@lang('contact.tax_no')</th>
+                            <th>@lang('contact.pay_term')</th>
+                            <th>@lang('account.opening_balance')</th>
+                            <th>@lang('lang_v1.advance_balance')</th>
+                            <th>@lang('lang_v1.added_on')</th>
+                            <th>@lang('business.address')</th>
+                            <th>@lang('contact.mobile')</th>
+                            <th>@lang('contact.total_purchase_due')</th>
+                            <th>@lang('lang_v1.total_purchase_return_due')</th>
+                        @elseif( $type == 'customer')
+                            <!--<th>@lang('user.name')</th>-->
+                            <th>@lang('business.business_name')</th>
+                            <th>@lang('business.email')</th>
+                            <th>@lang('contact.tax_no')</th>
+                            <th>@lang('lang_v1.credit_limit')</th>
+                            <th>@lang('contact.pay_term')</th>
+                            <th>@lang('account.opening_balance')</th>
+                            <th>@lang('lang_v1.advance_balance')</th>
+                            <th>@lang('lang_v1.added_on')</th>
+                            @if($reward_enabled)
+                                <th id="rp_col">{{session('business.rp_name')}}</th>
                             @endif
-                            @php
-                                $custom_labels = json_decode(session('business.custom_labels'), true);
-                            @endphp
-                            <th >
-                                {{ $custom_labels['contact']['custom_field_1'] ?? __('lang_v1.contact_custom_field1') }}
-                            </th>
-                            <th >
-                                {{ $custom_labels['contact']['custom_field_2'] ?? __('lang_v1.contact_custom_field2') }}
-                            </th>
-                            <th >
-                                {{ $custom_labels['contact']['custom_field_3'] ?? __('lang_v1.contact_custom_field3') }}
-                            </th>
-                            <th >
-                                {{ $custom_labels['contact']['custom_field_4'] ?? __('lang_v1.contact_custom_field4') }}
-                            </th>
-                            <th >
-                                {{ $custom_labels['contact']['custom_field_5'] ?? __('lang_v1.custom_field', ['number' => 5]) }}
-                            </th>
-                            <th >
-                                {{ $custom_labels['contact']['custom_field_6'] ?? __('lang_v1.custom_field', ['number' => 6]) }}
-                            </th>
-                            <th >
-                                {{ $custom_labels['contact']['custom_field_7'] ?? __('lang_v1.custom_field', ['number' => 7]) }}
-                            </th>
-                            <th >
-                                {{ $custom_labels['contact']['custom_field_8'] ?? __('lang_v1.custom_field', ['number' => 8]) }}
-                            </th>
-                            <th >
-                                {{ $custom_labels['contact']['custom_field_9'] ?? __('lang_v1.custom_field', ['number' => 9]) }}
-                            </th>
-                            <th >
-                                {{ $custom_labels['contact']['custom_field_10'] ?? __('lang_v1.custom_field', ['number' => 10]) }}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr class="bg-gray font-17 text-center footer-total">
-                        
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td
-                                @if($type == 'supplier')
-                                    colspan="6"
-                                @elseif( $type == 'customer')
-                                    @if($reward_enabled)
-                                        colspan="9"
-                                    @else
-                                        colspan="8"
-                                    @endif
-                                @endif>
-                                    <strong>
-                                        @lang('sale.total'):
-                                    </strong>
-                            </td>
-                            <td id="footer_contact_due"></td>
-                            <td id="footer_contact_return_due"></td>
-                        
-                            <td ></td>
-                            <!--<td ></td>-->
-                            <td ></td>
-                            <td ></td>
-                            <td ></td>
-                            <td ></td>
-                            <td ></td>
-                            <td ></td>
-                            <td ></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            @endif
-        @endcomponent
-    </div>
+                            <th>@lang('lang_v1.customer_group')</th>
+                            <th>@lang('business.address')</th>
+                            <th>@lang('contact.mobile')</th>
+                            <th>@lang('contact.total_sale_due')</th>
+                            <th>@lang('lang_v1.total_sell_return_due')</th>
+                        @endif
+                        @php
+                            $custom_labels = json_decode(session('business.custom_labels'), true);
+                        @endphp
+                        <th >
+                            {{ $custom_labels['contact']['custom_field_1'] ?? __('lang_v1.contact_custom_field1') }}
+                        </th>
+                        <th >
+                            {{ $custom_labels['contact']['custom_field_2'] ?? __('lang_v1.contact_custom_field2') }}
+                        </th>
+                        <th >
+                            {{ $custom_labels['contact']['custom_field_3'] ?? __('lang_v1.contact_custom_field3') }}
+                        </th>
+                        <th >
+                            {{ $custom_labels['contact']['custom_field_4'] ?? __('lang_v1.contact_custom_field4') }}
+                        </th>
+                        <th >
+                            {{ $custom_labels['contact']['custom_field_5'] ?? __('lang_v1.custom_field', ['number' => 5]) }}
+                        </th>
+                        <th >
+                            {{ $custom_labels['contact']['custom_field_6'] ?? __('lang_v1.custom_field', ['number' => 6]) }}
+                        </th>
+                        <th >
+                            {{ $custom_labels['contact']['custom_field_7'] ?? __('lang_v1.custom_field', ['number' => 7]) }}
+                        </th>
+                        <th >
+                            {{ $custom_labels['contact']['custom_field_8'] ?? __('lang_v1.custom_field', ['number' => 8]) }}
+                        </th>
+                        <th >
+                            {{ $custom_labels['contact']['custom_field_9'] ?? __('lang_v1.custom_field', ['number' => 9]) }}
+                        </th>
+                        <th >
+                            {{ $custom_labels['contact']['custom_field_10'] ?? __('lang_v1.custom_field', ['number' => 10]) }}
+                        </th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr class="bg-gray font-17 text-center footer-total">
+                    
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td
+                            @if($type == 'supplier')
+                                colspan="6"
+                            @elseif( $type == 'customer')
+                                @if($reward_enabled)
+                                    colspan="9"
+                                @else
+                                    colspan="8"
+                                @endif
+                            @endif>
+                                <strong>
+                                    @lang('sale.total'):
+                                </strong>
+                        </td>
+                        <td id="footer_contact_due"></td>
+                        <td id="footer_contact_return_due"></td>
+                    
+                        <td ></td>
+                        <!--<td ></td>-->
+                        <td ></td>
+                        <td ></td>
+                        <td ></td>
+                        <td ></td>
+                        <td ></td>
+                        <td ></td>
+                        <td ></td>
+                    </tr>
+                </tfoot>
+            </table>
+        @endif
+    @endcomponent
+    
     <div class="modal fade contact_modal" tabindex="-1" role="dialog" 
     	aria-labelledby="gridSystemModalLabel">
     </div>

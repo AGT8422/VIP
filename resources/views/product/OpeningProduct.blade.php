@@ -14,8 +14,7 @@
     </section>
 
     <!-- Main content -->
-    <section class="content no-print">
-        <div class="row" style="margin:0px 15%">
+    <section class="content no-print"> 
             @component('components.filters', ["class"=>"box-primary" ,'title' => __('report.filters')])
                 <form action="{{ URL::to('products/Opening_product') }}" method="GET">
                     <div class="col-md-5">
@@ -36,9 +35,7 @@
                     </div>
                     
                 </form>
-            @endcomponent
-        </div>
-        <div class="row" style="margin:0px 15%">
+            @endcomponent  
             @component("components.widget",["class"=>"box-primary","title"=>__('List Of Opening Stock')])
                 <div class="col-md-12">
                     <a href="{{ URL::to('/products/add-Opening-Product') }}"  class="pull-right btn btn-md btn-primary">@lang("messages.add")</a>
@@ -122,8 +119,7 @@
                         </tfoot>
                     </table>
                 </div>
-            @endcomponent
-        </div>
+            @endcomponent 
 
         <div class="modal fade product_modal" tabindex="-1" role="dialog"
             aria-labelledby="gridSystemModalLabel">

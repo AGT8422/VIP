@@ -12,8 +12,7 @@
 </section>
 
 <!-- Main content -->
-<section class="content">
-    <div class="row" style="margin:0px 10%">
+<section class="content"> 
         @component('components.widget', ['class' => 'box-primary', 'title' => __( 'lang_v1.all_warranties' )])
             @slot('tool')
                 <div class="box-tools">
@@ -38,8 +37,7 @@
                     </tr>
                 </thead>
             </table>
-        @endcomponent
-    </div>
+        @endcomponent 
 
 
 </section>

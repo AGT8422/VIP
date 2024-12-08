@@ -26,8 +26,7 @@
                 </div>
             </div>  
         </div>     
-    @endif
-    <div class="row" style="margin:0px 10%">
+    @endif 
         @component('components.widget', ['class' => 'box-primary', 'title' => __('lang_v1.import_export_selling_price_group_prices')])
                 <div class="row">
                     <div class="col-sm-6">
@@ -54,9 +53,7 @@
                         </p>
                     </div>
                 </div>
-        @endcomponent
-    </div>
-    <div class="row" style="margin:0px 10%">
+        @endcomponent  
         @component('components.widget', ['class' => 'box-primary', 'title' => __( 'lang_v1.all_selling_price_group' )])
             @slot('tool')
                 <div class="box-tools">
@@ -77,8 +74,7 @@
                     </thead>
                 </table>
             </div>
-        @endcomponent
-    </div>
+        @endcomponent 
     
     <div class="modal fade brands_modal" tabindex="-1" role="dialog" 
     	aria-labelledby="gridSystemModalLabel">

@@ -136,21 +136,45 @@ class CheckController extends Controller
             foreach($bills_["bill_id"] as $bl){ $id_trans =  $bl;  if( $transaction == null ) { $transaction = $bl;  }else { $transaction .= ",".$bl ; } }
         }
         # ................................................
-        $company_name      = request()->session()->get("user_main.domain");
-        $document_expense = [];
-        if ($request->hasFile('document_expense')) {
-            $count_doc1 = 1;
-            foreach ($request->file('document_expense') as $file) {
-                $file_name =  'uploads/companies/'.$company_name.'/documents/check/'.time().'.'.$count_doc1++.'.'.$file->getClientOriginalExtension();
-                $file->move('uploads/companies/'.$company_name.'/documents/check',$file_name);
-                array_push($document_expense,$file_name);
-            }
-        }
         # .................................................
         # Generate reference number
         $ref_count                = $this->productUtil->setAndGetReferenceCount("Cheque");
         $ref_no                   = $this->productUtil->generateReferenceNumber("Cheque" , $ref_count);
         # return $this->add_main($request->cheque_type);
+        $company_name      = request()->session()->get("user_main.domain");
+        $document_expense = [];
+        if ($request->hasFile('document_expense')) {
+            $count_doc1 = 1;
+            $referencesNewStyle = str_replace('/', '-', $ref_no);
+            foreach ($request->file('document_expense') as $file) {
+                
+                #................
+                if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                    if ($file->getSize() <= config('constants.document_size_limit')){ 
+                        $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
+                        $file->move('uploads/companies/'.$company_name.'/documents/check',$file_name_m);
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/check/'. $file_name_m;
+                    }
+                }else{
+                    if ($file->getSize() <= config('constants.document_size_limit')) {
+                        $new_file_name = time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
+                        $Data         = getimagesize($file);
+                        $width         = $Data[0];
+                        $height        = $Data[1];
+                        $half_width    = $width/2;
+                        $half_height   = $height/2; 
+                        $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/check/'. $new_file_name;
+                        if ($imgs->save(public_path("uploads\companies\\$company_name\documents\check\\$new_file_name"),20)) {
+                            $uploaded_file_name = $new_file_name;
+                        }
+                            
+                    }
+                }
+                #................
+                 array_push($document_expense,$file_name);
+            }
+        }
         $business_id              =  request()->session()->get('user.business_id');
         $setting                  =  \App\Models\SystemAccount::where('business_id',$business_id)->first();
         $id                       =  ($request->cheque_type == 0)?$setting->cheque_collection:$setting->cheque_debit;
@@ -242,7 +266,6 @@ class CheckController extends Controller
     public function post_edit(Request $request,$id)
     {
         
-        
         DB::beginTransaction();
         $business_id              = request()->session()->get('user.business_id');
         $data                     = Check::find($id);
@@ -263,10 +286,35 @@ class CheckController extends Controller
         # ....................................
         $company_name      = request()->session()->get("user_main.domain");
         if($old_document == null){  $old_document = []; }
+        $referencesNewStyle = str_replace('/', '-', $data->ref_no);
         if ($request->hasFile('document_expense')) { $count_doc2 = 1;
             foreach ($request->file('document_expense') as $file) {
-                $file_name =  'uploads/companies/'.$company_name.'/documents/check/'.time().'_'.$count_doc2++.'.'.$file->getClientOriginalExtension();
-                $file->move('uploads/companies/'.$company_name.'/documents/check',$file_name);
+                
+                
+                #................
+                if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                    if ($file->getSize() <= config('constants.document_size_limit')){ 
+                        $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$count_doc2++.'_'.$file->getClientOriginalName();
+                        $file->move('uploads/companies/'.$company_name.'/documents/check',$file_name_m);
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/check/'. $file_name_m;
+                    }
+                }else{
+                    if ($file->getSize() <= config('constants.document_size_limit')) {
+                        $new_file_name = time().'_'.$referencesNewStyle.'_'.$count_doc2++.'_'.$file->getClientOriginalName();
+                        $Data         = getimagesize($file);
+                        $width         = $Data[0];
+                        $height        = $Data[1];
+                        $half_width    = $width/2;
+                        $half_height   = $height/2; 
+                        $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/check/'. $new_file_name;
+                        if ($imgs->save(public_path("uploads\companies\\$company_name\documents\check\\$new_file_name"),20)) {
+                            $uploaded_file_name = $new_file_name;
+                        }
+                            
+                    }
+                }
+                #................
                 array_push($old_document,$file_name);
             }
         }

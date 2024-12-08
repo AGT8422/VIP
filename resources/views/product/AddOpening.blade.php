@@ -23,8 +23,7 @@
 				<div class="alert success alert-success">
 				{{ session('yes') }}
 				</div>
-			@endif
-			<div class="row" style="margin:0px 10%">
+			@endif 
 				<div class="content">
 					@component("components.widget",["class"=>"box-primary","title"=>__("Insert The Data")])
 						<div  class="col-md-4">
@@ -170,8 +169,8 @@
 						
 						
 					@endcomponent
+				 
 				</div>
-			</div>
 		{!! Form::close() !!}
 </section>
 <!-- quick product modal -->

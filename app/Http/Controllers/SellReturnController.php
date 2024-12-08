@@ -537,17 +537,40 @@ class SellReturnController extends Controller
                 $document_sell      = [];$idx  = 1;
                 $company_name      = request()->session()->get("user_main.domain");
                 #........................................
-                if ($request->hasFile('document_sell')) {
-                    foreach ($request->file('document_sell') as $file) {
-                        $file_name =  'uploads/companies/'.$company_name.'/documents/sale_return/'.time().'_'.$idx++.'.'.$file->getClientOriginalExtension();
-                        $file->move('uploads/companies/'.$company_name.'/documents/sale_return',$file_name);
-                        array_push($document_sell,$file_name);
-                    }
-                } 
                 $input['line_type'] = 'return_sell';
                 $input['document']  =  json_encode($document_sell);
                 $sell_return        =  $this->transactionUtil->addSellReturn($input, $business_id, $user_id);
                 $receipt            =  $this->receiptContent($business_id, $sell_return->location_id, $sell_return->id);
+                if ($request->hasFile('document_sell')) {
+                    $referencesNewStyle = str_replace('/', '-', $receipt);
+                    foreach ($request->file('document_sell') as $file) {
+                        #................
+                        if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                            if ($file->getSize() <= config('constants.document_size_limit')){ 
+                                $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$idx++.'_'.$file->getClientOriginalName();
+                                $file->move('uploads/companies/'.$company_name.'/documents/sale_return',$file_name_m);
+                                $file_name =  'uploads/companies/'.$company_name.'/documents/sale_return/'. $file_name_m;
+                            }
+                        }else{
+                            if ($file->getSize() <= config('constants.document_size_limit')) {
+                                $new_file_name = time().'_'.$referencesNewStyle.'_'.$idx++.'_'.$file->getClientOriginalName();
+                                $Data         = getimagesize($file);
+                                $width         = $Data[0];
+                                $height        = $Data[1];
+                                $half_width    = $width/2;
+                                $half_height   = $height/2; 
+                                $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                                $file_name =  'uploads/companies/'.$company_name.'/documents/sale_return/'. $new_file_name;
+                                if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\sale_return\\$new_file_name"),20)) {
+                                    $uploaded_file_name = $new_file_name;
+                                }
+                                    
+                            }
+                        }
+                        #................
+                        array_push($document_sell,$file_name);
+                    }
+                } 
                 # .................. service item
                     $sellLine    = \App\TransactionSellLine::where("transaction_id",$sell_return->return_parent_id)->get();
                     $service_lines = [] ;
@@ -782,9 +805,32 @@ class SellReturnController extends Controller
             $company_name      = request()->session()->get("user_main.domain");
                 if ($request->hasFile('document_sell')) {
                     $id_return = 1;
+                    $referencesNewStyle = str_replace('/', '-', $input_data['invoice_no']);
                     foreach ($request->file('document_sell') as $file) {
-                        $file_name =  'uploads/companies/'.$company_name.'/documents/sale_return/'.time()."_".$id_return++.'.'.$file->getClientOriginalExtension();
-                        $file->move('uploads/companies/'.$company_name.'/documents/sale_return',$file_name);
+                        #................
+                        if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                            if ($file->getSize() <= config('constants.document_size_limit')){ 
+                                $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$id_return++.'_'.$file->getClientOriginalName();
+                                $file->move('uploads/companies/'.$company_name.'/documents/sale_return',$file_name_m);
+                                $file_name =  'uploads/companies/'.$company_name.'/documents/sale_return/'. $file_name_m;
+                            }
+                        }else{
+                            if ($file->getSize() <= config('constants.document_size_limit')) {
+                                $new_file_name = time().'_'.$referencesNewStyle.'_'.$id_return++.'_'.$file->getClientOriginalName();
+                                $Data         = getimagesize($file);
+                                $width         = $Data[0];
+                                $height        = $Data[1];
+                                $half_width    = $width/2;
+                                $half_height   = $height/2; 
+                                $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                                $file_name =  'uploads/companies/'.$company_name.'/documents/sale_return/'. $new_file_name;
+                                if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\sale_return\\$new_file_name"),20)) {
+                                    $uploaded_file_name = $new_file_name;
+                                }
+                                    
+                            }
+                        }
+                        #................
                         array_push($document_sell,$file_name);
                     }
                 } 
@@ -1017,21 +1063,44 @@ class SellReturnController extends Controller
                     } 
                 }
             }
+            # get info 
+            $trans                        = \App\Transaction::where("id",$request->transaction_id)->first();
+            $old_return                   = $trans->replicate();
             $company_name      = request()->session()->get("user_main.domain");
             $document_sell =  \App\Transaction::find($request->transaction_id)->document;
                 if ($request->hasFile('document_sell')) { $ids=1;
+                    $referencesNewStyle = str_replace('/', '-', $trans->invoice_no);
                     foreach ($request->file('document_sell') as $file) {
-                        $file_name =  'uploads/companies/'.$company_name.'/documents/sale_return/'.time().'_'.$ids++.'.'.$file->getClientOriginalExtension();
-                        $file->move('uploads/companies/'.$company_name.'/documents/sale_return',$file_name);
+                        #................
+                        if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                            if ($file->getSize() <= config('constants.document_size_limit')){ 
+                                $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$ids++.'_'.$file->getClientOriginalName();
+                                $file->move('uploads/companies/'.$company_name.'/documents/sale_return',$file_name_m);
+                                $file_name =  'uploads/companies/'.$company_name.'/documents/sale_return/'. $file_name_m;
+                            }
+                        }else{
+                            if ($file->getSize() <= config('constants.document_size_limit')) {
+                                $new_file_name = time().'_'.$referencesNewStyle.'_'.$ids++.'_'.$file->getClientOriginalName();
+                                $Data         = getimagesize($file);
+                                $width         = $Data[0];
+                                $height        = $Data[1];
+                                $half_width    = $width/2;
+                                $half_height   = $height/2; 
+                                $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                                $file_name =  'uploads/companies/'.$company_name.'/documents/sale_return/'. $new_file_name;
+                                if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\sale_return\\$new_file_name"),20)) {
+                                    $uploaded_file_name = $new_file_name;
+                                }
+                                    
+                            }
+                        }
+                        #................
                         array_push($document_sell,$file_name);
                     }
                 } 
             if(json_encode($document_sell)!="[]"){
                 $input_data['document'] = json_encode($document_sell);
             }
-            # get info 
-            $trans                        = \App\Transaction::where("id",$request->transaction_id)->first();
-            $old_return                   = $trans->replicate();
 
             # update sell return transaction  
             $trans->store                 = $input_data['store_id'];

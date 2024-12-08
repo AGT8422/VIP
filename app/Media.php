@@ -53,7 +53,8 @@ class Media extends Model
     {
         $path ='';
         if (!empty($this->file_name)) {
-             $path = asset('public/uploads/media/' . rawurlencode($this->file_name));
+            $company_name = request()->session()->get("user_main.domain");
+             $path = asset('uploads/companies/'.$company_name.'/media/' . rawurlencode($this->file_name));
         } 
         return $path;
     }
@@ -146,19 +147,27 @@ class Media extends Model
     public static function uploadFile($file)
     {
         $file_name = null;
-        if ($file->getSize() <= config('constants.document_size_limit')) {
-            $new_file_name = time() . '_' . mt_rand() . '_' . $file->getClientOriginalName();
-            $data        = getimagesize($file);
-            $width       = $data[0];
-            $height      = $data[1];    
-            $half_width  = $width/2;
-            $half_height = $height/2;
-            $imgs = \Image::make($file)->resize($half_width,$half_height);//$file->storeAs('/media', $new_file_name)
-            // if ($imgs->save(public_path("uploads\\".."\media\\$new_file_name"),20)) {
-            $company_name = request()->session()->get("user_main.domain");
-        
-            if ($imgs->save(public_path("uploads\companies\\$company_name\media\\$new_file_name"),20)) {
-                $file_name = $new_file_name;
+        if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+            if ($file->getSize() <= config('constants.document_size_limit')){ 
+                $company_name = request()->session()->get("user_main.domain");
+                $file_name    = time().'_'.$file->getClientOriginalName();
+                $file->move('uploads/companies/'.$company_name.'/media',$file_name);
+                 
+            }
+        }else{
+            if ($file->getSize() <= config('constants.document_size_limit')) {
+                $new_file_name = time() . '_' . mt_rand() . '_' . $file->getClientOriginalName();
+                $data          = getimagesize($file);
+                $width         = $data[0];
+                $height        = $data[1];    
+                $half_width    = $width/2;
+                $half_height   = $height/2;
+                $imgs = \Image::make($file)->resize($half_width,$half_height);//$file->storeAs('/media', $new_file_name)
+                // if ($imgs->save(public_path("uploads\\".."\media\\$new_file_name"),20)) {
+                $company_name = request()->session()->get("user_main.domain");
+                if ($imgs->save(public_path("uploads\companies\\$company_name\media\\$new_file_name"),20)) {
+                    $file_name = $new_file_name;
+                }
             }
         }
 

@@ -66,6 +66,7 @@ class IzoUserController extends Controller
             $password = (isset($output['password']))?$output['password']:null;
         }  
         #................................................
+        
         if(session()->has('user_main')){
             if(request()->session()->get('startLogin')){
                 // return redirect('/login');
@@ -115,7 +116,7 @@ class IzoUserController extends Controller
                 $password = $query_params['password'];
             }
         } 
- 
+       
         #................................................
         if(session()->has('user_main')){
             if(request()->session()->get('startLogin')){
@@ -800,7 +801,7 @@ class IzoUserController extends Controller
                 ];
                 session(['login_info'  => $payload2]);
                 $login_user = 1;
-                
+              
                 return redirect($login['url'])->with('login_user',$login_user);
             }
             //  return parent::login($request);
@@ -848,6 +849,7 @@ class IzoUserController extends Controller
      */
     public function traitLogin(Request $request,$databaseInfo=null)
     { 
+        
         $this->validateLogin($request);
         
         if($databaseInfo != null){
@@ -868,8 +870,11 @@ class IzoUserController extends Controller
             $this->fireLockoutEvent($request);
             return $this->sendLockoutResponse($request);
         }
-
+        
         if ($this->attemptLogin($request)) {
+            $credentials = $request->only('email', 'password');
+            \Auth::attempt($credentials);
+           
             if ($request->hasSession()) {
                 $request->session()->put('auth.password_confirmed_at', time());
             } 
@@ -904,6 +909,8 @@ class IzoUserController extends Controller
         // $final_url = "http://".$domain_url.":8000/home";
         // // dd($final_url);
         // return redirect()->away($final_url);
+       
+        
         return redirect("/home");
          
         // if($login['admin']){

@@ -13,8 +13,7 @@
 </section>
 
 <!-- Main content -->
-<section class="content">
-    <div class="row" style="margin:0px 10%">
+<section class="content"> 
         @component('components.widget', ['class' => 'box-primary', 'title' => __( 'brand.all_your_brands' )])
             @can('brand.create')
                 @slot('tool')
@@ -79,8 +78,7 @@
                     </table>
                 </div>
             @endcan
-        @endcomponent
-    </div>
+        @endcomponent 
 
     <div class="modal fade brands_modal" tabindex="-1" role="dialog" 
     	aria-labelledby="gridSystemModalLabel">

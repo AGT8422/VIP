@@ -16,7 +16,7 @@
 </section>
 
 <!-- Main content -->
-<section class="content no-print" style="margin:0px 10%">
+<section class="content no-print" >
     @component('components.filters', ['title' => __('report.filters')])
         <div class="col-md-4">
             <div class="form-group">

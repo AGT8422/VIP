@@ -87,19 +87,42 @@ class PaymentVoucherController extends Controller
         # note 0=> supplier , 1 =>customer
         $business_id      = request()->session()->get('user.business_id');
         DB::beginTransaction();
-        $company_name      = request()->session()->get("user_main.domain");
-        $document_expense = [];
-        if ($request->hasFile('document_expense')) { $count_doc1 = 1;
-            foreach ($request->file('document_expense') as $file) {
-                $file_name =  'uploads/companies/'.$company_name.'/documents/voucher/'.time().'.'.$count_doc1++.'.'.$file->getClientOriginalExtension();
-                $file->move('uploads/companies/'.$company_name.'/documents/voucher',$file_name);
-                array_push($document_expense,$file_name);
-            }
-        }
         # Generate reference number
         $ref_count             =  $this->productUtil->setAndGetReferenceCount("voucher");
         $ref_no                =  $this->productUtil->generateReferenceNumber("voucher" , $ref_count);
         # .........................................
+        $company_name      = request()->session()->get("user_main.domain");
+        $document_expense = [];
+        $referencesNewStyle = str_replace('/', '-', $ref_no );
+        if ($request->hasFile('document_expense')) { $count_doc1 = 1;
+            foreach ($request->file('document_expense') as $file) {
+                #................
+                if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                    if ($file->getSize() <= config('constants.document_size_limit')){ 
+                        $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
+                        $file->move('uploads/companies/'.$company_name.'/documents/voucher',$file_name_m);
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/voucher/'. $file_name_m;
+                    }
+                }else{
+                    if ($file->getSize() <= config('constants.document_size_limit')) {
+                        $new_file_name = time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
+                        $Data         = getimagesize($file);
+                        $width         = $Data[0];
+                        $height        = $Data[1];
+                        $half_width    = $width/2;
+                        $half_height   = $height/2; 
+                        $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/voucher/'. $new_file_name;
+                        if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\voucher\\$new_file_name"),20)) {
+                            $uploaded_file_name = $new_file_name;
+                        }
+                            
+                    }
+                }
+                #................
+                array_push($document_expense,$file_name);
+            }
+        }
         $data                  =  new PaymentVoucher;
         $data->business_id     =  $business_id;
         $data->ref_no          =  $ref_no;
@@ -182,10 +205,33 @@ class PaymentVoucherController extends Controller
         $company_name      = request()->session()->get("user_main.domain");
         if($old_document == null){  $old_document = [];  } 
         if ($request->hasFile('document_expense')) { $count_doc2 = 1;
+            $referencesNewStyle = str_replace('/', '-', $data->ref_no  );
             foreach ($request->file('document_expense') as $file) {
-                $file_name =  'uploads/companies/'.$company_name.'/documents/voucher/'.time().'_'.$count_doc2++.'.'.$file->getClientOriginalExtension();
-                $file->move('uploads/companies/'.$company_name.'/documents/voucher',$file_name);
-                array_push($old_document,$file_name);
+                #................
+                if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                    if ($file->getSize() <= config('constants.document_size_limit')){ 
+                        $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$count_doc2++.'_'.$file->getClientOriginalName();
+                        $file->move('uploads/companies/'.$company_name.'/documents/voucher',$file_name_m);
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/voucher/'. $file_name_m;
+                    }
+                }else{
+                    if ($file->getSize() <= config('constants.document_size_limit')) {
+                        $new_file_name = time().'_'.$referencesNewStyle.'_'.$count_doc2++.'_'.$file->getClientOriginalName();
+                        $Data         = getimagesize($file);
+                        $width         = $Data[0];
+                        $height        = $Data[1];
+                        $half_width    = $width/2;
+                        $half_height   = $height/2; 
+                        $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/voucher/'. $new_file_name;
+                        if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\voucher\\$new_file_name"),20)) {
+                            $uploaded_file_name = $new_file_name;
+                        }
+                            
+                    }
+                }
+                #................
+                 array_push($old_document,$file_name);
             }
         }
         if(json_encode($old_document)!="[]"){

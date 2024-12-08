@@ -9,6 +9,7 @@
 @php  
     $CashBal = 0;
     $BankBal = 0;
+    // dd(Auth::user());
 @endphp 
 
 @section('special_css')

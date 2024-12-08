@@ -58,7 +58,7 @@ class DailyPaymentController extends Controller
     } 
     public function post_add(Request $request)
     {
-        \DB::beginTransaction();
+       \DB::beginTransaction();
        $request->validate([ 'image.mimes'=>'png,jpeg,png,jpeg,pdf' ]);
        $business_id      = request()->session()->get('user.business_id');
        $ref_count        = $this->productUtil->setAndGetReferenceCount("daily_payment");
@@ -67,11 +67,36 @@ class DailyPaymentController extends Controller
        $company_name      = request()->session()->get("user_main.domain");
        $document_expense = [];
        if ($request->hasFile('document_expense')) { $count_doc1 = 1;
+           $referencesNewStyle = str_replace('/', '-', $ref_no); 
            foreach ($request->file('document_expense') as $file) {
-               $file_name        =  time().'_'.$count_doc1++.'.'.$file->getClientOriginalExtension();
-               $source_file_name =  'uploads/companies/'.$company_name.'/documents/journal-voucher/'. $file_name;
-               $file->move('uploads/companies/'.$company_name.'/documents/journal-voucher',$file_name);
-               array_push($document_expense,$source_file_name);
+                #................
+                
+                if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                    if ($file->getSize() <= config('constants.document_size_limit')){ 
+                        $file_name    =   time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
+                        $file->move('uploads/companies/'.$company_name.'/documents/journal-voucher',$file_name);
+                        $source_file_name =  'uploads/companies/'.$company_name.'/documents/journal-voucher/'. $file_name;
+                    }
+                }else{
+                    if ($file->getSize() <= config('constants.document_size_limit')) {
+                        $new_file_name = time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
+                        $data          = getimagesize($file);
+                        $width         = $data[0];
+                        $height        = $data[1];
+                        $half_width    = $width/2;
+                        $half_height   = $height/2; 
+                        $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                        $source_file_name =  'uploads/companies/'.$company_name.'/documents/journal-voucher/'. $new_file_name;
+                        if ($imgs->save(public_path("uploads\companies\\$company_name\documents\journal-voucher\\$new_file_name"),20)) {
+                            $uploaded_file_name = $new_file_name;
+                        }
+                         
+                    }
+                }
+                #................
+                array_push($document_expense,$source_file_name);
+
+              
            }
        }
        # .................................................
@@ -166,15 +191,38 @@ class DailyPaymentController extends Controller
         $data->amount =  round($request->total_credit,2);
         $data->date   =  $this->productUtil->uf_date($request->date, true);
         $data->currency_id     =  $request->currency_id;
-       $data->exchange_price  =  $request->currency_id_amount;
+        $data->exchange_price  =  $request->currency_id_amount;
         # ................................................
         $company_name      = request()->session()->get("user_main.domain");
         $old_document    =  $data->document;
+        $referencesNewStyle = str_replace('/', '-', $data->ref_no);
         if($old_document == null){ $old_document = []; }
         if ($request->hasFile('document_expense')) {  $id_s = 1;
             foreach ($request->file('document_expense') as $file) {
-                $file_name =  'uploads/companies/'.$company_name.'/documents/journal-voucher/'.time().'_'.$id_s++.'.'.$file->getClientOriginalExtension();
-                $file->move('uploads/companies/'.$company_name.'/documents/journal-voucher',$file_name);
+                #................
+                if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                    if ($file->getSize() <= config('constants.document_size_limit')){ 
+                        $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$id_s++.'_'.$file->getClientOriginalName();
+                        $file->move('uploads/companies/'.$company_name.'/documents/journal-voucher',$file_name_m);
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/journal-voucher/'. $file_name_m;
+                    }
+                }else{
+                    if ($file->getSize() <= config('constants.document_size_limit')) {
+                        $new_file_name = time().'_'.$referencesNewStyle.'_'.$id_s++.'_'.$file->getClientOriginalName();
+                        $Data         = getimagesize($file);
+                        $width         = $Data[0];
+                        $height        = $Data[1];
+                        $half_width    = $width/2;
+                        $half_height   = $height/2; 
+                        $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                        $file_name =  'uploads/companies/'.$company_name.'/documents/journal-voucher/'. $new_file_name;
+                        if ($imgs->save(public_path("uploads\companies\\$company_name\documents\journal-voucher\\$new_file_name"),20)) {
+                            $uploaded_file_name = $new_file_name;
+                        }
+                            
+                    }
+                }
+                #................
                 array_push($old_document,$file_name);
             }
         }
@@ -213,9 +261,9 @@ class DailyPaymentController extends Controller
                                                                             })->get();
             foreach($accounts_items as $itemOne){
                 # ................................................. 
-                $accountOld                = \App\Account::find($i->account_id);
+                $accountOld                = \App\Account::find($itemOne->account_id);
                 $accountNew                = \App\Account::find($request->old_account_id[$key]);
-                $dateOld                   = $i->operation_date;  
+                $dateOld                   = $itemOne->operation_date;  
                 $dateNew                   = $this->productUtil->uf_date($request->date, true);
                 # .................................................
                 $itemOne->amount           = round(abs($amount),2)  ; 

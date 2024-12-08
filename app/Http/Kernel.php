@@ -59,6 +59,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
+        'authIzo'                 => \App\Http\Middleware\AuthIzo::class,
         'auth'                    => \App\Http\Middleware\Authenticate::class,
         'Aapi'                    => \App\Http\Middleware\ApiAuthentication::class,
         'auth.basic'              => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

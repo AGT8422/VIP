@@ -27,8 +27,7 @@
                   'class' => 'product_form', 'files' => true ]) !!}
               {{-- *1* section product Information --}}
               {{-- *************************************** --}}
-                <input type="hidden" id="product_id" value="{{ $product->id }}">
-                <div class="row" style="margin:0px 10%"> 
+                <input type="hidden" id="product_id" value="{{ $product->id }}"> 
                     @component('components.widget', ['class' => 'box-primary' , "title" =>__('Product Information')])
                         <div class="row">
                             <div class="col-sm-6">
@@ -196,12 +195,12 @@
                             
                           
                     @endcomponent 
-                </div>
+                 
               {{-- *************************************** --}}
 
               {{-- *2* section product Media --}}
               {{-- *************************************** --}}
-                <div class="row" style="margin:0px 0%"> 
+                 
                   @component('components.widget', ['class' => 'box-primary' , "title" =>__('Product Media')])
                       <div class="row">
                           <div class="col-sm-6">
@@ -289,12 +288,12 @@
                           </div>
                       </div>
                   @endcomponent 
-                </div>
+                
               {{-- *************************************** --}}
               
               {{-- *3* section product  Additional Info --}}
               {{-- *************************************** --}}
-                <div class="row" style="margin:0px 0%"> 
+                
                   @component('components.widget', ['class' => 'box-primary',"title" =>__('Product Additional Info')])
                       <div class="row">
                       @if(session('business.enable_product_expiry'))
@@ -433,12 +432,12 @@
                       {{-- @include('layouts.partials.module_form_part') --}}
                       </div>
                   @endcomponent
-                </div>
+                 
               {{-- *************************************** --}}
               
               {{-- *4* section product Prices --}}
               {{-- *************************************** --}}
-                <div class="row" style="margin:0px 0%"> 
+                 
                   @component('components.widget', ['class' => 'box-primary',"title"=>__('Product Prices')])
                       <div class="row">
                           @php
@@ -474,12 +473,12 @@
                           <input type="hidden" id="default_profit_percent" value="{{ $default_profit_percent }}">
                       </div>
                   @endcomponent
-                </div>
+               
               {{-- *************************************** --}}
   
               {{-- *5* section modal --}}
               {{-- *************************************** --}}
-                <div class="row">
+               
                   <input type="hidden" name="submit_type" id="submit_type">
                       {{-- *1* section save  --}}
                       {{-- *************************************** --}}
@@ -507,7 +506,7 @@
                           @include('unit.edit_add' , ["product"=> $product,'unitall'=>$unitall])
                         </div>
                       {{-- *************************************** --}}
-                </div>
+                
               {{-- *************************************** --}}
 
               {!! Form::close() !!}

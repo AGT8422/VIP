@@ -39,7 +39,7 @@
           'id' => 'product_add_form','class' => 'product_form ' . $form_class, 'files' => true ]) !!}
                 {{-- *1* section product information --}}
                 {{-- ******************************************************* --}}
-                  <div class="row" style="margin:0px 10%;">   
+              
                     @component('components.widget', ['class' => 'box-primary'  , "title" =>__('Product Information')  ])
                       <div class="row">
                           
@@ -210,12 +210,12 @@
                           {{-- ******************************** --}}
                       </div>
                     @endcomponent
-                  </div>
+                   
                 {{-- ****************************************************** --}}
                 
                 {{-- *2* section media --}}
                 {{-- ****************************************************** --}}
-                  <div class="row" style="margin:0px 10%;">   
+                   
                     @component('components.widget', ['class' => 'box-primary' , "title" =>__('Product Media')  ])
                           <div class="row">
                             <div class="col-sm-6">
@@ -256,12 +256,12 @@
                             <div class="clearfix"></div>
                           </div>
                     @endcomponent
-                  </div>
+                  
                 {{-- ****************************************************** --}}
                 
                 {{-- *3* section product additional info --}}
                 {{-- ****************************************************** --}}
-                  <div class="row" style="margin:0px 10%;"> 
+                   
                     @component('components.widget', ['class' => 'box-primary',"title"=>__('Product Additional Info') ])
                         <div class="row">
                         @if(session('business.enable_product_expiry'))
@@ -381,7 +381,7 @@
                         <!--@include('layouts.partials.module_form_part')-->
                       </div>
                     @endcomponent
-                  </div>
+                  
                 {{-- ****************************************************** --}}
                 
                 {{-- *4* section old page for price --}}
@@ -393,7 +393,7 @@
                   
                 {{-- *5* section product price  --}}
                 {{-- ****************************************************** --}}
-                  <div class="row" style="margin:0px 10%;"> 
+                   
                     @component('components.widget', ['class' => 'box-primary' ,"title"=>__('Product Prices')])
                         <div class="row">
                         @php
@@ -441,12 +441,12 @@
 
                       </div>
                     @endcomponent
-                  </div>
+                  
                 {{-- ****************************************************** --}}
                 
                 {{-- *6* section modal --}}
                 {{-- ****************************************************** --}}
-                <div class="row">
+               
                   <div class="col-sm-12">
                     <input type="hidden" name="submit_type" id="submit_type">
                     <div class="text-center">
@@ -473,9 +473,9 @@
                           @include('unit.create_add')
                         </div>
                       {{-- **************************************** --}}
+                  
+                    </div>
                   </div>
-                </div>
-        </div>
       {!! Form::close() !!}
     </section>
   {{-- ********************************************** --}}

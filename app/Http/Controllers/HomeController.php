@@ -62,7 +62,7 @@ class HomeController extends Controller
      */
     public function index()
     {  
-       
+        // dd(auth()->user());
         $business_id = request()->session()->get('user.business_id');
        
         $fy = $this->businessUtil->getCurrentFinancialYear($business_id);

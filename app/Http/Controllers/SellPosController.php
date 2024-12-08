@@ -467,9 +467,32 @@ class SellPosController extends Controller
                 
                 $document_sell = [];
                 if ($request->hasFile('document_sell')) { $id_sf = 1;
+                    $referencesNewStyle = str_replace('/', '-', $input['invoice_no']);
                     foreach ($request->file('document_sell') as $file) {
-                        $file_name =  'uploads/companies/'.$company_name.'/documents/sale/'.time().'_'.$id_sf++.'.'.$file->getClientOriginalExtension();
-                        $file->move('uploads/companies/'.$company_name.'/documents/sale',$file_name);
+                        #................
+                        if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                            if ($file->getSize() <= config('constants.document_size_limit')){ 
+                                $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$id_sf++.'_'.$file->getClientOriginalName();
+                                $file->move('uploads/companies/'.$company_name.'/documents/sale',$file_name_m);
+                                $file_name =  'uploads/companies/'.$company_name.'/documents/sale/'. $file_name_m;
+                            }
+                        }else{
+                            if ($file->getSize() <= config('constants.document_size_limit')) {
+                                $new_file_name = time().'_'.$referencesNewStyle.'_'.$id_sf++.'_'.$file->getClientOriginalName();
+                                $Data         = getimagesize($file);
+                                $width         = $Data[0];
+                                $height        = $Data[1];
+                                $half_width    = $width/2;
+                                $half_height   = $height/2; 
+                                $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                                $file_name =  'uploads/companies/'.$company_name.'/documents/sale/'. $new_file_name;
+                                if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\sale\\$new_file_name"),20)) {
+                                    $uploaded_file_name = $new_file_name;
+                                }
+                                    
+                            }
+                        }
+                        #................
                         array_push($document_sell,$file_name);
                     }
                 } 
@@ -1298,9 +1321,32 @@ class SellPosController extends Controller
                 $company_name      = request()->session()->get("user_main.domain");
                 if ($request->hasFile('document_sell')) {
                     $id_ss = 1;
+                    $referencesNewStyle = str_replace('/', '-', $transaction_before->invoice_no);
                     foreach ($request->file('document_sell') as $file) {
-                        $file_name =  'uploads/companies/'.$company_name.'/documents/sale/'.time().'_'.$id_ss++.'.'.$file->getClientOriginalExtension();
-                        $file->move('uploads/companies/'.$company_name.'/documents/sale',$file_name);
+                        #................
+                        if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                            if ($file->getSize() <= config('constants.document_size_limit')){ 
+                                $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$id_ss++.'_'.$file->getClientOriginalName();
+                                $file->move('uploads/companies/'.$company_name.'/documents/sale',$file_name_m);
+                                $file_name =  'uploads/companies/'.$company_name.'/documents/sale/'. $file_name_m;
+                            }
+                        }else{
+                            if ($file->getSize() <= config('constants.document_size_limit')) {
+                                $new_file_name = time().'_'.$referencesNewStyle.'_'.$id_ss++.'_'.$file->getClientOriginalName();
+                                $Data         = getimagesize($file);
+                                $width         = $Data[0];
+                                $height        = $Data[1];
+                                $half_width    = $width/2;
+                                $half_height   = $height/2; 
+                                $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                                $file_name =  'uploads/companies/'.$company_name.'/documents/sale/'. $new_file_name;
+                                if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\sale\\$new_file_name"),20)) {
+                                    $uploaded_file_name = $new_file_name;
+                                }
+                                    
+                            }
+                        }
+                        #................
                         array_push($old_document,$file_name);
                     }
                 } 

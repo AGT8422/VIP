@@ -76,6 +76,18 @@
 		height: 100vh !important;
 		width: 84% !important;
 	}
+	a{
+		color:#ec6808 !important;
+	}
+	.btn-primary{
+		color:white !important;
+		background-color: #ec6808 !important;
+		border:1px solid #ec6808 !important;
+	}
+	.btn-success{
+		color:white !important;
+		 
+	}
 </style>
 @if(!empty($__system_settings['additional_css']))
     {!! $__system_settings['additional_css'] !!}

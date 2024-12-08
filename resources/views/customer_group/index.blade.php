@@ -11,8 +11,7 @@
 </section>
 
 <!-- Main content -->
-<section class="content">
-    <div class="row" style="margin:0px 10%">
+<section class="content"> 
         @component('components.widget', ['class' => 'box-primary', 'title' => __( 'lang_v1.all_your_customer_groups' )])
             @can('customer.create')
                 @slot('tool')
@@ -77,7 +76,7 @@
             </table>
             </div>
         @endcan
-    @endcomponent
+        @endcomponent
 
     <div class="modal fade customer_groups_modal" tabindex="-1" role="dialog" 
     	aria-labelledby="gridSystemModalLabel">

@@ -18,53 +18,50 @@
 <div class="mheader" >
 
 </div>
-    <section class="content">
-        <div class="container">
-            <div class="row" >
-                <div class="col-md-12">
-                    @component('components.filters', ['title' => __('report.filters')])
-                        <div class="col-md-3" id="location_filter">
-                            <div class="form-group">
-                                {!! Form::label('location_id',  __('purchase.business_location') . ':') !!}
-                                {!! Form::select('location_id', $business_locations, null, ['class' => 'form-control select2', 'style' => 'width:100%']); !!}
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                {!! Form::label('type', __('product.product_type') . ':') !!}
-                                {!! Form::select('type', ['single' => __('lang_v1.single'), 'variable' => __('lang_v1.variable'), 'combo' => __('lang_v1.combo')], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_list_filter_type', 'placeholder' => __('lang_v1.all')]); !!}
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                {!! Form::label('category_id', __('product.category') . ':') !!}
-                                {!! Form::select('category_id', $categories, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_list_filter_category_id', 'placeholder' => __('lang_v1.all')]); !!}
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                {!! Form::label('brand_id', __('product.brand') . ':') !!}
-                                {!! Form::select('brand_id', $brands, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_list_filter_brand_id', 'placeholder' => __('lang_v1.all')]); !!}
-                            </div>
-                        </div>
-                        <div class="col-md-3"  >
-                            <div class="form-group">
-                                <label>@lang('lang_v1.search')</label>
-                                <div style="height: 37px">
-                                    <input type="text" name="productname" id="productname" class="form-control" style="width: 80%;float: left;height: 100% ">
-                                    <button type="button" class="btn-search" style="height:100%"><i class="fa fa-search" ></i></button>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-
-
-                    @endcomponent
+    <section class="content"> 
+        <div class="col-md-12">
+            @component('components.filters', ['title' => __('report.filters')])
+                <div class="col-md-3" id="location_filter">
+                    <div class="form-group">
+                        {!! Form::label('location_id',  __('purchase.business_location') . ':') !!}
+                        {!! Form::select('location_id', $business_locations, null, ['class' => 'form-control select2', 'style' => 'width:100%']); !!}
+                    </div>
                 </div>
-            </div>
-        </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('type', __('product.product_type') . ':') !!}
+                        {!! Form::select('type', ['single' => __('lang_v1.single'), 'variable' => __('lang_v1.variable'), 'combo' => __('lang_v1.combo')], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_list_filter_type', 'placeholder' => __('lang_v1.all')]); !!}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('category_id', __('product.category') . ':') !!}
+                        {!! Form::select('category_id', $categories, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_list_filter_category_id', 'placeholder' => __('lang_v1.all')]); !!}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('brand_id', __('product.brand') . ':') !!}
+                        {!! Form::select('brand_id', $brands, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_list_filter_brand_id', 'placeholder' => __('lang_v1.all')]); !!}
+                    </div>
+                </div>
+                <div class="col-md-3"  >
+                    <div class="form-group">
+                        <label>@lang('lang_v1.search')</label>
+                        <div style="height: 37px">
+                            <input type="text" name="productname" id="productname" class="form-control" style="width: 80%;float: left;height: 100% ">
+                            <button type="button" class="btn-search" style="height:100%"><i class="fa fa-search" ></i></button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            @endcomponent
+        </div> 
+      
 
 
 

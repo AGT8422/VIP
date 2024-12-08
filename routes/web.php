@@ -83,9 +83,10 @@ include_once('install_r.php');
 
 // ***********************************************************************
     //Routes for authenticated users only
-    Route::middleware(['SetDatabaseConnection','setData', 'auth', 'SetSessionData',  'language', 'timezone', 'AdminSidebarMenu', 'CheckUserLogin'])->group(function () {
+    Route::middleware(['SetDatabaseConnection','setData', 'authIzo', 'SetSessionData',  'language', 'timezone', 'AdminSidebarMenu', 'CheckUserLogin'])->group(function () {
         // 10 ***
             Route::get('/', 'HomeController@index');
+            Route::get('/main', 'HomeController@index')->name('home');
             Route::get('/home', 'HomeController@index')->name('home');
             Route::get('/home/get-totals', 'HomeController@getTotals');
             Route::get('/home/get-expense', 'HomeController@getExpense');

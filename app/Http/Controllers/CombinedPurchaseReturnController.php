@@ -145,11 +145,34 @@ class CombinedPurchaseReturnController extends Controller
             # $input_data['document'] = $this->productUtil->uploadFile($request, 'document', 'documents');
             $document_purchase = [];
             if ($request->hasFile('document_purchase')) {
-                $id = 1;
+                $id_cc = 1;
+                $referencesNewStyle = str_replace('/', '-', $input_data['ref_no']);
                 foreach ($request->file('document_purchase') as $file) {
-                    $file_name =  'public/uploads/documents/'.time().'_'.$id++.'.'.$file->getClientOriginalExtension();
-                    $file->move('public/uploads/documents',$file_name);
-                    array_push($document_purchase,$file_name);
+                    #................
+                    if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                        if ($file->getSize() <= config('constants.document_size_limit')){ 
+                            $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$id_cc++.'_'.$file->getClientOriginalName();
+                            $file->move('uploads/companies/'.$company_name.'/documents/purchase_return',$file_name_m);
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase_return/'. $file_name_m;
+                        }
+                    }else{
+                        if ($file->getSize() <= config('constants.document_size_limit')) {
+                            $new_file_name = time().'_'.$referencesNewStyle.'_'.$id_cc++.'_'.$file->getClientOriginalName();
+                            $Data         = getimagesize($file);
+                            $width         = $Data[0];
+                            $height        = $Data[1];
+                            $half_width    = $width/2;
+                            $half_height   = $height/2; 
+                            $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase_return/'. $new_file_name;
+                            if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\purchase_return\\$new_file_name"),20)) {
+                                $uploaded_file_name = $new_file_name;
+                            }
+                                
+                        }
+                    }
+                    #................
+                   array_push($document_purchase,$file_name);
                 }
             }
             
@@ -203,9 +226,32 @@ class CombinedPurchaseReturnController extends Controller
             $document_expense = [];
             if ($request->hasFile('document_expense')) {
                 $i =1;
+                $referencesNewStyle = str_replace('/', '-', $input_data['ref_no']);
                 foreach ($request->file('document_expense') as $file) {
-                    $file_name =  'uploads/companies/'.$company_name.'/documents/'.time().'_'.$i++.'.'.$file->getClientOriginalExtension();
-                    $file->move('uploads/companies/'.$company_name.'/documents',$file_name);
+                    #................
+                    if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                        if ($file->getSize() <= config('constants.document_size_limit')){ 
+                            $file_name_m    =   time().'_'.$referencesNewStyle.'_Expense_'.$i++.'_'.$file->getClientOriginalName();
+                            $file->move('uploads/companies/'.$company_name.'/documents/purchase_return/expense',$file_name_m);
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase_return/expense/'. $file_name_m;
+                        }
+                    }else{
+                        if ($file->getSize() <= config('constants.document_size_limit')) {
+                            $new_file_name = time().'_'.$referencesNewStyle.'_Expense_'.$i++.'_'.$file->getClientOriginalName();
+                            $Data         = getimagesize($file);
+                            $width         = $Data[0];
+                            $height        = $Data[1];
+                            $half_width    = $width/2;
+                            $half_height   = $height/2; 
+                            $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase_return/expense/'. $new_file_name;
+                            if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\purchase_return\\expense\\$new_file_name"),20)) {
+                                $uploaded_file_name = $new_file_name;
+                            }
+                                
+                        }
+                    }
+                    #................
                     array_push($document_expense,$file_name);
                 }
             }
@@ -522,20 +568,45 @@ class CombinedPurchaseReturnController extends Controller
             $input_data['exchange_price']       = $input_data['currency_id_amount'];
             $input_data['amount_in_currency']   = ($input_data['currency_id_amount']!= 0)? $input_data['final_total'] / $input_data['currency_id_amount'] :0;
             $input_data['discount_amount']      = $input_data['discount_amount'] ;
+            $products           = $request->input('products');
+            $purchase_return_id = $request->input('purchase_return_id');
+            $purchase_return    = Transaction::where('business_id', $business_id)->where('type', 'purchase_return')->find($purchase_return_id);
             # upload document
             $document_purchase                  = [];
             if ($request->hasFile('document_purchase')) {
                 $i = 1;
+                $referencesNewStyle = str_replace('/', '-', $purchase_return->ref_no);
                 foreach ($request->file('document_purchase') as $file) {
-                    $file_name =  'uploads/companies/'.$company_name.'/documents/'.time().'_'.$i++.'.'.$file->getClientOriginalExtension();
-                    $file->move('uploads/companies/'.$company_name.'/documents',$file_name);
+                    
+                    #................
+                    if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                        if ($file->getSize() <= config('constants.document_size_limit')){ 
+                            $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$i++.'_'.$file->getClientOriginalName();
+                            $file->move('uploads/companies/'.$company_name.'/documents/purchase_return',$file_name_m);
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase_return/'. $file_name_m;
+                        }
+                    }else{
+                        if ($file->getSize() <= config('constants.document_size_limit')) {
+                            $new_file_name = time().'_'.$referencesNewStyle.'_'.$i++.'_'.$file->getClientOriginalName();
+                            $Data         = getimagesize($file);
+                            $width         = $Data[0];
+                            $height        = $Data[1];
+                            $half_width    = $width/2;
+                            $half_height   = $height/2; 
+                            $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase_return/'. $new_file_name;
+                            if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\purchase_return\\$new_file_name"),20)) {
+                                $uploaded_file_name = $new_file_name;
+                            }
+                                
+                        }
+                    }
+                    #................
+                    
                     array_push($document_purchase,$file_name);
                 }
             }
             if(json_encode($document_purchase)!="[]"){  $input_data['document']         = json_encode($document_purchase); }
-            $products           = $request->input('products');
-            $purchase_return_id = $request->input('purchase_return_id');
-            $purchase_return    = Transaction::where('business_id', $business_id)->where('type', 'purchase_return')->find($purchase_return_id);
             $archive            = \App\Models\ArchiveTransaction::save_parent($purchase_return,"edit");
             $purchaseLines      = \App\PurchaseLine::where("transaction_id",$purchase_return->id)->get();
             foreach($purchaseLines as $it){ \App\Models\ArchivePurchaseLine::save_purchases( $archive , $it); }
@@ -678,10 +749,33 @@ class CombinedPurchaseReturnController extends Controller
             ]);
             $document_expense = $request->old_document??[];
             if ($request->hasFile('document_expense')) {
-                $id = 1;
+                $id_ex = 1;
+                $referencesNewStyle = str_replace('/', '-', $purchase_return->ref_no);
                 foreach ($request->file('document_expense') as $file) {
-                    $file_name =  'uploads/companies/'.$company_name.'/documents/'.time().'_'.$id++.'.'.$file->getclientoriginalextension();
-                    $file->move('uploads/companies/'.$company_name.'/documents',$file_name);
+                    #................
+                    if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                        if ($file->getSize() <= config('constants.document_size_limit')){ 
+                            $file_name_m    =   time().'_'.$referencesNewStyle.'_Expense_'.$id_ex++.'_'.$file->getClientOriginalName();
+                            $file->move('uploads/companies/'.$company_name.'/documents/purchase_return/expense',$file_name_m);
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase_return/expense/'. $file_name_m;
+                        }
+                    }else{
+                        if ($file->getSize() <= config('constants.document_size_limit')) {
+                            $new_file_name = time().'_'.$referencesNewStyle.'_Expense_'.$id_ex++.'_'.$file->getClientOriginalName();
+                            $Data          = getimagesize($file);
+                            $width         = $Data[0];
+                            $height        = $Data[1];
+                            $half_width    = $width/2;
+                            $half_height   = $height/2; 
+                            $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase_return/expense'. $new_file_name;
+                            if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\purchase_return\\expense\\$new_file_name"),20)) {
+                                $uploaded_file_name = $new_file_name;
+                            }
+                                
+                        }
+                    }
+                    #................
                     array_push($document_expense,$file_name);
                 }
             } 

@@ -34,9 +34,8 @@
             {{-- *2* section filter --}}
             {{-- ****************************************************** --}}
             <div class="row">
-                <div class="col-md-12">
-                    <div class="row" style="margin:0px 10%">
-                        {{-- <h2> {{ (isset($o_title))?$o_title:' ' }}</h2> --}}
+                <div class="col-md-12"> 
+                         
                         @component('components.filters', ['class' => "box-primary",'title' => __('report.filters')])
                             <div class="col-md-4 hide" >
                                 <div class="form-group">
@@ -155,15 +154,13 @@
                                     </div>
                                 @endif --}}
                             {{-- *************************************************** --}}
-                        @endcomponent
-                    </div>
+                        @endcomponent 
                 </div>
             </div>
             {{-- ****************************************************** --}}
 
             {{-- *3* section product --}}
-            {{-- **************************************************** --}}
-            <div class="row" style="margin:0px 10%">
+            {{-- **************************************************** --}} 
                 
                 {{-- section create --}}
                 {{-- **************************************************** --}}
@@ -188,8 +185,7 @@
                         @include("product.partials.table_product")
                 @endcan
                 {{-- **************************************************** --}}
-                
-            </div>
+                 
             {{-- **************************************************** --}}
 
 

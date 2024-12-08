@@ -18,8 +18,7 @@
 </section>
 
 <!-- Main content -->
-<section class="content">
-    <div class="row" style="margin:0px 10%">
+<section class="content"> 
         @component('components.widget', ['class' => 'box-primary', 'title' => __('lang_v1.all_variations')])
             @slot('tool')
                 <div class="box-tools">
@@ -41,7 +40,7 @@
                 </table>
             </div>
         @endcomponent
-    </div>
+   
     <div class="modal fade variation_modal" tabindex="-1" role="dialog" 
     	aria-labelledby="gridSystemModalLabel">
     </div>

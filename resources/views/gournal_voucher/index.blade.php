@@ -118,6 +118,9 @@
                             <li>
                                 <a href="{{ URL::to('gournal-voucher/edit/'.$item->id) }}"><i class="fas fa-edit"></i>@lang('home.Edit')</a>
                             </li>
+                            <li>
+                                <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "expense_voucher","id" => $item->id]) }}" target="_blank" class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>@lang('Add Attachment')</a>
+                            </li>
                             @if(request()->session()->get("user.id") == 1 || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8 )
                             @if($item->status == 0)
                             <li>

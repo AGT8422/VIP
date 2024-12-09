@@ -2,6 +2,8 @@
 @php
     $right =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '0%' : 'initial'  ;
     $left  =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' :  '0%' ;
+    $right_top  =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '10px' :  'initial' ;
+    $left_top  =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' :  '10px' ;
 @endphp
 <style>
       .sec{
@@ -33,6 +35,16 @@
        /* .treeview:hover{
       border:10px solid black !important;
     } */
+    .sidebar-menu>li>a{
+      padding:3% 10% ;
+      font-size: 18px;
+    }
+    .sidebar-menu>li>a>.fa{
+      width : 25px;
+      margin-right: 20px;
+      font-size: 20px;
+    }
+
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -63,6 +75,10 @@
       /* border-radius: 100px !important; */
       /* border:1px solid #3a3a3a33 !important; */
       margin: 10px 5px  !important; 
+    }
+    .skin-black-light .sidebar-menu .treeview-menu{
+      border-radius: 10px !important;
+      margin: 10px !important;
     }
     .skin-black-light .sidebar-menu>.active:hover {
 
@@ -107,9 +123,9 @@
       .logo-lg{
         padding-left:10px ;
         border-left:3px solid #ec6608;
-        font-size:20px ;
+        font-size:14px ;
         position: relative;
-        top:-10px;
+        top:-20px;
       }
       .title_side_bar a{
         color:white !important; 
@@ -119,16 +135,18 @@
         width: 30%;
       }
       .title_side_bar{
-        right:{{$right}};
+        right:{{$right_top}};
         position: fixed;
-        top: 0px;
-        width: 16%;
+        top: 10px;
+        left:{{$left_top}};
+        border-radius:10px ;
+        width: 14.6%;
         z-index: 100;
         box-shadow: -10px 0px 20px #3a3a3a33;
-        height: 90px;
+        height: 70px;
         color: #fff;
         background-color: #000; 
-        padding: 0px;
+        padding: 5px 20px 0px 0px ;
         text-align: center;
       }
       .treeview-menu{
@@ -167,6 +185,16 @@
      /* .treeview:hover{
       border:10px solid black !important;
     } */
+    .sidebar-menu>li>a{
+      padding:3% 10% ;
+      font-size: 18px;
+    }
+    .sidebar-menu>li>a>.fa{
+      width : 25px;
+      margin-right: 20px;
+      font-size: 20px;
+    }
+
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -197,6 +225,10 @@
       /* border-radius: 100px !important; */
       /* border:1px solid #3a3a3a33 !important; */
       margin: 10px 5px  !important; 
+    }
+    .skin-black-light .sidebar-menu .treeview-menu{
+      border-radius: 10px !important;
+      margin: 10px !important;
     }
     .skin-black-light .sidebar-menu>.active:hover {
 
@@ -241,9 +273,9 @@
     .logo-lg{
       padding-left:10px ;
       border-left:3px solid #ec6608;
-      font-size:20px ;
+      font-size:14px ;
       position: relative;
-      top:-10px;
+      top:-20px;
     }
     .title_side_bar a{
       color:white !important; 
@@ -253,16 +285,18 @@
       width: 30%;
     }
     .title_side_bar{
-      right:{{$right}};
+      right:{{$right_top}};
       position: fixed;
-      top: 0px;
-      width: 16%;
+      top: 10px;
+      left:{{$left_top}};
+      border-radius:10px ;
+      width: 14.6%;
       z-index: 100;
       box-shadow: -10px 0px 20px #3a3a3a33;
-      height: 90px;
+      height: 70px;
       color: #fff;
       background-color: #000; 
-      padding: 0px;
+      padding: 5px 20px 0px 0px ;
       text-align: center;
     }  
     .treeview-menu{
@@ -279,6 +313,16 @@
       color: #ec6608 !important;
       display: none;
     }
+    .sidebar-menu>li>a{
+      padding:3% 10% ;
+      font-size: 18px;
+    }
+    .sidebar-menu>li>a>.fa{
+      width : 25px;
+      margin-right: 20px;
+      font-size: 20px;
+    }
+
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -308,6 +352,16 @@
      /* .treeview:hover{
       border:10px solid black !important;
     } */
+
+    .sidebar-menu>li>a{
+      padding:3% 10% ;
+      font-size: 18px;
+    }
+    .sidebar-menu>li>a>.fa{
+      width : 25px;
+      margin-right: 20px;
+      font-size: 20px;
+    }
 
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
@@ -349,6 +403,10 @@
       /* border:1px solid #3a3a3a33; */
       margin: 10px 5px  ; 
     }
+    .skin-black-light .sidebar-menu .treeview-menu{
+      border-radius: 10px !important;
+      margin: 10px !important;
+    }
     .skin-black-light .sidebar-menu>.active:hover {
 
       background-color: #00000000 !important;
@@ -383,9 +441,9 @@
     .logo-lg{
       padding-left:10px ;
       border-left:3px solid #ec6608;
-      font-size:20px ;
+      font-size:14px ;
       position: relative;
-      top:-10px;
+      top:-20px;
     }
     .title_side_bar a{
       color:white !important; 
@@ -395,16 +453,18 @@
       width: 30%;
     }
     .title_side_bar{
-      right:{{$right}};
+      right:{{$right_top}};
       position: fixed;
-      top: 0px;
-      width: 16%;
+      top: 10px;
+      left:{{$left_top}};
+      border-radius:10px ;
+      width: 14.6%;
       z-index: 100;
       box-shadow: -10px 0px 20px #3a3a3a33;
-      height: 90px;
+      height: 70px;
       color: #fff;
       background-color: #000; 
-      padding: 0px;
+      padding: 5px 20px 0px 0px ;
       text-align: center;
     }  
     .treeview-menu{
@@ -421,6 +481,16 @@
       color: #ec6608 !important;
       display: none;
     }
+    .sidebar-menu>li>a{
+      padding:3% 10% ;
+      font-size: 18px;
+    }
+    .sidebar-menu>li>a>.fa{
+      width : 25px;
+      margin-right: 20px;
+      font-size: 20px;
+    }
+
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -450,6 +520,16 @@
      /* .treeview:hover{
       border:10px solid black !important;
     } */
+    .sidebar-menu>li>a{
+      padding:3% 10% ;
+      font-size: 18px;
+    }
+    .sidebar-menu>li>a>.fa{
+      width : 25px;
+      margin-right: 20px;
+      font-size: 20px;
+    }
+
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -480,6 +560,10 @@
       /* border-radius: 100px  !important; */
       /* border:1px solid #3a3a3a33 !important; */
       margin: 10px 5px  !important; 
+    }
+    .skin-black-light .sidebar-menu .treeview-menu{
+      border-radius: 10px !important;
+      margin: 10px !important;
     }
     .skin-black-light .sidebar-menu>.active:hover {
 
@@ -524,9 +608,9 @@
     .logo-lg{
       padding-left:10px ;
       border-left:3px solid #ec6608;
-      font-size:20px ;
+      font-size:14px ;
       position: relative;
-      top:-10px;
+      top:-20px;
     }
     .title_side_bar a{
       color:white !important; 
@@ -536,16 +620,18 @@
       width: 30%;
     }
     .title_side_bar{
-      right:{{$right}};
+      right:{{$right_top}};
       position: fixed;
-      top: 0px;
-      width: 16%;
+      top: 10px;
+      left:{{$left_top}};
+      border-radius:10px ;
+      width: 14.6%;
       z-index: 100;
       box-shadow: -10px 0px 20px #3a3a3a33;
-      height: 90px;
+      height: 70px;
       color: #fff;
       background-color: #000; 
-      padding: 0px;
+      padding: 5px 20px 0px 0px ;
       text-align: center;
     }  
     .treeview-menu{
@@ -562,6 +648,16 @@
       color: #ec6608 !important;
       display: none;
     }
+    .sidebar-menu>li>a{
+      padding:3% 10% ;
+      font-size: 18px;
+    }
+    .sidebar-menu>li>a>.fa{
+      width : 25px;
+      margin-right: 20px;
+      font-size: 20px;
+    }
+
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -621,9 +717,9 @@
     .logo-lg{
       padding-left:10px ;
       border-left:3px solid #ec6608;
-      font-size:20px ;
+      font-size:14px ;
       position: relative;
-      top:-10px;
+      top:-20px;
     }
     .title_side_bar a{
       color:white !important; 
@@ -633,16 +729,18 @@
       width: 30%;
     }
     .title_side_bar{
-      right:{{$right}};
+      right:{{$right_top}};
       position: fixed;
-      top: 0px;
-      width: 16%;
+      top: 10px;
+      left:{{$left_top}};
+      border-radius:10px ;
+      width: 14.6%;
       z-index: 100;
       box-shadow: -10px 0px 20px #3a3a3a33;
-      height: 90px;
+      height: 70px;
       color: #fff;
       background-color: #000; 
-      padding: 0px;
+      padding: 5px 20px 0px 0px ;
       text-align: center;
     }  
     .treeview-menu{
@@ -659,6 +757,16 @@
       color: #ec6608 !important;
       display: none;
     }
+    .sidebar-menu>li>a{
+      padding:3% 10% ;
+      font-size: 18px;
+    }
+    .sidebar-menu>li>a>.fa{
+      width : 25px;
+      margin-right: 20px;
+      font-size: 20px;
+    }
+
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -688,14 +796,11 @@
 </style>
  
 
-<!-- Left side column. contains the logo and sidebar -->
+<!-- <span class="logo-lg">{{"The Future Is Here"  }}</span> Left side column. contains the logo and sidebar -->
 <aside class="main-sidebar-new"  >
   <div class="title_side_bar">
     <img class="logo-style" src="{{asset('logo-white.png')}}" alt="logo">
-    <h6>  <small>
-        <span class="logo-lg">{{"The Future Is Here"  }}</span>
-      </small>
-    </h6>
+    
   </div>
   <!-- sidebar: style can be found in sidebar.less -->
   <section class="sidebar-new">

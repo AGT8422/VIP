@@ -521,7 +521,8 @@ class SellController extends Controller
                         } else {
                             $html .= '<li><a href="#" data-href="' . action('SellController@viewMedia', ["model_id" => $row->id, "model_type" => "App\Transaction", 'model_media_type' => 'shipping_document']) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-paperclip" aria-hidden="true"></i>' . __("lang_v1.shipping_documents") . '</a></li>';
                         }
-
+                        $html .= '<li><a href="#" data-href="' . action('HomeController@formAttach', ["type" => "sale","id" => $row->id]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-paperclip" aria-hidden="true"></i> ' . __("Add Attachment") . '</a></li>';
+                    
                         $html .= '</ul></div>';
 
                         return $html;
@@ -2103,6 +2104,8 @@ class SellController extends Controller
                              <i class="fa fa-envelope" aria-hidden="true"></i>' . __("lang_v1.new_quotation_notification") .
                               '</a></li>';
                         }
+                        $text .= '<li><a href="#" data-href="' . action('HomeController@formAttach', ["type" => "sale","id" => $row->id]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-paperclip" aria-hidden="true"></i> ' . __("Add Attachment") . '</a></li>';
+                    
                         $text .= '
                                     </ul>
                                     </div>
@@ -2489,6 +2492,7 @@ class SellController extends Controller
                                     data-container=".view_modal"><i class="fa fa-envelope" aria-hidden="true"></i>' . __("lang_v1.new_quotation_notification") . '</a></li>
                                    ';
                        }
+                       $text .= '<li><a href="#" data-href="' . action('HomeController@formAttach', ["type" => "sale","id" => $row->id]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-paperclip" aria-hidden="true"></i> ' . __("Add Attachment") . '</a></li>';
                        $text .='</ul>
                                     </div>
                                     ';
@@ -2945,6 +2949,8 @@ class SellController extends Controller
                                                         data-container=".view_modal"><i class="fa fa-envelope" aria-hidden="true"></i>' . __("lang_v1.new_quotation_notification") . '</a></li>
                                                         ';
                                     }
+                                    $text .= '<li><a href="#" data-href="' . action('HomeController@formAttach', ["type" => "sale","id" => $row->id]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-paperclip" aria-hidden="true"></i> ' . __("Add Attachment") . '</a></li>';
+                    
                                     $text .='</ul>
                                     </div>
                                     ';

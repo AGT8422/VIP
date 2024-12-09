@@ -77,7 +77,7 @@
             }
             .childbox{
                 border: 0px solid rgb(249, 0, 0);
-                width: 100%;
+                width: 68%;
                 border-radius: 10px;
                 padding: 10px 30px;
                 height: auto;
@@ -133,7 +133,7 @@
             }
             .izo-form-input{
                 width: 100%;
-                border-radius: 0px;
+                border-radius: 10px;
                 padding: 10px;
                 margin: 10px auto ;
                 font-size: 20px;
@@ -141,7 +141,7 @@
             }
             .izo-form-input-password{
                 width: 100% !important;
-                border-radius: 0px !important;
+                border-radius: 10px !important;
                 padding: 10px !important;
                 margin: 10px auto  !important;
                 font-size: 20px !important;
@@ -176,9 +176,12 @@
                 font-size: 16px;
                 font-weight: bolder;
             }
+            .title_silogo-style                  margin: 15px auto  ;
+                        width: 30%;
+                    }
             .izo-form-input-save{   
                 width: 100%;
-                border-radius: 0px;
+                border-radius: 10px;
                 padding: 10px;
                 margin: 10px auto ;
                 border: 1px solid #303030;
@@ -318,7 +321,7 @@
                 }
                 .izo-form-input{
                     width: 100%;
-                    border-radius: 0px;
+                    border-radius: 10px;
                     padding: 10px;
                     margin: 10px auto ;
                     font-size: 16px;
@@ -326,7 +329,7 @@
                 }
                 .izo-form-input-password{
                     width: 100% !important;
-                    border-radius: 0px !important;
+                    border-radius: 10px !important;
                     padding: 10px !important;
                     margin: 10px auto  !important;
                     font-size: 16px !important;
@@ -361,9 +364,12 @@
                     font-size: 16px;
                     font-weight: bolder;
                 }
+                .titllogo-style                      margin: 15px auto  ;
+                        width: 30%;
+                    }
                 .izo-form-input-save{   
                     width: 100%;
-                    border-radius: 0px;
+                    border-radius: 10px;
                     padding: 10px;
                     margin: 10px auto ;
                     border: 1px solid #303030;
@@ -492,7 +498,7 @@
                 }
                 .izo-form-input{
                     width: 100%;
-                    border-radius: 0px;
+                    border-radius: 10px;
                     padding: 10px;
                     margin: 10px auto ;
                     font-size: 23px;
@@ -500,7 +506,7 @@
                 }
                 .izo-form-input-password{
                     width: 100% !important;
-                    border-radius: 0px !important;
+                    border-radius: 10px !important;
                     padding: 10px !important;
                     margin: 10px auto  !important;
                     font-size: 23px !important;
@@ -535,9 +541,12 @@
                     font-size: 23px;
                     font-weight: bolder;
                 }
+                .titllogo-style                      margin: 15px auto  ;
+                        width: 30%;
+                    }
                 .izo-form-input-save{   
                     width: 100%;
-                    border-radius: 0px;
+                    border-radius: 10px;
                     padding: 10px;
                     margin: 10px auto ;
                     border: 1px solid #303030;
@@ -669,7 +678,7 @@
                 }
                 .izo-form-input{
                     width: 100%;
-                    border-radius: 0px;
+                    border-radius: 10px;
                     padding: 10px;
                     margin: 10px auto ;
                     font-size: 16px;
@@ -677,7 +686,7 @@
                 }
                 .izo-form-input-password{
                     width: 100% !important;
-                    border-radius: 0px !important;
+                    border-radius: 10px !important;
                     padding: 10px !important;
                     margin: 10px auto  !important;
                     font-size: 16px !important;
@@ -712,9 +721,12 @@
                     font-size: 16px;
                     font-weight: bolder;
                 }
+                .titllogo-style                      margin: 15px auto  ;
+                        width: 30%;
+                    }
                 .izo-form-input-save{   
                     width: 100%;
-                    border-radius: 0px;
+                    border-radius: 10px;
                     padding: 10px;
                     margin: 10px auto ;
                     border: 1px solid #303030;
@@ -850,7 +862,7 @@
                     }
                     .izo-form-input{
                         width: 100%;
-                        border-radius: 0px;
+                        border-radius: 10px;
                         padding: 10px;
                         margin: 10px auto ;
                         font-size: 23px;
@@ -858,7 +870,7 @@
                     }
                     .izo-form-input-password{
                         width: 100% !important;
-                        border-radius: 0px !important;
+                        border-radius: 10px !important;
                         padding: 10px !important;
                         margin: 10px auto  !important;
                         font-size: 23px !important;
@@ -893,9 +905,13 @@
                         font-size: 23px;
                         font-weight: bolder;
                     }
+                    .logo-style{
+                        margin: 15px auto  ;
+                        width: 30%;
+                    }
                     .izo-form-input-save{   
                         width: 100%;
-                        border-radius: 0px;
+                        border-radius: 10px;
                         padding: 10px;
                         margin: 10px auto ;
                         border: 1px solid #303030;
@@ -968,6 +984,7 @@
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 right_form_first_login_top">
                         <H1 class="text-center title_izo">
                             @lang('IZO CLOUD')
+                            
                         </H1>
                         <p class="description">
                             @lang('It is the ideal choice for managing your facility and companies smoothly, simplified and without complexity')
@@ -978,7 +995,10 @@
                         
                         <div class="col-xl-12 col-md-12 text-center" style="text-transform: uppercase;font-weight:bolder;">
                             <h3 class="" style="font-weight:600"> {{"  "}}</h3>
-                            <h1>IZO CLOUD</h1>
+                            <h1>
+                                IZO CLOUD
+                                {{-- <img class="logo-style" src="{{asset('logo-white.png')}}" alt="logo"> --}}
+                            </h1>
                             <p class="description_small">
                                 <br>
                             </p>
@@ -999,7 +1019,7 @@
                             </div>
                             <div class="col-xl-12 col-md-12">
                                 <div class="form-group">
-                                    <div class="checkbox icheck col-md-6 col-12 text-left py-5">
+                                    <div class="checkbox icheck col-md-7 col-12 text-left py-5">
                                         <label style="color: #0c0c0c">
                                             <small>&nbsp;</small>    
                                             <input type="checkbox" name="logout_other"  >&nbsp;&nbsp; {{"Logout Form Other Device"}}
@@ -1023,8 +1043,10 @@
                             
                             <div class="col-xl-12 col-md-12 text-center" style="width: 80% ;margin:auto 10%; font-family:Georgia, 'Times New Roman', Times, serif;"> 
                                     <p style="color:#838383;font-weight:600;text-transform:capitalize">
-                                        @lang('If you do not have an account already, create your own account and manage your company from anywhere around the world through the link')
-                                        <a href="{{route('izoRegister')}}" style="font-size:18px;text-decoration:underline">SignUp</a>
+                                        {{-- @lang('If you do not have an account already, create your own account and manage your company from anywhere around the world through the link') --}}
+                                        <a href="{{route('izoRegister')}}" class="sign-up-form" style="font-size:18px;text-decoration:underline">SignUp</a><br>
+                                        <span>&copy; Copyright   {{ date('Y') }} All rights reserved.</span> <br>
+                                        <span>{{  "IZO" }} - v5.12.24 </span> <br>
                                     </p>
                                  
                             </div>
@@ -1033,7 +1055,7 @@
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 right_form_first_login">
                         <H1 class="text-center title_izo">
-                            @lang('IZO CLOUD')
+                            @lang('IZO CLOUD') 
                         </H1>
                         <p class="description">
                             @lang('It is the ideal choice for managing your facility and companies smoothly, simplified and without complexity')

@@ -1107,7 +1107,7 @@
                                 <i class="fas fa-check success-icon hide_icon"></i>
                                 <i class="fa fa-times-circle hide_icon"></i>
                                 <div class="izo-group-form">
-                                    {!! Form::select('mobile_code',['+971'=>'AED - +971'],null,['class' => 'izo-form-input-mobile',  'id'=>'mobile_code' , 'style' => 'width:20%'  ]) !!}
+                                    {!! Form::select('mobile_code',['+971'=>'AED   +971'],null,['class' => 'izo-form-input-mobile',  'id'=>'mobile_code' , 'style' => 'width:20%'  ]) !!}
                                     {!! Form::number('mobile',null,['class' => 'izo-form-input',  'id'=>'mobile' ,'data-max' => "9" , 'min'=>0,'max'=>9999999999 ,'style' => 'width:80%' , 'placeholder' => __('00 0000 000')  ]) !!}
                                 </div>
                                 <span class="error" id="mobileError"></span>

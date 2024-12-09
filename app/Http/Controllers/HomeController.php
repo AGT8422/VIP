@@ -736,6 +736,129 @@ class HomeController extends Controller
         }
     }
 
+    public function saveAttach(Request $request){
+        try{
+            $type              = $request->type_of_attachment;
+            $source_id         = $request->source_id;
+            
+            switch ($type){
+                case 'purchase'://
+                        $source     = \App\Transaction::find($source_id); 
+                        $ref_no     = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url        = '/purchases';
+                        break;
+                case 'purchase_return'://
+                        $source     = \App\Transaction::find($source_id); 
+                        $ref_no     = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url        = '/purchase-return';
+                        break;
+                case 'sale'://
+                        $source     = \App\Transaction::find($source_id);
+                        $ref_no     = $source->invoice_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url        = '/sells';
+                        if ($source->status == 'quotation') { $url = '/sells/quotations'; 
+                        }  else if ($source->status == 'ApprovedQuotation') { $url = '/sells/QuatationApproved';
+                        }  else if ($source->status == 'final' || $source->status == 'Delivered') { $url = '/sells';
+                        }  else if ($source->status == 'draft') {
+                            if ( $source->is_quotation == 1) { $url = '/sells/quotations';
+                            } else { $url = '/sells/drafts'; }
+                        }else{
+                            $url        = '/sells';
+                        }
+                        break;
+                case 'sell_return'://
+                        $source     = \App\Transaction::find($source_id);
+                        $ref_no     = $source->invoice_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url        = '/sell-return';
+                        break;                    
+                case 'payment_voucher':// 
+                        $source     = \App\Models\PaymentVoucher::find($source_id);
+                        $ref_no     = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url        = '/payment-voucher';
+                        break;
+                case 'daily_payment'://
+                        $source     = \App\Models\DailyPayment::find($source_id);
+                        $ref_no     = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url        = '/daily-payment';
+                        break;
+                case 'expense_voucher'://
+                        $source     = \App\Models\GournalVoucher::find($source_id);
+                        $ref_no     = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url        = '/gournal-voucher';
+                        break;  
+                case 'check'://
+                        $source     = \App\Models\Check::find($source_id);
+                        $ref_no     = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url        = '/cheque'; 
+                        break;                    
+                default:
+                    $source            = null;
+                    $ref_no            = ""; $document_attach   = [] ; 
+                    $url               = "/";
+                    break;
+
+            }
+            $company_name      = request()->session()->get("user_main.domain");
+            if ($request->hasFile('attach')) {
+                $count_doc1 = 1;
+                $referencesNewStyle = str_replace('/', '-', $ref_no);
+                foreach ($request->file('attach') as $file) {
+                    #................
+                    if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
+                        if ($file->getSize() <= config('constants.document_size_limit')){ 
+                            $file_name_m    =  time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
+                            $file->move('uploads/companies/'.$company_name.'/documents/purchase',$file_name_m);
+                            $file_name      =  'uploads/companies/'.$company_name.'/documents/purchase/'. $file_name_m;
+                        }
+                    }else{
+                        if ($file->getSize() <= config('constants.document_size_limit')) {
+                            $new_file_name = time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
+                            $Data          = getimagesize($file);
+                            $width         = $Data[0];
+                            $height        = $Data[1];
+                            $half_width    = $width/2;
+                            $half_height   = $height/2; 
+                            $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/'. $new_file_name;
+                            if ($imgs->save(public_path("uploads\companies\\$company_name\documents\purchase\\$new_file_name"),20)) {
+                                $uploaded_file_name = $new_file_name;
+                            }
+                        }
+                    }
+                    #................
+                    array_push($document_attach,$file_name);
+                }
+            }
+            if(!empty($source)){
+
+                $source->document           = json_encode($document_attach) ;
+                $source->update();
+                $output = [
+                    "success" => 1,
+                    "msg" => __('Added successfully'),
+                ]; 
+                return redirect($url)->with("status",$output);
+            }else{
+                $output = [
+                    "success" => 0,
+                    "msg" => __('Failed Action'),
+                ];
+                return redirect($url)->with("status",$output);
+            }
+        }catch(Exception $e){
+            $output = [
+                "success" => 0,
+                "msg" => __('Failed Action'),
+            ];
+            return redirect($url)->with("status",$output);
+        }
+    }
+
+    public function formAttach(Request $request){
+             
+            return view('attachment_outside.attach_outside');
+       
+    }
     /**
      * Retrieves sell products whose available quntity is less than alert quntity.
      *

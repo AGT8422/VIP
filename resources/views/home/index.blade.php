@@ -139,7 +139,7 @@
          <div class="col-md-5 ">
             <div class="col-md-6">
                 <div class="card1">
-                    <H4>Sales  <small class="pull-right">Date Range</small></H4>
+                    <H4>Sales  <small class="pull-right">Date Range</small><small class="pull-right">Date Range</small></H4>
                     <p>Excluding VAT : <b class="display_currency pull-right big-number sales-exc" data-currency_symbol="true" >{{$totalSalesExclude}}</b></p>
                     <p>Including VAT : <b class="display_currency pull-right big-number sales-inc" data-currency_symbol="true" >{{$totalSales}}</b></p>
                 </div>

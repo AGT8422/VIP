@@ -191,6 +191,8 @@ class PurchaseReturnController extends Controller
                         
                         }
                     }
+                    $html .= '<li><a href="#" data-href="' . action('HomeController@formAttach', ["type" => "purchase_return","id" => $row->id]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-paperclip" aria-hidden="true"></i> ' . __("Add Attachment") . '</a></li>';
+                    
                     $html .= '</ul></div>';
                     
                     return $html;

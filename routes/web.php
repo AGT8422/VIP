@@ -96,6 +96,8 @@ include_once('install_r.php');
             Route::get('/home/sales-payment-dues', 'HomeController@getSalesPaymentDues');
             Route::post('/attach-medias-to-model', 'HomeController@attachMediasToGivenModel')->name('attach.medias.to.model');
             Route::get('/calendar', 'HomeController@getCalendar')->name('calendar');
+            Route::post('/save-attachment', 'HomeController@saveAttach');
+            Route::get('/form-attachment', 'HomeController@formAttach');
         // 10 ***
         // 1 **
             Route::get('/download-sql', 'SqlDownloadController@download');
@@ -137,15 +139,18 @@ include_once('install_r.php');
             Route::post('/contacts/check-contact-id', 'ContactController@checkContactId');
             Route::get('/contacts/customers', 'ContactController@getCustomers');
             Route::resource('contacts', 'ContactController');
-        // 13 ***
+            // 13 ***
             
             Route::get('/expense/change-account', 'PurchaseController@changeAccountExpense');
-
+            
         // 3 ***
             Route::get('taxonomies-ajax-index-page', 'TaxonomyController@getTaxonomyIndexPage');
             Route::resource('taxonomies', 'TaxonomyController');
             Route::resource('variation-templates', 'VariationTemplateController');
         // 3 ***
+        
+            
+        
         // 19 ***
             Route::get('/test-login','ProductController@testLogin');
             Route::get('/products/add', 'BrandController@create1');

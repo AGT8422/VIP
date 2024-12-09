@@ -207,6 +207,8 @@ class PurchaseController extends Controller
                         '" data-status="' . $row->status . '" class="'.$class.'"><i class="fas fa-edit" aria-hidden="true" ></i>' . __("lang_v1.update_status") . '</a></li>';
                     }
 
+                    $html .= '<li><a href="#" data-href="' . action('HomeController@formAttach', ["type" => "purchase","id" => $row->id]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-paperclip" aria-hidden="true"></i> ' . __("Add Attachment") . '</a></li>';
+                    
                     if ($row->status == 'ordered') {
                         $html .= '<li><a href="#" data-href="' . action('NotificationController@getTemplate', ["transaction_id" => $row->id,"template_for" => "new_order"]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-envelope" aria-hidden="true"></i> ' . __("lang_v1.new_order_notification") . '</a></li>';
                     } elseif ($row->status == 'received') {
@@ -291,12 +293,12 @@ class PurchaseController extends Controller
                                 return (string) view('sell.partials.bill_status', ['state' => $state, 'id' => $row->id , "RecievedPrevious"=>$RecievedPrevious, "wrong" => $wrong ,"Purchaseline" => $Purchaseline]);
                                  
                 })->editColumn(
-                'payment_status',
-                    function ($row) {
-                        $payment_status = Transaction::getPaymentStatus($row);
-                        $cheques        = \App\Models\Check::where("transaction_id",$row->id)->whereIn("status",[0,3,4])->get();
-                        return (string) view('sell.partials.payment_status', ['payment_status' => $payment_status, 'id' => $row->id, 'for_purchase' => true,'cheques' => $cheques]);
-                    }
+                    'payment_status',
+                        function ($row) {
+                            $payment_status = Transaction::getPaymentStatus($row);
+                            $cheques        = \App\Models\Check::where("transaction_id",$row->id)->whereIn("status",[0,3,4])->get();
+                            return (string) view('sell.partials.payment_status', ['payment_status' => $payment_status, 'id' => $row->id, 'for_purchase' => true,'cheques' => $cheques]);
+                        }
                 )
                 ->addColumn('warehouse', function ($row) {
                     $transactions                 = Transaction::where("ref_no" , $row->ref_no)->get();

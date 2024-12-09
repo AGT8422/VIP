@@ -307,7 +307,7 @@ return [
    'time_format' => 'Time Format',
    '12_hour' => '12 Hour',
    '24_hour' => '24 Hour',
-   'list_quotations' => 'List quotations',
+   'list_quotations' => 'List Quotations',
    'list_drafts' => 'List Approved Quotation',
    'list_drafts1' => 'List  Drafts ',
    'you_cannot_delete_this_contact' => "Cannot delete the contact - Transactions already exist for the contact.",

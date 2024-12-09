@@ -232,7 +232,10 @@
                                     <li>
                                         <a href="{{ URL::to('reports/i-ch/'.$item->id) }}" target="_blank"><i class="fas fa-print"></i>@lang('messages.print')</a>
                                     </li>
-                                @endif
+                                    @endif
+                                <li>
+                                    <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "check","id" => $item->id]) }}" target="_blank"  class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>@lang('Add Attachment')</a>
+                                </li>
                                 @if($item->document && $item->document != [])
                                     <li>
                                     {{-- @php dd($item->image); @endphp --}}

@@ -75,6 +75,15 @@ class LoginController extends Controller
     public function logout()
     {
         $this->businessUtil->activityLog(auth()->user(), 'logout');
+        
+        $business_id          = request()->session()->get('user.business_id');
+        $user_id              = request()->session()->get('user.id');
+        $i                    = request()->input('lang');
+        $input['id']          = $user_id;
+        $input['business_id'] = $business_id;
+        $input                = ["language"=>"en"];
+        $user                 = \App\User::find($user_id);
+        $user->update($input);
         request()->session()->flush();
         \Auth::logout(); 
         

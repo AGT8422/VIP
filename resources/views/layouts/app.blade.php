@@ -13,9 +13,10 @@
 
 
 <!DOCTYPE html>
-@php 
-    
+@php  
 @endphp 
+
+
 <html lang="{{ session()->get('lang', config('app.locale')) }}" dir="{{in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'rtl' : 'ltr'}}">
    
     <head>
@@ -72,9 +73,19 @@
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     </head>
 
-
+    @php
+        // dd(session()->get('change_lang'));
+    @endphp
     <body class=" @if($pos_layout) hold-transition lockscreen @else hold-transition skin-@if(!empty(session('business.theme_color'))){{session('business.theme_color')}}@else{{'black-light'}}@endif sidebar-mini @endif">
-            {{-- @php $moduleUtil = new \App\Utils\ModuleUtil; $package =  \Modules\Superadmin\Entities\Subscription::first();   @endphp 
+        @if(session()->get('change_lang'))
+            <div class="loading">
+                <div class="loading-content">
+                    <h1>IZO <small>waiting.....</small></h1>
+                </div>
+            </div>
+            
+        @endif    
+        {{-- @php $moduleUtil = new \App\Utils\ModuleUtil; $package =  \Modules\Superadmin\Entities\Subscription::first();   @endphp 
             @if(!$moduleUtil->isSubscribed(request()->session()->get('user.business_id')))
             <div class="waring_message text-center" > --}}
                 {{-- {!! __("lang_v1.subscribe_wrang") !!} {!! "<br> During " . $package["permitted_period"]      !!} --}}
@@ -232,6 +243,16 @@
                 } 
             });
         });
+         
+        setTimeout(() => {
+            @if(session()->get('change_lang'))
+                @php
+                    session()->forget('change_lang')
+                @endphp 
+                location.reload()
+            @endif
+        }, 500);
+          
          setInterval(function() {
             $('meta[name="csrf-token"]').attr('content', '{{ csrf_token() }}');
         }, 300000); 

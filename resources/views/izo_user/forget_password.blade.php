@@ -4,64 +4,16 @@
 
 
 @php
-    $left_box            = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '50px';
-    $right_box           = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? '50px' : 'initial';
-    $translate           = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? '50%' : '-50%';
-    $margin_left         = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '50%';
-    $margin_right        = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? '50%' : 'initial';
-    $left_margin         = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '10px';
-    $right_margin        = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? '10px' : 'initial';
-    $parent_left_margin  = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '-40px';
-    $parent_right_margin = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? '-40px' : 'initial';
+    $left_box     = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '50px';
+    $right_box    = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? '50px' : 'initial';
+    $translate    = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? '50%' : '-50%';
+    $margin_left  = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '50%';
+    $margin_right = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? '50%' : 'initial';
 @endphp
 
 @section('content')
     @section('app_css')
         <style>
-                /* Hide the default checkbox */
-                input[type="checkbox"] {
-                    position: absolute;
-                    opacity: 0;
-                    width: 0;
-                    height: 0;
-                }
-
-                /* Create a custom checkbox */
-                .custom-checkbox {
-                    position: relative;
-                    display: inline-block;
-                    width: 20px;  /* Adjust the width */
-                    height: 20px; /* Adjust the height */
-                    background-color: #ffffff; /* Default background color */
-                    border: 1px solid #000; /* Optional: Make it rounded */
-                    border-radius: 0px; /* Optional: Make it rounded */
-                }
-
-                /* Create the checkmark (hidden by default) */
-                .custom-checkbox::after {
-                    content: "";
-                    position: absolute;
-                    display: none;
-                    left: 7px;
-                    top: 3px;
-                    width: 5px;
-                    height: 10px;
-                    border: solid white;
-                    border-width: 0 3px 3px 0;
-                    transform: rotate(45deg);
-                }
-
-                /* Show the checkmark when the checkbox is checked */
-                input[type="checkbox"]:checked + .custom-checkbox::after {
-                    display: block;
-                }
-
-                /* Change background color when checked */
-                input[type="checkbox"]:checked + .custom-checkbox {
-                    background-color: #ec6808;
-                    border:1px solid #ec6808;
-                }
-
             .loading{
                 position: fixed;
                 left: 0px;
@@ -256,8 +208,7 @@
                  /* background-color: #838383 !important; */
                  width: 100% !important; 
             }
-            
-            .izo-form-input-save{   
+                    .izo-form-input-save{   
                 width: 100%;
                 border-radius: 10px;
                 padding: 10px;
@@ -279,6 +230,9 @@
                 width:150px;
                 font-size:20px;
                 box-shadow: 0px 0px 10px #f7f7f7;
+            }
+            .input-icheck{
+                /* font-size: 20px; */
             }
             .language_box i{
                 color:#ec6808;
@@ -324,6 +278,9 @@
                     width:150px;
                     font-size:20px;
                     box-shadow: 0px 0px 10px #f7f7f7;
+                }
+                .input-icheck{
+                    /* font-size: 20px; */
                 }
                 .language_box i{
                     color:#ec6808;
@@ -529,8 +486,7 @@
                      /* background-color: #838383 !important; */
                      width: 100% !important; 
                 }
-                
-                .izo-form-input-save{   
+                    .izo-form-input-save{   
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -555,6 +511,9 @@
                     width:150px;
                     font-size:20px;
                     box-shadow: 0px 0px 10px #f7f7f7;
+                }
+                .input-icheck{
+                    /* font-size: 20px; */
                 }
                 .language_box i{
                     color:#ec6808;
@@ -759,8 +718,7 @@
                      /* background-color: #838383 !important; */
                      width: 100% !important; 
                 }
-                
-                .izo-form-input-save{   
+                    .izo-form-input-save{   
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -784,6 +742,9 @@
                     width:150px;
                     font-size:20px;
                     box-shadow: 0px 0px 10px #f7f7f7;
+                }
+                .input-icheck{
+                    /* font-size: 20px; */
                 }
                 .language_box i{
                     color:#ec6808;
@@ -992,8 +953,7 @@
                      /* background-color: #838383 !important; */
                      width: 100% !important; 
                 }
-                
-                .izo-form-input-save{   
+                    .izo-form-input-save{   
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -1018,6 +978,9 @@
                         width:150px;
                         font-size:20px;
                         box-shadow: 0px 0px 10px #f7f7f7;
+                    }
+                    .input-icheck{
+                        /* font-size: 20px; */
                     }
                     .language_box i{
                         color:#ec6808;
@@ -1230,7 +1193,6 @@
                          /* background-color: #838383 !important; */
                          width: 100% !important; 
                     }
-                    
                     .izo-form-input-save{   
                         width: 100%;
                         border-radius: 10px;
@@ -1334,59 +1296,21 @@
                         </div> 
                         <br>
                         {!! Form::open(['url' => route('izoLoginAccount'), 'method' => 'post', 'id' => 'first_login_form','files' => true ]) !!}
-                        <input type="hidden" id="domain_name_sub" name="domain_name_sub" value="{{$subdomain}}">
-                        <div class="col-xs-12">
-                            <h2 style="color: #000 !important"><b>{{__('izo.login')}}</b></h2>
-                            <br>
-                        </div>
-                        <div class="col-xl-12 col-md-12">
-                                <b style="font-size:17px;color: #ec6808 !important">{{__('izo.email_address')}}</b>
+                            <input type="hidden" id="domain_name_sub" name="domain_name_sub" value="{{$subdomain}}">
+                            <div class="col-xs-12 text-center">
+                                <h2 style="color: #000 !important"><b>{{__('izo.reset_password')}}</b></h2>
+                            </div>
+                            <div class="col-xl-12 col-md-12 text-center">
+                                <b style="font-size:13px;color: #3a3a3a88 !important">{{__('izo.reset_password_desc')}}</b>
                                 {!! Form::text('email',(isset($email))?$email:null,['class' => 'izo-form-input','id'=>'email', 'placeholder' => __('izo.email_placeholder') ]) !!}
                                 <span class="error" id="emailError"></span>
                             </div>
-                            @php 
-                                $pass = (isset($password))?$password:null;
-                                @endphp 
+                                
                             <div class="col-xl-12 col-md-12">
-                                <b  style="font-size:17px;color: #ec6808 !important">{{__('izo.password')}}</b>
-                                <input type="password" class="izo-form-input-password" id='password' value="{{$pass}}" name="password" placeholder="{{__('izo.password_placeholder')}}">
-                                <span class="error" id="passwordError"></span>
-                            </div>
-                            <div class="col-xl-12 col-md-12">
-                                <b  style="font-size:17px;color: #ec6808 !important"><a href="{{\URL::to('/forget-password')}}">{{__('izo.forget_password')}}</a></b>
-                            </div>
-                            <div class="col-xl-12 col-md-12">
-                                <div class="form-group">
-                                    <div class="checkbox icheck col-md-12 col-12 text-left py-5">
-                                    <div class=" col-12 ">
-                                        <label style="color: #0c0c0c ; font-size:15px;margin-left:{{$parent_left_margin}};margin-right:{{$parent_right_margin}} ">
-                                            <small>&nbsp;</small>    
-                                            {!! Form::checkbox('logout_other', 1, null, [ 'class' => 'input-icheck', 'id' => 'logout_other']); !!}
-                                            <span class="custom-checkbox"></span>
-                                            <span style="position:relative;top:-5px;left:{{$left_margin}};right:{{$right_margin}}">{{ __( 'izo.logout_form_other_device' ) }} </span> 
-                                        </label>
-                                    </div>
-                                    <div class=" col-12 " style="line-height: 8px">
-                                        &nbsp;
-                                    </div>
-                                    <div class=" col-12 ">
-                                        <label style="color: #0c0c0c; font-size:15px;margin-left:{{$parent_left_margin}};margin-right:{{$parent_right_margin}} ">
-                                            <small>&nbsp;</small>   
-                                            {!! Form::checkbox('remember', 1, old('remember') ? true : false, [ 'class' => 'input-icheck', 'id' => 'remember']); !!}
-                                        <span class="custom-checkbox"></span>
-                                        <span style="position:relative;top:-5px;left:{{$left_margin}};right:{{$right_margin}}">{{ __( 'izo.remember_me' ) }} </span>
-                                        </label>
-                                    </div>
-                                    </div>
-                                </div>
-                                 
-                            </div>
-                            
-                            <div class="col-xl-12 col-md-12">
-                                {!! Form::submit(__('izo.login'),['class' => 'izo-form-input-save']) !!}
+                                {!! Form::submit(__('izo.reset_password_button'),['class' => 'izo-form-input-save']) !!}
                             </div>
                             <div class="col-xl-12 col-md-12 text-center sign-up-box">
-                                <a href="{{route('izoRegister')}}" class="sign-up-form"   >{{__('izo.signup')}}</a>
+                                <a href="{{route('izoLogin')}}" class="sign-up-form"   >{{__('izo.signin')}}</a>
                             </div>
                             
                             <div class="col-xl-12 col-md-12 text-center" style="width: 80% ;margin:auto 10%; font-family:Georgia, 'Times New Roman', Times, serif;"> 
@@ -1432,7 +1356,7 @@
         </script>
     </body>
 @endsection
-@include('izo_user.layouts.js.login')
+@include('izo_user.layouts.js.forget')
 
 
  

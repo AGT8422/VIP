@@ -27,8 +27,10 @@ class SetSessionData
         if (!$request->session()->has('user')) {
             $business_util = new BusinessUtil;
             $i                    = session()->get('lang');
-             
+            
             $user = Auth::user();
+           
+            
             $session_data = ['id'         => $user->id,
                             'surname'     => $user->surname,
                             'first_name'  => $user->first_name,
@@ -53,18 +55,13 @@ class SetSessionData
             $request->session()->put('user', $session_data);
             $request->session()->put('business', $business);
             $request->session()->put('currency', $currency_data);
-
-            //set current financial year to session
+            $request->session()->put('locale', $i); 
             $financial_year = $business_util->getCurrentFinancialYear($business->id);
             $request->session()->put('financial_year', $financial_year);
-            $business_id          = request()->session()->get('user.business_id');
-            $user_id              = request()->session()->get('user.id');
-            $input['id']          = $user_id;
-            $input['business_id'] = $business_id;
-            $input                = ["language"=>$i];
-            $user                 = \App\User::find($user_id);
-            $user->update($input);
-            session()->put('user.language', $i);
+            
+
+            //set current financial year to session
+            // dd($user); 
         }
 
         return $next($request);

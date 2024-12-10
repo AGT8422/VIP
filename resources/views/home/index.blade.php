@@ -15,6 +15,7 @@
 @section('special_css')
 
     <style>
+
             .card3{
                 margin: 0% 0% 0% 1%;
                 /* max-width: 500px; */
@@ -114,7 +115,7 @@
     <style> 
     </style>
  
-  
+ 
     
  <div class="sec-total">
     <div class="row">

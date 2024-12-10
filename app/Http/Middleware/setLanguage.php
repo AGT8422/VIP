@@ -28,6 +28,7 @@ class setLanguage
                 $user                 = \App\User::find($user_id);
                 $user->update($input);
                 session()->put('user.language', $i);
+                session()->put('locale', $i);  
             } 
         }else{  
             \App::setLocale(config('app.locale')) ;

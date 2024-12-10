@@ -50,40 +50,47 @@ class IzoUser extends Model
             $register->subscribe_expire_date   = \Carbon::now()->addWeeks(3);
             $register->not_active	           = 0;
             #.1...................................................... name of directory
-            $new_dir_payments                  = '/uploads/companies/'.$data["company_name"]."/payments";
-            $new_dir_logo                      = '/uploads/companies/'.$data["company_name"]."/logo";
+            $new_dir_business_logo             = '/uploads/companies/'.$data["company_name"]."/business_logo";
             $new_dir_documents                 = '/uploads/companies/'.$data["company_name"]."/documents";
             $new_dir_img                       = '/uploads/companies/'.$data["company_name"]."/img";
+            $new_dir_logo                      = '/uploads/companies/'.$data["company_name"]."/logo";
             $new_dir_media                     = '/uploads/companies/'.$data["company_name"]."/media";
+            $new_dir_payments                  = '/uploads/companies/'.$data["company_name"]."/payments";
+            $new_dir_video                     = '/uploads/companies/'.$data["company_name"]."/video";
             
-            $out_dir_payments                  = '../uploads/companies/'.$data["company_name"]."/payments";
-            $out_dir_logo                      = '../uploads/companies/'.$data["company_name"]."/business_logos";
-            $out_dir_documents                 = '../uploads/companies/'.$data["company_name"]."/invoice_logos";
-            $out_dir_img                       = '../uploads/companies/'.$data["company_name"]."/img";
+            // $out_dir_payments                  = '../uploads/companies/'.$data["company_name"]."/payments";
+            // $out_dir_logo                      = '../uploads/companies/'.$data["company_name"]."/business_logos";
+            // $out_dir_documents                 = '../uploads/companies/'.$data["company_name"]."/invoice_logos";
+            // $out_dir_img                       = '../uploads/companies/'.$data["company_name"]."/img";
             // $out_dir_media                     = '../uploads/companies/'.$data["company_name"]."/media";
             #.2...................................................... create url directory
-            $out_new_dir_logo                  = public_path($out_dir_logo);
-            $out_new_dir_payments              = public_path($out_dir_payments);
-            $out_new_path_documents            = public_path($out_dir_documents);
-            $out_new_dir_img                   = public_path($out_dir_img);
+            // $out_new_dir_logo                  = public_path($out_dir_logo);
+            // $out_new_dir_payments              = public_path($out_dir_payments);
+            // $out_new_path_documents            = public_path($out_dir_documents);
+            // $out_new_dir_img                   = public_path($out_dir_img);
             // $out_new_dir_media                 = public_path($out_dir_media);
 
-            $new_dir_logo                      = public_path($new_dir_logo);
-            $new_dir_payments                  = public_path($new_dir_payments);
+            $new_path_business_logo            = public_path($new_dir_business_logo);
             $new_path_documents                = public_path($new_dir_documents);
             $new_path_img                      = public_path($new_dir_img);
+            $new_dir_logo                      = public_path($new_dir_logo);
             $new_path_media                    = public_path($new_dir_media);
+            $new_dir_payments                  = public_path($new_dir_payments);
+            $new_path_video                    = public_path($new_dir_video);
+
             #.3...................................................... Create the directory
-            (!File::exists($new_dir_logo))?File::makeDirectory($new_dir_logo, 0755, true):null; 
-            (!File::exists($new_dir_payments))?File::makeDirectory($new_dir_payments, 0755, true):null; 
+            (!File::exists($new_path_business_logo))?File::makeDirectory($new_path_business_logo, 0755, true):null; 
             (!File::exists($new_path_documents))?File::makeDirectory($new_path_documents, 0755, true):null; 
             (!File::exists($new_path_img))?File::makeDirectory($new_path_img, 0755, true):null; 
+            (!File::exists($new_dir_logo))?File::makeDirectory($new_dir_logo, 0755, true):null; 
             (!File::exists($new_path_media))?File::makeDirectory($new_path_media, 0755, true):null; 
+            (!File::exists($new_dir_payments))?File::makeDirectory($new_dir_payments, 0755, true):null; 
+            (!File::exists($new_path_video))?File::makeDirectory($new_path_video, 0755, true):null; 
             
-            (!File::exists($out_new_dir_logo))?File::makeDirectory($out_new_dir_logo, 0755, true):null; 
-            (!File::exists($out_new_dir_payments))?File::makeDirectory($out_new_dir_payments, 0755, true):null; 
-            (!File::exists($out_new_path_documents))?File::makeDirectory($out_new_path_documents, 0755, true):null; 
-            (!File::exists($out_new_dir_img))?File::makeDirectory($out_new_dir_img, 0755, true):null; 
+            // (!File::exists($out_new_dir_logo))?File::makeDirectory($out_new_dir_logo, 0755, true):null; 
+            // (!File::exists($out_new_dir_payments))?File::makeDirectory($out_new_dir_payments, 0755, true):null; 
+            // (!File::exists($out_new_path_documents))?File::makeDirectory($out_new_path_documents, 0755, true):null; 
+            // (!File::exists($out_new_dir_img))?File::makeDirectory($out_new_dir_img, 0755, true):null; 
             // (!File::exists($out_new_dir_media))?File::makeDirectory($out_new_dir_media, 0755, true):null; 
             #.........................................................
             $query                             = 'CREATE DATABASE '.$database;

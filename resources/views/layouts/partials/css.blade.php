@@ -22,6 +22,32 @@
 	* Pattern direction
 	* http://ignitersworld.com/lab/patternLock.html
 	*/
+	.loading{
+                position: fixed;
+                left: 0px;
+                right: 0px;
+                width: 100%;
+                height: 100%;
+                z-index: 2000;
+                background-color: rgb(0, 0, 0);
+            }
+            .loading .loading-content{
+                position: relative; 
+                margin: 50vh auto; 
+                transform: translateX(-50%);
+                transform: translateY(-50%);
+                width: 200px;
+                height: 100px;
+                z-index: 2000;
+                color: #fefefe;
+                font-size: 20px;
+                font-weight: 700;
+                background-color: rgba(175, 28, 28, 0);
+            }
+            .loading .loading-content h1{ 
+                color: #fefefe;  
+                font-weight: bold;
+            }
 	.patt-wrap {
 	  z-index: 10;
 	}

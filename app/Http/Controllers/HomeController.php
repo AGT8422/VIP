@@ -214,6 +214,14 @@ class HomeController extends Controller
             $filters['end_date']   = \Carbon::now()->endOfYear()->format('Y-m-d');
         }
       
+        $user_id              = request()->session()->get('user.id');
+        $i                    = request()->input('lang');
+        $input['id']          = $user_id;
+        $input['business_id'] = $business_id;
+        $input                = ["language"=>$i];
+        $user                 = \App\User::find($user_id);
+        // $user->update($input);
+
         // $expenses = $this->transactionUtil->getExpenseReport($business_id, $filters);
 
         // $values = [];
@@ -1271,11 +1279,12 @@ class HomeController extends Controller
 
             if (in_array($i, ['en', 'ar'])) {
                 session(['locale' => $i]);
+                session(['lang' => $i]);
                 // Determine the direction for the new locale
                 $direction = ($i === 'ar') ? 'rtl' : 'ltr';
                 session(['direction' => $direction]);
                 session()->put('user.language', $i);
-                App::setLocale($i);
+                \App::setLocale($i);
             }
             DB::commit();
             $output = [

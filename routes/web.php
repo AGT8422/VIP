@@ -13,6 +13,7 @@
 
 include_once('install_r.php');
     Route::middleware(['setLanguage' ])->group(function () {
+        Route::get('/forget-password','IzoUserController@forgetPassword')->name('izoForgetPassword');
         Route::get('/login-account','IzoUserController@loginPage')->name('izoLogin');
         Route::get('/login-account-redirect/{id}','IzoUserController@loginPageRedirect')->name('izoRedirectLogin');
         Route::get('/register-account','IzoUserController@register')->name('izoRegister');
@@ -86,7 +87,7 @@ include_once('install_r.php');
     Route::get('/home/change-lang-app', 'HomeController@changeLanguageApp');
 // ***********************************************************************
     //Routes for authenticated users only
-    Route::middleware(['SetDatabaseConnection', 'setLanguage','setData', 'authIzo', 'SetSessionData',  'language', 'timezone', 'AdminSidebarMenu', 'CheckUserLogin'])->group(function () {
+    Route::middleware(['SetDatabaseConnection',  'setData', 'authIzo', 'SetSessionData',  'language', 'timezone', 'AdminSidebarMenu', 'CheckUserLogin'])->group(function () {
         // 10 ***
             Route::get('/', 'HomeController@index');
             Route::get('/main', 'HomeController@index')->name('home');
@@ -1125,7 +1126,7 @@ include_once('install_r.php');
     // 3 ***
     
     // 11 ***
-        Route::middleware(['setData', 'setLanguage', 'authIzo', 'SetSessionData','SetDatabaseConnection', 'language', 'timezone'])->group(function () {
+        Route::middleware(['setData',   'authIzo', 'SetSessionData','SetDatabaseConnection', 'language', 'timezone'])->group(function () {
             Route::get('/load-more-notifications', 'HomeController@loadMoreNotifications');
             Route::get('/get-total-unread', 'HomeController@getTotalUnreadNotifications');
             Route::get('/purchases/print/{id}', 'PurchaseController@printInvoice');
@@ -1142,7 +1143,7 @@ include_once('install_r.php');
     // 9 ***
         /* add by eng mohamed ali
         this route is opend without auth to view product  */
-        Route::middleware(['setData', 'setLanguage', 'authIzo','SetDatabaseConnection', 'SetSessionData', 'AdminSidebarMenu', 'timezone'])->group(function () {
+        Route::middleware(['setData',   'authIzo','SetDatabaseConnection', 'SetSessionData', 'AdminSidebarMenu', 'timezone'])->group(function () {
                 Route::get('/gallery/gallery', 'ProductGallery@gallery');
                 Route::get('/gallery/setting', 'ProductGallery@setting');
                 Route::get('/gallery/stock_report', 'ProductGallery@stock_report');

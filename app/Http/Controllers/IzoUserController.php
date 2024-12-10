@@ -129,6 +129,59 @@ class IzoUserController extends Controller
         #................................................
         return view('izo_user.login')->with(compact(['list_domains','email','password']));
     }
+    /**
+     * forget password.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function forgetPassword(Request $request)
+    {
+        //
+        
+        
+         
+        if(!$request->session()->get('user')){
+            if ($request->session()->get('startLogin')) {
+                // return redirect('/panel-account');
+            }
+        }
+         
+        #.....................................every time from the main
+        Config::set('database.connections.mysql.database', "izocloud");
+        DB::purge('mysql');
+        DB::reconnect('mysql');
+        #....................................
+        $email                         = null;
+        $password                      = null;
+        $list_domains                  = [];
+        $list_domain  = IzoUser::pluck("domain_url"); 
+        foreach($list_domain as $li){
+            if($li != null){
+                $list_domains[] = $li;
+            }
+        } 
+        #................................................
+        
+        // $url                           = request()->session()->get('url.intended');
+        // $parsed_url                    = parse_url($url);
+        // if(isset($parsed_url['query'])){
+        //     parse_str($parsed_url['query'], $query_params);
+        //     if(isset($query_params['email'])){
+        //         $email    = $query_params['email'];
+        //         $password = $query_params['password'];
+        //     }
+        // } 
+       
+        #................................................
+        if(session()->has('user_main')){
+            if(request()->session()->get('startLogin')){
+                // return redirect('/login');
+            }
+            return redirect('/panel-account');
+        }
+        #................................................
+        return view('izo_user.forget_password')->with(compact(['list_domains']));
+    }
     
     /**
      * Change authentication from email to username
@@ -760,6 +813,7 @@ class IzoUserController extends Controller
         if(!$login['status']){
             return redirect('/login-account');
         }
+        session(['change_lang'  => "change"]);
         $url       = request()->root();
         $parsedUrl = parse_url($url);
         $host      = $parsedUrl['host'] ?? '';  
@@ -833,6 +887,7 @@ class IzoUserController extends Controller
                         "password" => $data['password']
                     ];
                     session(['login_info'  => $payload2]);
+                    
                     return redirect($login['url'])->with(compact('domain_name'));
                 }
                 //  return parent::login($request);
@@ -914,7 +969,7 @@ class IzoUserController extends Controller
         
         if(!session()->get('lang')){
             session(['lang'  => "en"]); 
-             
+            
         }
         return redirect("/home");
          

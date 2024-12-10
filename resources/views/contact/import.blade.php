@@ -6,9 +6,9 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1><b>@lang('lang_v1.import_contacts')</b>
-    </h1>               
-    <h5><i><b>{{ "   Contacts  >  " }} </b>{{ "Import Contacts"   }} <b> {{"   "}} </b></i></h5>  
-    <br> 
+    </h1>
+    @php $mainUrl = '/contacts?type=customer';  @endphp               
+    <h5><i><b><a href="{{\URL::to($mainUrl)}}">{{ "   Contacts  >  " }}</a> </b>{{ "Import Contacts"   }} <b> {{"   "}} </b></i></h5>  
 </section>
 
 <!-- Main content -->
@@ -31,7 +31,7 @@
     
     <div class="row">
         <div class="col-sm-12">
-            <div class="row" style="margin:0px 10%">
+            <div class="row">
                 <div class="col-sm-12">
                     @component('components.widget', ['class' => 'box-primary', 'title' => __('lang_v1.instructions')])
                         <div class="row pull-left" style="width:50%">        

@@ -122,9 +122,9 @@
         <div class="col-md-12 text-center">
           
             <small class="date_filter_1" >  
-                    <span style="font-size:18px;line-height:35px"> Date Range : &nbsp; &nbsp;</span>
+                    <span style="font-size:18px;line-height:34px"> Date Range : &nbsp; &nbsp;</span>
                     <div class="input-group" style="box-shadow:0px 0px 10px #3a3a3a33;border-radius:10px !important">
-                        <span class="input-group-addon" style="border-top-left-radius:10px !important;border-bottom-left-radius:10px !important"><i class="fa fa-calendar" style="color:#ec6808;font-size:18px;"></i></span>
+                        <span class="input-group-addon" style="border-top-left-radius:10px !important;border-bottom-left-radius:10px !important"><i class="fa fa-calendar" style="color:#ec6808;font-size:17px;"></i></span>
                         {!! Form::text('transaction_date_range', null, ['class' => 'form-control','id'=>'transaction_date_range' ,  'style' => 'font-size:19px;border-top-right-radius:10px !important;border-bottom-right-radius:10px !important', 'readonly', 'placeholder' => __('report.date_range')]) !!}
                     </div>
                 </small>
@@ -139,7 +139,7 @@
          <div class="col-md-5 ">
             <div class="col-md-6">
                 <div class="card1">
-                    <H4>Sales  <small class="pull-right">Date Range</small><small class="pull-right">Date Range</small></H4>
+                    <H4>Sales  <small class="pull-right D_rang">Date Range</small></H4>
                     <p>Excluding VAT : <b class="display_currency pull-right big-number sales-exc" data-currency_symbol="true" >{{$totalSalesExclude}}</b></p>
                     <p>Including VAT : <b class="display_currency pull-right big-number sales-inc" data-currency_symbol="true" >{{$totalSales}}</b></p>
                 </div>
@@ -147,7 +147,7 @@
             {{-- 2 --}}
             <div class="col-md-6">
                 <div class="card1">
-                    <H4>Invoices <small class="pull-right">Date Range</small></H4>
+                    <H4>Invoices <small class="pull-right D_rang">Date Range</small></H4>
                     <p>  &nbsp;</p>
                     <p>Number Of Invoices : <b  class="pull-right big-number number-of-invoice">{{$numberOfInvoice}}</b></p>
                 </div>
@@ -158,7 +158,7 @@
             {{--  TODO  IF REGISTER IN VAT SHOW THIS --}}
             <div class="col-md-6">
                 <div class="card1">
-                    <H4>VAT  <small class="pull-right">Date Range</small></H4>
+                    <H4>VAT  <small class="pull-right D_rang">Date Range</small></H4>
                     <p>  &nbsp;</p>
                     <p>VAT Amount : <b class="display_currency pull-right big-number vat-sales" data-currency_symbol="true" >{{ $totalSalesTax}}</b></p>
                 </div>
@@ -166,7 +166,7 @@
             {{-- 1 --}}
             <div class="col-md-6">
                 <div class="card1">
-                    <H4>Customers <small class="pull-right">Accumulated</small></H4>
+                    <H4>Customers <small class="pull-right D_rang">Date Range</small></H4>
                     <p>  &nbsp;</p>
                     <p>Total Customer : <b  class="pull-right big-number number-of-contact">{{$contactOfInvoice}}</b></p>
                 </div> 
@@ -178,7 +178,7 @@
              {{-- 2 --}}
              <div class="col-md-6">
                 <div class="card1">
-                    <H4>Cost Of Sales <small class="pull-right">Date Range</small></H4>
+                    <H4>Cost Of Sales <small class="pull-right D_rang">Date Range</small></H4>
                     <p>  &nbsp;</p>
                     <p>COS : <b class="display_currency pull-right big-number cost-of-sales" data-currency_symbol="true" >{{ $costOfDeliveredSale + $costOfUnDeliveredSale }}</b></p>
                 </div>
@@ -186,7 +186,7 @@
               
             <div class="col-md-6">
                 <div class="card1">
-                    <H4>Delivered Goods Value</H4>
+                    <H4>Delivered<small class="pull-right D_rang">Date Range</small><br> <small style="color:black">Goods  Value</small></H4>
                     <p>Cost Value : <b class="display_currency pull-right big-number cost-delivered" data-currency_symbol="true" >{{$costOfDeliveredSale}}</b></p>
                     <p>Sales Value : <b class="display_currency pull-right big-number amount-delivered" data-currency_symbol="true" >{{$amountOfDeliveredSale}}</b></p>
                 </div>
@@ -197,7 +197,7 @@
             {{-- # --}}
             <div class="col-md-6">
                 <div class="card1">
-                    <H4>Gross Profit <small class="pull-right">Date Range</small></H4>
+                    <H4>Gross Profit <small class="pull-right D_rang">Date Range</small></H4>
                     <p>  &nbsp;</p>
                     <p> GP : <b class="display_currency pull-right big-number gross-profit" data-currency_symbol="true" >{{$totalSalesExclude - ($costOfDeliveredSale + $costOfUnDeliveredSale) }}</b></p>
                 </div>
@@ -205,7 +205,7 @@
             {{-- # --}}
             <div class="col-md-6">
                 <div class="card1">
-                    <H4 style="font-size">Undelivered Goods Value</H4>
+                    <H4 style=" ">Undelivered<small class="pull-right D_rang">Date Range</small><br> <small style="color:black">Goods  Value</small></H4>
                     <p>Cost Value : <b class="display_currency pull-right big-number cost-un-delivered" data-currency_symbol="true" >{{$costOfUnDeliveredSale}}</b></p>
                     <p>Sales Value : <b class="display_currency pull-right big-number amount-un-delivered" data-currency_symbol="true" >{{$amountOfUnDeliveredSale}}</b></p>
                 </div>
@@ -216,7 +216,7 @@
             {{-- 2 --}}
             <div class="col-md-12">
                 <div class="card1">
-                    <H4><a href="{{\URL::to('/gallery/stock_report')}}">Goods Value </a> <small class="pull-right">Accumulated</small></H4>
+                    <H4><a href="{{\URL::to('/gallery/stock_report')}}">Goods Value </a> <small class="pull-right D_rang">Accumulated</small></H4>
                     <p>  &nbsp;</p>
                     <p>Stock Value : <b class="display_currency pull-right big-number" data-currency_symbol="true" >{{ $closing }}</b></p>
                 </div>
@@ -227,7 +227,7 @@
             {{-- # --}}
             <div class="col-md-6">
                 <div class="card1">
-                    <H4>Total Customers <small class="pull-right">Date Range</small></H4>
+                    <H4>Total Customers <small class="pull-right D_rang">Accumulated</small></H4>
                     <p>  &nbsp;</p>
                     <p> Balance : <b class="display_currency pull-right big-number" data-currency_symbol="true" >{{abs($totalBalanceCustomer)}}</b></p>
                 </div>
@@ -235,7 +235,7 @@
             {{-- # --}}
             <div class="col-md-6">
                 <div class="card1">
-                    <H4>Total Suppliers <small class="pull-right">Accumulated</small></H4>
+                    <H4>Total Suppliers <small class="pull-right D_rang">Accumulated</small></H4>
                     <p>  &nbsp;</p>
                     <p> Balance : <b class="display_currency pull-right big-number" data-currency_symbol="true" >{{abs($totalBalanceSupplier)}}</b></p>
                 </div>
@@ -247,7 +247,7 @@
                 <H4>Paid/Unpaid Sales 
                     
                     <small class="date_filter pull-right">
-                        <b class="p-5">Pattern:</b> &nbsp;&nbsp;&nbsp;
+                        <b class="p-5" style="line-height: 34px ">Pattern:</b> &nbsp;
                         <div class="col-md-12">
                             {!! Form::select('pattern_id', $patterns,null, ['class' => 'form-control select2','id'=>'pattern_id' , 'placeholder' => __('ALL')]) !!}
                         </div>

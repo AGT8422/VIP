@@ -8,7 +8,9 @@
     </script>
     <script type="text/javascript">
             $(document).ready(function() {
-                 
+                $(document).on('click','.language_box',function(){
+                    $(".list_of_lang").toggleClass('hide');
+                });
                 
                 let debounceTimer;
                 const debounceDelay = 500; // Adjust the delay as needed (milliseconds)

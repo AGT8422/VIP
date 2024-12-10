@@ -12,6 +12,9 @@
         <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
         <li class="active">Here</li>
     </ol> -->
+    @php $mainUrl = '/users';  @endphp  
+    <h5><i><b><a href="{{\URL::to($mainUrl)}}">{{ "   User Management  >  " }}</a></b>{{ "List Of Users"   }} <b> {{"   "}} </b></i></h5>
+ 
 </section>
 
 <!-- Main content -->

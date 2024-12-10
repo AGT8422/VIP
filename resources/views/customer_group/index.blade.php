@@ -6,8 +6,9 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1><b>@lang( 'lang_v1.customer_groups' )</h1></b>
-    <h5><i><b>{{ "   Contacts  >  " }} </b>{{ "Customer Groups"   }} <b> {{"   "}} </b></i></h5>
-    <br>    
+    @php $mainUrl = '/contacts?type=customer';  @endphp  
+    <h5><i><b><a href="{{\URL::to($mainUrl)}}">{{ "   Contacts  >  " }}</a></b>{{ "Customer Groups"   }} <b> {{"   "}} </b></i></h5>
+ 
 </section>
 
 <!-- Main content -->

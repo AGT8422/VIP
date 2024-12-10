@@ -16,7 +16,7 @@
 @php 
     
 @endphp 
-<html lang="{{ session()->get('user.language', config('app.locale')) }}" dir="{{in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'rtl' : 'ltr'}}">
+<html lang="{{ session()->get('lang', config('app.locale')) }}" dir="{{in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'rtl' : 'ltr'}}">
    
     <head>
         <!-- PWA  -->

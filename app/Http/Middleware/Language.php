@@ -28,6 +28,7 @@ class Language
         if(Auth::id()){
             $locale =  Auth::User()->language;
         }
+      
         App::setLocale($locale);
         return $next($request);
     }

@@ -13,6 +13,8 @@ use App\Utils\TransactionUtil;
 use App\VariationLocationDetails;
 use Datatables;
 use DB;
+
+use Artisan;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -1257,7 +1259,7 @@ class HomeController extends Controller
         try{
 
             DB::beginTransaction();
-
+          
             $business_id          = request()->session()->get('user.business_id');
             $user_id              = request()->session()->get('user.id');
             $i                    = request()->input('lang');
@@ -1272,8 +1274,36 @@ class HomeController extends Controller
                 // Determine the direction for the new locale
                 $direction = ($i === 'ar') ? 'rtl' : 'ltr';
                 session(['direction' => $direction]);
-                 
+                session()->put('user.language', $i);
+                App::setLocale($i);
             }
+            DB::commit();
+            $output = [
+                'success' => true,
+                'msg' => __('lang_v1.success')
+            ];
+        }catch(Exception $e){
+            \DB::rollback();
+            \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
+            $output = [
+                'success' => false,
+                'msg' => __('messages.something_went_wrong')
+            ];
+
+        }
+        return redirect()->back();
+    }
+    public function changeLanguageApp(Request $request){
+        try{
+
+            DB::beginTransaction();
+            $i                    = request()->input('lang'); 
+            session(["lang"=>$i]);
+            \App::getLocale($i);
+            Artisan::call('cache:clear');
+            Artisan::call('view:clear');
+            Artisan::call('route:clear');
+            Artisan::call('config:clear');
             DB::commit();
             $output = [
                 'success' => true,

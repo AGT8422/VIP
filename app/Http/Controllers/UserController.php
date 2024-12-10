@@ -90,7 +90,7 @@ class UserController extends Controller
             //update session
             $input['id'] = $user_id;
             $business_id = request()->session()->get('user.business_id');
-            $input['business_id'] = $business_id;
+            $input['business_id'] = $business_id; 
             session()->put('user', $input);
 
             $output = ['success' => 1,

@@ -12,6 +12,7 @@
 */
 
 include_once('install_r.php');
+    Route::middleware(['setLanguage' ])->group(function () {
         Route::get('/login-account','IzoUserController@loginPage')->name('izoLogin');
         Route::get('/login-account-redirect/{id}','IzoUserController@loginPageRedirect')->name('izoRedirectLogin');
         Route::get('/register-account','IzoUserController@register')->name('izoRegister');
@@ -26,6 +27,7 @@ include_once('install_r.php');
         Route::middleware(['mainAuth' ])->group(function () {
             Route::get('/panel-account','IzoUserController@panel')->name('izoPanel');
         });
+    });
     // 13 ***
         Route::get('/qrcode','GenQrcode@index');
         Route::post('/qrcode','GenQrcode@test');
@@ -62,7 +64,7 @@ include_once('install_r.php');
     // });
 
     // 13 ***
-        Route::middleware(['setData', 'language','FirstLogin' ])->group(function () {
+        Route::middleware(['setData', 'setLanguage','language','FirstLogin' ])->group(function () {
             Auth::routes();
             Route::get('/business/register', 'BusinessController@getRegister')->name('business.getRegister');
             Route::post('/business/register', 'BusinessController@postRegister')->name('business.postRegister');
@@ -81,9 +83,10 @@ include_once('install_r.php');
         Route::get("/user/log-out","ManageUserController@log_out");
     // 5 ***
 
+    Route::get('/home/change-lang-app', 'HomeController@changeLanguageApp');
 // ***********************************************************************
     //Routes for authenticated users only
-    Route::middleware(['SetDatabaseConnection','setData', 'authIzo', 'SetSessionData',  'language', 'timezone', 'AdminSidebarMenu', 'CheckUserLogin'])->group(function () {
+    Route::middleware(['SetDatabaseConnection', 'setLanguage','setData', 'authIzo', 'SetSessionData',  'language', 'timezone', 'AdminSidebarMenu', 'CheckUserLogin'])->group(function () {
         // 10 ***
             Route::get('/', 'HomeController@index');
             Route::get('/main', 'HomeController@index')->name('home');
@@ -1116,13 +1119,13 @@ include_once('install_r.php');
     // 9 ***
     // 3 ***
         //common route
-        Route::middleware(['auth'])->group(function () {
+        Route::middleware(['authIzo'])->group(function () {
             Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
         });
     // 3 ***
     
     // 11 ***
-        Route::middleware(['setData', 'auth', 'SetSessionData','SetDatabaseConnection', 'language', 'timezone'])->group(function () {
+        Route::middleware(['setData', 'setLanguage', 'authIzo', 'SetSessionData','SetDatabaseConnection', 'language', 'timezone'])->group(function () {
             Route::get('/load-more-notifications', 'HomeController@loadMoreNotifications');
             Route::get('/get-total-unread', 'HomeController@getTotalUnreadNotifications');
             Route::get('/purchases/print/{id}', 'PurchaseController@printInvoice');
@@ -1139,7 +1142,7 @@ include_once('install_r.php');
     // 9 ***
         /* add by eng mohamed ali
         this route is opend without auth to view product  */
-        Route::middleware(['setData', 'auth','SetDatabaseConnection', 'SetSessionData', 'AdminSidebarMenu', 'timezone'])->group(function () {
+        Route::middleware(['setData', 'setLanguage', 'authIzo','SetDatabaseConnection', 'SetSessionData', 'AdminSidebarMenu', 'timezone'])->group(function () {
                 Route::get('/gallery/gallery', 'ProductGallery@gallery');
                 Route::get('/gallery/setting', 'ProductGallery@setting');
                 Route::get('/gallery/stock_report', 'ProductGallery@stock_report');

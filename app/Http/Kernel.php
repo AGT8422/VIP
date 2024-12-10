@@ -39,7 +39,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\SubdomainMiddleware::class,
             \App\Http\Middleware\SetDatabaseConnection::class,
             // \App\Http\Middleware\mainAuth::class,
-            
+            \App\Http\Middleware\setLanguage::class, 
         ],
         
         'api' => [
@@ -83,6 +83,7 @@ class Kernel extends HttpKernel
         'CheckUserLogin'          => \App\Http\Middleware\CheckUserLogin::class,        
         'SingleSessionMiddleware' => \App\Http\Middleware\SingleSessionMiddleware::class,    
         'cors'                    => \App\Http\Middleware\Cors::class, // added
+        'setLanguage'             => \App\Http\Middleware\setLanguage::class,    
     ];
     /**
      * The priority-sorted list of middleware.

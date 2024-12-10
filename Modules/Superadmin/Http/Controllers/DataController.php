@@ -99,7 +99,7 @@ class DataController extends Controller
     public function modifyAdminMenu() 
     {
         $menu = Menu::instance('admin-sidebar-menu');
-        // if (auth()->user()->can('superadmin')) {
+        if (auth()->user()->can('superadmin')) {
             $menu->dropdown(
                 __('superadmin::lang.superadmin'),
                 function ($sub) {
@@ -153,7 +153,7 @@ class DataController extends Controller
                 },
                 ['icon' => 'fa fas fa-users-cog']
                 )->order(1);
-        // }
+        }
 
         if (auth()->user()->can('superadmin.access_package_subscriptions') && request()->session()->get("user.id") == 1 ) {
             $menu->whereTitle(__('business.settings'), function ($sub) {

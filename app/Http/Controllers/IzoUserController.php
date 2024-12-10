@@ -85,12 +85,14 @@ class IzoUserController extends Controller
     {
         //
         
+        
+         
         if(!$request->session()->get('user')){
             if ($request->session()->get('startLogin')) {
                 // return redirect('/panel-account');
             }
         }
-        
+         
         #.....................................every time from the main
         Config::set('database.connections.mysql.database', "izocloud");
         DB::purge('mysql');
@@ -781,7 +783,7 @@ class IzoUserController extends Controller
 
         }
         $subdomain     = $subdomain;
-        
+        // dd(session()->get('lang'));
         if($subdomain == ""){
             $payload =  [
                 "value1" => Hash::make("success"),
@@ -909,8 +911,11 @@ class IzoUserController extends Controller
         // $final_url = "http://".$domain_url.":8000/home";
         // // dd($final_url);
         // return redirect()->away($final_url);
-       
         
+        if(!session()->get('lang')){
+            session(['lang'  => "en"]); 
+             
+        }
         return redirect("/home");
          
         // if($login['admin']){

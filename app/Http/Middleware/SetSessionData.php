@@ -22,10 +22,11 @@ class SetSessionData
      */
     public function handle($request, Closure $next)
     {
-         
-
+        
+        
         if (!$request->session()->has('user')) {
             $business_util = new BusinessUtil;
+            $i                    = session()->get('lang');
              
             $user = Auth::user();
             $session_data = ['id'         => $user->id,
@@ -34,7 +35,7 @@ class SetSessionData
                             'last_name'   => $user->last_name,
                             'email'       => $user->email,
                             'business_id' => $user->business_id,
-                            'language'    => $user->language,
+                            'language'    => $i,
                             ];
 
 
@@ -56,6 +57,14 @@ class SetSessionData
             //set current financial year to session
             $financial_year = $business_util->getCurrentFinancialYear($business->id);
             $request->session()->put('financial_year', $financial_year);
+            $business_id          = request()->session()->get('user.business_id');
+            $user_id              = request()->session()->get('user.id');
+            $input['id']          = $user_id;
+            $input['business_id'] = $business_id;
+            $input                = ["language"=>$i];
+            $user                 = \App\User::find($user_id);
+            $user->update($input);
+            session()->put('user.language', $i);
         }
 
         return $next($request);

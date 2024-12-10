@@ -134,9 +134,10 @@
 <script src="{{asset('assets/js/dashboards-analytics.js')}}"></script>
 <script type="text/javascript">
     $(document).ready( function(){
+        
         var locale = "{{session()->get('user.language', config('app.locale'))}}";
         var isRTL = @if(in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl'))) true; @else false; @endif
-
+        
         $('#calendar').fullCalendar('option', {
             locale: locale,
             isRTL: isRTL

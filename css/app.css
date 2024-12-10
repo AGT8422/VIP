@@ -1418,7 +1418,7 @@ tfoot>tr {
 }
  
 .table thead th{
-  background-color: #494949 !important;
+  /* background-color: #494949 !important; */
   font-weight: bolder;
   color: #ffffff;  
   
@@ -1554,7 +1554,7 @@ div.pos-tab-menu div.list-group>a.active .fa{
   border: 1px solid black !important;
 }
 .icheckbox_square-blue.checked{
-  border: 1px solid rgb(0, 141, 207) !important;
+   border: 1px solid #ee680e !important;
    color:   #ee680e !important;
 }
 .iCheck-helper{

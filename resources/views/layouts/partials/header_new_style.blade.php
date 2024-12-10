@@ -3,6 +3,7 @@
 @php
     $right =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '10%'  ;
     $left  =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '10%' : 'initial'  ;
+    $txt   =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'left' : 'right'  ;
 @endphp
 
 <style>
@@ -51,7 +52,7 @@
     .parent_right_header{
         height: 80px;
         padding: 15px 30px;
-        text-align: right;
+        text-align: {{$txt}};
         font-size: 20px;
         /* border: 1px solid black; */
     }
@@ -69,7 +70,20 @@
         /* background-color: #f7f7f7; */
         padding: 10px;
     }
+    .user-image{
+        margin-left: 10px !important;
+        box-shadow: 0px 0px 10px #3a3a3a33 !important;
+        outline:2px solid #000 !important;
+        padding:1px !important;
+    }
+    .content-header h1{
+        color:black !important;
+    }
     .content-header{
+        color:black !important;
+        padding: 10px !important;
+        border-left:5px solid #3a3a3a !important;
+        box-shadow: 0px 0px 10px #3a3a3a33 !important;
         margin: 0px 1% !important;
     }
     .main-header-new{
@@ -132,7 +146,7 @@
         .parent_right_header{
             height: 80px;
             padding: 15px 30px;
-            text-align: right;
+            text-align: {{$txt}};
             font-size: 20px;
             /* border: 1px solid black; */
         }
@@ -150,7 +164,21 @@
             /* background-color: #f7f7f7; */
             padding: 10px;
         }
+        .user-image{
+            margin-left: 10px !important;
+            box-shadow: 0px 0px 10px #3a3a3a33 !important;
+            outline:2px solid #000 !important;
+            padding:1px !important;
+        }
+        .content-header h1{
+            color:black !important;
+        }
+        
         .content-header{
+            color:black !important;
+            padding: 10px !important;
+            border-left:5px solid #3a3a3a !important;
+            box-shadow: 0px 0px 10px #3a3a3a33 !important;
             margin: 0px 1% !important;
         }
         .main-header-new{
@@ -166,6 +194,7 @@
             border-radius: 20px;
             border:1px solid #f7f7f7;
         }
+        
     }
     @media (min-width: 600px)  and  (max-width: 900px) {
         #header_shortcut_dropdown i{
@@ -214,7 +243,7 @@
         .parent_right_header{
             height: 80px;
             padding: 15px 30px;
-            text-align: right;
+            text-align: {{$txt}};
             font-size: 20px;
             /* border: 1px solid black; */
         }
@@ -232,7 +261,21 @@
             /* background-color: #f7f7f7; */
             padding: 10px;
         }
+        .user-image{
+            margin-left: 10px !important;
+            box-shadow: 0px 0px 10px #3a3a3a33 !important;
+            outline:2px solid #000 !important;
+            padding:1px !important;
+        }
+        .content-header h1{
+            color:black !important;
+        }
+        
         .content-header{
+            color:black !important;
+            padding: 10px !important;
+            border-left:5px solid #3a3a3a !important;
+            box-shadow: 0px 0px 10px #3a3a3a33 !important;
             margin: 0px 1% !important;
         }
         .main-header-new{
@@ -248,6 +291,7 @@
             border-radius: 20px;
             border:1px solid #f7f7f7;
         }
+        
     }
     @media (min-width: 1024px) and  (max-width:1400px) {
         #header_shortcut_dropdown i{
@@ -296,7 +340,7 @@
         .parent_right_header{
             height: 80px;
             padding: 15px 30px;
-            text-align: right;
+            text-align: {{$txt}};
             font-size: 20px;
             /* border: 1px solid black; */
         }
@@ -314,7 +358,21 @@
             /* background-color: #f7f7f7; */
             padding: 10px;
         }
+        .user-image{
+            margin-left: 10px !important;
+            box-shadow: 0px 0px 10px #3a3a3a33 !important;
+            outline:2px solid #000 !important;
+            padding:1px !important;
+        }
+        .content-header h1{
+            color:black !important;
+        }
+        
         .content-header{
+            color:black !important;
+            padding: 10px !important;
+            border-left:5px solid #3a3a3a !important;
+            box-shadow: 0px 0px 10px #3a3a3a33 !important;
             margin: 0px 1% !important;
         }
         .main-header-new{
@@ -330,6 +388,7 @@
             border-radius: 20px;
             border:1px solid #f7f7f7;
         }
+        
     }
     @media (min-width: 900px)  and  (max-width: 1024px){
         #header_shortcut_dropdown i{
@@ -378,7 +437,7 @@
         .parent_right_header{
             height: 80px;
             padding: 15px 30px;
-            text-align: right;
+            text-align: {{$txt}};
             font-size: 20px;
             /* border: 1px solid black; */
         }
@@ -396,7 +455,21 @@
             /* background-color: #f7f7f7; */
             padding: 10px;
         }
+        .user-image{
+            margin-left: 10px !important;
+            box-shadow: 0px 0px 10px #3a3a3a33 !important;
+            outline:2px solid #000 !important;
+            padding:1px !important;
+        }
+        .content-header h1{
+            color:black !important;
+        }
+        
         .content-header{
+            color:black !important;
+            padding: 10px !important;
+            border-left:5px solid #3a3a3a !important;
+            box-shadow: 0px 0px 10px #3a3a3a33 !important;
             margin: 0px 1% !important;
         }
         .main-header-new{
@@ -412,6 +485,8 @@
             border-radius: 20px;
             border:1px solid #f7f7f7;
         }
+        
+        
     }
 
 </style>
@@ -438,7 +513,7 @@
         @php
             
         @endphp
-        <div class="col-md-6 parent_right_header" dir="rtl">
+        <div class="col-md-6 parent_right_header" @if(in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl'))) dir="ltr" @else dir="rtl" @endif>
                  <div class="item-one">
                     <ul class="nav navbar-nav">
                         <!-- User Account Menu -->
@@ -450,7 +525,7 @@
                                 $profile_photo = auth()->user()->media;
                                 @endphp
                                 @if(!empty($profile_photo))
-                                <img src="{{$profile_photo->display_url}}" class="user-image" alt="User Image">
+                                <img src="{{$profile_photo->display_url}}" class="user-image pull-right"  alt="User Image">
                                 @endif
                                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
                                 <span>{{ Auth::User()->first_name }} {{ Auth::User()->last_name }}</span>
@@ -517,15 +592,11 @@
                         </ul>
                     </div>
                  </div>
-                 
-            
-                
                  <div class="item-one">
                     <button id="btnCalculator" title="@lang('lang_v1.calculator')" type="button" class="btn btn-success btn-flat pull-right m-8 btn-sm mt-10 popover-default hidden-xs" data-toggle="popover" data-trigger="click" data-content='@include("layouts.partials.calculator")' data-html="true" data-placement="bottom">
                         <strong><i class="fa fa-calculator fa-lg" aria-hidden="true"></i></strong>
                     </button>
                  </div>
-
                  <div class="item-one">
                     <button id="btnLanguage_shortcut_dropdown"  title="@lang('languages')" type="button" class="btn btn-success dropdown-toggle btn-flat  popover-default pull-right m-8 btn-sm mt-10" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-language fa-lg"></i>

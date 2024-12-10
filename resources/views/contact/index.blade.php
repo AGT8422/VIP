@@ -14,8 +14,8 @@
     <h1> <b>@lang('lang_v1.'.$type.'s')</b>
         <small>@lang( 'contact.manage_your_contact', ['contacts' =>  __('lang_v1.'.$type.'s') ])</small>
     </h1>
-    <h5><i><b>{{ "   Contacts  >  " }} </b> {{" List Of "}} @lang('lang_v1.'.$type.'s') <b> {{"   "}} </b></i></h5>  
-	<br> 
+    @php $mainUrl = '/contacts?type='.$type  @endphp
+    <h5><i><b><a href="{{\URL::to($mainUrl)}}">{{ "   Contacts  >  " }}</a>  </b> {{" List Of "}} @lang('lang_v1.'.$type.'s') <b> {{"   "}} </b></i></h5>  
 </section>
 
 <!-- Main content -->

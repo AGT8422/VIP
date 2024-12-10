@@ -71,7 +71,7 @@
       /* margin:5px auto !important; */
     }
     .sidebar-menu>li:hover{
-      /* background-color: red; */
+      background-color: red;
       /* border-radius: 100px !important; */
       /* border:1px solid #3a3a3a33 !important; */
       margin: 10px 5px  !important; 
@@ -105,9 +105,13 @@
         /* border:1px solid #3a3a3a33; */
         margin: 10px 5px  ; 
       }
+      .sidebar-menu .treeview{
+        /* padding-bottom:10px !important;  */
+      }
       .sidebar-menu .treeview:hover{
         border:0px solid black !important;
-        background-color: #3a3a3a33 !important;
+        background-color: #3a3a3a00 !important;
+        /* padding-bottom:10px !important;  */
       }
       .sidebar-menu .treeview .active{
         /* background-color:blue; */
@@ -131,7 +135,7 @@
         color:white !important; 
       }
       .title_side_bar img{
-      margin: 15px auto  ;
+        margin: 15px auto  ;
         width: 30%;
       }
       .title_side_bar{
@@ -221,7 +225,7 @@
       /* margin:5px auto !important; */
     }
     .sidebar-menu>li:hover{
-      /* background-color: red; */
+      background-color: red;
       /* border-radius: 100px !important; */
       /* border:1px solid #3a3a3a33 !important; */
       margin: 10px 5px  !important; 
@@ -255,9 +259,13 @@
       /* border:1px solid #3a3a3a33; */
       margin: 10px 5px  ; 
     }
+    .sidebar-menu .treeview{
+      /* padding-bottom:10px !important;  */
+    }
     .sidebar-menu .treeview:hover{
       border:0px solid black !important;
-      background-color: #3a3a3a33 !important;
+      background-color: #3a3a3a00 !important;
+      /* padding-bottom:10px !important;  */
     }
     .sidebar-menu .treeview .active{
       /* background-color:blue; */
@@ -389,7 +397,7 @@
       /* margin:5px auto !important; */
     }
     .sidebar-menu>li:hover{
-              /* background-color: red; */
+              background-color: red;
         /* border-radius: 100px !important; */
         /* border:1px solid #3a3a3a33 !important; */
         margin: 10px 5px  !important; 
@@ -423,9 +431,13 @@
       border-left:0px solid transparent !important;
       /* background-color: red !important; */
      }
+    .sidebar-menu .treeview{
+      /* padding-bottom:10px !important;  */
+    }
     .sidebar-menu .treeview:hover{
       border:0px solid black !important;
-      background-color: #3a3a3a33 !important;
+      background-color: #3a3a3a00 !important;
+      /* padding-bottom:10px !important;  */
     }
     .sidebar-menu .treeview .active{
       /* background-color:blue; */
@@ -556,7 +568,7 @@
       /* margin:5px auto !important; */
     }
     .sidebar-menu>li:hover{
-      /* background-color: red; */
+      background-color: red;
       /* border-radius: 100px  !important; */
       /* border:1px solid #3a3a3a33 !important; */
       margin: 10px 5px  !important; 
@@ -590,9 +602,13 @@
       /* border:1px solid #3a3a3a33; */
       margin: 10px 5px  ; 
     }
+    .sidebar-menu .treeview{
+      /* padding-bottom:10px !important;  */
+    }
     .sidebar-menu .treeview:hover{
       border:0px solid black !important;
-      background-color: #3a3a3a33 !important;
+      background-color: #3a3a3a00 !important;
+      /* padding-bottom:10px !important;  */
     }
     .sidebar-menu .treeview .active{
       /* background-color:blue; */
@@ -685,7 +701,7 @@
   }
   @media (min-width: 900px)  and  (max-width: 1024px){
     .sidebar-menu>li:hover{
-              /* background-color: red; */
+              background-color: red;
         /* border-radius: 100px  !important; */
         /* border:1px solid #3a3a3a33 !important; */
         margin: 10px 5px  !important; 
@@ -699,9 +715,13 @@
       /* border:1px solid #3a3a3a33; */
       margin: 10px 5px  ; 
     }
+    .sidebar-menu .treeview{
+      /* padding-bottom:10px !important;  */
+    }
     .sidebar-menu .treeview:hover{
       border:0px solid black !important;
-      background-color: #3a3a3a33 !important;
+      background-color: #3a3a3a00 !important;
+      /* padding-bottom:10px !important;  */
     }
     .sidebar-menu .treeview .active{
       /* background-color:blue; */

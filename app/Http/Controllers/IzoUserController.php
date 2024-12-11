@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Auth;
 use Anhskohbo\NoCaptcha\Facades\NoCaptcha;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
+ 
+
+use Illuminate\Support\Facades\Http;
 
 
 class IzoUserController extends Controller
@@ -22,7 +25,8 @@ class IzoUserController extends Controller
 
     use AuthenticatesUsers;
 
-
+ 
+    
     /**
      * Create a new controller instance.
      *
@@ -775,9 +779,8 @@ class IzoUserController extends Controller
         DB::reconnect('mysql'); 
         
        
-
         $request->validate([
-            // 'g-recaptcha-response' => 'required|captcha',
+            'g-recaptcha-response' => 'required|captcha',
             'email'                => 'required|email',
             'mobile'               => 'required|min:7|max:9',
             // Other validation rules...
@@ -785,7 +788,22 @@ class IzoUserController extends Controller
         $data = $request->only(['company_name','email','domain_name','mobile','mobile_code','password']);
         $data['User-Agent']  = $request->header('User-Agent');
         $data['ip']          = $request->ip();
-        $save = IzoUser::saveUser($data);
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => env('NOCAPTCHA_SECRET'),
+            'response' => $request->input('g-recaptcha-response'),
+        ]);
+
+        $responseBody = json_decode($response->getBody());
+
+        if ($responseBody->success && $responseBody->score >= 0.5) {
+            // reCAPTCHA passed, handle form submission
+            $save = IzoUser::saveUser($data);
+            // return back()->with('success', 'Form submitted successfully.');
+        } else {
+            // reCAPTCHA failed
+            return back()->withErrors(['captcha' => 'reCAPTCHA verification failed.']);
+        }
+        
         if(!$save){
             return redirect('/register-account');
         }else{

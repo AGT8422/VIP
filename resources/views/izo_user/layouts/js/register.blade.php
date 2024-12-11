@@ -81,7 +81,7 @@
                                     company_name = false;
                                 } 
                             } 
-
+                            console.log('company_name '  +  company_name);
 
 
 
@@ -153,7 +153,7 @@
 
 
 
-
+                            // console.log('emails '  +  emails);
 
                         },
                         "error":function(xhr,status,error){
@@ -213,6 +213,7 @@
                                     domain_name = false;
                                 } 
                             } 
+                            // console.log('domain_name '  +  domain_name);
                         },
                         "error":function(xhr,status,error){
                             
@@ -221,7 +222,6 @@
                 },debounceDelay));
 
                 $("#mobile").on('input',debounce(function(){
-                    
                     
                     var spin    = $(this).parent().parent().find('.spinner');
                     var correct = $(this).parent().parent().find('.success-icon');
@@ -281,6 +281,7 @@
                                     mobile = true;
                                 } 
                             } 
+                            // console.log('mobile '  +  mobile);
                         },
                         "error":function(xhr,status,error){
                             
@@ -375,7 +376,7 @@
                         wrong.addClass('hide_icon');
                           
                     } 
-                    
+                    // console.log('passwords '  +  passwords);
                 },debounceDelay));
                 
                 $("#confirm-password").on('input',debounce(function(){
@@ -404,6 +405,7 @@
                             spin.addClass('hide_icon');
                             correct.addClass('hide_icon');
                             wrong.addClass('hide_icon');
+                            passwords = false;
                             confirm_passwords = false;
                         }else{
                             spin.addClass('hide_icon');
@@ -414,6 +416,7 @@
                             $("#password").css({"border": "2px solid green","color":"green"}); 
                             $('#passwordError').text('');
                             $('#passwordError').parent().find('.izo-form-input').css({"border": "2px solid green;","color":"green"});
+                            passwords = true;
                             confirm_passwords = true;
                             spin.addClass('hide_icon');
                             correct.addClass('hide_icon');
@@ -429,14 +432,16 @@
                         spin.addClass('hide_icon');
                         correct.addClass('hide_icon');
                         wrong.addClass('hide_icon');
-
+                        
                         // spin.addClass('hide_icon');
                         // wrong.removeClass('hide_icon');
                         // correct.addClass('hide_icon');
                         // wrong.find('.izo-form-input-password').css({"border": "1px solid red","color":"red"});
+                        passwords = false;
                         confirm_passwords = false;
                     } 
-                    
+                    // console.log('passwords '  +  password);
+                    // console.log('confirm_passwords '  +  confirm_passwords);
                 },debounceDelay));
                 
                 
@@ -446,7 +451,14 @@
                 $('#first_register_form').on('submit', function(e) {
                     // Prevent default form submission
                     e.preventDefault();
-
+                    // console.log(
+                    //     company_name,
+                    //     emails,
+                    //     mobile,
+                    //     domain_name,
+                    //     passwords,
+                    //     confirm_passwords,
+                    // );
                     if(company_name == true && domain_name  == true && emails == true && passwords == true && mobile == true && confirm_passwords == true ){
                         isValid = true;
                     }else{
@@ -546,7 +558,7 @@
                         wrong.addClass('hide_icon');
                     }
                     
-                    // console.log('isValid '  +  isValid);
+                    console.log('isValid '  +  isValid);
                     if (isValid) {
                         // If the form is valid, submit it
                         $(".loading").css({"display":"block"});
@@ -554,6 +566,9 @@
                     }
                 });
                 
+
+               
+
                 function validateEmail(email) {
                     const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
                     return re.test(email);
@@ -571,6 +586,34 @@
                         $("form#go-home").submit();
                     }   
                 }   
+            });
+            document.addEventListener('DOMContentLoaded', function () {
+                const selectSelected = document.querySelector('.select-selected');
+                const selectItems = document.querySelector('.select-items');
+                const mobile_code = $('#mobile_code');
+                const options = selectItems.querySelectorAll('div');
+               
+                selectSelected.addEventListener('click', function () {
+                    selectItems.classList.toggle('select-arrow-active');
+                    selectItems.style.display = selectItems.style.display === 'block' ? 'none' : 'block';
+                });
+
+                options.forEach(option => {
+                    option.addEventListener('click', function () {
+                        selectSelected.innerHTML = this.innerHTML;
+                        selectSelected.dataset.value = this.dataset.value;
+                        mobile_code.attr('value',this.dataset.value);
+                        selectItems.style.display = 'none';
+                        options.forEach(opt => opt.classList.remove('same-as-selected'));
+                        this.classList.add('same-as-selected');
+                    });
+                });
+
+                document.addEventListener('click', function (e) {
+                    if (!selectSelected.contains(e.target) && !selectItems.contains(e.target)) {
+                        selectItems.style.display = 'none';
+                    }
+                });
             });
     </script>
 @endsection

@@ -14,8 +14,8 @@ class AlterTableRecievedPreviouses1 extends Migration
     public function up()
     {
         Schema::table('recieved_previouses', function (Blueprint $table) {
-            $table->integer('transaction_deliveries_id')->unsigned();
-            $table->foreign('transaction_deliveries_id')->references('id')->on('transaction_recieveds')->onDelete('cascade');
+            // $table->integer('transaction_deliveries_id')->unsigned();
+            // $table->foreign('transaction_deliveries_id')->references('id')->on('transaction_recieveds')->onDelete('cascade');
         });
     }
 

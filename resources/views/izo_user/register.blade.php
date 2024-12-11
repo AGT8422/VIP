@@ -15,6 +15,8 @@
     $padding_right       = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? '130px' : 'initial';
     $left_mobile         = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '20px';
     $right_mobile        = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? '20px' : 'initial';
+    $before_left_mobile  = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '4px';
+    $before_right_mobile = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? '4px' : 'initial';
 @endphp
 @section('content')
     @section('app_css')
@@ -151,6 +153,87 @@
                 font-size: 20px;
                 font-weight: bolder;
             /* } */  
+            .custom-select {
+            position: absolute;
+            display: inline-block;
+            width: 20%;
+            top:16px;
+            left:{{$left_mobile}};
+            right:{{$right_mobile}};
+            font-size: 17px; 
+        }
+        .select-selected .text_flag{
+            display: none;
+        }
+        .select-selected {
+            background-color: #f9f9f900;
+            border: 1px solid #dddddd00;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            font-size: 14px;
+            height: 30px;
+            align-items: center;
+        }
+        .select-selected::after {
+            content: "";
+            position: absolute;
+            top: 14px;
+            right: {{$before_left_mobile}};
+            left: {{$before_right_mobile}};
+            border: 4px solid transparent;
+            border-color: #000 transparent transparent transparent;
+        }
+        .select-selected.select-arrow-active::after {
+            border-color: transparent transparent #000 transparent;
+            top: 7px;
+        }
+        .select-items  .flag-icon {
+            width: 32px !important;
+            height: 32px !important;
+        }
+        .select-items {
+            position: absolute;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            width: 100%;
+            z-index: 99;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            font-size: 10px ;
+        }
+        .select-items div {
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        .select-items div:hover {
+            background-color: #ddd;
+        }
+        .same-as-selected {
+            background-color: #ddd;
+        }
+            .flag-container {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .flag-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .flag-icon {
+                margin :0% 5px ; 
+                width: 22px;
+                height: 22px;
+            }
+            .logo-style{                      
+                margin: 15px auto  ;
+                width: 30%;
+            }
             .sign-up-box a{
                         color: #0c0c0c !important;
                 }
@@ -244,7 +327,7 @@
                 border-radius: 10px;
                 padding: 10px 30px;
                 height: auto;
-                transform: translateY(15%);
+                transform: translateY(10%);
                 background: rgba(93, 237, 9, 0); 
                 display: flex;
                 justify-content: center;
@@ -1251,7 +1334,43 @@
 
             }
             $subdomain = $subdomain; 
-       
+            
+            $list_of_code = [
+                "+1"       => '<span class="flag-icon flag-icon-us"></span><span>United States (+1)</span>',
+                "+44"      => '<span class="flag-icon flag-icon-gb"></span><span>United Kingdom (+44)</span>',
+                "+49"      => '<span class="flag-icon flag-icon-de"></span><span>Germany (+49)</span>',
+                "+33"      => '<span class="flag-icon flag-icon-fr"></span><span>France (+33)</span>',
+                "+971"     => '<span class="flag-icon flag-icon-ae"></span><span>United Arab Emirates (+971)</span>',
+                "+61"      => '<span class="flag-icon flag-icon-au"></span><span>Australia (+61)</span>',
+                "+81"      => '<span class="flag-icon flag-icon-jp"></span><span>Japan (+81)</span>',
+                "+93"      => '<span class="flag-icon flag-icon-af"></span><span>Afghanistan (+93)</span>',
+                "+355"     => '<span class="flag-icon flag-icon-al"></span><span>Albania (+355)</span>',
+                "+213"     => '<span class="flag-icon flag-icon-dz"></span><span>Algeria (+213)</span>',
+                "+376"     => '<span class="flag-icon flag-icon-ad"></span><span>Andorra (+376)</span>',
+                "+244"     => '<span class="flag-icon flag-icon-ao"></span><span>Angola (+244)</span>',
+                "+54"      => '<span class="flag-icon flag-icon-ar"></span><span>Argentina (+54)</span>',
+                "+374"     => '<span class="flag-icon flag-icon-am"></span><span>Armenia (+374)</span>',
+                "+61"      => '<span class="flag-icon flag-icon-au"></span><span>Australia (+61)</span>',
+                "+43"      => '<span class="flag-icon flag-icon-at"></span><span>Austria (+43)</span>',
+                "+994"     => '<span class="flag-icon flag-icon-az"></span><span>Azerbaijan (+994)</span>',
+                "+1-242"   => '<span class="flag-icon flag-icon-bs"></span><span>Bahamas (+1-242)</span>',
+                "+973"     => '<span class="flag-icon flag-icon-bh"></span><span>Bahrain (+973)</span>',
+                "+880"     => '<span class="flag-icon flag-icon-bd"></span><span>Bangladesh (+880)</span>',
+                "+1-246"   => '<span class="flag-icon flag-icon-bb"></span><span>Barbados (+1-246)</span>',
+                "+375"     => '<span class="flag-icon flag-icon-by"></span><span>Belarus (+375)</span>',
+                "+32"      => '<span class="flag-icon flag-icon-be"></span><span>Belgium (+32)</span>',
+                "+501"     => '<span class="flag-icon flag-icon-bz"></span><span>Belize (+501)</span>',
+                "+229"     => '<span class="flag-icon flag-icon-bj"></span><span>Benin (+229)</span>',
+                "+975"     => '<span class="flag-icon flag-icon-bt"></span><span>Bhutan (+975)</span>',
+                "+591"     => '<span class="flag-icon flag-icon-bo"></span><span>Bolivia (+591)</span>',
+                "+387"     => '<span class="flag-icon flag-icon-ba"></span><span>Bosnia and Herzegovina (+387)</span>',
+                "+267"     => '<span class="flag-icon flag-icon-bw"></span><span>Botswana (+267)</span>',
+                "+55"      => '<span class="flag-icon flag-icon-br"></span><span>Brazil (+55)</span>',
+                "+673"     => '<span class="flag-icon flag-icon-bn"></span><span>Brunei (+673)</span>' ,
+                "+359"     => '<span class="flag-icon flag-icon-bg"></span><span>Bulgaria (+359)</span>',
+                "+226"     => '<span class="flag-icon flag-icon-bf"></span><span>Burkina Faso (+226)</span>',
+                "+257"     => '<span class="flag-icon flag-icon-bi"></span><span>Burundi (+257)</span>' 
+            ];
             
         @endphp
         <div class="loading">
@@ -1276,6 +1395,10 @@
             <div class="row childbox">
                 {{-- <div class=""> --}}
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 left_form_first_login">
+                        <div class="col-xl-12 col-md-12 text-center" style="text-transform: uppercase;background-color:#fff;font-weight:bolder;">
+                            <img class="logo-style"  src="{{asset('logo.png')}}" alt="logo">                            
+                        </div> 
+                        <br>
                         <div class="col-xl-12 col-md-12 text-left" style=" text-transform: capitalize;font-weight:bolder;font-family:Georgia, 'Times New Roman', Times, serif;">
                             <h3  style="font-weight:600 ;color:#666666fd;font-family:Georgia, 'Times New Roman', Times, serif;">{{__("izo.register_now")}}</h3>
                             <small style="font-weight:600 ;color:#666666fd;font-family:Georgia, 'Times New Roman', Times, serif;">
@@ -1313,7 +1436,155 @@
                                     <i class="fas fa-check success-icon hide_icon"></i>
                                     <i class="fa fa-times-circle hide_icon"></i>
                                     <div class="izo-group-form">
-                                        {!! Form::select('mobile_code',['+971'=>' +971'],null,['class' => 'izo-form-input-mobile',  'id'=>'mobile_code' , 'style' => 'font-size:13px;position:absolute;right:'.$right_mobile.' !important;left:'.$left_mobile.' !important;top:5px;width:20%'  ]) !!}
+                                        {{-- <select name="mobile_code" id="mobile_code" class="izo-form-input-mobile" style="font-size:13px;position:absolute;right:{{$right_mobile}} !important;left:{{$left_mobile}} !important;top:5px;width:20%">
+                                             
+                                                <option value="+1"    class="country-option"> <span class="flag-icon flag-icon-us"></span><span>United States (+1)</span></option>
+                                                <option value="+44"   class="country-option"> <span class="flag-icon flag-icon-gb"></span><span>United Kingdom (+44)</span></option>
+                                                <option value="+49"   class="country-option"> <span class="flag-icon flag-icon-de"></span><span>Germany (+49)</span></option>
+                                                <option value="+33"   class="country-option"> <span class="flag-icon flag-icon-fr"></span><span>France (+33)</span></option>
+                                                <option value="+971"  class="country-option"> <span class="flag-icon flag-icon-ae"></span><span>United Arab Emirates (+971)</span></option>
+                                                <option value="+61"   class="country-option"> <span class="flag-icon flag-icon-au"></span><span>Australia (+61)</span></option>
+                                                <option value="+81"   class="country-option"> <span class="flag-icon flag-icon-jp"></span><span>Japan (+81)</span></option>
+                                                <option value="+93"   class="country-option"> <span class="flag-icon flag-icon-af"></span><span>Afghanistan (+93)</span></option>
+                                                <option value="+355"  class="country-option"> <span class="flag-icon flag-icon-al"></span><span>Albania (+355)</span></option>
+                                                <option value="+213"  class="country-option"> <span class="flag-icon flag-icon-dz"></span><span>Algeria (+213)</span></option>
+                                                <option value="+376"  class="country-option"> <span class="flag-icon flag-icon-ad"></span><span>Andorra (+376)</span></option>
+                                                <option value="+244"  class="country-option"> <span class="flag-icon flag-icon-ao"></span><span>Angola (+244)</span></option>
+                                                <option value="+54"   class="country-option"> <span class="flag-icon flag-icon-ar"></span><span>Argentina (+54)</span></option>
+                                                <option value="+374"  class="country-option"> <span class="flag-icon flag-icon-am"></span><span>Armenia (+374)</span></option>
+                                                <option value="+61"   class="country-option"> <span class="flag-icon flag-icon-au"></span><span>Australia (+61)</span></option>
+                                                <option value="+43"   class="country-option"> <span class="flag-icon flag-icon-at"></span><span>Austria (+43)</span></option>
+                                                <option value="+994"  class="country-option"> <span class="flag-icon flag-icon-az"></span><span>Azerbaijan (+994)</span></option>
+                                                <option value="+1-242" class="country-option"><span class="flag-icon flag-icon-bs"></span><span>Bahamas (+1-242)</span></option>
+                                                <option value="+973"  class="country-option"> <span class="flag-icon flag-icon-bh"></span><span>Bahrain (+973)</span></option>
+                                                <option value="+880"  class="country-option"> <span class="flag-icon flag-icon-bd"></span><span>Bangladesh (+880)</span></option>
+                                                <option value="+1-246" class="country-option"><span class="flag-icon flag-icon-bb"></span><span>Barbados (+1-246)</span></option>
+                                                <option value="+375"  class="country-option"> <span class="flag-icon flag-icon-by"></span><span>Belarus (+375)</span></option>
+                                                <option value="+32"   class="country-option"> <span class="flag-icon flag-icon-be"></span><span>Belgium (+32)</span></option>
+                                                <option value="+501"  class="country-option"> <span class="flag-icon flag-icon-bz"></span><span>Belize (+501)</span></option>
+                                                <option value="+229"  class="country-option"> <span class="flag-icon flag-icon-bj"></span><span>Benin (+229)</span></option>
+                                                <option value="+975"  class="country-option"> <span class="flag-icon flag-icon-bt"></span><span>Bhutan (+975)</span></option>
+                                                <option value="+591"  class="country-option"> <span class="flag-icon flag-icon-bo"></span><span>Bolivia (+591)</span></option>
+                                                <option value="+387"  class="country-option"> <span class="flag-icon flag-icon-ba"></span><span>Bosnia and Herzegovina (+387)</span></option>
+                                                <option value="+267"  class="country-option"> <span class="flag-icon flag-icon-bw"></span><span>Botswana (+267)</span></option>
+                                                <option value="+55"   class="country-option"> <span class="flag-icon flag-icon-br"></span><span>Brazil (+55)</span></option>
+                                                <option value="+673"  class="country-option"> <span class="flag-icon flag-icon-bn"></span><span>Brunei (+673)</span></option>,
+                                                <option value="+359"  class="country-option"> <span class="flag-icon flag-icon-bg"></span><span>Bulgaria (+359)</span></option>
+                                                <option value="+226"  class="country-option"> <span class="flag-icon flag-icon-bf"></span><span>Burkina Faso (+226)</span></option>
+                                                <option value="+257"  class="country-option"> <span class="flag-icon flag-icon-bi"></span><span>Burundi (+257)</span></option>
+                                        </select> --}}
+                                        <input type="text" hidden id="mobile_code" name="mobile_code" value="+971">
+                                        <div class="custom-select">
+                                            <div class="select-selected">
+                                                <span class="flag-icon flag-icon-ae"></span><span><span class="text_flag">United Arab Emirates</span> (+971)</span>
+                                            </div>
+                                            <div class="select-items">
+                                                <div data-value="+971">
+                                                    <span class="flag-icon flag-icon-ae"></span><span><span class="text_flag">United Arab Emirates</span> (+971)</span>
+                                                </div>
+                                                <div data-value="+1">
+                                                    <span class="flag-icon flag-icon-us"></span><span><span class="text_flag">United States</span> (+1)</span>
+                                                </div>
+                                                <div data-value="+44">
+                                                    <span class="flag-icon flag-icon-gb"></span><span><span class="text_flag">United Kingdom</span> (+44)</span>
+                                                </div>
+                                                <div data-value="+49">
+                                                    <span class="flag-icon flag-icon-de"></span><span><span class="text_flag">Germany</span> (+49)</span>
+                                                </div>
+                                                <div data-value="+33">
+                                                    <span class="flag-icon flag-icon-fr"></span><span><span class="text_flag">France</span> (+33)</span>
+                                                </div>
+                                                <div data-value="+61">
+                                                    <span class="flag-icon flag-icon-au"></span><span><span class="text_flag">Australia</span> (+61)</span>
+                                                </div>
+                                                <div data-value="+81">
+                                                    <span class="flag-icon flag-icon-jp"></span><span><span class="text_flag">Japan</span> (+81)</span>
+                                                </div>
+                                                <div data-value="+93">
+                                                    <span class="flag-icon flag-icon-af"></span><span><span class="text_flag">Afghanistan</span> (+93)</span> 
+                                                </div>
+                                                <div data-value="+355">
+                                                    <span class="flag-icon flag-icon-al"></span><span><span class="text_flag">Albania</span> (+355)</span>  
+                                                </div>
+                                                <div data-value="+213">
+                                                    <span class="flag-icon flag-icon-dz"></span><span><span class="text_flag">Algeria</span> (+213)</span>  
+                                                </div>
+                                                <div data-value="+376">
+                                                    <span class="flag-icon flag-icon-ad"></span><span><span class="text_flag">Andorra</span> (+376)</span>   
+                                                </div>
+                                                <div data-value="+244">
+                                                    <span class="flag-icon flag-icon-ao"></span><span><span class="text_flag">Angola</span> (+244)</span>  
+                                                </div>
+                                                <div data-value="+54">
+                                                    <span class="flag-icon flag-icon-ar"></span><span><span class="text_flag">Argentina</span> (+54)</span>  
+                                                </div>
+                                                <div data-value="+374">
+                                                    <span class="flag-icon flag-icon-am"></span><span><span class="text_flag">Armenia</span> (+374)</span>  
+                                                </div>
+                                                <div data-value="+61">
+                                                    <span class="flag-icon flag-icon-au"></span><span><span class="text_flag">Australia</span> (+61)</span>  
+                                                </div>
+                                                <div data-value="+43">
+                                                    <span class="flag-icon flag-icon-at"></span><span><span class="text_flag">Austria</span> (+43)</span>    
+                                                </div>
+                                                <div data-value="+994">
+                                                    <span class="flag-icon flag-icon-az"></span><span><span class="text_flag">Azerbaijan</span> (+994)</span>  
+                                                </div>
+                                                <div data-value="+1-242">
+                                                    <span class="flag-icon flag-icon-bs"></span><span><span class="text_flag">Bahamas</span> (+1-242)</span>  
+                                                </div>
+                                                <div data-value="+973">
+                                                    <span class="flag-icon flag-icon-bh"></span><span><span class="text_flag">Bahrain</span> (+973)</span>  
+                                                </div>
+                                                <div data-value="+880">
+                                                    <span class="flag-icon flag-icon-bd"></span><span><span class="text_flag">Bangladesh</span> (+880)</span>  
+                                                </div>
+                                                <div data-value="+1-246">
+                                                    <span class="flag-icon flag-icon-bb"></span><span><span class="text_flag">Barbados</span> (+1-246)</span>  
+                                                </div>
+                                                <div data-value="+375">
+                                                    <span class="flag-icon flag-icon-by"></span><span><span class="text_flag">Belarus</span> (+375)</span>  
+                                                </div>
+                                                <div data-value="+32">
+                                                    <span class="flag-icon flag-icon-be"></span><span><span class="text_flag">Belgium</span> (+32)</span>  
+                                                </div>
+                                                <div data-value="+501">
+                                                    <span class="flag-icon flag-icon-bz"></span><span><span class="text_flag">Belize</span> (+501)</span> 
+                                                </div>
+                                                <div data-value="+229">
+                                                    <span class="flag-icon flag-icon-bj"></span><span><span class="text_flag">Benin</span> (+229)</span>  
+                                                </div>
+                                                <div data-value="+975">
+                                                    <span class="flag-icon flag-icon-bt"></span><span><span class="text_flag">Bhutan</span> (+975)</span>  
+                                                </div>
+                                                <div data-value="+591">
+                                                    <span class="flag-icon flag-icon-bo"></span><span><span class="text_flag">Bolivia</span> (+591)</span>  
+                                                </div>
+                                                <div data-value="+387">
+                                                    <span class="flag-icon flag-icon-ba"></span><span><span class="text_flag">Bosnia and Herzegovina</span> (+387)</span> 
+                                                </div>
+                                                <div data-value="+267"> 
+                                                    <span class="flag-icon flag-icon-bw"></span><span><span class="text_flag">Botswana</span> (+267)</span>  
+                                                </div>
+                                                <div data-value="+55"> 
+                                                    <span class="flag-icon flag-icon-br"></span><span><span class="text_flag">Brazil</span> (+55)</span> 
+                                                </div>
+                                                <div data-value="+673"> 
+                                                    <span class="flag-icon flag-icon-bn"></span><span><span class="text_flag">Brunei</span> (+673)</span>  
+                                                </div>
+                                                <div data-value="+359"> 
+                                                    <span class="flag-icon flag-icon-bg"></span><span><span class="text_flag">Bulgaria</span> (+359)</span> 
+                                                </div>
+                                                <div data-value="+226"> 
+                                                    <span class="flag-icon flag-icon-bf"></span><span><span class="text_flag">Burkina Faso</span> (+226)</span> 
+                                                </div>
+                                                <div data-value="+257"> 
+                                                    <span class="flag-icon flag-icon-bi"></span><span><span class="text_flag">Burundi</span> (+257)</span> 
+                                                </div>
+                                                <!-- Add more countries as needed -->
+                                            </div>
+                                        </div>
+                                        {{-- {!! Form::select('mobile_code',$list_of_code,null,['class' => 'izo-form-input-mobile',  'id'=>'mobile_code' , 'style' => 'font-size:13px;position:absolute;right:'.$right_mobile.' !important;left:'.$left_mobile.' !important;top:5px;width:20%'  ]) !!} --}}
                                         {!! Form::number('mobile',null,['class' => 'izo-form-input',  'id'=>'mobile' ,'data-max' => "9" , 'min'=>0,'max'=>9999999999 ,'style' => 'padding-left:'.$padding_left.';padding-right:'.$padding_right.';width:100%' , 'placeholder' => __('00 0000 000')  ]) !!}
                                     </div>
                                     <span class="error" id="mobileError"></span>
@@ -1324,7 +1595,7 @@
                                     @endif
                                 </div>
                                 
-                            <div class="col-xl-12 col-md-12 field_icon_domain " dir="ltr">
+                            <div class="col-xl-12 col-md-12 field_icon_domain" dir="ltr">
                                 <i class="fas fa-spinner fa-spin spinner hide_icon"></i>
                                 <i class="fas fa-check success-icon hide_icon"></i>
                                 <i class="fa fa-times-circle hide_icon"></i>
@@ -1394,6 +1665,8 @@
                         
                         
                     </div>
+                     
+                     
                 {{-- </div> --}}
             </div>
         </div>

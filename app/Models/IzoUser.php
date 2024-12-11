@@ -152,7 +152,7 @@ class IzoUser extends Model
             
             // More headers
             $headers .= 'From: <alhamwi.agt@gmail.com>' . "\r\n";
-            mail($to,$subject,$message,$headers) ;
+            // mail($to,$subject,$message,$headers) ;
 
             return true;
         }catch(Exception $e){

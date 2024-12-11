@@ -1378,7 +1378,7 @@
                 <h1>IZO <small>waiting.....</small></h1>
             </div>
         </div>
-        <form hidden action="https://localhost:8000/register-account" id="go-home" method="GET">
+        <form hidden action="https://izocloud.com/register-account" id="go-home" method="GET">
             <button id="go_home"  type="submit">Go Home</button>
         </form>
         <div class="language_box">

@@ -33,7 +33,7 @@ return [
     'google' => [
         'client_id'     => "590924719831-50pb6rvat4p8n45rue9jr675h0m2gjku.apps.googleusercontent.com",
         'client_secret' => "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",
-        'redirect'      => "http://localhost:8000/auth/google/callback",
+        'redirect'      => "https://www.izocloud.com/auth/google/callback",
     ],
 
     'stripe' => [

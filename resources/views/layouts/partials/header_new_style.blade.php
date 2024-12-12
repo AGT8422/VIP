@@ -4,8 +4,9 @@
     $right =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '10%'  ;
     $left  =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '10%' : 'initial'  ;
     $txt   =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'left' : 'right'  ;
+    $border_left  = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl'))) ? '0px' : '5px';
+    $border_right   = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl'))) ? '5px' : '0px';
 @endphp
-
 <style>
     #header_shortcut_dropdown i{
         color:#ec8608;
@@ -82,7 +83,8 @@
     .content-header{
         color:black !important;
         padding: 10px !important;
-        border-left:5px solid #3a3a3a !important;
+        border-left:{{$border_left}} solid #3a3a3a !important;
+        border-right:{{$border_right}} solid #3a3a3a !important;
         box-shadow: 0px 0px 10px #3a3a3a33 !important;
         margin: 0px 1% !important;
     }
@@ -177,7 +179,8 @@
         .content-header{
             color:black !important;
             padding: 10px !important;
-            border-left:5px solid #3a3a3a !important;
+            border-left:{{$border_left}} solid #3a3a3a !important;
+            border-right:{{$border_right}} solid #3a3a3a !important;
             box-shadow: 0px 0px 10px #3a3a3a33 !important;
             margin: 0px 1% !important;
         }
@@ -274,7 +277,8 @@
         .content-header{
             color:black !important;
             padding: 10px !important;
-            border-left:5px solid #3a3a3a !important;
+            border-left:{{$border_left}} solid #3a3a3a !important;
+            border-right:{{$border_right}} solid #3a3a3a !important;
             box-shadow: 0px 0px 10px #3a3a3a33 !important;
             margin: 0px 1% !important;
         }
@@ -371,7 +375,8 @@
         .content-header{
             color:black !important;
             padding: 10px !important;
-            border-left:5px solid #3a3a3a !important;
+            border-left:{{$border_left}} solid #3a3a3a !important;
+            border-right:{{$border_right}} solid #3a3a3a !important;
             box-shadow: 0px 0px 10px #3a3a3a33 !important;
             margin: 0px 1% !important;
         }
@@ -468,7 +473,8 @@
         .content-header{
             color:black !important;
             padding: 10px !important;
-            border-left:5px solid #3a3a3a !important;
+            border-left:{{$border_left}} solid #3a3a3a !important;
+            border-right:{{$border_right}} solid #3a3a3a !important;
             box-shadow: 0px 0px 10px #3a3a3a33 !important;
             margin: 0px 1% !important;
         }

@@ -5,7 +5,10 @@
 @endif
 
 @yield('css')
-
+@php
+	$border_right  = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl'))) ? '0px' : '3px';
+	$border_left   = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl'))) ? '3px' : '0px';
+@endphp
 <!-- app css -->
 <link rel="stylesheet" href="{{ asset('css/app.css?v='.$asset_v) }}">
 
@@ -118,13 +121,14 @@
 		box-shadow: 0px 0px 10px #3a3a3a33 !important;
 		border-top-color:transparent !important;
 		border-top:0px solid transparent !important;
-		border-left:3px solid transparent !important;
+		border-left:{{$border_left}} solid transparent !important;
+		border-right:{{$border_right}} solid transparent !important;
 	}
 	.content-header h5 b{
 		cursor: pointer !important;
 		color:#ec6808 !important;
 	}
-	.dataTable thead tr th{
+	.table thead tr th{
 		background-color: #000000fd !important;
 		border:1px solid #00000033 !important;
 		border-top:1px solid #3a3a3a33 !important;

@@ -1305,6 +1305,22 @@ class HomeController extends Controller
     public function changeLanguageApp(Request $request){
         try{
 
+            if(request()->ajax()){
+                $i    = request()->input('lang'); 
+                DB::beginTransaction();
+                session(["lang"=>$i]);
+                \App::getLocale($i);
+                Artisan::call('cache:clear');
+                Artisan::call('view:clear');
+                Artisan::call('route:clear');
+                Artisan::call('config:clear');
+                DB::commit();
+                $output = [
+                    'success' => true,
+                    'msg' => __('lang_v1.success')
+                ];
+                return $output;
+            }
             DB::beginTransaction();
             $i                    = request()->input('lang'); 
             session(["lang"=>$i]);

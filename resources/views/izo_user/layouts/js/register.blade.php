@@ -51,7 +51,7 @@
                                 correct.addClass('hide_icon');
                                 wrong.removeClass('hide_icon');
                                 wrong.parent().find('.izo-form-input').css({"border":"2px solid red","color":"red"});
-                                wrong.parent().find('.error').html('already exist');
+                                wrong.parent().find('.error').html("{!!__('izo.already_exist')!!}");
                                 wrong.addClass('hide_icon');
                                 company_name = true;
                             }else{
@@ -62,7 +62,7 @@
                                         correct.addClass('hide_icon');
                                         wrong.removeClass('hide_icon');
                                         wrong.parent().find('.izo-form-input').css({"border":"2px solid red","color":"red"});
-                                        wrong.parent().find('.error').html('Please should be at least 3 characters');
+                                        wrong.parent().find('.error').html("{!!__('izo.desc_company')!!}");
                                         wrong.addClass('hide_icon');
                                         company_name = false;
                                     }else{
@@ -120,7 +120,7 @@
                                 correct.addClass('hide_icon');
                                 wrong.removeClass('hide_icon');
                                 wrong.parent().find('.izo-form-input').css({"border":"2px solid red","color":"red"});
-                                wrong.parent().find('.error').html('already exist');
+                                wrong.parent().find('.error').html("{!!__('izo.already_exist')!!}");
                                 emails = false;
                                 wrong.addClass('hide_icon');
                             }else{
@@ -131,7 +131,7 @@
                                             wrong.removeClass('hide_icon');
                                             wrong.parent().find('.izo-form-input').css({"border":"2px solid red","color":"red"});
                                             emails = false;
-                                            wrong.parent().find('.error').html('invaild email');
+                                            wrong.parent().find('.error').html("{!!__('izo.desc_email')!!}");
                                             wrong.addClass('hide_icon');
                                         }else{
                                             spin.addClass('hide_icon');
@@ -181,7 +181,7 @@
                         "data":{domain_name:$(this).val()},
                         "success":function(data){ 
                             if(data.message === false && value != ""){
-                                $('#domainError').text('Domain Name is already used.');
+                                $('#domainError').html("{!!__('izo.desc_domain')!!}");
                                 $('#domainError').parent().find('.izo-form-input').css({"border": "2px solid red","color":"red"});
                                 spin.addClass('hide_icon');
                                 correct.addClass('hide_icon');
@@ -195,7 +195,7 @@
                                         correct.addClass('hide_icon');
                                         wrong.removeClass('hide_icon');
                                         wrong.parent().find('.izo-form-input').css({"border":"2px solid red","color":"red"});
-                                        wrong.parent().find('.error').html('Please should be at least 3 characters');
+                                        wrong.parent().find('.error').html("{!!__('izo.desc_company')!!}");
                                         wrong.addClass('hide_icon');
                                         company_name = false;
                                     }else{
@@ -259,7 +259,7 @@
                                         wrong.removeClass('hide_icon');
                                         correct.addClass('hide_icon');
                                         // wrong.parent().find('.izo-form-input-mobile').css({"border": "2px solid red","color":"red"}); 
-                                        $('#mobileError').text('Must be less than or equal to '+parseFloat(max)+' number.');
+                                        $('#mobileError').html("{!!__('izo.desc_number')!!}"+parseFloat(max)+" {!!__('izo.desc_number_num')!!}");
                                         $('#mobileError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                                         spin.addClass('hide_icon');
                                         correct.addClass('hide_icon');
@@ -308,7 +308,7 @@
                             wrong.removeClass('hide_icon');
                             correct.addClass('hide_icon');
                             wrong.parent().find('.izo-form-input-password').css({"border": "2px solid red","color":"red"}); 
-                            $('#passwordError').text('Password must Contain at Letter .');
+                            $('#passwordError').html();
                             $('#passwordError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                             passwords = false;
                             spin.addClass('hide_icon');
@@ -319,7 +319,7 @@
                             wrong.removeClass('hide_icon');
                             correct.addClass('hide_icon');
                             wrong.parent().find('.izo-form-input-password').css({"border": "2px solid red","color":"red"}); 
-                            $('#passwordError').text('Password must Contain at least One Capital Letter .');
+                            $('#passwordError').html("{!!__('izo.desc_password')!!}");
                             $('#passwordError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                             passwords = false;
                             spin.addClass('hide_icon');
@@ -330,7 +330,7 @@
                             wrong.removeClass('hide_icon');
                             correct.addClass('hide_icon');
                             wrong.parent().find('.izo-form-input-password').css({"border": "2px solid red","color":"red"}); 
-                            $('#passwordError').text('Password must Contain at least One Number .');
+                            $('#passwordError').html("{!!__('izo.desc_password')!!}");
                             $('#passwordError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                             passwords = false;
                             spin.addClass('hide_icon');
@@ -342,10 +342,10 @@
                                 wrong.removeClass('hide_icon');
                                 correct.addClass('hide_icon');
                                 wrong.parent().find('.izo-form-input-password').css({"border": "2px solid red","color":"red"}); 
-                                $('#passwordError').text('Don\'t Match .');
+                                $('#passwordError').html("");
                                 $('#passwordError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                                 $("#confirm-password").css({"border": "2px solid red","color":"red"});  
-                                $('#passwordConfirmError').text('Don\'t Match .');
+                                $('#passwordConfirmError').html("{!!__('izo.desc_not_match')!!}");
                                 $('#passwordConfirmError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                                 passwords = false;
                                 spin.addClass('hide_icon');
@@ -368,7 +368,7 @@
                         wrong.removeClass('hide_icon');
                         correct.addClass('hide_icon');
                         wrong.parent().find('.izo-form-input-password').css({"border": "2px solid red","color":"red"});
-                        $('#passwordError').text('Password must be at least 6 characters.');
+                        $('#passwordError').html("{!!__('izo.desc_password')!!}");
                         $('#passwordError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                         passwords = false;
                         spin.addClass('hide_icon');
@@ -397,10 +397,10 @@
                             wrong.removeClass('hide_icon');
                             correct.addClass('hide_icon');
                             wrong.parent().find('.izo-form-input-password').css({"border": "2px solid red","color":"red"}); 
-                            $('#passwordConfirmError').text('Password Dosn\'t match.');
+                            $('#passwordConfirmError').html("{!!__('izo.desc_not_match')!!}");
                             $('#passwordConfirmError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                             $("#password").css({"border": "2px solid red","color":"red"});  
-                            $('#passwordError').text('Don\'t Match .');
+                            $('#passwordError').html("{!!__('izo.desc_not_match')!!}");
                             $('#passwordError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                             spin.addClass('hide_icon');
                             correct.addClass('hide_icon');
@@ -427,7 +427,7 @@
                         wrong.removeClass('hide_icon');
                         correct.addClass('hide_icon');
                         wrong.parent().find('.izo-form-input-password').css({"border": "2px solid red","color":"red"}); 
-                        $('#passwordConfirmError').text('Password must be at least 6 characters.');
+                        $('#passwordConfirmError').html("{!!__('izo.desc_not_match')!!}");
                         $('#passwordConfirmError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                         spin.addClass('hide_icon');
                         correct.addClass('hide_icon');
@@ -461,19 +461,19 @@
                     // );
                     if(company_name == true && domain_name  == true && emails == true && passwords == true && mobile == true && confirm_passwords == true ){
                         isValid = true;
+                        $('.error').text('');
                     }else{
                         isValid = false;
                     }
 
                     // Clear previous errors
-                    $('.error').text('');
                     // Validate form fields
                     const name     = $('#company_name').val().trim();
                     const email    = $('#email').val().trim();
                     const password = $('#password').val().trim();
                     
                     if (name === '') {
-                        $('#nameError').text('Name is required.');
+                        $('#nameError').html("{!!__('izo.desc_company_require')!!}");
                         $('#nameError').parent().find('.izo-form-input').css({"border": "2px solid red","color":"red"});
                         var spin    = $('#nameError').parent().find('.spinner');
                         var correct = $('#nameError').parent().find('.success-icon');
@@ -485,7 +485,7 @@
                     }
                     
                     if (email === '') {
-                        $('#emailError').text('Email is required.');
+                        $('#emailError').html("{!!__('izo.desc_email_require')!!}");
                         $('#emailError').parent().find('.izo-form-input').css({"border": "2px solid red","color":"red"});
                         var spin    = $('#emailError').parent().find('.spinner');
                         var correct = $('#emailError').parent().find('.success-icon');
@@ -495,7 +495,7 @@
                         correct.addClass('hide_icon');
                         wrong.addClass('hide_icon');
                     } else if (!validateEmail(email)) {
-                        $('#emailError').text('Invalid email format.');
+                        $('#emailError').html("{!!__('izo.desc_email')!!}");
                         $('#emailError').parent().find('.izo-form-input').css({"border": "2px solid red","color":"red"});
                         var spin    = $('#emailError').parent().find('.spinner');
                         var correct = $('#emailError').parent().find('.success-icon');
@@ -507,7 +507,7 @@
                     }
                      
                     if (password === '') {
-                        $('#passwordError').text('Password is required.');
+                        $('#passwordError').html("{!!__('izo.desc_password_require')!!}");
                         $('#passwordError').parent().find('.izo-form-input').css({"border": "2px solid red","color":"red"});
                         var spin    = $('#passwordError').parent().find('.spinner');
                         var correct = $('#passwordError').parent().find('.success-icon');
@@ -517,7 +517,7 @@
                         correct.addClass('hide_icon');
                         wrong.addClass('hide_icon');
                     } else if (password.length <  6) {
-                        $('#passwordError').text('Password must be at least 6 characters.');
+                        $('#passwordError').html("{!!__('izo.desc_password')!!}");
                         $('#passwordError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                         var spin    = $('#passwordError').parent().find('.spinner');
                         var correct = $('#passwordError').parent().find('.success-icon');
@@ -527,7 +527,7 @@
                         correct.addClass('hide_icon');
                         wrong.addClass('hide_icon');
                     } else if(!/[a-z]/.test(password)){
-                        $('#passwordError').text('Password must Contain at Letter .');
+                        $('#passwordError').html("{!!__('izo.desc_password')!!}");
                         $('#passwordError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                         var spin    = $('#passwordError').parent().find('.spinner');
                         var correct = $('#passwordError').parent().find('.success-icon');
@@ -537,7 +537,7 @@
                         correct.addClass('hide_icon');
                         wrong.addClass('hide_icon');
                     } else if(!/[A-Z]/.test(password)){
-                        $('#passwordError').text('Password must Contain at least One Capital Letter .');
+                        $('#passwordError').html("{!!__('izo.desc_password')!!}");
                         $('#passwordError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                         var spin    = $('#passwordError').parent().find('.spinner');
                         var correct = $('#passwordError').parent().find('.success-icon');
@@ -547,7 +547,7 @@
                         correct.addClass('hide_icon');
                         wrong.addClass('hide_icon');
                     } else if(!/[0-9]/.test(password)){
-                        $('#passwordError').text('Password must Contain at least One Number .');
+                        $('#passwordError').html("{!!__('izo.desc_password')!!}");
                         $('#passwordError').parent().find('.izo-form-input').css({"border": "2px solid red;","color":"red"});
                         var spin    = $('#passwordError').parent().find('.spinner');
                         var correct = $('#passwordError').parent().find('.success-icon');
@@ -588,6 +588,22 @@
                 }   
             });
             document.addEventListener('DOMContentLoaded', function () {
+                
+                const togglePassword = document.querySelector('#togglePassword');
+                const password = document.querySelector('#password');
+                const confirm_password = document.querySelector('#confirm-password');
+
+                togglePassword.addEventListener('click', function () {
+                    // Toggle the type attribute using getAttribute() and setAttribute()
+                    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                    const confirm_type = confirm_password.getAttribute('type') === 'password' ? 'text' : 'password';
+                    password.setAttribute('type', type);
+                    confirm_password.setAttribute('type', confirm_type);
+
+                    // Toggle the eye icon
+                    this.classList.toggle('eye-icon--active');
+                });
+                
                 const selectSelected = document.querySelector('.select-selected');
                 const selectItems = document.querySelector('.select-items');
                 const mobile_code = $('#mobile_code');

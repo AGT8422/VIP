@@ -9,6 +9,10 @@
 @php  
     $CashBal = 0;
     $BankBal = 0;
+    $translate    = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'50%' : '-50%';
+    $margin_sec   = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'0% 5% 0% 0%' : '0% 0% 0% 5%';
+    $margin_left  = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'initial' : '50%';
+    $margin_right = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'50%' : 'initial';
     // dd(Auth::user());
 @endphp 
 
@@ -70,7 +74,7 @@
                 /* border:1px solid black;  */
             }
             .sec-total{
-                margin: 0% 0% 0% 5%;
+                margin: {{$margin_sec}};
                 max-width: 1400px;
             }
             .clear{
@@ -87,8 +91,9 @@
 
             }
             .date_filter_1{
-                margin-left: 50%;
-                transform: translateX(-50%);
+                margin-left: {{$margin_left}};
+                margin-right: {{$margin_right}};
+                transform: translateX({{$translate}});
                 display: flex;
                 width: 500px;
 
@@ -124,7 +129,7 @@
           
             <small class="date_filter_1" >  
                     <span style="font-size:18px;line-height:34px"> Date Range : &nbsp; &nbsp;</span>
-                    <div class="input-group" style="box-shadow:0px 0px 10px #3a3a3a33;border-radius:10px !important">
+                    <div class="input-group" dir="ltr" style="box-shadow:0px 0px 10px #3a3a3a33;border-radius:10px !important">
                         <span class="input-group-addon" style="border-top-left-radius:10px !important;border-bottom-left-radius:10px !important"><i class="fa fa-calendar" style="color:#ec6808;font-size:17px;"></i></span>
                         {!! Form::text('transaction_date_range', null, ['class' => 'form-control','id'=>'transaction_date_range' ,  'style' => 'font-size:19px;border-top-right-radius:10px !important;border-bottom-right-radius:10px !important', 'readonly', 'placeholder' => __('report.date_range')]) !!}
                     </div>

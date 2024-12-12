@@ -140,7 +140,16 @@
                 width: auto !important;
                 /* border-bottom: 10px solid #ff954a; */
             }
+            .izo-form-input-password:focus{
+                    border-color: #ec6808 !important;
+                    outline:1px solid #ec6808 !important;
+                }
+                .izo-form-input:focus{
+                    border-color:#ec6808 !important;
+                    outline: 1px solid #ec6808 !important;
+                }
             .izo-form-input{
+                font-family:Georgia, 'Times New Roman', Times, serif;
                 width: 100%;
                 border-radius: 10px;
                 padding: 10px;
@@ -202,13 +211,15 @@
                 transform: translateX({{$translate}}) !important;
             }
             .sign-up-form{
+                font-family:Georgia, 'Times New Roman', Times, serif;
                 position: relative;
                 font-size:18px;text-decoration:underline;
                 padding: 10px !important;
                  /* background-color: #838383 !important; */
                  width: 100% !important; 
             }
-                    .izo-form-input-save{   
+                    .izo-form-input-save{ 
+                        font-family:Georgia, 'Times New Roman', Times, serif;  
                 width: 100%;
                 border-radius: 10px;
                 padding: 10px;
@@ -418,7 +429,16 @@
                     width: auto !important;
                     /* border-bottom: 10px solid #ff954a; */
                 }
+                .izo-form-input-password:focus{
+                    border-color: #ec6808 !important;
+                    outline:1px solid #ec6808 !important;
+                }
+                .izo-form-input:focus{
+                    border-color:#ec6808 !important;
+                    outline: 1px solid #ec6808 !important;
+                }
                 .izo-form-input{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -480,13 +500,15 @@
                     transform: translateX({{$translate}}) !important;
                 }
                 .sign-up-form{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     position: relative;
                     font-size:18px;text-decoration:underline;
                     padding: 10px !important;
                      /* background-color: #838383 !important; */
                      width: 100% !important; 
                 }
-                    .izo-form-input-save{   
+                    .izo-form-input-save{ 
+                        font-family:Georgia, 'Times New Roman', Times, serif;  
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -650,7 +672,16 @@
                     width: auto !important;
                     /* border-bottom: 10px solid #ff954a; */
                 }
+                .izo-form-input-password:focus{
+                    border-color: #ec6808 !important;
+                    outline:1px solid #ec6808 !important;
+                }
+                .izo-form-input:focus{
+                    border-color:#ec6808 !important;
+                    outline: 1px solid #ec6808 !important;
+                }
                 .izo-form-input{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -712,13 +743,15 @@
                     transform: translateX({{$translate}}) !important;
                 }
                 .sign-up-form{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     position: relative;
                     font-size:18px;text-decoration:underline;
                     padding: 10px !important;
                      /* background-color: #838383 !important; */
                      width: 100% !important; 
                 }
-                    .izo-form-input-save{   
+                    .izo-form-input-save{ 
+                        font-family:Georgia, 'Times New Roman', Times, serif;  
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -885,7 +918,16 @@
                     width: auto !important;
                     /* border-bottom: 10px solid #ff954a; */
                 }
+                .izo-form-input-password:focus{
+                    border-color: #ec6808 !important;
+                    outline:1px solid #ec6808 !important;
+                }
+                .izo-form-input:focus{
+                    border-color:#ec6808 !important;
+                    outline: 1px solid #ec6808 !important;
+                }
                 .izo-form-input{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -947,13 +989,15 @@
                     transform: translateX({{$translate}}) !important;
                 }
                 .sign-up-form{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     position: relative;
                     font-size:18px;text-decoration:underline;
                     padding: 10px !important;
                      /* background-color: #838383 !important; */
                      width: 100% !important; 
                 }
-                    .izo-form-input-save{   
+                    .izo-form-input-save{ 
+                        font-family:Georgia, 'Times New Roman', Times, serif;  
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -1124,7 +1168,16 @@
                         width: auto !important;
                         /* border-bottom: 10px solid #ff954a; */
                     }
+                    .izo-form-input-password:focus{
+                    border-color: #ec6808 !important;
+                    outline:1px solid #ec6808 !important;
+                }
+                .izo-form-input:focus{
+                    border-color:#ec6808 !important;
+                    outline: 1px solid #ec6808 !important;
+                }
                     .izo-form-input{
+                        font-family:Georgia, 'Times New Roman', Times, serif;
                         width: 100%;
                         border-radius: 10px;
                         padding: 10px;
@@ -1187,13 +1240,15 @@
                         transform: translateX({{$translate}}) !important;
                     }
                     .sign-up-form{
+                        font-family:Georgia, 'Times New Roman', Times, serif;
                         position: relative;
                         font-size:18px;text-decoration:underline;
                         padding: 10px !important;
                          /* background-color: #838383 !important; */
                          width: 100% !important; 
                     }
-                    .izo-form-input-save{   
+                    .izo-form-input-save{ 
+                        font-family:Georgia, 'Times New Roman', Times, serif;  
                         width: 100%;
                         border-radius: 10px;
                         padding: 10px;
@@ -1298,10 +1353,10 @@
                         {!! Form::open(['url' => route('izoLoginAccount'), 'method' => 'post', 'id' => 'first_login_form','files' => true ]) !!}
                             <input type="hidden" id="domain_name_sub" name="domain_name_sub" value="{{$subdomain}}">
                             <div class="col-xs-12 text-center">
-                                <h2 style="color: #000 !important"><b>{{__('izo.reset_password')}}</b></h2>
+                                <h3 style="color: #000 !important;font-family:Georgia, 'Times New Roman', Times, serif;"><b>{{__('izo.reset_password')}}</b></h3>
                             </div>
                             <div class="col-xl-12 col-md-12 text-center">
-                                <b style="font-size:13px;color: #3a3a3a88 !important">{{__('izo.reset_password_desc')}}</b>
+                                <b style="font-size:17px;color: #3a3a3a88 !important ;font-family:Georgia, 'Times New Roman', Times, serif;">{{__('izo.reset_password_desc')}}</b>
                                 {!! Form::text('email',(isset($email))?$email:null,['class' => 'izo-form-input','id'=>'email', 'placeholder' => __('izo.email_placeholder') ]) !!}
                                 <span class="error" id="emailError"></span>
                             </div>

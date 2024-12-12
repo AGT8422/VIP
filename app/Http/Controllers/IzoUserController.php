@@ -780,7 +780,7 @@ class IzoUserController extends Controller
         
        
         $request->validate([
-            'g-recaptcha-response' => 'required|captcha',
+            // 'g-recaptcha-response' => 'required|captcha',
             'email'                => 'required|email',
             'mobile'               => 'required|min:7|max:9',
             // Other validation rules...
@@ -788,21 +788,21 @@ class IzoUserController extends Controller
         $data = $request->only(['company_name','email','domain_name','mobile','mobile_code','password']);
         $data['User-Agent']  = $request->header('User-Agent');
         $data['ip']          = $request->ip();
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => env('NOCAPTCHA_SECRET'),
-            'response' => $request->input('g-recaptcha-response'),
-        ]);
+        // $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+        //     'secret' => env('NOCAPTCHA_SECRET'),
+        //     'response' => $request->input('g-recaptcha-response'),
+        // ]);
 
-        $responseBody = json_decode($response->getBody());
+        // $responseBody = json_decode($response->getBody());
 
-        if ($responseBody->success && $responseBody->score >= 0.5) {
-            // reCAPTCHA passed, handle form submission
-            $save = IzoUser::saveUser($data);
-            // return back()->with('success', 'Form submitted successfully.');
-        } else {
-            // reCAPTCHA failed
-            return back()->withErrors(['captcha' => 'reCAPTCHA verification failed.']);
-        }
+        // if ($responseBody->success && $responseBody->score >= 0.5) {
+        //     // reCAPTCHA passed, handle form submission
+        //     // return back()->with('success', 'Form submitted successfully.');
+        // } else {
+        //     // reCAPTCHA failed
+        //     return back()->withErrors(['captcha' => 'reCAPTCHA verification failed.']);
+        // }
+        $save = IzoUser::saveUser($data);
         
         if(!$save){
             return redirect('/register-account');

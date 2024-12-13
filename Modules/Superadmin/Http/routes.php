@@ -2,7 +2,7 @@
 
 Route::get('/pricing', 'Modules\Superadmin\Http\Controllers\PricingController@index')->name('pricing');
 
-Route::group(['middleware' => ['web', 'auth', 'language', 'AdminSidebarMenu', 'superadmin'], 'prefix' => 'superadmin', 'namespace' => 'Modules\Superadmin\Http\Controllers'], function () {
+Route::group(['middleware' => ['web',    'language', 'AdminSidebarMenu', 'superadmin'], 'prefix' => 'superadmin', 'namespace' => 'Modules\Superadmin\Http\Controllers'], function () {
     Route::get('/install', 'InstallController@index');
     Route::get('/install/update', 'InstallController@update');
     Route::get('/install/uninstall', 'InstallController@uninstall');
@@ -37,7 +37,7 @@ Route::group(['middleware' => ['web', 'auth', 'language', 'AdminSidebarMenu', 's
 
 });
 
-Route::group(['middleware' => ['web', 'SetSessionData', 'auth', 'language', 'timezone', 'AdminSidebarMenu'],
+Route::group(['middleware' => ['web', 'SetSessionData',    'language', 'timezone', 'AdminSidebarMenu'],
     'namespace' => 'Modules\Superadmin\Http\Controllers'], function () {
         //Routes related to paypal checkout
         Route::get('/subscription/{package_id}/paypal-express-checkout','SubscriptionController@paypalExpressCheckout' );

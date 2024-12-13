@@ -1424,54 +1424,7 @@ tfoot>tr {
   color: #ffffff;  
   
 }
-div.dataTables_scrollHead table.dataTable {
-  border-top-left-radius: 10px !important;
-  border-top-right-radius: 10px !important;
-   
-}
-div.dataTables_scrollHead table.dataTable tfoot tr {
-  border-bottom-left-radius: 10px !important;
-  border-bottom-right-radius: 10px !important;
-   
-}
-.dataTables_scrollFootInner table.dataTable   {
-  border-bottom-left-radius: 10px !important;
-  border-bottom-right-radius: 10px !important;
-   
-}
-table.dataTable  tfoot tr  {
-  border-bottom-left-radius: 10px !important;
-  border-bottom-right-radius: 10px !important;
-   
-}
-table.dataTable {
-  border-radius : 10px !important;
-  
-   
-}
 
-table.table-bordered.dataTable th:first-child{
-  border-top-left-radius: 9px !important;
-   
-  
-}
- 
-table.table-bordered.dataTable th:last-child{
-  border-top-right-radius: 9px !important;
-  
-}
-table.table-bordered.dataTable tfoot td:first-child{
-  border-bottom-left-radius: 9px !important;
-   
-  
-}
- 
-table.table-bordered.dataTable tfoot td:last-child{
-  border-bottom-right-radius: 9px !important;
-  
-}
- 
- 
 .btn-info{
   background-color: #ffe8d9 !important;
   color: #ee680e !important;

@@ -1308,7 +1308,7 @@
     @endsection
     <body lang="{{ session()->get('lang', config('app.locale')) }}" dir="{{in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'rtl' : 'ltr'}}">
         @php 
-               
+             
             $url       = request()->root();
             $parsedUrl = parse_url($url);
             $host      = $parsedUrl['host'] ?? '';  
@@ -1333,7 +1333,7 @@
 
             }
             $subdomain = $subdomain; 
-       		 
+       		
              
         @endphp
         @if(isset($email))
@@ -1358,6 +1358,9 @@
             <input type="hidden" id="domain_name_array" value="{{json_encode([])}}">
         @endif
         <input type="hidden" id="domain_name_current" value="{{parse_url(request()->root(),PHP_URL_HOST)}}">
+        
+       
+
         <div class="language_box">
             <i class="fa fas fa-globe"  ></i>
         </div>
@@ -1492,6 +1495,7 @@
         </script>
     </body>
 @endsection
+
 @include('izo_user.layouts.js.login')
 
 

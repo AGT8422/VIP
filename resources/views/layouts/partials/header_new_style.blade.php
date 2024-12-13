@@ -508,9 +508,9 @@
         <div class="col-md-6 parent_left_header">
             {{-- <input type="search" class="form-control-search" placeholder="Search"> --}}
             {{-- 1 --}}
-            <ul class="nav navbar-nav">
+            {{-- <ul class="nav navbar-nav">
                 @include('layouts.partials.header-notifications')
-            </ul>
+            </ul>--}}
             {{-- 2 --}}
             <div class="col-md-4 m-8  mt-15 hidden-xs " style="margin-top:6px;color: #ee6800; background:#ffe8d9;border:1px solid #ee6800;border-radius:5px;padding:10px 20px 10px 20px;"><strong>{{ date('d - m - Y', strtotime(@format_date('now'))) }}</strong></div>
             

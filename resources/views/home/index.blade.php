@@ -9,6 +9,9 @@
 @php  
     $CashBal = 0;
     $BankBal = 0;
+    $p_font       = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'18px' : '16px';
+    $h4_font      = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'22px' : '20px';
+    $D_rang_font  = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'18px' : '16px';
     $margin_bank  = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'0% 15% 0% 0%' : '0% 0% 0% 15%';
     $translate    = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'50%' : '-50%';
     $margin_sec   = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'0% 5% 0% 0%' : '0% 0% 0% 5%';
@@ -20,6 +23,18 @@
 @section('special_css')
 
     <style>
+            p{
+                font-size:{{$p_font}};
+            }
+            h4{
+                font-size:{{$h4_font}};
+            }
+            .D_rang{
+                font-size:{{$D_rang_font}} !important;
+            }
+            .date_filter  b{
+                font-size:{{$p_font}} !important;
+            }
             .sec-body * {
                 font-family:Georgia, 'Times New Roman', Times, serif !important;
             }
@@ -41,7 +56,7 @@
                 /* max-width: 500px; */
                 border-radius: 20px ;
                 padding: 20px ;
-                height: 137.98px;
+                height: 170.9px;
                 background-color: white;
                 box-shadow: 0px 0px 10px #3a3a3a33;
             }
@@ -137,7 +152,7 @@
                     <span style="font-size:18px;line-height:34px;font-family:Georgia, 'Times New Roman', Times, serif !important;"> {{__('izo.date_range')}} : &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    &nbsp;</span>
                     <div class="input-group" dir="ltr" style="box-shadow:0px 0px 10px #3a3a3a33;border-radius:10px !important">
                         <span class="input-group-addon" style="border-top-left-radius:10px !important;border-bottom-left-radius:10px !important"><i class="fa fa-calendar" style="color:#ec6808;font-size:17px; "></i></span>
-                        {!! Form::text('transaction_date_range', null, ['class' => 'form-control','id'=>'transaction_date_range' ,  'style' => 'font-size:19px;border-top-right-radius:10px !important;border-bottom-right-radius:10px !important;font-family:Georgia, \'Times New Roman\', Times, serif !important;', 'readonly', 'placeholder' => __('report.date_range')]) !!}
+                        {!! Form::text('transaction_date_range', null, ['class' => 'form-control','id'=>'transaction_date_range' ,  'style' => 'font-size:19px;border-top-right-radius:10px !important;border-bottom-right-radius:10px !important;', 'readonly', 'placeholder' => __('report.date_range')]) !!}
                     </div>
                     
 
@@ -149,7 +164,7 @@
         <div class="col-md-6 text-center">
            
             <small class="date_filter_1" >  
-                <b class="p-5" style="line-height: 34px;font-family:Georgia, 'Times New Roman', Times, serif !important; ">{{__('izo.pattern')}}  </b> &nbsp;
+                <b class="p-5" style="line-height: 34px;font-size:17px;font-family:Georgia, 'Times New Roman', Times, serif !important; ">{{__('izo.pattern')}}  </b> &nbsp;
                 <div class="col-md-8 col-md-offset-2 ml-10 ">
                     {!! Form::select('pattern_id', $patterns,null, ['class' => 'form-control select2','id'=>'pattern_id' , 'placeholder' => __('ALL')]) !!}
                 </div>
@@ -166,8 +181,9 @@
             <div class="col-md-6">
                 <div class="card1">
                     <H4>{{__('izo.sales')}}  <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
-                    <p>{{__('izo.exc_vat')}}   <b class="display_currency pull-right big-number sales-exc" data-currency_symbol="true" >{{$totalSalesExclude}}</b></p>
-                    <p>{{__('izo.inc_vat')}}   <b class="display_currency pull-right big-number sales-inc" data-currency_symbol="true" >{{$totalSales}}</b></p>
+                    <p>  &nbsp;</p>
+                    <p>{{__('izo.exc_vat')}}   <b class="display_currency pull-right big-number sales-exc standard" data-currency_symbol="true"  >{{$totalSalesExclude}}</b></p>
+                    <p>{{__('izo.inc_vat')}}   <b class="display_currency pull-right big-number sales-inc standard" data-currency_symbol="true"  >{{$totalSales}}</b></p>
                 </div>
             </div>
             {{-- 2 --}}
@@ -175,7 +191,8 @@
                 <div class="card1">
                     <H4>{{__('izo.invoices')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
                     <p>  &nbsp;</p>
-                    <p>{{__('izo.number_of_invoice')}}   <b  class="pull-right big-number number-of-invoice">{{$numberOfInvoice}}</b></p>
+                    <p>  &nbsp;</p>
+                    <p>{{__('izo.number_of_invoice')}}   <b  class="pull-right big-number number-of-invoice standard">{{$numberOfInvoice}}</b></p>
                 </div>
             </div>
             <div class="col-md-12">
@@ -186,7 +203,8 @@
                 <div class="card1">
                     <H4>{{__('izo.vat')}}  <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
                     <p>  &nbsp;</p>
-                    <p>{{__('izo.vat_amount')}}   <b class="display_currency pull-right big-number vat-sales" data-currency_symbol="true" >{{ $totalSalesTax}}</b></p>
+                    <p>  &nbsp;</p>
+                    <p>{{__('izo.vat_amount')}}   <b class="display_currency pull-right big-number vat-sales standard" data-currency_symbol="true" >{{ $totalSalesTax}}</b></p>
                 </div>
             </div>
             {{-- 1 --}}
@@ -194,7 +212,8 @@
                 <div class="card1">
                     <H4>{{__('izo.customers')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
                     <p>  &nbsp;</p>
-                    <p>{{__('izo.total_customer')}}   <b  class="pull-right big-number number-of-contact">{{$contactOfInvoice}}</b></p>
+                    <p>  &nbsp;</p>
+                    <p>{{__('izo.total_customer')}}   <b  class="pull-right big-number number-of-contact standard">{{$contactOfInvoice}}</b></p>
                 </div> 
             </div> 
            
@@ -206,15 +225,16 @@
                 <div class="card1">
                     <H4>{{__('izo.cost_of_sales')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
                     <p>  &nbsp;</p>
-                    <p>COS   <b class="display_currency pull-right big-number cost-of-sales" data-currency_symbol="true" >{{ $costOfDeliveredSale + $costOfUnDeliveredSale }}</b></p>
+                    <p>  &nbsp;</p>
+                    <p>COS   <b class="display_currency pull-right big-number cost-of-sales standard" data-currency_symbol="true" >{{ $costOfDeliveredSale + $costOfUnDeliveredSale }}</b></p>
                 </div>
             </div>
               
             <div class="col-md-6">
                 <div class="card1">
                     <H4>{{__('izo.delivered_goods_value_left')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small>{!!__('izo.delivered_goods_value_right')!!}</H4>
-                    <p>{{__('izo.cost_value')}}    <b class="display_currency pull-right big-number cost-delivered" data-currency_symbol="true" >{{$costOfDeliveredSale}}</b></p>
-                    <p>{{__('izo.sales_value')}}    <b class="display_currency pull-right big-number amount-delivered" data-currency_symbol="true" >{{$amountOfDeliveredSale}}</b></p>
+                    <p>{{__('izo.cost_value')}}    <b class="display_currency pull-right big-number cost-delivered standard" data-currency_symbol="true" >{{$costOfDeliveredSale}}</b></p>
+                    <p>{{__('izo.sales_value')}}    <b class="display_currency pull-right big-number amount-delivered standard" data-currency_symbol="true" >{{$amountOfDeliveredSale}}</b></p>
                 </div>
             </div>
             <div class="col-md-12">
@@ -225,15 +245,16 @@
                 <div class="card1">
                     <H4>{{__('izo.gross_profit')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
                     <p>  &nbsp;</p>
-                    <p> GP   <b class="display_currency pull-right big-number gross-profit" data-currency_symbol="true" >{{$totalSalesExclude - ($costOfDeliveredSale + $costOfUnDeliveredSale) }}</b></p>
+                    <p>  &nbsp;</p>
+                    <p> GP   <b class="display_currency pull-right big-number gross-profit standard" data-currency_symbol="true" >{{$totalSalesExclude - ($costOfDeliveredSale + $costOfUnDeliveredSale) }}</b></p>
                 </div>
             </div>  
             {{-- # --}}
             <div class="col-md-6">
                 <div class="card1">
                     <H4 style=" ">{{__('izo.undelivered_goods_value_left')}}<small class="pull-right D_rang">{{__('izo.date_range')}}</small>{!!__('izo.undelivered_goods_value_right')!!}</H4>
-                    <p>{{__('izo.cost_value')}}   <b class="display_currency pull-right big-number cost-un-delivered" data-currency_symbol="true" >{{$costOfUnDeliveredSale}}</b></p>
-                    <p>{{__('izo.sales_value')}}   <b class="display_currency pull-right big-number amount-un-delivered" data-currency_symbol="true" >{{$amountOfUnDeliveredSale}}</b></p>
+                    <p>{{__('izo.cost_value')}}   <b class="display_currency pull-right big-number cost-un-delivered standard" data-currency_symbol="true" >{{$costOfUnDeliveredSale}}</b></p>
+                    <p>{{__('izo.sales_value')}}   <b class="display_currency pull-right big-number amount-un-delivered standard" data-currency_symbol="true" >{{$amountOfUnDeliveredSale}}</b></p>
                 </div>
             </div>
             <div class="col-md-12">
@@ -244,7 +265,8 @@
                 <div class="card1">
                     <H4><a href="{{\URL::to('/gallery/stock_report')}}">{{__('izo.goods_value')}} </a> <small class="pull-right D_rang">{{__('izo.accumulated')}}</small></H4>
                     <p>  &nbsp;</p>
-                    <p>{{__('izo.goods_value')}}   <b class="display_currency pull-right big-number" data-currency_symbol="true" >{{ $closing }}</b></p>
+                    <p>  &nbsp;</p>
+                    <p>{{__('izo.goods_value')}}   <b class="display_currency pull-right big-number standard" data-currency_symbol="true" >{{ $closing }}</b></p>
                 </div>
             </div>
             <div class="col-md-12">
@@ -257,7 +279,8 @@
                 <div class="card1">
                     <H4><a href="{{\URL::to($customerUrl)}}">{{__('izo.total_customer')}}</a> <small class="pull-right D_rang">{{__('izo.accumulated')}}</small></H4>
                     <p>  &nbsp;</p>
-                    <p> {{__('izo.balance')}}   <b class="display_currency pull-right big-number" data-currency_symbol="true" >{{abs($totalBalanceCustomer)}}</b></p>
+                    <p>  &nbsp;</p>
+                    <p> {{__('izo.balance')}}   <b class="display_currency pull-right big-number standard" data-currency_symbol="true" >{{abs($totalBalanceCustomer)}}</b></p>
                 </div>
             </div>  
             {{-- # --}}
@@ -265,7 +288,8 @@
                 <div class="card1">
                     <H4><a href="{{\URL::to($supplierUrl)}}">{{__('izo.total_supplier')}}</a> <small class="pull-right D_rang">{{__('izo.accumulated')}}</small></H4>
                     <p>  &nbsp;</p>
-                    <p> {{__('izo.balance')}}   <b class="display_currency pull-right big-number" data-currency_symbol="true" >{{abs($totalBalanceSupplier)}}</b></p>
+                    <p>  &nbsp;</p>
+                    <p> {{__('izo.balance')}}   <b class="display_currency pull-right big-number standard" data-currency_symbol="true" >{{abs($totalBalanceSupplier)}}</b></p>
                 </div>
             </div>   
         </div>   
@@ -278,15 +302,15 @@
                 </H4>
                 <div class="card-box-body row">
                     <div class=" card-box-header col-md-4">
-                        <h4 class="display_currency" id="totalSales" data-currency_symbol="true">{{$totalSales}}</h4>
+                        <h4 class="display_currency standard" id="totalSales" data-currency_symbol="true">{{$totalSales}}</h4>
                         <p>{{__('izo.total_sales')}} </p>
                     </div>
                     <div class=" card-box-header col-md-4">
-                        <h4 class="display_currency" id="totalPaidSales" data-currency_symbol="true">{{$totalPaidSales}}</h4>
+                        <h4 class="display_currency standard" id="totalPaidSales" data-currency_symbol="true">{{$totalPaidSales}}</h4>
                         <p>{{__('izo.total_paid_sales')}} </p>
                     </div>
                     <div class=" card-box-header col-md-4">
-                        <h4 class="display_currency" id="totalUnPaidSales" data-currency_symbol="true">{{$totalUnPaidSales}}</h4>
+                        <h4 class="display_currency standard" id="totalUnPaidSales" data-currency_symbol="true">{{$totalUnPaidSales}}</h4>
                         <p>{{__('izo.total_unpaid_sales')}} </p>
                     </div>
                 </div>
@@ -306,11 +330,11 @@
                 <h4>{{__('izo.cash_bank')}}
                     <h6>&nbsp;</h6>
                     <small class="date_filter pull-right" style="width: 100%;margin:{{$margin_bank}};float: left">
-                        <b class="p-5" style="">{{__('izo.total_bank')}}:  &nbsp;&nbsp;&nbsp;<b class="display_currency pull-right big-number" data-currency_symbol="true" >{{$BankBal}}</b></b>
+                        <b class="p-5" style="">{{__('izo.total_bank')}}:  &nbsp;&nbsp;&nbsp;<b class="display_currency pull-right big-number standard" data-currency_symbol="true" >{{$BankBal}}</b></b>
                     </small>
                     <h6>&nbsp;</h6>
                     <small class="date_filter pull-right" style="width: 100%;margin:{{$margin_bank}};float: right">
-                        <b class="p-5">{{__('izo.total_cash')}}: &nbsp;&nbsp;&nbsp;<b class="display_currency pull-right big-number" data-currency_symbol="true" >{{$CashBal}}</b></b> 
+                        <b class="p-5">{{__('izo.total_cash')}}: &nbsp;&nbsp;&nbsp;<b class="display_currency pull-right big-number standard" data-currency_symbol="true" >{{$CashBal}}</b></b> 
                     </small>
                    <h6>&nbsp;</h6>
                 </h4>
@@ -320,7 +344,7 @@
                         @php
                             $url = '/account/account/'.$cashId[$k];
                         @endphp
-                        <p> <a href="{{\URL::to($url)}}">{{$k}}</a>  <b class="display_currency pull-right big-number" data-currency_symbol="true" >{{abs($balance)}}</b></p>
+                        <p> <a href="{{\URL::to($url)}}">{{$k}}</a>  <b class="display_currency pull-right big-number standard" data-currency_symbol="true" >{{abs($balance)}}</b></p>
                     @endforeach
                     <br>
                     <h6>{{__('izo.bank')}}</h6>
@@ -328,7 +352,7 @@
                         @php
                             $url = '/account/account/'.$bankId[$k];
                         @endphp
-                        <p> <a href="{{\URL::to($url)}}">{{$k}}</a>  <b class="display_currency pull-right big-number" data-currency_symbol="true" >{{abs($balance)}}</b></p>
+                        <p> <a href="{{\URL::to($url)}}">{{$k}}</a>  <b class="display_currency pull-right big-number standard" data-currency_symbol="true" >{{abs($balance)}}</b></p>
                     @endforeach
                 </div>
                 

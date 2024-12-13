@@ -3412,7 +3412,7 @@
                                             </div>
                                             <div class="clearfix"></div>
                                             <div class="col-md-6">
-                                                {!! Form::label('job', __('Job') ) !!}
+                                                {!! Form::label('job', __('Job Title *') ) !!}
                                                 {!! Form::select('job',$jobs,null,['class' => 'izo-form-input', 'id'=>'job','required', 'placeholder' => __('-- Choose job') ]) !!}
                                             </div>
                                             <div class="col-md-6">
@@ -3462,7 +3462,7 @@
                                                 {!! Form::select('type_business',$list_type_of_business,null,['class' => 'izo-form-input','required', 'id'=>'type_business', 'placeholder' => __('-- Choose Type Of Business') ]) !!}
                                             </div>
                                             <div class="col-md-6">
-                                                {!! Form::label('section', __('Type Of Business *') ) !!}
+                                                {!! Form::label('section', __('Type Of Category *') ) !!}
                                                 {!! Form::select('section',[],null,['class' => 'izo-form-input','required', 'id'=>'section','placeholder' => __('-- Choose Type Of Business')  ]) !!}
                                             </div>
                                             {{-- <div class="custom-radio"> 

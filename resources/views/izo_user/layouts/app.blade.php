@@ -39,13 +39,53 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+    <style>
+      .status_box{
+        top:30px;
+        z-index: 5000;
+        padding: 20px;
+        right:40px;
+        border-radius: 10px;
+        position: absolute;
+        background-color: green;
+        color: white;
+        font-weight: 700;
+        font-size: 20px;
+      }
+      .status_box_wrong{
+        top:30px;
+        z-index: 5000;
+        padding: 20px;
+        right:40px;
+        border-radius: 10px;
+        position: absolute;
+        background-color: #ff3333;
+        color: white;
+        font-weight: 700;
+        font-size: 20px;
+      }
+    </style>
 </head>
-
+ 
+@if(request()->session()->get('status'))
+  <div @if(request()->session()->get('status.success') == 1) class="status_box" @else  class="status_box_wrong" @endif>
+      {{ request()->session()->get('status.msg')}}
+  </div>
+@endif
 @yield('content')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
 @yield('javascript')
+<script type="text/javascript">
+  $(document).ready(function(){
+    @if(request()->session()->get('status'))
+    setTimeout(() => {
+          $('.status_box').remove();
+          $('.status_box_wrong').remove();
+        }, 5000);
+        @endif
+      });
+    </script>
 
 </html>
+  

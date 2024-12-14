@@ -81,4 +81,39 @@ return [
     'total_customer'               => 'رصيد الموردين',
     'balance'                      => 'الرصيد',
     
+    'Box Sales'                    => 'مربع المبيعات',
+    'Box Sales Exclude Vat'        => 'مربع المبيعات غير شامل الضريبة',
+    'Box Sales Include Vat'        => 'مربع المبيعات شامل الضريبة',
+    'Box Invoices'                 => 'مربع الفواتير',
+    'Box Invoices Number'          => 'مربع الفواتير عدد الفواتير',
+    'Box Vat'                      => 'مربع الضريبة ',
+    'Box Vat Amount'               => 'مربع الضريبة قيمة الضريبة ',
+    'Box Customers'                => 'مربع الزبائن',
+    'Box Customers Total'          => 'مربع الزبائن كافة الزبائن',
+    'Box Cost Of Sales'            => 'مربع تكلفة المبيعات',
+    'Box Cost Of Sales COS'        => 'مربع تكلفة المبيعات التكلفة ',
+    'Box Gross Profit'             => 'مربع مجمل الربح',
+    'Box Gross Profit GP'          => 'مربع مجمل الربح القيمة',
+    'Box Goods Value'              => 'مربع قيمة المخزون ',
+    'Box Goods Value Number'       => 'مربع قيمة المخزون القيمة',
+    'Box Total Customer'           => 'مربع رصيد الزبائن',
+    'Box Total Customer Balance'   => 'مربع رصيد الزبائن الرصيد',
+    'Box Total Supplier'           => 'مربع رصيد الموردين',
+    'Box Total Supplier Balance'   => 'مربع رصيد الموردين الرصيد',
+    'Box Delivered'                => 'مربع التسليمات',
+    'Box Delivered Cost Value'     => 'مربع التسليمات قيمة التكلفة',
+    'Box Delivered Sales Value'    => 'مربع التسليمات قيمة المبيعات',
+    'Box Un Delivered'             => 'مربع غير المسلمة',
+    'Box Un Delivered Cost Value'  => 'مربع غير المسلمة قيمة التكلفة',
+    'Box Un Delivered Sales Value' => 'مربع غير المسلمة قيمة المبيعات', 
+    'Box Bank & Cash'              => 'مربع النقدية والبنوك',
+    'Box Paid - Unpaid'            => 'مربع المدفوع وغير المدفوع',
+    '' => '',
+    '' => '',
+    '' => '',
+
+
+
+
+
 ];

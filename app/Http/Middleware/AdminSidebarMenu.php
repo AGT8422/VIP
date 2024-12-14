@@ -41,7 +41,7 @@ class AdminSidebarMenu
              
            
             //User management dropdown  10
-            if (  request()->session()->get("user.id") == 1 || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8) {
+            if ( request()->session()->get("user.id") == 1 || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8) {
                 $menu->dropdown(
                     __('user.user_management'),
                     function ($sub) {

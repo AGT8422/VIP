@@ -164,136 +164,184 @@
             
         </div>
         <div class="col-md-6 text-center">
-           
             <small class="date_filter_1" >  
                 <b class="p-5" style="line-height: 34px;font-size:17px;font-family:Georgia, 'Times New Roman', Times, serif !important; ">{{__('izo.pattern')}}  </b> &nbsp;
                 <div class="col-md-8 col-md-offset-2 ml-10 ">
-                    {!! Form::select('pattern_id', $patterns,null, ['class' => 'form-control select2','id'=>'pattern_id' , 'placeholder' => __('ALL')]) !!}
+                    {!! Form::select('pattern_id', $patterns,null, ['class' => 'form-control select2','style'=>'font-size:18px; !important','id'=>'pattern_id' , 'placeholder' => __('ALL')]) !!}
                 </div>
             </small> 
             <h6>&nbsp;</h6>
-            
         </div>
-        
         <div class="col-md-12">&nbsp;</div> 
     </div>
     <div class="row sec-body">
          <!-- Total Revenue -->
          <div class="col-md-6 ">
-            <div class="col-md-6">
-                <div class="card1">
-                    <H4>{{__('izo.sales')}}  <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
-                    <p>  &nbsp;</p>
-                    <p>{{__('izo.exc_vat')}}   <b class="display_currency pull-right big-number sales-exc standard" data-currency_symbol="true"  >{{$totalSalesExclude}}</b></p>
-                    <p>{{__('izo.inc_vat')}}   <b class="display_currency pull-right big-number sales-inc standard" data-currency_symbol="true"  >{{$totalSales}}</b></p>
+            {{-- ***** --}}
+            @if(auth()->user()->can('izo.box_sales'))
+                <div @if(auth()->user()->can('izo.box_invoices')) class="col-md-6" @else  class="col-md-12" @endif>
+                    <div class="card1">
+                        <H4>{{__('izo.sales')}}  <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
+                        <p>  &nbsp;</p>
+                        @if(auth()->user()->can('izo.box_sales_exc'))
+                            <p>{{__('izo.exc_vat')}}   <b class="display_currency pull-right big-number sales-exc standard" data-currency_symbol="true"  >{{$totalSalesExclude}}</b></p>
+                        @endif
+                        @if(auth()->user()->can('izo.box_sales_inc'))
+                            <p>{{__('izo.inc_vat')}}   <b class="display_currency pull-right big-number sales-inc standard" data-currency_symbol="true"  >{{$totalSales}}</b></p>
+                        @endif
+                    </div>
                 </div>
-            </div>
-            {{-- 2 --}}
-            <div class="col-md-6">
-                <div class="card1">
-                    <H4>{{__('izo.invoices')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
-                    <p>  &nbsp;</p>
-                    <p>  &nbsp;</p>
-                    <p>{{__('izo.number_of_invoice')}}   <b  class="pull-right big-number number-of-invoice standard">{{$numberOfInvoice}}</b></p>
+            @endif
+            {{-- ***** --}}
+            @if(auth()->user()->can('izo.box_invoices'))
+                <div @if(auth()->user()->can('izo.box_sales')) class="col-md-6" @else  class="col-md-12" @endif>
+                    <div class="card1">
+                        <H4>{{__('izo.invoices')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
+                        <p>  &nbsp;</p>
+                        <p>  &nbsp;</p>
+                        @if(auth()->user()->can('izo.box_invoices_number'))
+                            <p>{{__('izo.number_of_invoice')}}   <b  class="pull-right big-number number-of-invoice standard">{{$numberOfInvoice}}</b></p>
+                        @endif
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-12">
-                &nbsp;
-            </div>
-            {{--  TODO  IF REGISTER IN VAT SHOW THIS --}}
-            <div class="col-md-6">
-                <div class="card1">
-                    <H4>{{__('izo.vat')}}  <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
-                    <p>  &nbsp;</p>
-                    <p>  &nbsp;</p>
-                    <p>{{__('izo.vat_amount')}}   <b class="display_currency pull-right big-number vat-sales standard" data-currency_symbol="true" >{{ $totalSalesTax}}</b></p>
+            @endif
+            {{-- ##### --}}
+            <div class="col-md-12"> &nbsp; </div>
+            {{-- ##### --}}
+            {{-- ***** --}}
+            @if(auth()->user()->can('izo.box_vat'))
+                {{--  TODO  IF REGISTER IN VAT SHOW THIS --}}
+                <div @if(auth()->user()->can('izo.box_customer')) class="col-md-6" @else  class="col-md-12" @endif>
+                    <div class="card1">
+                        <H4>{{__('izo.vat')}}  <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
+                        <p>  &nbsp;</p>
+                        <p>  &nbsp;</p>
+                        @if(auth()->user()->can('izo.box_vat_amount'))
+                            <p>{{__('izo.vat_amount')}}   <b class="display_currency pull-right big-number vat-sales standard" data-currency_symbol="true" >{{ $totalSalesTax}}</b></p>
+                        @endif
+                    </div>
                 </div>
-            </div>
-            {{-- 1 --}}
-            <div class="col-md-6">
-                <div class="card1">
-                    <H4>{{__('izo.customers')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
-                    <p>  &nbsp;</p>
-                    <p>  &nbsp;</p>
-                    <p>{{__('izo.total_customer')}}   <b  class="pull-right big-number number-of-contact standard">{{$contactOfInvoice}}</b></p>
+            @endif
+            {{-- ***** --}}
+            @if(auth()->user()->can('izo.box_customer'))
+                <div @if(auth()->user()->can('izo.box_vat')) class="col-md-6" @else  class="col-md-12" @endif>
+                    <div class="card1">
+                        <H4>{{__('izo.customers')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
+                        <p>  &nbsp;</p>
+                        <p>  &nbsp;</p>
+                        @if(auth()->user()->can('izo.box_customer_total'))
+                            <p>{{__('izo.total_customer')}}   <b  class="pull-right big-number number-of-contact standard">{{$contactOfInvoice}}</b></p>
+                        @endif
+                    </div> 
                 </div> 
-            </div> 
-           
-            <div class="col-md-12">
-                &nbsp;
-            </div>
-             {{-- 2 --}}
-             <div class="col-md-6">
-                <div class="card1">
-                    <H4>{{__('izo.cost_of_sales')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
-                    <p>  &nbsp;</p>
-                    <p>  &nbsp;</p>
-                    <p>COS   <b class="display_currency pull-right big-number cost-of-sales standard" data-currency_symbol="true" >{{ $costOfDeliveredSale + $costOfUnDeliveredSale }}</b></p>
+            @endif
+            {{-- ##### --}}
+            <div class="col-md-12"> &nbsp; </div>
+            {{-- ##### --}}
+            {{-- ***** --}} 
+            @if(auth()->user()->can('izo.box_cost_of_sales'))
+                <div @if(auth()->user()->can('izo.box_delivered')) class="col-md-6" @else  class="col-md-12" @endif>
+                    <div class="card1">
+                        <H4>{{__('izo.cost_of_sales')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
+                        <p>  &nbsp;</p>
+                        <p>  &nbsp;</p>
+                        @if(auth()->user()->can('izo.box_cost_of_sales_cos'))
+                            <p>COS   <b class="display_currency pull-right big-number cost-of-sales standard" data-currency_symbol="true" >{{ $costOfDeliveredSale + $costOfUnDeliveredSale }}</b></p>
+                        @endif
+                    </div>
                 </div>
-            </div>
-              
-            <div class="col-md-6">
+            @endif
+            {{-- ***** --}}
+            @if(auth()->user()->can('izo.box_delivered'))
+            <div @if(auth()->user()->can('izo.box_cost_of_sales')) class="col-md-6" @else  class="col-md-12" @endif>
                 <div class="card1">
                     <H4>{{__('izo.delivered_goods_value_left')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small>{!!__('izo.delivered_goods_value_right')!!}</H4>
-                    <p>{{__('izo.cost_value')}}    <b class="display_currency pull-right big-number cost-delivered standard" data-currency_symbol="true" >{{$costOfDeliveredSale}}</b></p>
-                    <p>{{__('izo.sales_value')}}    <b class="display_currency pull-right big-number amount-delivered standard" data-currency_symbol="true" >{{$amountOfDeliveredSale}}</b></p>
+                    @if(auth()->user()->can('izo.box_delivered_cost'))
+                        <p>{{__('izo.cost_value')}}    <b class="display_currency pull-right big-number cost-delivered standard" data-currency_symbol="true" >{{$costOfDeliveredSale}}</b></p>
+                    @endif
+                    @if(auth()->user()->can('izo.box_delivered_sales'))
+                        <p>{{__('izo.sales_value')}}   <b class="display_currency pull-right big-number amount-delivered standard" data-currency_symbol="true" >{{$amountOfDeliveredSale}}</b></p>
+                    @endif
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-12">
-                &nbsp;
-            </div>  
-            {{-- # --}}
-            <div class="col-md-6">
-                <div class="card1">
-                    <H4>{{__('izo.gross_profit')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
-                    <p>  &nbsp;</p>
-                    <p>  &nbsp;</p>
-                    <p> GP   <b class="display_currency pull-right big-number gross-profit standard" data-currency_symbol="true" >{{$totalSalesExclude - ($costOfDeliveredSale + $costOfUnDeliveredSale) }}</b></p>
-                </div>
-            </div>  
-            {{-- # --}}
-            <div class="col-md-6">
+            @endif
+            {{-- ##### --}}
+            <div class="col-md-12"> &nbsp; </div>  
+            {{-- ##### --}}
+            {{-- ***** --}}  
+            @if(auth()->user()->can('izo.box_gross_profit'))
+                <div @if(auth()->user()->can('izo.box_un_delivered')) class="col-md-6" @else  class="col-md-12" @endif>
+                    <div class="card1">
+                        <H4>{{__('izo.gross_profit')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
+                        <p>  &nbsp;</p>
+                        <p>  &nbsp;</p>
+                        @if(auth()->user()->can('izo.box_gross_profit'))
+                            <p> GP   <b class="display_currency pull-right big-number gross-profit standard" data-currency_symbol="true" >{{$totalSalesExclude - ($costOfDeliveredSale + $costOfUnDeliveredSale) }}</b></p>
+                        @endif 
+                    </div>
+                </div> 
+            @endif 
+            {{-- ***** --}}
+            @if(auth()->user()->can('izo.box_un_delivered'))
+            <div @if(auth()->user()->can('izo.box_gross_profit')) class="col-md-6" @else  class="col-md-12" @endif>
                 <div class="card1">
                     <H4 style=" ">{{__('izo.undelivered_goods_value_left')}}<small class="pull-right D_rang">{{__('izo.date_range')}}</small>{!!__('izo.undelivered_goods_value_right')!!}</H4>
-                    <p>{{__('izo.cost_value')}}   <b class="display_currency pull-right big-number cost-un-delivered standard" data-currency_symbol="true" >{{$costOfUnDeliveredSale}}</b></p>
-                    <p>{{__('izo.sales_value')}}   <b class="display_currency pull-right big-number amount-un-delivered standard" data-currency_symbol="true" >{{$amountOfUnDeliveredSale}}</b></p>
+                    @if(auth()->user()->can('izo.box_un_delivered_cost'))
+                        <p>{{__('izo.cost_value')}}   <b class="display_currency pull-right big-number cost-un-delivered standard" data-currency_symbol="true" >{{$costOfUnDeliveredSale}}</b></p>
+                    @endif
+                    @if(auth()->user()->can('izo.box_un_delivered_sales'))
+                        <p>{{__('izo.sales_value')}}   <b class="display_currency pull-right big-number amount-un-delivered standard" data-currency_symbol="true" >{{$amountOfUnDeliveredSale}}</b></p>
+                    @endif
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-12">
-                &nbsp;  
-            </div>    
-            {{-- 2 --}}
+            @endif
+            {{-- ##### --}}
+            <div class="col-md-12"> &nbsp; </div>    
+            {{-- ##### --}}
+            {{-- ***** --}} 
+            @if(auth()->user()->can('izo.box_goods_value'))
             <div class="col-md-12">
                 <div class="card1">
                     <H4><a href="{{\URL::to('/gallery/stock_report')}}">{{__('izo.goods_value')}} </a> <small class="pull-right D_rang">{{__('izo.accumulated')}}</small></H4>
                     <p>  &nbsp;</p>
                     <p>  &nbsp;</p>
-                    <p>{{__('izo.goods_value')}}   <b class="display_currency pull-right big-number standard" data-currency_symbol="true" >{{ $closing }}</b></p>
+                    @if(auth()->user()->can('izo.box_goods_value_num'))
+                        <p>{{__('izo.goods_value')}}   <b class="display_currency pull-right big-number standard" data-currency_symbol="true" >{{ $closing }}</b></p>
+                    @endif
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-12">
-                &nbsp;
-            </div>  
-            {{-- # --}}
+            @endif
+            {{-- ##### --}}
+            <div class="col-md-12"> &nbsp; </div>  
+            {{-- ##### --}}
+            {{-- ***** --}}
             @php $customerUrl = '/contacts?type=customer'   @endphp
             @php $supplierUrl = '/contacts?type=supplier'   @endphp
-            <div class="col-md-6">
+            @if(auth()->user()->can('izo.box_total_customer'))
+            <div @if(auth()->user()->can('izo.box_total_supplier')) class="col-md-6" @else  class="col-md-12" @endif>
                 <div class="card1">
                     <H4><a href="{{\URL::to($customerUrl)}}">{{__('izo.total_customer')}}</a> <small class="pull-right D_rang">{{__('izo.accumulated')}}</small></H4>
                     <p>  &nbsp;</p>
                     <p>  &nbsp;</p>
-                    <p> {{__('izo.balance')}}   <b class="display_currency pull-right big-number standard" data-currency_symbol="true" >{{abs($totalBalanceCustomer)}}</b></p>
+                    @if(auth()->user()->can('izo.box_total_customer_balance'))
+                        <p> {{__('izo.balance')}}   <b class="display_currency pull-right big-number standard" data-currency_symbol="true" >{{abs($totalBalanceCustomer)}}</b></p>
+                    @endif 
                 </div>
-            </div>  
-            {{-- # --}}
-            <div class="col-md-6">
+            </div> 
+            @endif 
+            {{-- ***** --}}
+            @if(auth()->user()->can('izo.box_total_supplier'))
+            <div @if(auth()->user()->can('izo.box_total_customer')) class="col-md-6" @else  class="col-md-12" @endif>
                 <div class="card1">
                     <H4><a href="{{\URL::to($supplierUrl)}}">{{__('izo.total_supplier')}}</a> <small class="pull-right D_rang">{{__('izo.accumulated')}}</small></H4>
                     <p>  &nbsp;</p>
                     <p>  &nbsp;</p>
-                    <p> {{__('izo.balance')}}   <b class="display_currency pull-right big-number standard" data-currency_symbol="true" >{{abs($totalBalanceSupplier)}}</b></p>
+                    @if(auth()->user()->can('izo.box_total_supplier_balance'))
+                        <p> {{__('izo.balance')}}   <b class="display_currency pull-right big-number standard" data-currency_symbol="true" >{{abs($totalBalanceSupplier)}}</b></p>
+                    @endif   
+                    </div>
                 </div>
-            </div>   
+            @endif   
         </div>   
         <!-- Total Revenue -->
         <div class="col-md-6 ">
@@ -410,7 +458,7 @@
         // });
         document.addEventListener('DOMContentLoaded', function () {
 
-                
+                   
                 transaction_date_range      = $("#transaction_date_range");
                 dateRangeSettings.startDate = moment().startOf('year');
                 dateRangeSettings.endDate   = moment().endOf('year');

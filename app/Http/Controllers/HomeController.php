@@ -221,7 +221,7 @@ class HomeController extends Controller
                 $widgets[$widget_array['position']][] = $widget_array['widget'];
             }
         }
-
+        $date_format    = request()->session()->get('business.date_format'); 
 
         $date_range =[]; //$request->input('date_range');
         
@@ -230,8 +230,8 @@ class HomeController extends Controller
             $filters['start_date'] = $this->transactionUtil->uf_date(trim($date_range_array[0]));
             $filters['end_date']   = $this->transactionUtil->uf_date(trim($date_range_array[1]));
         } else {
-            $filters['start_date'] = \Carbon::now()->startOfYear()->format('Y-m-d');
-            $filters['end_date']   = \Carbon::now()->endOfYear()->format('Y-m-d');
+            $filters['start_date'] = \Carbon::now()->startOfYear()->format($date_format);
+            $filters['end_date']   = \Carbon::now()->endOfYear()->format($date_format);
         }
       
         $user_id              = request()->session()->get('user.id');
@@ -315,37 +315,37 @@ class HomeController extends Controller
                                                       ->where('type', 'sale')
                                                       ->whereIn('status', ['final','delivered'])
                                                       ->whereIn('sub_status', ['final','f'])
-                                                      ->whereDate("transaction_date",">=",$filters['start_date'])                  
-                                                      ->whereDate("transaction_date","<=",$filters['end_date']  )                  
+                                                      ->whereDate("transaction_date",">=",$this->transactionUtil->uf_date(trim($filters['start_date'])))                  
+                                                      ->whereDate("transaction_date","<=",$this->transactionUtil->uf_date(trim($filters['end_date'])))                  
                                                       ->groupBy('contact_id')->pluck('contact_id')->count();
         $idsOfInvoice            = \App\Transaction::where('business_id', $business_id)
                                                       ->where('type', 'sale')
                                                       ->whereIn('status', ['final','delivered'])
-                                                      ->whereDate("transaction_date",">=",$filters['start_date'])                  
-                                                      ->whereDate("transaction_date","<=",$filters['end_date']  )  
+                                                      ->whereDate("transaction_date",">=",$this->transactionUtil->uf_date(trim($filters['start_date'])))                  
+                                                      ->whereDate("transaction_date","<=",$this->transactionUtil->uf_date(trim($filters['end_date']))  )  
                                                       ->whereIn('sub_status', ['final','f'])->pluck('id');
         $numberOfInvoice         = \App\Transaction::where('business_id', $business_id)
                                                       ->where('type', 'sale')
                                                       ->whereIn('status', ['final','delivered'])
-                                                      ->whereDate("transaction_date",">=",$filters['start_date'])                  
-                                                      ->whereDate("transaction_date","<=",$filters['end_date']  )  
+                                                      ->whereDate("transaction_date",">=",$this->transactionUtil->uf_date(trim($filters['start_date'])))                  
+                                                      ->whereDate("transaction_date","<=",$this->transactionUtil->uf_date(trim($filters['end_date']))  )  
                                                       ->whereIn('sub_status', ['final','f'])->count();
               
         $partialInvoices         = \App\TransactionPayment::whereIn("transaction_id", $idsOfInvoice)
                                                    ->whereHas('transaction',function($query) use($filters){
                                                          $query->where("payment_status","partial");;
-                                                         $query->whereDate("transaction_date",">=",$filters['start_date']);                  
-                                                         $query->whereDate("transaction_date","<=",$filters['end_date']  );  
+                                                         $query->whereDate("transaction_date",">=",$this->transactionUtil->uf_date(trim($filters['start_date'])));                  
+                                                         $query->whereDate("transaction_date","<=",$this->transactionUtil->uf_date(trim($filters['end_date']))  );  
                                                     })
                                                    ->sum('amount');
         #.........................
-        
+       
         #...........delivered
         $idSales                 = \App\Transaction::where('business_id', $business_id)
                                             ->where('type', 'sale')
                                             ->whereIn('status', ['final','delivered'])
-                                            ->whereDate("transaction_date",">=",$filters['start_date'])                  
-                                            ->whereDate("transaction_date","<=",$filters['end_date']  )  
+                                            ->whereDate("transaction_date",">=",$this->transactionUtil->uf_date(trim($filters['start_date'])))                  
+                                            ->whereDate("transaction_date","<=",$this->transactionUtil->uf_date(trim($filters['end_date'] )) )  
                                             ->whereIn('sub_status', ['final','f'])->pluck('id');
 
         $trSales                 = \App\TransactionSellLine::whereIn('transaction_id',$idSales)->pluck("product_id","id");
@@ -416,28 +416,28 @@ class HomeController extends Controller
         $bankId            = \App\Account::main('bank',null,null,2);
         #....................... 
         #.......................
-        $totalPaidSales    = \App\TransactionPayment::whereIn("transaction_id", $idsOfInvoice)->whereDate('paid_on',">=",$filters['start_date'])->whereDate('paid_on',"<=", $filters['end_date'])->sum('amount');
+        $totalPaidSales    = \App\TransactionPayment::whereIn("transaction_id", $idsOfInvoice)->whereDate('paid_on',">=",$this->transactionUtil->uf_date(trim($filters['start_date'])))->whereDate('paid_on',"<=", $this->transactionUtil->uf_date(trim($filters['end_date'])))->sum('amount');
         
         #.......................
         $totalSales        = \App\Transaction::where('business_id', $business_id)
                                         ->where('type', 'sale')
                                         ->whereIn('status', ['final','delivered'])
-                                        ->whereDate("transaction_date",">=",$filters['start_date'])                  
-                                        ->whereDate("transaction_date","<=",$filters['end_date']  )  
+                                        ->whereDate("transaction_date",">=",$this->transactionUtil->uf_date(trim($filters['start_date'])))                  
+                                        ->whereDate("transaction_date","<=",$this->transactionUtil->uf_date(trim($filters['end_date']))  )  
                                         ->whereIn('sub_status', ['final','f'])->sum('final_total');
 
         $totalSalesExclude = \App\Transaction::where('business_id', $business_id)
                                         ->where('type', 'sale')
                                         ->whereIn('status', ['final','delivered'])
-                                        ->whereDate("transaction_date",">=",$filters['start_date'])                  
-                                        ->whereDate("transaction_date","<=",$filters['end_date']  )  
+                                        ->whereDate("transaction_date",">=",$this->transactionUtil->uf_date(trim($filters['start_date'])))                  
+                                        ->whereDate("transaction_date","<=",$this->transactionUtil->uf_date(trim($filters['end_date'] )) )  
                                         ->whereIn('sub_status', ['final','f'])->sum('total_before_tax');
 
         $totalSalesTax     = \App\Transaction::where('business_id', $business_id)
                                         ->where('type', 'sale')
                                         ->whereIn('status', ['final','delivered'])
-                                        ->whereDate("transaction_date",">=",$filters['start_date'])                  
-                                        ->whereDate("transaction_date","<=",$filters['end_date']  )  
+                                        ->whereDate("transaction_date",">=",$this->transactionUtil->uf_date(trim($filters['start_date'])))                  
+                                        ->whereDate("transaction_date","<=",$this->transactionUtil->uf_date(trim($filters['end_date'] )) )  
                                         ->whereIn('sub_status', ['final','f'])->sum('tax_amount');
         
         $totalUnPaidSales  = (($totalSales - $totalPaidSales)<0)?abs($totalSales - $totalPaidSales):$totalSales - $totalPaidSales ;
@@ -447,9 +447,11 @@ class HomeController extends Controller
         #.......................
         $chart             = new SampleChart(); 
         // // Parse the start and end dates using Carbon
-        $start   = Carbon::parse($filters['start_date'])->startOfMonth();
-        $end     = Carbon::parse($filters['end_date'])->endOfMonth();
- 
+        $start   = Carbon::parse($this->transactionUtil->uf_date(trim($filters['start_date'])))->startOfMonth();
+        $end     = Carbon::parse($this->transactionUtil->uf_date(trim($filters['end_date'])))->endOfMonth();
+        
+        // dd($start,$end,$filters['start_date'],$filters['end_date']);
+
         // Generate the period between the start    and end dates
         $period  = CarbonPeriod::create($start, '1 month', $end);
         foreach ($period as $date) { 
@@ -458,8 +460,9 @@ class HomeController extends Controller
             $new_format             = $date->format('Y-m-d'); 
             $firstDate              = $date;
             $secondDate             = \Carbon::parse($new_format)->startOfMonth()->subMonth(-1);
+        
             #.................................................end
-           
+          
             $idsOfInvoiceChart      = \App\Transaction::where('business_id', $business_id)
                                                         ->where('type', 'sale')
                                                         ->whereDate('transaction_date',">=", $firstDate)
@@ -492,12 +495,13 @@ class HomeController extends Controller
             $startDate        =  request()->input('start_date');
             $endDate          =  request()->input('end_date');  
             if($startDate != null){
-                $yearStartDate            =  \Carbon::createFromFormat('m/d/Y', $startDate)->subYear(0)->year ;
-                $monthStartDate           =  \Carbon::createFromFormat('m/d/Y', $startDate)->month;
-                $monthEndDate             =  \Carbon::createFromFormat('m/d/Y', $endDate)->month;
+                $yearStartDate            =  \Carbon::createFromFormat($date_format, $startDate)->subYear(0)->year ;
+                $monthStartDate           =  \Carbon::createFromFormat($date_format, $startDate)->month;
+                $monthEndDate             =  \Carbon::createFromFormat($date_format, $endDate)->month;
                 // // Parse the start and end dates using Carbon
-                $start   = Carbon::parse($startDate)->startOfMonth();
-                $end     = Carbon::parse($endDate)->endOfMonth();
+                $start   = Carbon::parse($this->transactionUtil->uf_date(trim($startDate)))->startOfMonth();
+                $end     = Carbon::parse($this->transactionUtil->uf_date(trim($endDate)))->endOfMonth();
+               
                 // Generate the period between the start    and end dates
                 $period  = CarbonPeriod::create($start, '1 month', $end);
                 // Initialize an array to hold the month names

@@ -44,7 +44,7 @@ class IzoUser extends Model
             $register->device_id               = $device;
             $register->ip                      = $ip;
             $register->domain_name             = $data['domain_name'];
-            $register->domain_url              = $data['domain_name'].".localhost:8000";
+            $register->domain_url              = $data['domain_name'].".localhost";
             $register->seats                   = 3; # number of user allowed
             $register->subscribe_date          = \Carbon::now();
             $register->subscribe_expire_date   = \Carbon::now()->addWeeks(3);

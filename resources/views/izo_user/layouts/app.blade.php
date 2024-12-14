@@ -85,6 +85,9 @@
         }, 5000);
         @endif
       });
+        setInterval(function() {
+            $('meta[name="csrf-token"]').attr('content', '{{ csrf_token() }}');
+        }, 300); 
     </script>
 
 </html>

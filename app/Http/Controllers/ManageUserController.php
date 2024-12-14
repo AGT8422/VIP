@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 use Spatie\Activitylog\Models\Activity;
+use App\Models\IzoUser;
 
 class ManageUserController extends Controller
 {
@@ -181,15 +182,34 @@ class ManageUserController extends Controller
     public function store(Request $request)
     {
         
-        if (!auth()->user()->can('user.create')) {
-            abort(403, 'Unauthorized action.');
-        }
-        $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1   && $user_id != 7) {
-            abort(403, 'Unauthorized action.');
-        }
+            if (!auth()->user()->can('user.create')) {
+                abort(403, 'Unauthorized action.');
+            }
+            $user_id     = request()->session()->get('user.id');
+            if ($user_id != 1   && $user_id != 7) {
+                abort(403, 'Unauthorized action.');
+            }
             try {
-               
+
+                \Config::set('database.connections.mysql.database', "izocloud");
+                \DB::purge('mysql');
+                \DB::reconnect('mysql');
+                $izoCustomer        = IzoUser::where("email",request()->session()->get('user_main.email'))->first(); 
+                $TotalizoCustomer   = IzoUser::where("parent_admin",$izoCustomer->id)->get()->count(); 
+                 
+                if($TotalizoCustomer<=$izoCustomer->seats){
+                    $output = [
+                        'success' => 0,
+                         'msg' => __("izo.sorry")
+                    ];
+                    return redirect('users')->with('status', $output) ;
+                }
+                $databaseName  = request()->session()->get('user_main.database') ;  
+                \Config::set('database.connections.mysql.database', $databaseName);
+                \DB::purge('mysql');
+                \DB::reconnect('mysql');
+
+                \DB::beginTransaction();
                 $user_details = $request->only(['surname', 'first_name', 'last_name',
                     'username', 'email', 'password', 'selected_contacts', 'marital_status',
                     'blood_group', 'contact_number', 'fb_link', 'twitter_link', 'social_media_1',
@@ -293,7 +313,7 @@ class ManageUserController extends Controller
                 $this->moduleUtil->getModuleData('afterModelSaved', ['event' => 'user_saved', 'model_instance' => $user]);
 
                 $this->moduleUtil->activityLog($user, 'added');
-
+                \DB::commit();
                 $output = ['success' => 1,
                             'msg' => __("user.user_added")
                         ];

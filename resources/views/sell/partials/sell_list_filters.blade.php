@@ -97,7 +97,7 @@
     </div>
 @endif
 @if(empty($only) || in_array('only_subscriptions', $only))
-<div class="col-md-3">
+<div class="col-md-3 hide">
     <div class="form-group">
         <div class="checkbox">
             <label>

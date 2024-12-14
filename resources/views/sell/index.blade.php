@@ -21,7 +21,7 @@
     @component('components.filters', ['title' => __('report.filters')])
         @include('sell.partials.sell_list_filters',["users" => $users])
         @if($is_woocommerce)
-            <div class="col-md-3">
+            <div class="col-md-3 hide">
                 <div class="form-group">
                     <div class="checkbox">
                         <label>

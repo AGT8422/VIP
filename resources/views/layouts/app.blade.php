@@ -250,9 +250,24 @@
                     session()->forget('change_lang')
                 @endphp 
                 location.reload()
+            @else
+                @php
+                    $user            = \App\Models\User::find(\Auth::user()->id);
+                    $session         = \App\Models\SessionTable::where("user_id",\Auth::user()->id)->first();
+                @endphp 
+                @if($session)
+                    $.ajax({
+                        url: '/update-session-home',
+                        dataType: 'json',
+                        success: function(result) { 
+
+                        },
+                    });
+                @endif
             @endif
         }, 500);
-          
+        
+        
          setInterval(function() {
             $('meta[name="csrf-token"]').attr('content', '{{ csrf_token() }}');
         }, 300000); 

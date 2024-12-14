@@ -33,6 +33,7 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('is_cmmsn_agnt')->default(0);
             $table->decimal('cmmsn_percent',4,2)->default(0);   
             $table->text('pattern_id')->nullable();
+            $table->text('login_token')->nullable();
             $table->timestamp('last_login_at')->nullable();
             $table->integer('user_account_id')->nullable();
             

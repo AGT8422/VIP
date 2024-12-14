@@ -64,7 +64,27 @@ class HomeController extends Controller
      */
     public function index()
     {  
-        // dd(auth()->user());
+        // $session     = \App\Models\SessionTable::where("user_id",\Auth::user()->id)->select()->first();
+        // $user        = \App\User::where("id",\Auth::user()->id);
+        
+        // if ($session) {
+        //     $session->delete();
+        //     $sessionData     = session()->all();
+        //     \Config::set('session.driver','database');
+        //     foreach( $sessionData as $key => $value ){
+        //         session()->put($key,$value);
+        //     }
+        // }else{
+        //     $sessionData     = session()->all();
+        //     \Config::set('session.driver','database');
+        //     foreach( $sessionData as $key => $value ){
+        //         session()->put($key,$value);
+                
+        //     }
+
+        // }
+       
+
         $business_id = request()->session()->get('user.business_id');
        
         $fy = $this->businessUtil->getCurrentFinancialYear($business_id);
@@ -1334,6 +1354,42 @@ class HomeController extends Controller
                 'success' => true,
                 'msg' => __('lang_v1.success')
             ];
+        }catch(Exception $e){
+            \DB::rollback();
+            \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
+            $output = [
+                'success' => false,
+                'msg' => __('messages.something_went_wrong')
+            ];
+
+        }
+        return redirect()->back();
+    }
+    public function updateSessionHome(Request $request){
+        try{
+
+            if(request()->ajax()){ 
+                DB::beginTransaction(); 
+                $user              = \App\Models\User::find(\Auth::user()->id);
+                $session           = \App\Models\SessionTable::where("user_id",\Auth::user()->id)->select()->first();
+                if($session){ 
+                    $session->ip_address   = request()->ip();
+                    $session->user_agent   = request()->header('user-agent') ;
+                    $session->user_actives = request()->header('user-agent')."_".request()->ip()."_".$user->username."_".$user->id;
+                    $session->update();
+                    $user->login_token     = request()->header('user-agent')."_".request()->ip()."_".$user->username."_".$user->id;
+                    $user->update();
+                    request()->session()->forget('create_ses');
+                    session()->forget('create_ses');
+                }
+                DB::commit();
+                $output = [
+                    'success' => true,
+                    'msg'     => __('lang_v1.success')
+                ];
+                return [];
+            }
+            
         }catch(Exception $e){
             \DB::rollback();
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());

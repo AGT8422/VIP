@@ -23,13 +23,10 @@ class SetSessionData
     public function handle($request, Closure $next)
     {
         
-        
         if (!$request->session()->has('user')) {
             $business_util = new BusinessUtil;
-            $i                    = session()->get('lang');
-            
+            $i    = session()->get('lang');
             $user = Auth::user();
-           
             
             $session_data = ['id'         => $user->id,
                             'surname'     => $user->surname,
@@ -43,27 +40,29 @@ class SetSessionData
 
             $business = Business::findOrFail($user->business_id);
             // dd( Config::get('database.connections.mysql.database'));
-            $currency                                = $business->currency;
-            $currency_data = ['id' => $currency->id,
+            $currency                                =  $business->currency;
+            $currency_data = [  'id'                 => $currency->id,
                                 'code'               => $currency->code,
                                 'symbol'             => $currency->symbol,
                                 'thousand_separator' => $currency->thousand_separator,
                                 'decimal_separator'  => $currency->decimal_separator,
                                 'currency'           => $currency->currency,
                             ];
-
             $request->session()->put('user', $session_data);
+            session()->put('user', $session_data);
             $request->session()->put('business', $business);
+            session()->put('business', $business);
             $request->session()->put('currency', $currency_data);
+            session()->put('currency', $currency_data);
             $request->session()->put('locale', $i); 
+            session()->put('locale', $i); 
             $financial_year = $business_util->getCurrentFinancialYear($business->id);
             $request->session()->put('financial_year', $financial_year);
-            
-
+            session()->put('financial_year', $financial_year);
             //set current financial year to session
             // dd($user); 
+            // dd(session()->all());
         }
-
         return $next($request);
     }
 }

@@ -102,6 +102,7 @@ include_once('install_r.php');
             Route::get('/calendar', 'HomeController@getCalendar')->name('calendar');
             Route::post('/save-attachment', 'HomeController@saveAttach');
             Route::get('/form-attachment', 'HomeController@formAttach');
+            Route::get('/update-session-home', 'HomeController@updateSessionHome');
         // 10 ***
         // 1 **
             Route::get('/download-sql', 'SqlDownloadController@download');
@@ -1120,7 +1121,7 @@ include_once('install_r.php');
     // 9 ***
     // 3 ***
         //common route
-        Route::middleware(['authIzo'])->group(function () {
+        Route::middleware(['auth'])->group(function () {
             Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
         });
     // 3 ***

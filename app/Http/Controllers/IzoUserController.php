@@ -16,6 +16,8 @@ use Anhskohbo\NoCaptcha\Facades\NoCaptcha;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail; 
 use App\Utils\ModuleUtil;
+use Artisan;
+use Illuminate\Support\Facades\Cookie;
 
 use Illuminate\Support\Facades\Http;
 
@@ -80,6 +82,7 @@ class IzoUserController extends Controller
         #................................................
         
         if(session()->has('user_main')){
+         
             if(request()->session()->get('startLogin')){
                 // return redirect('/login');
             }
@@ -96,8 +99,8 @@ class IzoUserController extends Controller
     public function loginPage(Request $request)
     {
         //
-        
-        
+       
+        \Config::set('session.driver','database');
         if(!$request->session()->get('user')){
             if ($request->session()->get('startLogin')) {
                 // return redirect('/panel-account');
@@ -121,7 +124,7 @@ class IzoUserController extends Controller
         #................................................
         
         $url                           = request()->session()->get('url.intended');
-        $parsed_url                    = parse_url($url);
+        if($url != null){$parsed_url               = parse_url($url);}else{$parsed_url = [];}
         if(isset($parsed_url['query'])){
             parse_str($parsed_url['query'], $query_params);
             if(isset($query_params['email'])){
@@ -134,8 +137,7 @@ class IzoUserController extends Controller
         if(session()->has('user_main')){
             if(request()->session()->get('startLogin')){
                 // return redirect('/login');
-            }
-             
+            } 
             return redirect('/panel-account');
         }
         
@@ -212,7 +214,7 @@ class IzoUserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function register(Request $request)
-    {
+    { 
         //
         #.....................................every time from the main
         Config::set('database.connections.mysql.database', "izocloud");
@@ -346,8 +348,7 @@ class IzoUserController extends Controller
      */
     public function panel(Request $request)
     {
-        //
-        
+        // 
         $businessUtil  = new BusinessUtil();
         $timeZone      = [
             'Africa/Abidjan' => 'Ivory Coast Time',
@@ -742,7 +743,7 @@ class IzoUserController extends Controller
             $subdomain = '';
 
         }
-        $subdomain     = $subdomain; 
+        $subdomain     = $subdomain;  
         if(session()->has('startLogin')){
             if($subdomain == ""){
                 $login_user = (request()->session()->get('login_user'))?request()->session()->get('login_user'):null; 
@@ -828,7 +829,6 @@ class IzoUserController extends Controller
     protected function login(Request $request)
     {
         // 
-        
         #.....................................every time from the main
         Config::set('database.connections.mysql.database', "izocloud");
         DB::purge('mysql');
@@ -864,7 +864,6 @@ class IzoUserController extends Controller
 
         }
         $subdomain     = $subdomain;
-        // dd(session()->get('lang'));
         if($subdomain == ""){
             $payload =  [
                 "value1" => Hash::make("success"),
@@ -877,14 +876,13 @@ class IzoUserController extends Controller
             
             // dd($subdomain != $login['domain']);
             if($subdomain == ""){
-                    $domain_name =  $login['domain'];
-                    $payload2 =  [
+                $domain_name =  $login['domain'];
+                $payload2 =  [
                     "email"    => $data['email'],
                     "password" => $data['password']
                 ];
                 session(['login_info'  => $payload2]);
                 $login_user = 1;
-              
                 return redirect($login['url'])->with('login_user',$login_user);
             }
             //  return parent::login($request);
@@ -897,6 +895,7 @@ class IzoUserController extends Controller
                 // return view('izo_user.confirm');
                 return redirect("/login-account");
             }else{
+               
                 $payload =  [
                     "value1" => Hash::make("success"),
                     "value2" => $login['password']
@@ -905,7 +904,7 @@ class IzoUserController extends Controller
                 $database_info["database"] = $login['database'];
                 $database_info["admin"]    = $login['admin'];
                 $database_name             = $database_info ;
-                
+           
                 
                 // dd($subdomain != $login['domain']);
                 if($subdomain == ""){
@@ -914,10 +913,11 @@ class IzoUserController extends Controller
                         "email"    => $data['email'],
                         "password" => $data['password']
                     ];
-                    session(['login_info'  => $payload2]);
-                    
+                    session(['login_info'  => $payload2]); 
                     return redirect($login['url'])->with(compact('domain_name'));
                 }
+                
+                
                 //  return parent::login($request);
                 return $this->traitLogin($request,$database_name);
             }
@@ -943,11 +943,6 @@ class IzoUserController extends Controller
         // Determine the database connection settings dynamically
         $this->setDatabaseConnection($request,$database);
         
-        
-        
-        
-        
-        
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
@@ -959,8 +954,8 @@ class IzoUserController extends Controller
          
         if ($this->attemptLogin($request)) {
             $credentials = $request->only('email', 'password');
-           
             \Auth::attempt($credentials);
+            // dd(\Auth::attempt($credentials),\Auth::user());
             if ($request->hasSession()) {
                 $request->session()->put('auth.password_confirmed_at', time());
             } 
@@ -984,76 +979,51 @@ class IzoUserController extends Controller
      * @return mixed
      */
     protected function authenticated(Request $request, $user)
-    {
-        //
-        // dd(request()->root());
-        // $url       = request()->root();
-        // $parsedUrl = parse_url($url);
-        // $host      = $parsedUrl['host'] ?? '';  
-        // $hostParts = explode('.', $host);
-        // $domain_url = request()->session()->get('user_main.domain_url') ;
-        // $final_url = "http://".$domain_url.":8000/home";
-        // // dd($final_url);
+    { 
+        // $url         = request()->root();
+        // $parsedUrl   = parse_url($url);
+        // $host        = $parsedUrl['host'] ?? '';  
+        // $hostParts   = explode('.', $host);
+        // $domain_url  = request()->session()->get('user_main.domain_url') ;
+        // $final_url   = "http://".$domain_url.":8000/home";
         // return redirect()->away($final_url);
-       
-        // if($user->user_account_id != null || $user->user_visa_account_id != null){
-        //     session()->flush();
-        //     \Auth::logout();
-        //     return redirect('/login-account')
-        //     ->with(
-        //         'status',
-        //         ['success' => 0, 'msg' => __('lang_v1.login_not_allowed')]
-        //     );
-        // }
-        // $session     = \App\Models\SessionTable::where("user_id",$user->id)->select()->first();
-      
-        // if(!empty($session)){
-        //     if($user->id == 1){
-        //         session()->flush();
-        //         \Auth::logout();
-        //         return redirect('/login-account')
-        //         ->with(
-        //             'status',
-        //             ['success' => 0, 'msg' => __('lang_v1.sorry_there_is_device_active 1')]
-        //         );
-        //     }else if(isset($request->logout_other)){
-        //         $session->delete();
-        //         session()->flush();
-        //         \Auth::logout();
-        //         return redirect('/login-account')
-        //         ->with(
-        //             'status',
-        //             ['success' => 0, 'msg' => __('lang_v1.sorry_there_is_device_active 2')]
-        //         ); 
-        //     }else{
-        //         session()->flush();
-        //         \Auth::logout();
-        //         return redirect('/login-account')
-        //         ->with(
-        //             'status',
-        //             ['success' => 0, 'msg' => __('lang_v1.sorry_there_is_device_active 3')]
-        //         ); 
-        //     }
-        // }
-        // session()->flush();
-        // \Auth::logout();
-        // return redirect('/login-account')
-        // ->with(
-        //     'status',
-        //     ['success' => 0, 'msg' => __('lang_v1.login_not_allowed')]
-        // );
+        
+        #...............................................
+        if($user->user_account_id != null || $user->user_visa_account_id != null){
+            session()->flush();
+            \Auth::logout();
+            return redirect('/login-account')
+            ->with(
+                'status',
+                ['success' => 0, 'msg' => __('lang_v1.login_not_allowed')]
+            );
+        }
+        $session     = \App\Models\SessionTable::where("user_id",$user->id)->select()->first();
+        if(!empty($session)){
+            if($user->id == 1){ 
+                if(isset($request->logout_other)){
+                    $session->delete(); 
+                    session()->put('delete_session','delete');
+                }else{
+                    session()->flush();
+                    \Auth::logout();
+                    return redirect('/login-account')
+                    ->with(
+                        'status',
+                        ['success' => 0, 'msg' => __('lang_v1.sorry_there_is_device_active')]
+                    );
+                }
+            }else if(isset($request->logout_other)){
+                $session->delete(); 
+            }
+        }else{
+            session()->put('create_session','first_login');
+        }
+        #...............................................
         if(!session()->get('lang')){
             session(['lang'  => "en"]); 
-            
         }
         return redirect("/home");
-         
-        // if($login['admin']){
-        //     $domain_name =  $login['domain'];
-        //     return redirect($login['url'])->with(compact('domain_name'));
-        // }else{
-
-        // }
       
     }
 

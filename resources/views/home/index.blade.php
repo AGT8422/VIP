@@ -137,12 +137,14 @@
     </style>
 @endsection
 
+
+ 
 @section('content')
     <style> 
     </style>
  
  
-    
+     
  <div class="sec-total">
     <div class="row">
         <div class="col-md-12">&nbsp;</div>
@@ -534,7 +536,8 @@
                         chart.render();
                     } 
                 }
-
+                 
+          
                 search("","");
             });
 

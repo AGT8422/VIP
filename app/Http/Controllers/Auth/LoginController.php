@@ -83,6 +83,7 @@ class LoginController extends Controller
         $input['business_id'] = $business_id;
         $input                = ["language"=>"en"];
         $user                 = \App\User::find($user_id);
+        $session              = \App\Models\SessionTable::where("user_id",\Auth::user()->id)->delete();
         $user->update($input);
         request()->session()->flush();
         \Auth::logout(); 

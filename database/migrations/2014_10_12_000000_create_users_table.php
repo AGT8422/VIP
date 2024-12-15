@@ -43,6 +43,7 @@ class CreateUsersTable extends Migration
             $table->integer('user_pattern_id')->nullable();
             $table->integer('user_store_id')->nullable();
             $table->integer('tax_id')->nullable(); 
+            $table->integer('izo_user_id')->nullable(); 
             $table->tinyInteger('include')->default(0);
             
             $table->tinyInteger('is_admin_izo')->default(0);

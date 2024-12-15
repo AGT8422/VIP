@@ -64,6 +64,7 @@ class HomeController extends Controller
      */
     public function index()
     {  
+        
         // $session     = \App\Models\SessionTable::where("user_id",\Auth::user()->id)->select()->first();
         // $user        = \App\User::where("id",\Auth::user()->id);
         
@@ -98,10 +99,10 @@ class HomeController extends Controller
          
          
         //.1.//.... end 
-        if (!auth()->user()->can('dashboard.data')) {
+        // if (!auth()->user()->can('dashboard.data')) {
 
-            return view('home.index', compact('date_filters'));
-        }
+        //     return view('home.index', compact('date_filters'));
+        // }
 
         $currency_detail = $this->transactionUtil->purchaseCurrencyDetails($business_id);
         $user_id = request()->session()->get('user.id');
@@ -407,7 +408,7 @@ class HomeController extends Controller
         $pattern            = \App\Models\Pattern::where("business_id", $business_id)->get();
         foreach($pattern as $pat){
             $patterns[$pat->id] = $pat->name;
-        }
+        } 
         #.......................
         #.......................
         $cash              = \App\Account::main('cash',null,null,1);

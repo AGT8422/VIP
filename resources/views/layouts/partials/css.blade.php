@@ -43,7 +43,7 @@
                 width: 200px;
                 height: 100px;
                 z-index: 2000;
-                color: #fefefe;
+                color: #f7f7f7;
                 font-size: 20px;
                 font-weight: 700;
                 background-color: rgba(175, 28, 28, 0);

@@ -1121,7 +1121,7 @@ include_once('install_r.php');
     // 9 ***
     // 3 ***
         //common route
-        Route::middleware(['auth'])->group(function () {
+        Route::middleware(['authIzo'])->group(function () {
             Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
         });
     // 3 ***

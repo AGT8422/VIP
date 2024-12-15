@@ -514,7 +514,7 @@
             </ul>--}}
             {{-- 2 --}}
             
-            <div class="col-md-4 m-8  mt-15 hidden-xs " style="margin-top:6px;color: #ee6800; background:#ffe8d9;border:1px solid #ee6800;border-radius:5px;padding:10px 20px 10px 20px;"><strong>{{ \Carbon::now()->format($date_format) }}</strong></div>
+            <div class="col-md-4 m-8  mt-15 hidden-xs " style="box-shadow:0px 0px 10px #3a3a3a33;margin-top:6px;color: #ee6800; background:#ffe8d9;border:1px solid #ee6800;border-radius:5px;padding:10px 20px 10px 20px;"><strong>{{ \Carbon::now()->format($date_format) }}</strong></div>
 
         </div>
         @php

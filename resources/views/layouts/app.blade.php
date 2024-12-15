@@ -80,7 +80,11 @@
         @if(session()->get('change_lang'))
             <div class="loading">
                 <div class="loading-content">
-                    <h1>IZO <small>waiting.....</small></h1>
+                    <h1 class="text-center">
+                        <img class="logo-style" width=100 height=50 src="{{asset('logo-white.png')}}" alt="logo">
+                        <br>
+                        <small>{!!__('izo.waiting')!!}</small>
+                    </h1>
                 </div>
             </div>
             

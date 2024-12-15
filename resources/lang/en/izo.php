@@ -108,9 +108,12 @@ return [
     'Box Un Delivered Sales Value' => 'Box Un Delivered Sales Value', 
     'Box Bank & Cash'              => 'Box Bank & Cash',
     'Box Paid - Unpaid'            => 'Box Paid - Unpaid',
-    '' => '',
-    '' => '',
-    '' => '',
+    'sorry_more_user'              => 'Unfortunately, you cannot add users because you have reached the permissible limit. If you want to increase users, change the subscription plan',
+    'sorry_this_email_exist'       => 'This user name and email are already registered',
+    'sorry_cant_delete_admin_user' => 'You Can\'t Delete This user From This Page',
+    'waiting'                      => 'Please Wait.....',
+    ''=> '',
+    ''=> ''
 
 
 ];

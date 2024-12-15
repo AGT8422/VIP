@@ -41,7 +41,7 @@ class AdminSidebarMenu
              
            
             //User management dropdown  10
-            if (  request()->session()->get("user.id") == 1 || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8) {
+            if ( request()->session()->get("user.id") == 1 || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8) {
                 $menu->dropdown(
                     __('user.user_management'),
                     function ($sub) {
@@ -151,7 +151,7 @@ class AdminSidebarMenu
                             $sub->url(
                                 action('LabelsController@show',['product_id=null']),
                                 __('barcode.print_labels'),
-                                ['icon' => 'fa fas fa-barcode', 'active' => request()->segment(1) == 'labels' && request()->segment(2) == 'show']
+                                ['icon' => 'fa fas fa-barcode', 'active' => request()->segment(1) == 'labels' && request()->segment(2) == 'show','style'=>'font-weight:bold']
                             );
                         }
 
@@ -251,7 +251,7 @@ class AdminSidebarMenu
                             );
                              $sub->url( action('StocktackingController@index'),
                                 __('lang_v1.Inventory_of_stores'),
-                                 ['icon' => 'fa fas fa-plus-circle', 'active' => request()->segment(1) == 'stocktacking' && request()->segment(2) == null]
+                                 ['icon' => 'fa fas fa-plus-circle', 'active' => request()->segment(1) == 'stocktacking' && request()->segment(2) == null ,'style'=>'font-weight:bold']
                             );
                          },
                     ['icon' => 'fa fas fa-book']
@@ -405,21 +405,21 @@ class AdminSidebarMenu
                                 $sub->url(
                                         action('PosBranchController@index'),
                                         __('home.List_pos'),
-                                        ['icon'=>'fa fas fa-list' , 'active' => request()->segment(1) == 'pos-branch' && request()->segment(2) == null ]
+                                        ['icon'=>'fa fas fa-list' , 'active' => request()->segment(1) == 'pos-branch' && request()->segment(2) == null ,'style'=>'font-weight:bold' ]
                                     );
                         }
                         if(auth()->user()->can('home.Create_pos')){
                             $sub->url(
                                 action('PosBranchController@create'),
                                 __('home.Create_pos'),
-                                ['icon'=>'fa fas fa-list' , 'active' => request()->segment(1) == 'pos-branch' && request()->segment(2) == "create"]
+                                ['icon'=>'fa fas fa-list' , 'active' => request()->segment(1) == 'pos-branch' && request()->segment(2) == "create" ,'style'=>'font-weight:bold']
                             );
                         }
                         if(auth()->user()->can('home.Go_To')){
                             $sub->url(
                                 action('PosBranchController@Pos'),
                                 __('home.Go_To'),
-                                ['icon'=>'fa fas fa-list' , 'active' => request()->segment(1) == 'pos-branch' && request()->segment(2) == "go-to-pos"]
+                                ['icon'=>'fa fas fa-list' , 'active' => request()->segment(1) == 'pos-branch' && request()->segment(2) == "go-to-pos" ,'style'=>'font-weight:bold']
                             );
                         }
                     },
@@ -447,42 +447,42 @@ class AdminSidebarMenu
                             );
                         }
                         if(auth()->user()->can('warehouse.recieved')|| auth()->user()->can('admin_without.views') || auth()->user()->can('warehouse.views') || auth()->user()->can('manufuctoring.views')|| auth()->user()->can('admin_supervisor.views') || auth()->user()->can('SalesMan.views' )){
-                                $sub->dropdown(
-                                    __('recieved.recieved'),
-                                    function ($sub){
+                                // $sub->dropdown(
+                                //     __('recieved.recieved'),
+                                //     function ($sub){
                                         $sub->url(
                                             action('RecievedPageController@index'),
                                             __('recieved.show_recieved'),
                                             ['icon'=>'fa fas fa-list', 'active' => request()->segment(1) == 'recieved' && request()->segment(2) == "index",'style'=>'font-weight:bold !important']
                                         );
-                                    },
-                                    ['icon'=>'fa fa-retweet']
-                                )->order(35);
+                                //     },
+                                //     ['icon'=>'fa fa-retweet']
+                                // )->order(35);
                         }
                         if(auth()->user()->can('warehouse.delivered')|| auth()->user()->can('admin_without.views') || auth()->user()->can('warehouse.views')|| auth()->user()->can('manufuctoring.views') || auth()->user()->can('admin_supervisor.views') || auth()->user()->can('SalesMan.views' )){
-                                $sub->dropdown(
-                                    __('delivery.delivered'),
-                                    function ($sub){
+                                // $sub->dropdown(
+                                //     __('delivery.delivered'),
+                                //     function ($sub){
                                         $sub->url(
                                             action('DeliveryPageController@index'),
                                             __('delivery.show_delivered'),
                                             ['icon'=>'fa fas fa-list' , 'active' => request()->segment(1) == 'delivery' && request()->segment(2) == "index",'style'=>'font-weight:bold !important']
                                         );
-                                    },
-                                    ['icon'=>'fa fa-bars']
-                                )->order(35);
+                                //     },
+                                //     ['icon'=>'fa fa-bars']
+                                // )->order(35);
                         }
                     
                         //Stock transfer dropdown  35
                         if (auth()->user()->can('purchase.view')|| auth()->user()->can('admin_without.views') || auth()->user()->can('warehouse.views')|| auth()->user()->can('manufuctoring.views')) {
-                                $sub->dropdown(
-                                    __('lang_v1.stock_transfers'),
-                                    function ($sub) {
+                                // $sub->dropdown(
+                                //     __('lang_v1.stock_transfers'),
+                                //     function ($sub) {
                                         if (auth()->user()->can('purchase.view')|| auth()->user()->can('admin_without.views') || auth()->user()->can('warehouse.views')|| auth()->user()->can('manufuctoring.views') || auth()->user()->can('admin_supervisor.views')) {
                                             $sub->url(
                                                 action('StockTransferController@index'),
                                                 __('lang_v1.list_stock_transfers'),
-                                                ['icon' => 'fa fas fa-list', "Style" => "color:#f1f1f1 !important: " , 'active' => request()->segment(1) == 'stock-transfers' && request()->segment(2) == null,'style'=>'font-weight:bold !important']
+                                                ['icon' => 'fa fas fa-list', "Style" => " font-weight:bold !important " , 'active' => request()->segment(1) == 'stock-transfers' && request()->segment(2) == null ]
                                             );
                                         }
                                         if (auth()->user()->can('purchase.create')|| auth()->user()->can('admin_without.views') || auth()->user()->can('warehouse.views')|| auth()->user()->can('manufuctoring.views') || auth()->user()->can('admin_supervisor.views')) {
@@ -492,53 +492,53 @@ class AdminSidebarMenu
                                                 ['icon' => 'fa fas fa-plus-circle', 'active' => request()->segment(1) == 'stock-transfers' && request()->segment(2) == 'create','style'=>'font-weight:bold !important']
                                             );
                                         }
-                                    },
-                                    ['icon' => 'fa fas fa-truck']
-                                )->order(35);
+                                    // },
+                                    // ['icon' => 'fa fas fa-truck']
+                                // )->order(35);
                         }
                         if (auth()->user()->can('warehouse.invetory')|| auth()->user()->can('admin_without.views') || !auth()->user()->can('warehouse.views')|| auth()->user()->can('manufuctoring.views')|| auth()->user()->can('manufuctoring.views')) {
-                                    $sub->dropdown(
-                                        __('lang_v1.Inventory_of_stores'),
-                                        function ($sub) {
+                                    // $sub->dropdown(
+                                    //     __('lang_v1.Inventory_of_stores'),
+                                    //     function ($sub) {
                                             if (auth()->user()->can('warehouse.invetory')|| auth()->user()->can('admin_without.views') || auth()->user()->can('warehouse.views')) {
                                                 $sub->url( action('StocktackingController@index'),
                                                             __('lang_v1.Inventory_of_stores'),
-                                                    ['icon' => 'fa fas fa-plus-circle', 'active' => request()->segment(1) == 'stocktacking' && request()->segment(2) == null]
+                                                    ['icon' => 'fa fas fa-plus-circle','style'=>'font-weight:bold !important', 'active' => request()->segment(1) == 'stocktacking' && request()->segment(2) == null]
                                                 );
                                             }
                                             if (auth()->user()->can('warehouse.add_invetory')|| auth()->user()->can('admin_without.views') || auth()->user()->can('warehouse.views')) {
                                                 $sub->url(
                                                     action('StocktackingController@create'),
                                                     __('lang_v1.Create_an_inventory_period'),
-                                                    ['icon' => 'fa fas fa-plus-circle', 'active' => request()->segment(1) == 'stocktacking' && request()->segment(2) == 'create']
+                                                    ['icon' => 'fa fas fa-plus-circle', 'active' => request()->segment(1) == 'stocktacking' && request()->segment(2) == 'create','style'=>'font-weight:bold !important']
                                                 );
                                             }
-                                        },
-                                        ['icon' => 'fa fas fa-warehouse']
-                                    )->order(35);
+                                    //     },
+                                    //     ['icon' => 'fa fas fa-warehouse']
+                                    // )->order(35);
                         }
 
                         if ((auth()->user()->can('warehouse.add_adjustment')|| auth()->user()->can('admin_without.views') ) && !auth()->user()->can("manufuctoring.views") && !auth()->user()->can("warehouse.views") ) {
-                            $sub->dropdown(
-                                __('stock_adjustment.stock_adjustment'),
-                                function ($sub) {
+                            // $sub->dropdown(
+                            //     __('stock_adjustment.stock_adjustment'),
+                            //     function ($sub) {
                                     if (auth()->user()->can('purchase.view')|| auth()->user()->can('admin_without.views') || auth()->user()->can('warehouse.views')) {
                                         $sub->url(
                                             action('StockAdjustmentController@index'),
                                             __('stock_adjustment.list'),
-                                            ['icon' => 'fa fas fa-list', 'active' => request()->segment(1) == 'stock-adjustments' && request()->segment(2) == null]
+                                            ['icon' => 'fa fas fa-list', 'active' => request()->segment(1) == 'stock-adjustments' && request()->segment(2) == null,'style'=>'font-weight:bold !important']
                                         );
                                     }
                                     if (auth()->user()->can('purchase.create')|| auth()->user()->can('admin_without.views') || auth()->user()->can('warehouse.views')) {
                                         $sub->url(
                                             action('StockAdjustmentController@create'),
                                             __('stock_adjustment.add'),
-                                            ['icon' => 'fa fas fa-plus-circle', 'active' => request()->segment(1) == 'stock-adjustments' && request()->segment(2) == 'create']
+                                            ['icon' => 'fa fas fa-plus-circle', 'active' => request()->segment(1) == 'stock-adjustments' && request()->segment(2) == 'create','style'=>'font-weight:bold !important']
                                         );
                                     }
-                                },
-                                ['icon' => 'fa fas fa-database']
-                            )->order(40);
+                            //     },
+                            //     ['icon' => 'fa fas fa-database']
+                            // )->order(40);
                         }
                     
                     },
@@ -977,7 +977,7 @@ class AdminSidebarMenu
                                 $sub->url(
                                     action('BusinessController@getBusinessSettings'),
                                     __('business.business_settings'),
-                                    ['icon' => 'fa fas fa-cogs', 'active' => request()->segment(1) == 'business', 'id' => "tour_step2"]
+                                    ['icon' => 'fa fas fa-cogs', 'active' => request()->segment(1) == 'business', 'id' => "tour_step2",'style'=>'font-weight:bold']
                                 );
                                 
                             }
@@ -1122,7 +1122,7 @@ class AdminSidebarMenu
                         if (auth()->user()->can('business_settings.access')|| auth()->user()->can('admin_without.views')) {
                             $sub->url(
                                 action('ReactFrontController@getApiList'),
-                                __('React List'),
+                                __('lang_v1.React List'),
                                 ['icon' => 'fa fas fa-cogs', 'active' => request()->segment(1) == 'Rct', 'id' => "app1_list" ,'style' => 'font-weight:bold']
                             );
                         }

@@ -84,6 +84,250 @@
                             </b></label>
                         </div>
                     </div>
+                    <div class="clearfix"></div> 
+                    {{-- box sales --}}
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_sales', in_array('izo.box_sales', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Sales' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_sales_exc', in_array('izo.box_sales_exc', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Sales Exclude Vat' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_sales_inc', in_array('izo.box_sales_inc', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Sales Include Vat' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div> 
+                    {{-- box invoices --}}
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_invoices', in_array('izo.box_invoices', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Invoices' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_invoices_number', in_array('izo.box_invoices_number', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Invoices Number' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div> 
+                    {{-- box sales --}}
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_vat', in_array('izo.box_vat', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Vat' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_vat_amount', in_array('izo.box_vat_amount', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Vat Amount' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div> 
+                    {{-- box Customers --}}
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_customer', in_array('izo.box_customer', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Customers' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_customer_total', in_array('izo.box_customer_total', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Customers Total' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div> 
+                    {{-- box cost of sales --}}
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_cost_of_sales', in_array('izo.box_cost_of_sales', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Cost Of Sales' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_cost_of_sales_cos', in_array('izo.box_cost_of_sales_cos', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Cost Of Sales COS' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div> 
+                    {{-- box Gross Profit --}}
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_gross_profit', in_array('izo.box_gross_profit', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Gross Profit' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_gross_profit_gp', in_array('izo.box_gross_profit_gp', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Gross Profit GP' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div> 
+                    {{-- box Goods Value --}}
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_goods_value', in_array('izo.box_goods_value', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Goods Value' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_goods_value_num', in_array('izo.box_goods_value_num', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Goods Value Number' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div> 
+                    {{-- box Total Customer --}}
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_total_customer', in_array('izo.box_total_customer', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Total Customer' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_total_customer_balance', in_array('izo.box_total_customer_balance', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Total Customer Balance' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div> 
+                    {{-- box Total Supplier --}}
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_total_supplier', in_array('izo.box_total_supplier', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Total Supplier' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_total_supplier_balance', in_array('izo.box_total_supplier_balance', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Total Supplier Balance' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div> 
+                    {{-- box Delivered --}}
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_delivered', in_array('izo.box_delivered', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Delivered' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_delivered_cost', in_array('izo.box_delivered_cost', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Delivered Cost Value' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_delivered_sales', in_array('izo.box_delivered_sales', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Delivered Sales Value' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div> 
+                    {{-- box Un Delivered --}}
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_un_delivered', in_array('izo.box_un_delivered', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Un Delivered' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_un_delivered_cost', in_array('izo.box_un_delivered_cost', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Un Delivered Cost Value' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_un_delivered_sales', in_array('izo.box_un_delivered_sales', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Un Delivered Sales Value' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div> 
+                    {{-- box cash & bank --}}
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_cash_bank', in_array('izo.box_cash_bank', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Bank & Cash' ) }}
+                            </label>
+                        </div>
+                    </div>
+                    {{-- box paid / un paid --}}
+                    <div class="col-md-4"> 
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'izo.box_paid_unpaid', in_array('izo.box_paid_unpaid', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.Box Paid - Unpaid' ) }}
+                            </label>
+                        </div>
+                    </div>
+
+
+
                     <div class="clearfix"></div><hr  style="width:100%;border: 1px solid #ee8835b4">
                     <div class="col-md-12  main_permission text-left"><!-- ** 2 ** -->
                         <div class="checkbox ">

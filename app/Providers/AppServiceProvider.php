@@ -74,7 +74,7 @@ class AppServiceProvider extends ServiceProvider
                 if(isAppInstalled()){
                     $keys = ['additional_js', 'additional_css'];
                     $__system_settings = System::getProperties($keys, true);
-
+                    
                     //Get js,css from modules
                     $moduleUtil = new ModuleUtil;
                     $module_additional_script = $moduleUtil->getModuleData('get_additional_script');
@@ -212,7 +212,7 @@ class AppServiceProvider extends ServiceProvider
             }
             echo $formated_number; ?>';
         });
-
+        
         $this->registerCommands();
     }
 

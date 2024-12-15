@@ -80,7 +80,11 @@
         @if(session()->get('change_lang'))
             <div class="loading">
                 <div class="loading-content">
-                    <h1>IZO <small>waiting.....</small></h1>
+                    <h1 class="text-center">
+                        <img class="logo-style" width=100 height=50 src="{{asset('logo-white.png')}}" alt="logo">
+                        <br>
+                        <small>{!!__('izo.waiting')!!}</small>
+                    </h1>
                 </div>
             </div>
             
@@ -250,9 +254,24 @@
                     session()->forget('change_lang')
                 @endphp 
                 location.reload()
+            @else
+                @php
+                    $user            = \App\Models\User::find(\Auth::user()->id);
+                    $session         = \App\Models\SessionTable::where("user_id",\Auth::user()->id)->first();
+                @endphp 
+                @if($session)
+                    $.ajax({
+                        url: '/update-session-home',
+                        dataType: 'json',
+                        success: function(result) { 
+
+                        },
+                    });
+                @endif
             @endif
         }, 500);
-          
+        
+        
          setInterval(function() {
             $('meta[name="csrf-token"]').attr('content', '{{ csrf_token() }}');
         }, 300000); 

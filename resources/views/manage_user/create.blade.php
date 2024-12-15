@@ -17,8 +17,8 @@
   @component('components.widget')
       <div class="col-md-2">
         <div class="form-group">
-          {!! Form::label('surname', __( 'business.prefix' ) . ':') !!}
-            {!! Form::text('surname', null, ['class' => 'form-control', "id"=>"surname", 'placeholder' => __( 'business.prefix_placeholder' ) ]); !!}
+          {!! Form::label('surname', __( 'business.prefix' ) . ': *') !!}
+            {!! Form::text('surname', null, ['class' => 'form-control', "id"=>"surname",'required', 'placeholder' => __( 'business.prefix_placeholder' ) ]); !!}
         </div>
       </div>
       <div class="col-md-5">
@@ -228,7 +228,7 @@
       <div class="col-md-4">
         <div class="form-group">
           {!! Form::label('pattern_id', __( 'business.patterns' ) . ':') !!}  
-            {!! Form::select('pattern_id[]', $patterns , null, ['class' => 'form-control select2 ','multiple'=>'true', 'id'=>'pattern_id'   ]); !!}
+            {!! Form::select('pattern_id[]', $patterns , null, ['class' => 'form-control select2 ',"required",'multiple'=>'true', 'id'=>'pattern_id'   ]); !!}
         </div>
       </div>
       <div class="clearfix"></div>

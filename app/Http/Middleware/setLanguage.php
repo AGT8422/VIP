@@ -33,6 +33,8 @@ class setLanguage
         }else{  
             \App::setLocale(config('app.locale')) ;
         }
+        // dd("S");
+        
         return $next($request);
     }
 }

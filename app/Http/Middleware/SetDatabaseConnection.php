@@ -33,7 +33,7 @@ class SetDatabaseConnection
         //     }
         // }
         // request()->session()->flush(); 
-        // dd("database");
+         
         if($request->session()->get('startLogin')){
             $databaseName = request()->session()->get('user_main.database');
            
@@ -41,10 +41,10 @@ class SetDatabaseConnection
             $databaseName = 'izocloud';
         }        
         // Set the database configuration dynamically
-        DB::purge('mysql');
         Config::set('database.connections.mysql.database', $databaseName);
+        DB::purge('mysql');
         DB::reconnect('mysql'); 
-        
+
         // Schema::connection('mysql')->getConnection()->reconnect();
         return $next($request);
     }

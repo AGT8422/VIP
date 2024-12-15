@@ -188,7 +188,16 @@
                 width: auto !important;
                 /* border-bottom: 10px solid #ff954a; */
             }
+            .izo-form-input-password:focus{
+                    border-color: #ec6808 !important;
+                    outline:1px solid #ec6808 !important;
+                }
+                .izo-form-input:focus{
+                    border-color:#ec6808 !important;
+                    outline: 1px solid #ec6808 !important;
+                }
             .izo-form-input{
+                font-family:Georgia, 'Times New Roman', Times, serif;
                 width: 100%;
                 border-radius: 10px;
                 padding: 10px;
@@ -197,6 +206,7 @@
                 border: 1px solid #3a3a3a33;
             }
             .izo-form-input-password{
+                font-family:Georgia, 'Times New Roman', Times, serif;
                 width: 100% !important;
                 border-radius: 10px !important;
                 padding: 10px !important;
@@ -250,6 +260,7 @@
                 transform: translateX({{$translate}}) !important;
             }
             .sign-up-form{
+                font-family:Georgia, 'Times New Roman', Times, serif;
                 position: relative;
                 font-size:18px;text-decoration:underline;
                 padding: 10px !important;
@@ -257,7 +268,8 @@
                  width: 100% !important; 
             }
             
-            .izo-form-input-save{   
+            .izo-form-input-save{
+                font-family:Georgia, 'Times New Roman', Times, serif;   
                 width: 100%;
                 border-radius: 10px;
                 padding: 10px;
@@ -461,7 +473,16 @@
                     width: auto !important;
                     /* border-bottom: 10px solid #ff954a; */
                 }
+                .izo-form-input-password:focus{
+                    border-color: #ec6808 !important;
+                    outline:1px solid #ec6808 !important;
+                }
+                .izo-form-input:focus{
+                    border-color:#ec6808 !important;
+                    outline: 1px solid #ec6808 !important;
+                }
                 .izo-form-input{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -470,6 +491,7 @@
                     border: 1px solid #3a3a3a33;
                 }
                 .izo-form-input-password{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     width: 100% !important;
                     border-radius: 10px !important;
                     padding: 10px !important;
@@ -523,6 +545,7 @@
                     transform: translateX({{$translate}}) !important;
                 }
                 .sign-up-form{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     position: relative;
                     font-size:18px;text-decoration:underline;
                     padding: 10px !important;
@@ -530,7 +553,8 @@
                      width: 100% !important; 
                 }
                 
-                .izo-form-input-save{   
+                .izo-form-input-save{
+                    font-family:Georgia, 'Times New Roman', Times, serif;   
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -691,7 +715,16 @@
                     width: auto !important;
                     /* border-bottom: 10px solid #ff954a; */
                 }
+                .izo-form-input-password:focus{
+                    border-color: #ec6808 !important;
+                    outline:1px solid #ec6808 !important;
+                }
+                .izo-form-input:focus{
+                    border-color:#ec6808 !important;
+                    outline: 1px solid #ec6808 !important;
+                }
                 .izo-form-input{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -700,6 +733,7 @@
                     border: 1px solid #3a3a3a33;
                 }
                 .izo-form-input-password{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     width: 100% !important;
                     border-radius: 10px !important;
                     padding: 10px !important;
@@ -753,6 +787,7 @@
                     transform: translateX({{$translate}}) !important;
                 }
                 .sign-up-form{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     position: relative;
                     font-size:18px;text-decoration:underline;
                     padding: 10px !important;
@@ -760,7 +795,8 @@
                      width: 100% !important; 
                 }
                 
-                .izo-form-input-save{   
+                .izo-form-input-save{
+                    font-family:Georgia, 'Times New Roman', Times, serif;   
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -924,7 +960,16 @@
                     width: auto !important;
                     /* border-bottom: 10px solid #ff954a; */
                 }
+                .izo-form-input-password:focus{
+                    border-color: #ec6808 !important;
+                    outline:1px solid #ec6808 !important;
+                }
+                .izo-form-input:focus{
+                    border-color:#ec6808 !important;
+                    outline: 1px solid #ec6808 !important;
+                }
                 .izo-form-input{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -933,6 +978,7 @@
                     border: 1px solid #3a3a3a33;
                 }
                 .izo-form-input-password{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     width: 100% !important;
                     border-radius: 10px !important;
                     padding: 10px !important;
@@ -986,6 +1032,7 @@
                     transform: translateX({{$translate}}) !important;
                 }
                 .sign-up-form{
+                    font-family:Georgia, 'Times New Roman', Times, serif;
                     position: relative;
                     font-size:18px;text-decoration:underline;
                     padding: 10px !important;
@@ -993,7 +1040,8 @@
                      width: 100% !important; 
                 }
                 
-                .izo-form-input-save{   
+                .izo-form-input-save{
+                    font-family:Georgia, 'Times New Roman', Times, serif;   
                     width: 100%;
                     border-radius: 10px;
                     padding: 10px;
@@ -1161,7 +1209,16 @@
                         width: auto !important;
                         /* border-bottom: 10px solid #ff954a; */
                     }
+                    .izo-form-input-password:focus{
+                    border-color: #ec6808 !important;
+                    outline:1px solid #ec6808 !important;
+                }
+                .izo-form-input:focus{
+                    border-color:#ec6808 !important;
+                    outline: 1px solid #ec6808 !important;
+                }
                     .izo-form-input{
+                        font-family:Georgia, 'Times New Roman', Times, serif;
                         width: 100%;
                         border-radius: 10px;
                         padding: 10px;
@@ -1170,6 +1227,7 @@
                         border: 1px solid #3a3a3a33;
                     }
                     .izo-form-input-password{
+                        font-family:Georgia, 'Times New Roman', Times, serif;
                         width: 100% !important;
                         border-radius: 10px !important;
                         padding: 10px !important;
@@ -1224,6 +1282,7 @@
                         transform: translateX({{$translate}}) !important;
                     }
                     .sign-up-form{
+                        font-family:Georgia, 'Times New Roman', Times, serif;
                         position: relative;
                         font-size:18px;text-decoration:underline;
                         padding: 10px !important;
@@ -1231,7 +1290,8 @@
                          width: 100% !important; 
                     }
                     
-                    .izo-form-input-save{   
+                    .izo-form-input-save{
+                        font-family:Georgia, 'Times New Roman', Times, serif;   
                         width: 100%;
                         border-radius: 10px;
                         padding: 10px;
@@ -1248,7 +1308,7 @@
     @endsection
     <body lang="{{ session()->get('lang', config('app.locale')) }}" dir="{{in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'rtl' : 'ltr'}}">
         @php 
-               
+             
             $url       = request()->root();
             $parsedUrl = parse_url($url);
             $host      = $parsedUrl['host'] ?? '';  
@@ -1273,14 +1333,18 @@
 
             }
             $subdomain = $subdomain; 
-       		 
+       		
              
         @endphp
         @if(isset($email))
             @if($email != null && $password != null)
                 <div class="loading">
                     <div class="loading-content">
-                        <h1>IZO <small>waiting.....</small></h1>
+                        <h1 class="text-center">
+                            <img class="logo-style" width=100 height=50 src="{{asset('logo-white.png')}}" alt="logo">
+                            <br>
+                            <small>{!!__('izo.waiting')!!}</small>
+                        </h1>
                     </div>
                 </div>
             @endif
@@ -1298,6 +1362,9 @@
             <input type="hidden" id="domain_name_array" value="{{json_encode([])}}">
         @endif
         <input type="hidden" id="domain_name_current" value="{{parse_url(request()->root(),PHP_URL_HOST)}}">
+        
+       
+
         <div class="language_box">
             <i class="fa fas fa-globe"  ></i>
         </div>
@@ -1336,11 +1403,11 @@
                         {!! Form::open(['url' => route('izoLoginAccount'), 'method' => 'post', 'id' => 'first_login_form','files' => true ]) !!}
                         <input type="hidden" id="domain_name_sub" name="domain_name_sub" value="{{$subdomain}}">
                         <div class="col-xs-12">
-                            <h2 style="color: #000 !important"><b>{{__('izo.login')}}</b></h2>
+                            <h3 style="color: #000 !important;font-family:Georgia, 'Times New Roman', Times, serif;" ><b>{{__('izo.login')}}</b></h3>
                             <br>
                         </div>
                         <div class="col-xl-12 col-md-12">
-                                <b style="font-size:17px;color: #ec6808 !important">{{__('izo.email_address')}}</b>
+                                <b style="font-size:17px;color: #ec6808 !important;font-family:Georgia, 'Times New Roman', Times, serif;">{{__('izo.email_address')}}</b>
                                 {!! Form::text('email',(isset($email))?$email:null,['class' => 'izo-form-input','id'=>'email', 'placeholder' => __('izo.email_placeholder') ]) !!}
                                 <span class="error" id="emailError"></span>
                             </div>
@@ -1348,12 +1415,12 @@
                                 $pass = (isset($password))?$password:null;
                                 @endphp 
                             <div class="col-xl-12 col-md-12">
-                                <b  style="font-size:17px;color: #ec6808 !important">{{__('izo.password')}}</b>
+                                <b  style="font-size:17px;color: #ec6808 !important;font-family:Georgia, 'Times New Roman', Times, serif;">{{__('izo.password')}}</b>
                                 <input type="password" class="izo-form-input-password" id='password' value="{{$pass}}" name="password" placeholder="{{__('izo.password_placeholder')}}">
                                 <span class="error" id="passwordError"></span>
                             </div>
                             <div class="col-xl-12 col-md-12">
-                                <b  style="font-size:17px;color: #ec6808 !important"><a href="{{\URL::to('/forget-password')}}">{{__('izo.forget_password')}}</a></b>
+                                <b  style="font-size:17px;color: #ec6808 !important;font-family:Georgia, 'Times New Roman', Times, serif;"><a href="{{\URL::to('/forget-password')}}">{{__('izo.forget_password')}}</a></b>
                             </div>
                             <div class="col-xl-12 col-md-12">
                                 <div class="form-group">
@@ -1363,7 +1430,7 @@
                                             <small>&nbsp;</small>    
                                             {!! Form::checkbox('logout_other', 1, null, [ 'class' => 'input-icheck', 'id' => 'logout_other']); !!}
                                             <span class="custom-checkbox"></span>
-                                            <span style="position:relative;top:-5px;left:{{$left_margin}};right:{{$right_margin}}">{{ __( 'izo.logout_form_other_device' ) }} </span> 
+                                            <span style="position:relative;font-family:Georgia, 'Times New Roman', Times, serif;top:-5px;left:{{$left_margin}};right:{{$right_margin}}">{{ __( 'izo.logout_form_other_device' ) }} </span> 
                                         </label>
                                     </div>
                                     <div class=" col-12 " style="line-height: 8px">
@@ -1374,7 +1441,7 @@
                                             <small>&nbsp;</small>   
                                             {!! Form::checkbox('remember', 1, old('remember') ? true : false, [ 'class' => 'input-icheck', 'id' => 'remember']); !!}
                                         <span class="custom-checkbox"></span>
-                                        <span style="position:relative;top:-5px;left:{{$left_margin}};right:{{$right_margin}}">{{ __( 'izo.remember_me' ) }} </span>
+                                        <span style="position:relative;top:-5px;font-family:Georgia, 'Times New Roman', Times, serif;left:{{$left_margin}};right:{{$right_margin}}">{{ __( 'izo.remember_me' ) }} </span>
                                         </label>
                                     </div>
                                     </div>
@@ -1432,6 +1499,7 @@
         </script>
     </body>
 @endsection
+
 @include('izo_user.layouts.js.login')
 
 

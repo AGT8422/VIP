@@ -5,7 +5,11 @@
 @endif
 
 @yield('css')
-
+@php
+	$float_btn     = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl'))) ? 'left' : 'right';
+	$border_right  = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl'))) ? '0px' : '3px';
+	$border_left   = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl'))) ? '3px' : '0px';
+@endphp
 <!-- app css -->
 <link rel="stylesheet" href="{{ asset('css/app.css?v='.$asset_v) }}">
 
@@ -39,7 +43,7 @@
                 width: 200px;
                 height: 100px;
                 z-index: 2000;
-                color: #fefefe;
+                color: #f7f7f7;
                 font-size: 20px;
                 font-weight: 700;
                 background-color: rgba(175, 28, 28, 0);
@@ -105,6 +109,11 @@
 	a{
 		color:#ec6808 !important;
 	}
+	.btn-search{
+
+		background-color: #ec6808 !important;
+		border:1px solid #ec6808 !important;
+	}
 	.btn-primary{
 		color:white !important;
 		background-color: #ec6808 !important;
@@ -118,14 +127,20 @@
 		box-shadow: 0px 0px 10px #3a3a3a33 !important;
 		border-top-color:transparent !important;
 		border-top:0px solid transparent !important;
-		border-left:3px solid transparent !important;
+		border-left:{{$border_left}} solid transparent !important;
+		border-right:{{$border_right}} solid transparent !important;
 	}
 	.content-header h5 b{
 		cursor: pointer !important;
 		color:#ec6808 !important;
 	}
-	.dataTable thead tr th{
-		background-color: #000000fd !important;
+	.table tfoot tr th,
+	.table tfoot tr td{
+		font-family:Georgia, 'Times New Roman', Times, serif !important;
+	}
+	.table thead tr th{
+		font-family:Georgia, 'Times New Roman', Times, serif !important;
+		background-color: #353535fd !important;
 		border:1px solid #00000033 !important;
 		border-top:1px solid #3a3a3a33 !important;
 		border-bottom:1px solid #3a3a3a33 !important;
@@ -144,6 +159,9 @@
 	}
 	.D_rang{
 		font-size: 13px !important;
+	}
+	.box-tools{
+		float: {{$float_btn}} !important;
 	}
 </style>
 @if(!empty($__system_settings['additional_css']))

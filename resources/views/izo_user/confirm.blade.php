@@ -3224,7 +3224,7 @@
 @section('content')
    
     @php   
-        $domain_name = "http://".session()->get('user_main.domain').".izocloud.com";
+        $domain_name = "https://".session()->get('user_main.domain').".izocloud.com";
         $domain_name = $domain_name??"";
         $text        = "email=".request()->session()->get("login_info.email")."_password=".request()->session()->get("login_info.password");
         $text        =  Illuminate\Support\Facades\Crypt::encryptString($text);

@@ -1,11 +1,13 @@
 @inject('request', 'Illuminate\Http\Request')
 
 @php
-    $right =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '10%'  ;
-    $left  =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '10%' : 'initial'  ;
-    $txt   =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'left' : 'right'  ;
+    $right          =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '10%'  ;
+    $left           =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '10%' : 'initial'  ;
+    $txt            =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'left' : 'right'  ;
+    $border_left    = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl'))) ? '0px' : '5px';
+    $border_right   = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl'))) ? '5px' : '0px';
+    $date_format    = request()->session()->get('business.date_format'); 
 @endphp
-
 <style>
     #header_shortcut_dropdown i{
         color:#ec8608;
@@ -82,7 +84,8 @@
     .content-header{
         color:black !important;
         padding: 10px !important;
-        border-left:5px solid #3a3a3a !important;
+        border-left:{{$border_left}} solid #3a3a3a !important;
+        border-right:{{$border_right}} solid #3a3a3a !important;
         box-shadow: 0px 0px 10px #3a3a3a33 !important;
         margin: 0px 1% !important;
     }
@@ -177,7 +180,8 @@
         .content-header{
             color:black !important;
             padding: 10px !important;
-            border-left:5px solid #3a3a3a !important;
+            border-left:{{$border_left}} solid #3a3a3a !important;
+            border-right:{{$border_right}} solid #3a3a3a !important;
             box-shadow: 0px 0px 10px #3a3a3a33 !important;
             margin: 0px 1% !important;
         }
@@ -274,7 +278,8 @@
         .content-header{
             color:black !important;
             padding: 10px !important;
-            border-left:5px solid #3a3a3a !important;
+            border-left:{{$border_left}} solid #3a3a3a !important;
+            border-right:{{$border_right}} solid #3a3a3a !important;
             box-shadow: 0px 0px 10px #3a3a3a33 !important;
             margin: 0px 1% !important;
         }
@@ -371,7 +376,8 @@
         .content-header{
             color:black !important;
             padding: 10px !important;
-            border-left:5px solid #3a3a3a !important;
+            border-left:{{$border_left}} solid #3a3a3a !important;
+            border-right:{{$border_right}} solid #3a3a3a !important;
             box-shadow: 0px 0px 10px #3a3a3a33 !important;
             margin: 0px 1% !important;
         }
@@ -468,7 +474,8 @@
         .content-header{
             color:black !important;
             padding: 10px !important;
-            border-left:5px solid #3a3a3a !important;
+            border-left:{{$border_left}} solid #3a3a3a !important;
+            border-right:{{$border_right}} solid #3a3a3a !important;
             box-shadow: 0px 0px 10px #3a3a3a33 !important;
             margin: 0px 1% !important;
         }
@@ -502,12 +509,12 @@
         <div class="col-md-6 parent_left_header">
             {{-- <input type="search" class="form-control-search" placeholder="Search"> --}}
             {{-- 1 --}}
-            <ul class="nav navbar-nav">
+            {{-- <ul class="nav navbar-nav">
                 @include('layouts.partials.header-notifications')
-            </ul>
+            </ul>--}}
             {{-- 2 --}}
-            <div class="col-md-4 m-8  mt-15 hidden-xs " style="margin-top:6px;color: #ee6800; background:#ffe8d9;border:1px solid #ee6800;border-radius:5px;padding:10px 20px 10px 20px;"><strong>{{ date('d - m - Y', strtotime(@format_date('now'))) }}</strong></div>
             
+            <div class="col-md-4 m-8  mt-15 hidden-xs " style="box-shadow:0px 0px 10px #3a3a3a33;margin-top:6px;color: #ee6800; background:#ffe8d9;border:1px solid #ee6800;border-radius:5px;padding:10px 20px 10px 20px;"><strong>{{ \Carbon::now()->format($date_format) }}</strong></div>
 
         </div>
         @php
@@ -622,3 +629,6 @@
         </div>
  
 </header>
+ 
+
+ 

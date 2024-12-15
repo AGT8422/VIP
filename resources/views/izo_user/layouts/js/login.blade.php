@@ -81,8 +81,7 @@
                 }  
                 if( window.location.hostname != "izocloud" ){
                     if(checked == 0 ){ 
-                         
-                        $("form#go-home").submit();
+                        // $("form#go-home").submit();
                     }   
                 }   
            

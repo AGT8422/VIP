@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 use Spatie\Activitylog\Models\Activity;
+use App\Models\IzoUser;
+
 
 class ManageUserController extends Controller
 {
@@ -181,15 +183,57 @@ class ManageUserController extends Controller
     public function store(Request $request)
     {
         
-        if (!auth()->user()->can('user.create')) {
-            abort(403, 'Unauthorized action.');
-        }
-        $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1   && $user_id != 7) {
-            abort(403, 'Unauthorized action.');
-        }
+            if (!auth()->user()->can('user.create')) {
+                abort(403, 'Unauthorized action.');
+            }
+            $user_id     = request()->session()->get('user.id');
+            if ($user_id != 1   && $user_id != 7) {
+                abort(403, 'Unauthorized action.');
+            }
             try {
-               
+
+                \DB::beginTransaction();
+
+                \Config::set('database.connections.mysql.database', "izocloud");
+                \DB::purge('mysql');
+                \DB::reconnect('mysql');
+                $izoCustomer        = IzoUser::where("email",request()->session()->get('user_main.email'))->first(); 
+                $TotalizoCustomer   = IzoUser::where("parent_admin",$izoCustomer->id)->get()->count(); 
+                
+                $listOfUsers        = IzoUser::pluck("email")->toArray();
+                 
+                if(in_array($request->email,$listOfUsers) || in_array($request->username,$listOfUsers) ){
+                    $output = [
+                        'success' => 0,
+                         'msg' => __("izo.sorry_this_email_exist")
+                    ];
+                    return redirect('users')->with('status', $output) ;
+                }
+                 
+                if($TotalizoCustomer<=$izoCustomer->seats){
+                    $output = [
+                        'success' => 0,
+                         'msg' => __("izo.sorry_more_user")
+                    ];
+                    return redirect('users')->with('status', $output) ;
+                }
+                $newIzoCustomer                = $izoCustomer->replicate();
+                // $newIzoCustomer->surname       = $request->surname;
+                $newIzoCustomer->mobile        = $request->contact_number;
+                $newIzoCustomer->email         = $request->email;
+                $newIzoCustomer->password      = Hash::make($request->password);;
+                $newIzoCustomer->device_id     = $request->header('User-Agent');
+                $newIzoCustomer->ip            = $request->ip();
+                $newIzoCustomer->status        = "company_user" ;
+                $newIzoCustomer->admin_user    = 0 ;
+                $newIzoCustomer->parent_admin  = $izoCustomer->id ;
+                $newIzoCustomer->save();
+                $idIzoCustomer = $newIzoCustomer->id; 
+                $databaseName  = request()->session()->get('user_main.database') ;  
+                \Config::set('database.connections.mysql.database', $databaseName);
+                \DB::purge('mysql');
+                \DB::reconnect('mysql');
+
                 $user_details = $request->only(['surname', 'first_name', 'last_name',
                     'username', 'email', 'password', 'selected_contacts', 'marital_status',
                     'blood_group', 'contact_number', 'fb_link', 'twitter_link', 'social_media_1',
@@ -265,7 +309,8 @@ class ManageUserController extends Controller
                 $user_details['max_sales_discount_percent'] = !is_null($user_details['max_sales_discount_percent']) ? $this->moduleUtil->num_uf($user_details['max_sales_discount_percent']) : null;
 
                 // set user language as its business by eng mohamed ali
-                $user_details['language']  = "en";
+                $user_details['language']     = "en";
+                $user_details['izo_user_id']  = $idIzoCustomer;
 
                 //Create the user
 
@@ -293,7 +338,7 @@ class ManageUserController extends Controller
                 $this->moduleUtil->getModuleData('afterModelSaved', ['event' => 'user_saved', 'model_instance' => $user]);
 
                 $this->moduleUtil->activityLog($user, 'added');
-
+                \DB::commit();
                 $output = ['success' => 1,
                             'msg' => __("user.user_added")
                         ];
@@ -301,7 +346,8 @@ class ManageUserController extends Controller
                 \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
                 
                 $output = ['success' => 0,
-                            'msg' => __("messages.something_went_wrong")
+                            'msg' =>"File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage()
+                            // 'msg' => __("messages.something_went_wrong")
                         ];
             }
     
@@ -439,11 +485,47 @@ class ManageUserController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $user_id     = request()->session()->get('user.id');
+        $business_id     = request()->session()->get('user.business_id');
         if ($user_id != 1 && $user_id != 7) {
             abort(403, 'Unauthorized action.');
         }
         try {
+             
+            $user      = User::where('business_id', $business_id)->findOrFail($id);
+            $izoUserId = $user->izo_user_id;
+            #.......................................
             \DB::beginTransaction();
+            \Config::set('database.connections.mysql.database', "izocloud");
+            \DB::purge('mysql');
+            \DB::reconnect('mysql');
+            #.......................................
+            $izoCustomer        = IzoUser::where("email",request()->session()->get('user_main.email'))->first(); 
+            $TotalizoCustomer   = IzoUser::where("parent_admin",$izoCustomer->id)->get()->count(); 
+            $izoChildCustomer   = IzoUser::find($izoUserId); 
+            #.......................................
+            // $newIzoCustomer->surname       = $request->surname;
+            $listOfUsers        = IzoUser::where("id","!=",$izoUserId)->pluck("email")->toArray();
+                 
+            if(in_array($request->email,$listOfUsers) || in_array($request->username,$listOfUsers) ){
+                $output = [
+                    'success' => 0,
+                        'msg' => __("izo.sorry_this_email_exist")
+                ];
+                return redirect('users')->with('status', $output) ;
+            }
+            $password_has = null;
+            $izoChildCustomer->mobile        = $request->contact_number;
+            $izoChildCustomer->email         = $request->email;
+            if($request->password != null && $request->password != ""){
+                $izoChildCustomer->password      = Hash::make($request->password);
+                $password_has = $izoChildCustomer->password;  
+            }
+            $izoChildCustomer->update();
+            
+            $databaseName  = request()->session()->get('user_main.database') ;  
+            \Config::set('database.connections.mysql.database', $databaseName);
+            \DB::purge('mysql');
+            \DB::reconnect('mysql');
 
             $user_data = $request->only(['surname', 'first_name', 'last_name', 'email', 'selected_contacts', 'marital_status',
                 'blood_group', 'contact_number', 'fb_link', 'twitter_link', 'social_media_1',
@@ -475,7 +557,11 @@ class ManageUserController extends Controller
             }
 
             if (!empty($request->input('password'))) {
-                $user_data['password'] = $user_data['allow_login'] == 1 ? Hash::make($request->input('password')) : null;
+                if($password_has != null){
+                    $user_data['password'] = $password_has;
+                }else{
+                    $user_data['password'] = $user_data['allow_login'] == 1 ? Hash::make($request->input('password')) : null;
+                }
             }
 
             //Sales commission percentage
@@ -503,7 +589,7 @@ class ManageUserController extends Controller
                     $user_data['username'] .= $username_ext;
                 }
             }
-
+            $user_data['username'] = $request->email;
             $user = User::where('business_id', $business_id)
                           ->findOrFail($id);
             $user->update($user_data);
@@ -567,11 +653,31 @@ class ManageUserController extends Controller
         }
         if (request()->ajax()) {
             try {
+                \DB::beginTransaction();
                 $business_id = request()->session()->get('user.business_id');
+                $user        = User::where('business_id', $business_id)->where('id', $id)->first();
+                $izoUserId   = $user->izo_user_id;
                 
-                User::where('business_id', $business_id)
-                    ->where('id', $id)->delete();
+                \Config::set('database.connections.mysql.database', "izocloud");
+                \DB::purge('mysql');
+                \DB::reconnect('mysql');
+                $izoChildCustomer   = IzoUser::find($izoUserId);  
+                if($izoChildCustomer->admin_user == 1){
+                    $output = [
+                        'success' => 0,
+                         'msg'    => __("izo.sorry_cant_delete_admin_user")
+                    ];
+                    return redirect('users')->with('status', $output) ;
+                } 
+                $izoChildCustomer->delete(); 
+                $databaseName  = request()->session()->get('user_main.database') ;  
+                \Config::set('database.connections.mysql.database', $databaseName);
+                \DB::purge('mysql');
+                \DB::reconnect('mysql');
 
+
+                User::where('business_id', $business_id)->where('id', $id)->delete();
+                \DB::commit();
                 $output = ['success' => true,
                                 'msg' => __("user.user_delete_success")
                                 ];
@@ -579,7 +685,8 @@ class ManageUserController extends Controller
                 \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             
                 $output = ['success' => false,
-                            'msg' => __("messages.something_went_wrong")
+                            // 'msg' => __("messages.something_went_wrong")
+                            'msg' => "File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage()
                         ];
             }
 

@@ -1685,6 +1685,7 @@ return [
    "company_name"            => "Company Name",
    "device_no"               => "Device No",
    "activate"                => "Activate",
+   "React List"              => "React List",
    
    
    "Whole Price"             => "Whole Price",

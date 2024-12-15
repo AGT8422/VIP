@@ -32,6 +32,7 @@ class CreateIzoUsersTable extends Migration
             $table->date('subscribe_date')->nullable();
             $table->tinyInteger('not_active')->default(0);
             $table->tinyInteger('is_migrate')->default(0);
+            $table->integer('parent_admin')->default(0)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

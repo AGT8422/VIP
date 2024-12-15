@@ -4,7 +4,41 @@
 @section('app_css')
  <style>
 
-   
+            .active_input_focus{
+                outline:2px solid #ff0000 !important;
+            }
+            .list_of_lang{
+                background-color:#f7f7f7;
+                border-radius:10px;
+                padding:10px ;
+                position:absolute; 
+                top:0px;
+                left:50px;
+                width:150px;
+                z-index:3004;
+                font-size:20px;
+                box-shadow: 0px 0px 10px #f7f7f7;
+            }
+            .language_box i{
+                color:#ec6808;
+            }
+            .language_box{
+                font-size: 18px;
+                cursor: pointer;
+                font-weight: 700;
+                position: absolute;;
+                /* box-shadow: 0px 0px 10px #f7f7f7; */
+                text-align: center;
+                left:10px; 
+                top:0px;
+                z-index:3000;
+                line-height: 50px;
+                /* background-color:white !important; */
+                height:50px;
+                width:50px;
+                border-radius:100px !important;
+                color:black;
+            }
     .submit_panel{
         background-color: transparent;
         border: 0px solid black;
@@ -200,13 +234,18 @@
             width: auto !important;
             /* border-bottom: 10px solid #ff954a; */
         }
+        .izo-form-input:focus{
+            border:1px solid #ec6808 !important;
+            outline:1px solid #ec6808 !important;
+        }
         .izo-form-input{
             width: 100%;
-            border-radius: 0px;
+            border-radius: 10px;
             padding: 10px;
             margin: 10px auto ;
-            font-size: 20px;
-            border: 1px solid #e86000
+            font-size: 17px;
+            border: 1px solid #3a3a3a33;
+            /* outline: 1px solid #3a3a3a33 */
         }
         .izo-form-input-password{
             width: 100% !important;
@@ -355,15 +394,15 @@
         .board div.left_board{
                 display: flex;
                 /* justify-content: center; */
-            border-radius:10px;
+            /* border-radius:10px; */
             padding: 10px;
-            background-color: #ffffff75;
+            background-color: #ffffff;
             width: 120%;
             text-align: center;
         }
         .board div.right_board{
-            border-left:1px  solid #2c2c2c;
-            box-shadow: -10px 0px 10px #2c2c2c;
+            /* border-left:1px  solid #2c2c2c; */
+            /* box-shadow: -10px 0px 10px #2c2c2c; */
             background-color: white;
             width: 120%;
             padding: 0px;
@@ -486,18 +525,19 @@
         }
         .plartform label{
             position:absolute;
-            top:-8px;
+            top:-10px;
+            left:8px;
             letter-spacing:1px;
-            font-size:12px;
+            font-size:13px;
             color:#e68000;
         }
         .form_btn_primary{
             /* height: 100%; */
             box-shadow: 1px 1px 10px rgba(155, 155, 155, 0.226);
-            background-color: #e68000;
+            background-color: #e68000 !important;
             border-radius: 5px;
             font-weight: 700;
-            color: #f7f7f7;
+            color: #f7f7f7 !important;
             padding: 10px 25px;
             width: 100px; 
         }
@@ -708,13 +748,18 @@
             width: auto !important;
             /* border-bottom: 10px solid #ff954a; */
         }
+        .izo-form-input:focus{
+            border:1px solid #ec6808 !important;
+            outline:1px solid #ec6808 !important;
+        }
         .izo-form-input{
             width: 100%;
-            border-radius: 0px;
+            border-radius: 10px;
             padding: 10px;
             margin: 10px auto ;
-            font-size: 20px;
-            border: 1px solid #e86000
+            font-size: 17px;
+            border: 1px solid #3a3a3a33;
+            /* outline: 1px solid #3a3a3a33 */
         }
         .izo-form-input-password{
             width: 100% !important;
@@ -862,15 +907,15 @@
         .board div.left_board{
                 display: flex;
                 /* justify-content: center; */
-            border-top-left-radius:10px;
+            /* border-top-left-radius:10px; */
             border-top-right-radius:10px;
             padding: 10px;
-            background-color: #ffffff75;
+    background-color: #ffffff75;
             width: 110%;
         }
         .board div.right_board{
-            border-left:1px  solid #2c2c2c;
-            box-shadow: -10px 0px 10px #2c2c2c;
+            /* border-left:1px  solid #2c2c2c; */
+            /* box-shadow: -10px 0px 10px #2c2c2c; */
             background-color: white;
             width: 110%;
         }
@@ -991,18 +1036,19 @@
         }
         .plartform label{
             position:absolute;
-            top:-8px;
+            top:-10px;
+            left:8px;
             letter-spacing:1px;
-            font-size:12px;
+            font-size:13px;
             color:#e68000;
         }
         .form_btn_primary{
             /* height: 100%; */
             box-shadow: 1px 1px 10px rgba(155, 155, 155, 0.226);
-            background-color: #e68000;
+            background-color: #e68000 !important;
             border-radius: 5px;
             font-weight: 700;
-            color: #f7f7f7;
+            color: #f7f7f7 !important;
             padding: 10px 25px;
             width: 100px; 
         }
@@ -1033,7 +1079,7 @@
         }
         .next:hover,
         .finish:hover{
-            color: #fff;
+            color: #fff !important;
         }
         .prev:hover{
             color: #303030;
@@ -1250,13 +1296,18 @@
                     width: auto !important;
                     /* border-bottom: 10px solid #ff954a; */
                 }
+                .izo-form-input:focus{
+                    border:1px solid #ec6808 !important;
+                    outline:1px solid #ec6808 !important;
+                }
                 .izo-form-input{
                     width: 100%;
-                    border-radius: 0px;
+                    border-radius: 10px;
                     padding: 10px;
                     margin: 10px auto ;
-                    font-size: 20px;
-                    border: 1px solid #e86000
+                    font-size: 17px;
+                    border: 1px solid #3a3a3a33;
+                    /* outline: 1px solid #3a3a3a33 */
                 }
                 .izo-form-input-password{
                     width: 100% !important;
@@ -1400,14 +1451,14 @@
                 .board div.left_board{
                 display: flex;
                 /* justify-content: center; */
-                    border-radius:10px;
+                    /* border-radius:10px; */
                     padding: 10px;
-                    background-color: #ffffff75;
+                    background-color: #ffffff;
                     width: 110%;
                 }
                 .board div.right_board{
-                    border-left:1px  solid #2c2c2c;
-                    box-shadow: -10px 0px 10px #2c2c2c;
+                    /* border-left:1px  solid #2c2c2c; */
+                    /* box-shadow: -10px 0px 10px #2c2c2c; */
                     background-color: white;
                     width: 90%;
                 }
@@ -1517,18 +1568,19 @@
         }
         .plartform label{
             position:absolute;
-            top:-8px;
+            top:-10px;
+            left:8px;
             letter-spacing:1px;
-            font-size:12px;
+            font-size:13px;
             color:#e68000;
         }
         .form_btn_primary{
             /* height: 100%; */
             box-shadow: 1px 1px 10px rgba(155, 155, 155, 0.226);
-            background-color: #e68000;
+            background-color: #e68000 !important;
             border-radius: 5px;
             font-weight: 700;
-            color: #f7f7f7;
+            color: #f7f7f7 !important;
             padding: 10px 25px;
             width: 100px; 
         }
@@ -1777,13 +1829,18 @@
                     width: auto !important;
                     /* border-bottom: 10px solid #ff954a; */
                 }
+                .izo-form-input:focus{
+                    border:1px solid #ec6808 !important;
+                    outline:1px solid #ec6808 !important;
+                }
                 .izo-form-input{
                     width: 100%;
-                    border-radius: 0px;
+                    border-radius: 10px;
                     padding: 10px;
                     margin: 10px auto ;
-                    font-size: 20px;
-                    border: 1px solid #e86000
+                    font-size: 17px;
+                    border: 1px solid #3a3a3a33;
+                    /* outline: 1px solid #3a3a3a33 */
                 }
                 .izo-form-input-password{
                     width: 100% !important;
@@ -1927,14 +1984,14 @@
                 .board div.left_board{
                 display: flex;
                 /* justify-content: center; */
-                    border-radius:10px;
+                    /* border-radius:10px; */
                     padding: 10px;
-                    background-color: #ffffff75;
+                    background-color: #ffffff;
                     width: 110%;
                 }
                 .board div.right_board{
-                    border-left:1px  solid #2c2c2c;
-                    box-shadow: -10px 0px 10px #2c2c2c;
+                    /* border-left:1px  solid #2c2c2c; */
+                    /* box-shadow: -10px 0px 10px #2c2c2c; */
                     background-color: white;
                     width: 90%;
                 }
@@ -2044,18 +2101,19 @@
         }
         .plartform label{
             position:absolute;
-            top:-8px;
+            top:-10px;
+            left:8px;
             letter-spacing:1px;
-            font-size:12px;
+            font-size:13px;
             color:#e68000;
         }
         .form_btn_primary{
             /* height: 100%; */
             box-shadow: 1px 1px 10px rgba(155, 155, 155, 0.226);
-            background-color: #e68000;
+            background-color: #e68000 !important;
             border-radius: 5px;
             font-weight: 700;
-            color: #f7f7f7;
+            color: #f7f7f7 !important;
             padding: 10px 25px;
             width: 100px; 
         }
@@ -2304,13 +2362,18 @@
                 width: auto !important;
                 /* border-bottom: 10px solid #ff954a; */
             }
+            .izo-form-input:focus{
+                border:1px solid #ec6808 !important;
+                outline:1px solid #ec6808 !important;
+            }
             .izo-form-input{
                 width: 100%;
-                border-radius: 0px;
+                border-radius: 10px;
                 padding: 10px;
                 margin: 10px auto ;
-                font-size: 20px;
-                border: 1px solid #e86000
+                font-size: 17px;
+                border: 1px solid #3a3a3a33;
+                /* outline: 1px solid #3a3a3a33 */
             }
             .izo-form-input-password{
                 width: 100% !important;
@@ -2459,14 +2522,14 @@
             .board div.left_board{
                 display: flex;
                 /* justify-content: center; */
-                border-radius:10px;
+                /* border-radius:10px; */
                 padding: 10px;
-                background-color: #ffffff75;
+                background-color: #ffffff;
                 width: 110%;
             }
             .board div.right_board{
-                border-left:1px  solid #2c2c2c;
-                box-shadow: -10px 0px 10px #2c2c2c;
+                /* border-left:1px  solid #2c2c2c; */
+                /* box-shadow: -10px 0px 10px #2c2c2c; */
                 background-color: white;
                 width: 90%;
             }
@@ -2588,18 +2651,19 @@
         }
         .plartform label{
             position:absolute;
-            top:-8px;
+            top:-10px;
+            left:8px;
             letter-spacing:1px;
-            font-size:12px;
+            font-size:13px;
             color:#e68000;
         }
         .form_btn_primary{
             /* height: 100%; */
             box-shadow: 1px 1px 10px rgba(155, 155, 155, 0.226);
-            background-color: #e68000;
+            background-color: #e68000 !important;
             border-radius: 5px;
             font-weight: 700;
-            color: #f7f7f7;
+            color: #f7f7f7 !important;
             padding: 10px 25px;
             width: 100px; 
         }
@@ -2633,7 +2697,7 @@
             color: #fff;
         }
         .prev:hover{
-            color: #303030;
+            color: #303030 !important;
         }
         .platforms{
             
@@ -2840,13 +2904,18 @@
                 width: auto !important;
                 /* border-bottom: 10px solid #ff954a; */
             }
+            .izo-form-input:focus{
+                border:1px solid #ec6808 !important;
+                outline:1px solid #ec6808 !important;
+            }
             .izo-form-input{
                 width: 100%;
-                border-radius: 0px;
+                border-radius: 10px;
                 padding: 10px;
                 margin: 10px auto ;
-                font-size: 20px;
-                border: 1px solid #e86000
+                font-size: 17px;
+                border: 1px solid #3a3a3a33;
+                /* outline: 1px solid #3a3a3a33 */
             }
             .izo-form-input-password{
                 width: 100% !important;
@@ -2994,14 +3063,14 @@
             .board div.left_board{
                 display: flex;
                 /* justify-content: center; */
-                border-radius:10px;
+                /* border-radius:10px; */
                 padding: 10px;
-                background-color: #ffffff75;
+                background-color: #ffffff;
                 width: 110%;
             }
             .board div.right_board{
-                border-left:1px  solid #2c2c2c;
-                box-shadow: -10px 0px 10px #2c2c2c;
+                /* border-left:1px  solid #2c2c2c; */
+                /* box-shadow: -10px 0px 10px #2c2c2c; */
                 background-color: white;
                 width: 90%;
             }
@@ -3122,18 +3191,19 @@
         }
         .plartform label{
             position:absolute;
-            top:-8px;
+            top:-10px;
+            left:8px;
             letter-spacing:1px;
-            font-size:12px;
+            font-size:13px;
             color:#e68000;
         }
         .form_btn_primary{
             /* height: 100%; */
             box-shadow: 1px 1px 10px rgba(155, 155, 155, 0.226);
-            background-color: #e68000;
+            background-color: #e68000 !important;
             border-radius: 5px;
             font-weight: 700;
-            color: #f7f7f7;
+            color: #f7f7f7 !important;
             padding: 10px 25px;
             width: 100px; 
         }
@@ -3187,7 +3257,62 @@
 </style>
 @endsection
 @section('content')
- 
+ @php
+    $list_type_of_business  = [
+        "shop"       => "Shops And POS",
+        "craft"      => "Crafts and service professions",
+        "medical"    => "Medical care",
+        "tourism"    => "Logistics services",
+        "care"       => "Body care and fitness",
+        "tourism"    => "Tourism, transportation and hospitality",
+        "education"  => "Education",
+        "cars"       => "Cars",
+        "services"   => "Business services",
+        "projects"   => "Projects, contracting and real estate investment"
+    ];
+    
+    $list_section_of_business['shop']  = [
+        1 => "Shops And POS sections one",
+        2 => "Shops And POS sections Two"
+    ];
+    $list_section_of_business['craft']  = [
+        1 => "Crafts and service professions sections one",
+        2 => "Crafts and service professions sections Two",
+        3 => "Crafts and service professions sections Three"
+    ];
+    $list_section_of_business['medical']  = [
+        1 => "Medical care sections one",
+        2 => "Medical care sections Two",
+        3 => "Medical care sections Three",
+        4 => "Medical care sections Four"
+    ];
+    $list_section_of_business['tourism']  = [
+        1 => "Logistics services",
+        1 => "Logistics services",
+        1 => "Logistics services"
+    ];
+    $list_section_of_business['care']  = [
+        2 => "Body care and fitness",
+        2 => "Body care and fitness",
+        2 => "Body care and fitness",
+    ];
+    $list_section_of_business['tourism']  = [
+        3 => "Tourism, transportation and hospitality",
+        3 => "Tourism, transportation and hospitality",
+    ];
+    $list_section_of_business['education']  = [
+        1 => "Education"
+    ];
+    $list_section_of_business['cars']  = [
+        1 => "Cars"
+    ];
+    $list_section_of_business['services']  = [
+        1 => "Business services"
+    ];
+    $list_section_of_business['projects']  = [
+        1 => "Projects, contracting and real estate investment"
+    ];
+ @endphp
     {{-- @if(request()->session()->get('startLogin'))
         <div class="container">
             <div class="row">
@@ -3200,6 +3325,7 @@
        
     @else --}}
         <body class="contents font_style">
+           
             {{-- top --}}
             <div class="container mainTopbox">
                 <div class="row">
@@ -3216,35 +3342,56 @@
                             <div class="mySlides hide image_2"  data-active="0"  data-id="2"></div>
                             <div class="mySlides hide image_3"  data-active="0" data-id="3"></div>
                             <div class="mySlides hide image_4"  data-active="0" data-id="4"></div>
-                        
+                            
                         </div>
                         <br>
                         
                     </div>
+                    
                     <div class="col-md-4 text-right">
                         @php   
                             $domain_name = "http://".session()->get('user_main.domain').".izocloud.com/login-account";
                             $domain_name = $domain_name??"";
-                        @endphp 
+                            @endphp 
                         <br>
                         <ul class="header_nav">
                             <li>{{" "}}</li>
-                            <li>{{""}}</li>
                             <li class="hide">{{"Website"}}</li>
                             <li class="hide">{{"IZOCLOUD"}}</li>
-                        </ul>
+                            <li>
+                                
+                            </li>
+                        </ul> 
+                        
                     </div>
-                
+                    
+                    <div class="col-md-3 col-6" >
+                        <div class="pull-right">
+                            <br>
+                            <select class="input-form" style="border-radius:10px;font-size:14px;padding 10px; color:#ec6808" id="select_lang">
+                                <option  value="">
+                                    &nbsp;&nbsp; Language
+                                    <i class="fa fas fa-globe" ></i>
+                                </option>
+                                <option data-href="{{action("HomeController@changeLanguageApp",["lang"=>"en"])}}" value="en">
+                                      <a href="#"> &nbsp;&nbsp;{{__('izo.english')}}  </a>
+                                </option>
+                                <option data-href="{{action("HomeController@changeLanguageApp",["lang"=>"ar"])}}" value="ar" >
+                                    <a href="#">&nbsp;&nbsp;{{__('izo.arabic')}}  </a>  
+                                </option> 
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
             {{-- center --}}
             <div class="container mainbox">
+                <input type="hidden" id='list_section' value="{{json_encode($list_section_of_business)}}">
                 <div class="row childbox">
                     <div class="leftChild"> 
-                            <div onclick="viewPlatform(1);"  data-id="1" class="btn_platform active_div">{{"Your Information"}}</div>
+                            <div onclick="viewPlatform(1);"  data-id="1" class="btn_platform active_div">{{"Personal Information"}}</div>
                             <div onclick="viewPlatform(2);"  data-id="2" class="btn_platform">{{"Business Information"}}</div>
-                            <div onclick="viewPlatform(3);"  data-id="3" class="btn_platform">{{"Business Type"}}</div>
-                            <div onclick="viewPlatform(4);"  data-id="4" data-type="1" class="btn_platform type_of_job hide">{{"Type Of Job"}}</div>
+                            {{-- <div onclick="viewPlatform(3);"  data-id="3" data-type="1" class="btn_platform type_of_job hide">{{"Type Of Job"}}</div> --}}
                             {{--<div onclick="viewPlatform(5);"  data-id="5" class="btn_platform">{{"PLANS"}}</div>
                             <div onclick="viewPlatform(6);"  data-id="6" class="btn_platform">{{"LOGOUT"}}</div> --}}
                             <div ><a style="color: #2c2c2c" href="/account/logout">{{"LOGOUT"}}</a></div>  
@@ -3256,49 +3403,48 @@
                                     <div class="platforms">
                                         <div class="plartform " data-id="1" >
                                             <div class="col-md-6">
-                                                {!! Form::label('first_name', __('First Name') ) !!}
-                                                {!! Form::text('first_name',null,['class' => 'izo-form-input', 'id'=>'first_name', 'placeholder' => __('First Name') ]) !!}
+                                                {!! Form::label('first_name', __('First Name *') ) !!}
+                                                {!! Form::text('first_name',null,['class' => 'izo-form-input', 'id'=>'first_name','required', 'placeholder' => __('First Name') ]) !!}
                                             </div>
                                             <div class="col-md-6">
-                                                {!! Form::label('second_name', __('Second Name') ) !!}
-                                                {!! Form::text('second_name',null,['class' => 'izo-form-input', 'id'=>'second_name', 'placeholder' => __('Second Name') ]) !!}
+                                                {!! Form::label('second_name', __('Second Name *') ) !!}
+                                                {!! Form::text('second_name',null,['class' => 'izo-form-input', 'id'=>'second_name','required', 'placeholder' => __('Second Name') ]) !!}
                                             </div>
                                             <div class="clearfix"></div>
                                             <div class="col-md-6">
-                                                {!! Form::label('job', __('Job') ) !!}
-                                                {!! Form::select('job',$jobs,null,['class' => 'izo-form-input', 'id'=>'job', 'placeholder' => __('job') ]) !!}
+                                                {!! Form::label('job', __('Job Title *') ) !!}
+                                                {!! Form::select('job',$jobs,null,['class' => 'izo-form-input', 'id'=>'job','required', 'placeholder' => __('-- Choose job') ]) !!}
                                             </div>
                                             <div class="col-md-6">
-                                                {!! Form::label('company_size', __('Size Of Company') ) !!}
-                                                {!! Form::select('company_size',$company_size,null,['class' => 'izo-form-input', 'id'=>'company_size', 'placeholder' => __('Size') ]) !!}
+                                                {!! Form::label('company_size', __('Size Of Company *') ) !!}
+                                                {!! Form::select('company_size',$company_size,null,['class' => 'izo-form-input','required', 'id'=>'company_size', 'placeholder' => __('-- Choose Size') ]) !!}
                                             </div>
                                             <div class="clearfix"></div>
                                             <div class="col-md-6">
-                                                {!! Form::label('country', __('Country') ) !!}
-                                                {!! Form::select('country',$country,null,['class' => 'izo-form-input', 'id'=>'country', 'placeholder' => __('Country') ]) !!}
+                                                {!! Form::label('country', __('Country *') ) !!}
+                                                {!! Form::select('country',$country,null,['class' => 'izo-form-input', 'id'=>'country','required', 'placeholder' => __('-- Choose Country') ]) !!}
                                             </div>
                                             <div class="col-md-6">
-                                                {!! Form::label('time_zone', __('Time Zone') ) !!}
-                                                {!! Form::select('time_zone',$timeZone,null,['class' => 'izo-form-input', 'id'=>'time_zone', 'placeholder' => __('Time Zone') ]) !!}
+                                                {!! Form::label('time_zone', __('Time Zone *') ) !!}
+                                                {!! Form::select('time_zone',$timeZone,null,['class' => 'izo-form-input', 'id'=>'time_zone','required', 'placeholder' => __('-- Choose Time Zone') ]) !!}
                                             </div>
                                             <div class="clearfix"></div>
                                             <div class="col-md-6">
-                                                {!! Form::label('currency', __('Currency') ) !!}
-                                                {!! Form::select('currency',$currency,null,['class' => 'izo-form-input', 'id'=>'currency', 'placeholder' => __('Currency') ]) !!}
+                                                {!! Form::label('currency', __('Currency *') ) !!}
+                                                {!! Form::select('currency',$currency,null,['class' => 'izo-form-input', 'id'=>'currency','required', 'placeholder' => __('-- Choose Currency') ]) !!}
                                             </div>
                                             <div class="col-md-6">
-                                                {!! Form::label('language', __('Language') ) !!}
-                                                {!! Form::select('language',$language,null,['class' => 'izo-form-input', 'id'=>'language', 'placeholder' => __('Language') ]) !!}
+                                                {!! Form::label('language', __('Language *') ) !!}
+                                                {!! Form::select('language',$language,null,['class' => 'izo-form-input', 'id'=>'language','required', 'placeholder' => __('-- Choose Language') ]) !!}
                                             </div>
-                                        </div>
-                                        <div class="plartform hide" data-id="2"  >
+                                            <div class="clearfix"></div>
                                             <div class="col-md-6">
                                                 {!! Form::label('address', __('Address') ) !!}
                                                 {!! Form::text('address',null,['class' => 'izo-form-input', 'id'=>'address', 'placeholder' => __('Address') ]) !!}
                                             </div>
                                             <div class="col-md-6">
                                                 {!! Form::label('city', __('City') ) !!}
-                                                {!! Form::text('city',null,['class' => 'izo-form-input', 'id'=>'city', 'placeholder' => __('City') ]) !!}
+                                                {!! Form::text('city',null,['class' => 'izo-form-input', 'id'=>'city','placeholder' => __('City') ]) !!}
                                             </div>
                                             <div class="clearfix"></div>
                                             <div class="col-md-6">
@@ -3309,9 +3455,17 @@
                                                 {!! Form::label('tax_number', __('Tax Number') ) !!}
                                                 {!! Form::text('tax_number',null,['class' => 'izo-form-input', 'id'=>'tax_number', 'placeholder' => __('Tax Number') ]) !!}
                                             </div>
-                                        </div>
-                                        <div class="plartform hide" data-id="3"  >
-                                            <div class="custom-radio"> 
+                                        </div> 
+                                        <div class="plartform hide" data-id="2"  >
+                                            <div class="col-md-6">
+                                                {!! Form::label('type_business', __('Type Of Business *') ) !!}
+                                                {!! Form::select('type_business',$list_type_of_business,null,['class' => 'izo-form-input','required', 'id'=>'type_business', 'placeholder' => __('-- Choose Type Of Business') ]) !!}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {!! Form::label('section', __('Type Of Category *') ) !!}
+                                                {!! Form::select('section',[],null,['class' => 'izo-form-input','required', 'id'=>'section','placeholder' => __('-- Choose Type Of Business')  ]) !!}
+                                            </div>
+                                            {{-- <div class="custom-radio"> 
                                                 <div class="left-radio">
                                                     {!! Form::radio('type_business',1,null,['class' => 'izo-form-input type_business', 'id'=>'type_business' ]) !!} 
                                                     {!! Form::label('type_business', __('Shops And POS') ) !!}
@@ -3320,7 +3474,6 @@
                                                     {!! Form::radio('type_business',2,null,['class' => 'izo-form-input type_business', 'id'=>'type_business' ]) !!} 
                                                     {!! Form::label('type_business', __('Crafts and service professions') ) !!}
                                                 </div>
-                                            
                                             </div>
                                             <div class="custom-radio">  
                                                 <div class="left-radio">
@@ -3361,9 +3514,9 @@
                                                     {!! Form::radio('type_business',10,null,['class' => 'izo-form-input type_business', 'id'=>'type_business' ]) !!} 
                                                     {!! Form::label('type_business', __('Projects, contracting and real estate investment') ) !!}
                                                 </div> 
-                                            </div>
+                                            </div> --}}
                                         </div>
-                                        <div class="plartform hide" data-id="4"  >
+                                        {{-- <div class="plartform hide" data-id="3"  >
                                             <div class="sections" data-type="1">
                                                 <div class="box_sections" data-type="1" data-section="1">
                                                     <h5>{{"Shops And POS One"}}</h5>
@@ -3584,7 +3737,7 @@
                                                     <i class="fa fas fa-star"></i>
                                                 </div> 
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="bottom_platform">
                                         <a href="#" class="form_btn_close prev" onclick="prev();">PREV</a>
@@ -3662,16 +3815,54 @@
             </div>
         
             <script type="text/javascript">
-                    
+                   
                     function next(){
-                        id = $('#current_active').attr('value');
-                        if(parseFloat(id)+1>4){
-                            id = 1;
-                        }else{
-                            id = parseFloat(id)+1
+                        var id = $('#current_active').attr('value');
+                        
+                        var i  = 0 ;
+                        var first_name   = $('#first_name').val();
+                        var second_name  = $('#second_name').val();
+                        var job          = $('#job').val();
+                        var company_size = $('#company_size').val();
+                        var country      = $('#country').val();
+                        var time_zone    = $('#time_zone').val();
+                        var currency     = $('#currency').val();
+                        var language     = $('#language').val();
+                        var zip_code     = $('#zip_code').val();
+                        var tax_number   = $('#tax_number').val(); 
+
+                        if(first_name == ""  || second_name == ""  || job == ""  || company_size == ""  || country == ""  || time_zone == ""  || currency == ""  || language == ""  || 
+                           first_name == null  || second_name == null  || job == null  || company_size == null  || country == null  || time_zone == null  || currency == null  || language == null    ){
+                            i = 1;
                         }
-                        $('#current_active').attr('value',id);
-                        viewPlatform(id);
+                        if( i == 1){
+                            if($('#first_name').val() == "" || $('#first_name').val()  == null){$('#first_name').addClass('active_input_focus');}else{$('#first_name').removeClass('active_input_focus')}
+                            if($('#second_name').val() == "" || $('#second_name').val()  == null){$('#second_name').addClass('active_input_focus');}else{$('#second_name').removeClass('active_input_focus')}
+                            if($('#job').val() == "" || $('#job').val()  == null){$('#job').addClass('active_input_focus');}else{$('#job').removeClass('active_input_focus')}
+                            if($('#company_size').val() == "" || $('#company_size').val()  == null){$('#company_size').addClass('active_input_focus');}else{$('#company_size').removeClass('active_input_focus')}
+                            if($('#country').val() == "" || $('#country').val()  == null){$('#country').addClass('active_input_focus');}else{$('#country').removeClass('active_input_focus')}
+                            if($('#time_zone').val() == "" || $('#time_zone').val()  == null){$('#time_zone').addClass('active_input_focus');}else{$('#time_zone').removeClass('active_input_focus')}
+                            if($('#currency').val() == "" || $('#currency').val()  == null){$('#currency').addClass('active_input_focus');}else{$('#currency').removeClass('active_input_focus')}
+                            if($('#language').val() == "" || $('#language').val()  == null){$('#language').addClass('active_input_focus');}else{$('#language').removeClass('active_input_focus')}
+                            if($('#section').val() == "" || $('#section').val()  == null){$('#section').addClass('active_input_focus');}else{$('#section').removeClass('active_input_focus')}
+                        }else{
+                            if($('#first_name').val() == "" || $('#first_name').val()  == null){$('#first_name').addClass('active_input_focus');}else{$('#first_name').removeClass('active_input_focus')}
+                            if($('#second_name').val() == "" || $('#second_name').val()  == null){$('#second_name').addClass('active_input_focus');}else{$('#second_name').removeClass('active_input_focus')}
+                            if($('#job').val() == "" || $('#job').val()  == null){$('#job').addClass('active_input_focus');}else{$('#job').removeClass('active_input_focus')}
+                            if($('#company_size').val() == "" || $('#company_size').val()  == null){$('#company_size').addClass('active_input_focus');}else{$('#company_size').removeClass('active_input_focus')}
+                            if($('#country').val() == "" || $('#country').val()  == null){$('#country').addClass('active_input_focus');}else{$('#country').removeClass('active_input_focus')}
+                            if($('#time_zone').val() == "" || $('#time_zone').val()  == null){$('#time_zone').addClass('active_input_focus');}else{$('#time_zone').removeClass('active_input_focus')}
+                            if($('#currency').val() == "" || $('#currency').val()  == null){$('#currency').addClass('active_input_focus');}else{$('#currency').removeClass('active_input_focus')}
+                            if($('#language').val() == "" || $('#language').val()  == null){$('#language').addClass('active_input_focus');}else{$('#language').removeClass('active_input_focus')}
+                            if($('#section').val() == "" || $('#section').val()  == null){$('#section').addClass('active_input_focus');}else{$('#section').removeClass('active_input_focus')}
+                            if(parseFloat(id)+1>2){
+                                id = 1;
+                            }else{
+                                id = parseFloat(id)+1
+                            }
+                            $('#current_active').attr('value',id);
+                            viewPlatform(id);
+                        }
                     }
                     function prev(){
                         id = $('#current_active').attr('value');
@@ -3684,39 +3875,76 @@
                         viewPlatform(id);
                     }
                     function  viewPlatform(id){
-                        var id_finish = ($(".type_of_job").hasClass("hide"))?3:4;
-                        if(id == id_finish){
-                            $('.finish').removeClass('hide');
-                            $('.next').addClass('hide');
-                        }else{
-                            $('.next').removeClass('hide');
-                            $('.finish').addClass('hide');
+                        var i  = 0 ;
+                        var first_name   = $('#first_name').val();
+                        var second_name  = $('#second_name').val();
+                        var job          = $('#job').val();
+                        var company_size = $('#company_size').val();
+                        var country      = $('#country').val();
+                        var time_zone    = $('#time_zone').val();
+                        var currency     = $('#currency').val();
+                        var language     = $('#language').val();
+                        var zip_code     = $('#zip_code').val();
+                        var tax_number   = $('#tax_number').val(); 
+
+                        if(first_name == ""  || second_name == ""  || job == ""  || company_size == ""  || country == ""  || time_zone == ""  || currency == ""  || language == ""  || 
+                           first_name == null  || second_name == null  || job == null  || company_size == null  || country == null  || time_zone == null  || currency == null  || language == null     ){
+                            i = 1;
                         }
-                        $('.current_active').attr('value',id);
-                        $('.btn_platform').each(function(){
-                            if($(this).attr("data-id") == id){
-                                $(this).addClass('active_div');
-                            }else{    
-                                $(this).removeClass('active_div');
+                        if( i == 1){ 
+                            if($('#first_name').val() == "" || $('#first_name').val()  == null){$('#first_name').addClass('active_input_focus');}else{$('#first_name').removeClass('active_input_focus')}
+                            if($('#second_name').val() == "" || $('#second_name').val()  == null){$('#second_name').addClass('active_input_focus');}else{$('#second_name').removeClass('active_input_focus')}
+                            if($('#job').val() == "" || $('#job').val()  == null){$('#job').addClass('active_input_focus');}else{$('#job').removeClass('active_input_focus')}
+                            if($('#company_size').val() == "" || $('#company_size').val()  == null){$('#company_size').addClass('active_input_focus');}else{$('#company_size').removeClass('active_input_focus')}
+                            if($('#country').val() == "" || $('#country').val()  == null){$('#country').addClass('active_input_focus');}else{$('#country').removeClass('active_input_focus')}
+                            if($('#time_zone').val() == "" || $('#time_zone').val()  == null){$('#time_zone').addClass('active_input_focus');}else{$('#time_zone').removeClass('active_input_focus')}
+                            if($('#currency').val() == "" || $('#currency').val()  == null){$('#currency').addClass('active_input_focus');}else{$('#currency').removeClass('active_input_focus')}
+                            if($('#language').val() == "" || $('#language').val()  == null){$('#language').addClass('active_input_focus');}else{$('#language').removeClass('active_input_focus')}
+                            if($('#section').val() == "" || $('#section').val()  == null){$('#section').addClass('active_input_focus');}else{$('#section').removeClass('active_input_focus')}
+                          }else{
+                            if($('#first_name').val() == "" || $('#first_name').val()  == null){$('#first_name').addClass('active_input_focus');}else{$('#first_name').removeClass('active_input_focus')}
+                            if($('#second_name').val() == "" || $('#second_name').val()  == null){$('#second_name').addClass('active_input_focus');}else{$('#second_name').removeClass('active_input_focus')}
+                            if($('#job').val() == "" || $('#job').val()  == null){$('#job').addClass('active_input_focus');}else{$('#job').removeClass('active_input_focus')}
+                            if($('#company_size').val() == "" || $('#company_size').val()  == null){$('#company_size').addClass('active_input_focus');}else{$('#company_size').removeClass('active_input_focus')}
+                            if($('#country').val() == "" || $('#country').val()  == null){$('#country').addClass('active_input_focus');}else{$('#country').removeClass('active_input_focus')}
+                            if($('#time_zone').val() == "" || $('#time_zone').val()  == null){$('#time_zone').addClass('active_input_focus');}else{$('#time_zone').removeClass('active_input_focus')}
+                            if($('#currency').val() == "" || $('#currency').val()  == null){$('#currency').addClass('active_input_focus');}else{$('#currency').removeClass('active_input_focus')}
+                            if($('#language').val() == "" || $('#language').val()  == null){$('#language').addClass('active_input_focus');}else{$('#language').removeClass('active_input_focus')}
+                            if($('#section').val() == "" || $('#section').val()  == null){$('#section').addClass('active_input_focus');}else{$('#section').removeClass('active_input_focus')}
+                            var id_finish = ($(".type_of_job").hasClass("hide"))?1:2;
+                            if(id == id_finish){
+                                $('.finish').removeClass('hide');
+                                $('.next').addClass('hide');
+                            }else{
+                                $('.next').removeClass('hide');
+                                $('.finish').addClass('hide');
                             }
-                        });
-                        $('.plartform').each(function(){
-                            if(id == 4){
-                                type = $(".type_of_job").attr("data-type");
-                                $(".sections").each(function(){
-                                    if($(this).attr("data-type") == type){
-                                        $(this).removeClass('hide');
-                                    }else{    
-                                        $(this).addClass('hide');
-                                    }
-                                });
-                            }
-                            if($(this).attr("data-id") == id){
-                                $(this).removeClass('hide');
-                            }else{    
-                                $(this).addClass('hide');
-                            }
-                        });
+                            $('.current_active').attr('value',id);
+                            $('.btn_platform').each(function(){
+                                if($(this).attr("data-id") == id){
+                                    $(this).addClass('active_div');
+                                }else{    
+                                    $(this).removeClass('active_div');
+                                }
+                            });
+                            $('.plartform').each(function(){
+                                if(id == 1){
+                                    type = $(".type_of_job").attr("data-type");
+                                    $(".sections").each(function(){
+                                        if($(this).attr("data-type") == type){
+                                            $(this).removeClass('hide');
+                                        }else{    
+                                            $(this).addClass('hide');
+                                        }
+                                    });
+                                }
+                                if($(this).attr("data-id") == id){
+                                    $(this).removeClass('hide');
+                                }else{    
+                                    $(this).addClass('hide');
+                                }
+                            });
+                        }
                     }
                 setTimeout(() => {
                     // .............................................. platform
@@ -3732,6 +3960,40 @@
                             })
                         }
                     })
+                    $("#select_lang").on("change",function(){ 
+                        var ln  = $(this).val(); 
+                        $.ajax({
+                            url: '/home/change-lang-app',
+                            dataType: 'json',
+                            data:{
+                                lang:ln
+                            },
+                            success: function(result) {
+                                 location.reload();
+                            },
+                        });
+                    })
+                    $("#type_business").on("change",function(){ 
+                        var type  = $(this).val(); 
+                        list      = JSON.parse($("#list_section").val());
+                        html      = '<option value=""> -- Choose Type Of Business</option>';
+                        for( i in list){
+                            if(type == i){
+                                for( ie in list[i]) {
+                                    html += '<option value="'+ie+'">'+list[i][ie]+'</option>'; 
+                                }
+                            }  
+                        }
+                        if(html == ''){
+                            html      = '<option value=""> -- Choose Type Of Business</option>';
+                        }     
+                        $("#section").html(html); 
+                         
+                        
+                    })
+                    $(document).on('click','.language_box',function(){
+                        $(".list_of_lang").toggleClass('hide');
+                    });
                     $(".box_sections").each(function(){
                         $(this).on("click",function(){
                             id  = $(this).attr("data-type");
@@ -3745,7 +4007,6 @@
                                     $(this).removeClass('active_div');
                                 }else{
                                     $(this).addClass('active_div');
-
                                 }
                             })
                             var type    = $(this).attr("data-type");
@@ -3775,11 +4036,11 @@
                     $(window).resize(function() {
                         applyFunctionBasedOnWidth();
                     });
-                }, 100);
+                }, 200);
                 // ..................
                 setInterval(() => { 
                     id = $('#side').val();
-                    id = ((parseFloat(id)+1)>4)?1:(parseFloat(id) +1); 
+                    id = ((parseFloat(id)+1)>2)?1:(parseFloat(id) +1); 
                     
                     slide(id);
                     $('#side').attr("value",id); 

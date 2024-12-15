@@ -41,11 +41,11 @@
                     // const password = $('#password').val().trim();
                     
                     if (email === '') {
-                        $('#emailError').text('Email is required.');
+                        $('#emailError').html("{!!__('izo.desc_email_require')!!}");
                         $('#emailError').parent().find('.izo-form-input').css({"border": "2px solid red","color":"red"});
                         isValid = false;
                     } else if (!validateEmail(email)) {
-                        $('#emailError').text('Invalid email format.');
+                        $('#emailError').html("{!!__('izo.desc_email')!!}");
                         $('#emailError').parent().find('.izo-form-input').css({"border": "2px solid red","color":"red"});
                         isValid = false;
                     } 

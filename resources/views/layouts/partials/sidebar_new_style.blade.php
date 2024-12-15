@@ -1,5 +1,7 @@
 @inject('request', 'Illuminate\Http\Request')
 @php
+    $border_right_a =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '4px' : 'initial'  ;
+    $border_left_a  =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' :  '4px' ;
     $right =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '0%' : 'initial'  ;
     $left  =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' :  '0%' ;
     $right_top  =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '10px' :  'initial' ;
@@ -36,8 +38,9 @@
       border:10px solid black !important;
     } */
     .sidebar-menu>li>a{
+      font-family:Georgia, 'Times New Roman', Times, serif !important;
       padding:3% 10% ;
-      font-size: 18px;
+      font-size: 20px;
     }
     .sidebar-menu>li>a>.fa{
       width : 25px;
@@ -45,6 +48,10 @@
       font-size: 20px;
     }
 
+    .skin-black-light .sidebar-menu>li.active>a{
+      border-right:{{$border_right_a}} solid #ec6808 !important;
+      border-left:{{$border_left_a}} solid #ec6808 !important;
+    }
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -75,6 +82,10 @@
       /* border-radius: 100px !important; */
       /* border:1px solid #3a3a3a33 !important; */
       margin: 10px 5px  !important; 
+    }
+    .skin-black-light .sidebar-menu .treeview-menu>li>a{
+      font-family:Georgia, 'Times New Roman', Times, serif !important;
+      font-size:18px !important;
     }
     .skin-black-light .sidebar-menu .treeview-menu{
       border-radius: 10px !important;
@@ -190,8 +201,9 @@
       border:10px solid black !important;
     } */
     .sidebar-menu>li>a{
+      font-family:Georgia, 'Times New Roman', Times, serif !important;
       padding:3% 10% ;
-      font-size: 18px;
+      font-size: 20px;
     }
     .sidebar-menu>li>a>.fa{
       width : 25px;
@@ -199,6 +211,10 @@
       font-size: 20px;
     }
 
+    .skin-black-light .sidebar-menu>li.active>a{
+      border-right:{{$border_right_a}} solid #ec6808 !important;
+      border-left:{{$border_left_a}} solid #ec6808 !important;
+    }
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -229,6 +245,10 @@
       /* border-radius: 100px !important; */
       /* border:1px solid #3a3a3a33 !important; */
       margin: 10px 5px  !important; 
+    }
+    .skin-black-light .sidebar-menu .treeview-menu>li>a{
+      font-family:Georgia, 'Times New Roman', Times, serif !important;
+      font-size:18px !important;
     }
     .skin-black-light .sidebar-menu .treeview-menu{
       border-radius: 10px !important;
@@ -322,8 +342,9 @@
       display: none;
     }
     .sidebar-menu>li>a{
+      font-family:Georgia, 'Times New Roman', Times, serif !important;
       padding:3% 10% ;
-      font-size: 18px;
+      font-size: 20px;
     }
     .sidebar-menu>li>a>.fa{
       width : 25px;
@@ -331,6 +352,10 @@
       font-size: 20px;
     }
 
+    .skin-black-light .sidebar-menu>li.active>a{
+      border-right:{{$border_right_a}} solid #ec6808 !important;
+      border-left:{{$border_left_a}} solid #ec6808 !important;
+    }
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -362,8 +387,9 @@
     } */
 
     .sidebar-menu>li>a{
+      font-family:Georgia, 'Times New Roman', Times, serif !important;
       padding:3% 10% ;
-      font-size: 18px;
+      font-size: 20px;
     }
     .sidebar-menu>li>a>.fa{
       width : 25px;
@@ -371,6 +397,10 @@
       font-size: 20px;
     }
 
+    .skin-black-light .sidebar-menu>li.active>a{
+      border-right:{{$border_right_a}} solid #ec6808 !important;
+      border-left:{{$border_left_a}} solid #ec6808 !important;
+    }
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -411,6 +441,10 @@
       /* border:1px solid #3a3a3a33; */
       margin: 10px 5px  ; 
     }
+    .skin-black-light .sidebar-menu .treeview-menu>li>a{
+      font-family:Georgia, 'Times New Roman', Times, serif !important;
+      font-size:18px !important;
+    }
     .skin-black-light .sidebar-menu .treeview-menu{
       border-radius: 10px !important;
       margin: 10px !important;
@@ -494,8 +528,9 @@
       display: none;
     }
     .sidebar-menu>li>a{
+      font-family:Georgia, 'Times New Roman', Times, serif !important;
       padding:3% 10% ;
-      font-size: 18px;
+      font-size: 20px;
     }
     .sidebar-menu>li>a>.fa{
       width : 25px;
@@ -503,6 +538,10 @@
       font-size: 20px;
     }
 
+    .skin-black-light .sidebar-menu>li.active>a{
+      border-right:{{$border_right_a}} solid #ec6808 !important;
+      border-left:{{$border_left_a}} solid #ec6808 !important;
+    }
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -533,8 +572,9 @@
       border:10px solid black !important;
     } */
     .sidebar-menu>li>a{
+      font-family:Georgia, 'Times New Roman', Times, serif !important;
       padding:3% 10% ;
-      font-size: 18px;
+      font-size: 20px;
     }
     .sidebar-menu>li>a>.fa{
       width : 25px;
@@ -542,6 +582,10 @@
       font-size: 20px;
     }
 
+    .skin-black-light .sidebar-menu>li.active>a{
+      border-right:{{$border_right_a}} solid #ec6808 !important;
+      border-left:{{$border_left_a}} solid #ec6808 !important;
+    }
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -572,6 +616,10 @@
       /* border-radius: 100px  !important; */
       /* border:1px solid #3a3a3a33 !important; */
       margin: 10px 5px  !important; 
+    }
+    .skin-black-light .sidebar-menu .treeview-menu>li>a{
+      font-family:Georgia, 'Times New Roman', Times, serif !important;
+      font-size:18px !important;
     }
     .skin-black-light .sidebar-menu .treeview-menu{
       border-radius: 10px !important;
@@ -665,8 +713,9 @@
       display: none;
     }
     .sidebar-menu>li>a{
+      font-family:Georgia, 'Times New Roman', Times, serif !important;
       padding:3% 10% ;
-      font-size: 18px;
+      font-size: 20px;
     }
     .sidebar-menu>li>a>.fa{
       width : 25px;
@@ -674,6 +723,10 @@
       font-size: 20px;
     }
 
+    .skin-black-light .sidebar-menu>li.active>a{
+      border-right:{{$border_right_a}} solid #ec6808 !important;
+      border-left:{{$border_left_a}} solid #ec6808 !important;
+    }
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important
@@ -778,8 +831,9 @@
       display: none;
     }
     .sidebar-menu>li>a{
+      font-family:Georgia, 'Times New Roman', Times, serif !important;
       padding:3% 10% ;
-      font-size: 18px;
+      font-size: 20px;
     }
     .sidebar-menu>li>a>.fa{
       width : 25px;
@@ -787,6 +841,10 @@
       font-size: 20px;
     }
 
+    .skin-black-light .sidebar-menu>li.active>a{
+      border-right:{{$border_right_a}} solid #ec6808 !important;
+      border-left:{{$border_left_a}} solid #ec6808 !important;
+    }
     .skin-black-light .sidebar-menu>li.active>a,
     .skin-black-light .sidebar-menu .treeview-menu>li.active>a{
       color: #ec6608 !important

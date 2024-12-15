@@ -1321,7 +1321,7 @@
 
                 // The remaining parts are the subdomain
                 $subdomain = implode('.', $hostParts);
-            } else if(count($hostParts) == 2){
+            } else if(count($hostParts) == 3){
                 // Remove the last two parts (domain and TLD)
                 array_pop($hostParts); // TLD
  
@@ -1340,12 +1340,16 @@
             @if($email != null && $password != null)
                 <div class="loading">
                     <div class="loading-content">
-                        <h1>IZO <small>waiting.....</small></h1>
+                        <h1 class="text-center">
+                            <img class="logo-style" width=100 height=50 src="{{asset('logo-white.png')}}" alt="logo">
+                            <br>
+                            <small>{!!__('izo.waiting')!!}</small>
+                        </h1>
                     </div>
                 </div>
             @endif
         @endif
-        <form hidden action="http://localhost:8000" id="go-home" method="GET">
+        <form hidden action="https://izocloud.com" id="go-home" method="GET">
             <button id="go_home"  type="submit">Go Home</button>
         </form>
         {{-- @if(request()->session()->get('url.intended') != null && request()->session()->get('url.intended') != 'http://localhost:8000')

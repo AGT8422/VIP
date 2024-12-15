@@ -732,7 +732,7 @@ class IzoUserController extends Controller
 
             // The remaining parts are the subdomain
             $subdomain = implode('.', $hostParts);
-        } else if(count($hostParts) == 2){
+        } else if(count($hostParts) == 3){
             // Remove the last two parts (domain and TLD)
             array_pop($hostParts); // TLD
 
@@ -852,7 +852,7 @@ class IzoUserController extends Controller
 
             // The remaining parts are the subdomain
             $subdomain = implode('.', $hostParts);
-        } else if(count($hostParts) == 2){
+        } else if(count($hostParts) == 3){
             // Remove the last two parts (domain and TLD)
             array_pop($hostParts); // TLD
 

@@ -1417,7 +1417,7 @@
 
                 // The remaining parts are the subdomain
                 $subdomain = implode('.', $hostParts);
-            } else if(count($hostParts) == 2){
+            } else if(count($hostParts) == 3){
                 // Remove the last two parts (domain and TLD)
                 array_pop($hostParts); // TLD
  
@@ -1470,10 +1470,14 @@
         @endphp
         <div class="loading">
             <div class="loading-content">
-                <h1>IZO <small>waiting.....</small></h1>
+                <h1 class="text-center">
+                    <img class="logo-style" width=100 height=50 src="{{asset('logo-white.png')}}" alt="logo">
+                    <br>
+                    <small>{!!__('izo.waiting')!!}</small>
+                </h1>
             </div>
         </div>
-        <form hidden action="https://localhost:8000/register-account" id="go-home" method="GET">
+        <form hidden action="https://izocloud.com/register-account" id="go-home" method="GET">
             <button id="go_home"  type="submit">Go Home</button>
         </form>
         <div class="language_box">

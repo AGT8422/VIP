@@ -6,45 +6,48 @@
  
 
     <section class="content-header">
-            <h3 class="content-header  no-print">@lang("business.patterns") </h3>
+            <h3 class="">@lang("business.patterns") </h3>
     </section>
- <section class="content-header  no-print">
-     
+ 
+       
+    <div class="row">
+        <div class="col-md-12" style="padding: 0.5% 2%">
      @component("components.filters" , ["title"=>__('report.filters')])
      
-     <div class="col-md-3">
-        <div class="form-group">
-            {!! Form::label('location_id',  __('purchase.business_location') . ':') !!}
-            {!! Form::select('location_id',$business_locations , null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+        <div class="col-md-3">
+            <div class="form-group">
+                {!! Form::label('location_id',  __('purchase.business_location') . ':') !!}
+                {!! Form::select('location_id',$business_locations , null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+            </div>
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            {!! Form::label('pattern_name',  __('business.name') . ':') !!}
-            {!! Form::select('pattern_name', $pattern_name, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+        <div class="col-md-3">
+            <div class="form-group">
+                {!! Form::label('pattern_name',  __('business.name') . ':') !!}
+                {!! Form::select('pattern_name', $pattern_name, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+            </div>
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            {!! Form::label('invoice_scheme',  __('invoice.invoice_scheme') . ':') !!}
-            {!! Form::select('invoice_scheme', $invoice_schemes, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+        <div class="col-md-3">
+            <div class="form-group">
+                {!! Form::label('invoice_scheme',  __('invoice.invoice_scheme') . ':') !!}
+                {!! Form::select('invoice_scheme', $invoice_schemes, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+            </div>
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            {!! Form::label('invoice_layout',  __('invoice.invoice_layout') . ':') !!}
-            {!! Form::select('invoice_layout',$invoice_layout, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+        <div class="col-md-3">
+            <div class="form-group">
+                {!! Form::label('invoice_layout',  __('invoice.invoice_layout') . ':') !!}
+                {!! Form::select('invoice_layout',$invoice_layout, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+            </div>
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group hide">
-            {!! Form::label('pos',  __('business.pos') . ':') !!}
-            {!! Form::select('pos',[], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+        <div class="col-md-3">
+            <div class="form-group hide">
+                {!! Form::label('pos',  __('business.pos') . ':') !!}
+                {!! Form::select('pos',[], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+            </div>
         </div>
-    </div>
      
      @endcomponent
-    </section>
+        </div>
+    </div>
     <section class="content  no-print"> 
         @component("components.widget" , ["title"=>__("business.patterns")])
         {{-- @can('purchase.create') --}}

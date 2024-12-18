@@ -23,9 +23,10 @@ class FirstLogin
             return redirect('/login-account');
         }else if(!Hash::check("success", $request->session()->get('startLogin.value1'))){
             return redirect('/login-account');
-        }else if(!$request->session()->get('user')){
-            return redirect('/panel-account');
         }
+        // else if(!$request->session()->get('user')){
+        //     return redirect('/panel-account');
+        // }
         return $next($request);
     }
 }

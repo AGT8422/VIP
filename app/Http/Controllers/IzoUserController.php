@@ -262,7 +262,7 @@ class IzoUserController extends Controller
             $businessUtil  = new BusinessUtil();
             DB::beginTransaction();
             // DD(request()->session()->get('user_main'));
-
+            $owner_details = $request->only(['first_name','second_name','language','currency']);
             Config::set('database.connections.mysql.database', "izocloud");
             DB::purge('mysql');
             DB::reconnect('mysql');
@@ -271,11 +271,11 @@ class IzoUserController extends Controller
             Config::set('database.connections.mysql.database', $databaseName);
             DB::purge('mysql');
             DB::reconnect('mysql');
-            $owner_details = $request->only(['first_name','second_name','language','currency']);
             #.......................................Create User
             $owner_details['last_name']     = $owner_details['second_name'];
             $owner_details['surname']       = "";
             $owner_details['first_name']    = request()->session()->get('user_main.email');
+            $owner_details['contact_number']= request()->session()->get('user_main.mobile');
             $owner_details['username']      = request()->session()->get('user_main.email');
             $owner_details['email']         = request()->session()->get('user_main.email');
             $owner_details['password']      = $izoCustomer->password;
@@ -356,6 +356,7 @@ class IzoUserController extends Controller
                 "success" => 1,
                 "message" => __('Register Successfully'),
             ];
+            session()->put('log_out_back','logout');
             return redirect("/home")->with("status",$outPut);
         }catch(Exception $e){
             DB::rollBack();

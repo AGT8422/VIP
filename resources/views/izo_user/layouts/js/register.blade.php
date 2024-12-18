@@ -581,19 +581,19 @@
                     if (isValid) {
                         // If the form is valid, submit it
                         $(".loading").css({"display":"block"});
-                        // this.submit();
-                        sendCode();
-                        $.ajax({
-                            url:"/email-code-activation",
-                            dataType: 'html',
-                            data:{
-                                email:$("#email").val(),
-                            },
-                            success:function(data){ 
-                                if(data.success == 1){
-                                }
-                            },
-                        });	 
+                        this.submit();
+                        // sendCode();
+                        // $.ajax({
+                        //     url:"/email-code-activation",
+                        //     dataType: 'html',
+                        //     data:{
+                        //         email:$("#email").val(),
+                        //     },
+                        //     success:function(data){ 
+                        //         if(data.success == 1){
+                        //         }
+                        //     },
+                        // });	 
                         
                     }
                 });

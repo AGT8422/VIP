@@ -18,6 +18,7 @@
     <meta property="og:title" content="IZOCLOUD - برنامج المحاسبة لإدارة الأنشطة التجارية"/>
     <meta property="og:site_name" content="IZOCLOUD "/>
     <meta property="og:image" content="http://test.izocloud.com/uploads/IZO-D1.jpg"/>
+    <link rel="icon" type="image/x-icon" href="{{ asset('POS.ico') }}">
     <meta property="og:description" content=" مرحبا   نحن نعم علي بناء و تطوير المواقع وبرامج سطح المكتب"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">

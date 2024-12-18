@@ -15,7 +15,16 @@ class CreateSupportActivatesTable extends Migration
     {
         Schema::create('support_activates', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer();
+            $table->string("email")->nullable();
+            $table->string("mobile")->nullable();
+            $table->string("whatsapp")->nullable();
+            $table->string("email_activation_code")->nullable();
+            $table->string("email_activation_token")->nullable();
+            $table->string("mobile_activation_code")->nullable();
+            $table->string("mobile_activation_token")->nullable();
+            $table->string("whatsapp_activation_code")->nullable();
+            $table->string("whatsapp_activation_token")->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

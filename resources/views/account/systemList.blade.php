@@ -6,30 +6,31 @@
  
 
     <section class="content-header">
-            <h3 class="content-header  no-print">@lang("business.patterns") </h3>
-    </section>
- <section class="content-header  no-print">
+            <h3 class="     ">@lang("business.patterns") </h3>
+    </section> 
      
-     @component("components.filters" , ["title"=>__('report.filters')])
-     
-     <div class="col-md-3">
-        <div class="form-group">
-            {!! Form::label('location_id',  __('purchase.business_location') . ':') !!}
-            {!! Form::select('location_id',$business_locations , null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+    <div class="row">
+        <div class="col-md-12" style="padding: 0.5% 2%">
+            @component("components.filters" , ["title"=>__('report.filters'),'class'=>"box-primary"])
+                
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('location_id',  __('purchase.business_location') . ':') !!}
+                        {!! Form::select('location_id',$business_locations , null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('pattern_id',  __('business.name') . ':') !!}
+                        {!! Form::select('pattern_id', $patterns, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+                    </div>
+                </div>
+            
+            @endcomponent 
         </div>
+
     </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            {!! Form::label('pattern_id',  __('business.name') . ':') !!}
-            {!! Form::select('pattern_id', $patterns, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
-        </div>
-    </div>
-    
-    
-    
-     
-     @endcomponent
-    </section>
+
     <section class="content  no-print"> 
         @component("components.widget" , ["title"=>__("home.System Account")])
         {{-- @can('purchase.create') --}}

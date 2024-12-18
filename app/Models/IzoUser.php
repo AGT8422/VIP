@@ -98,6 +98,7 @@ class IzoUser extends Model
             $register->save();
             $payload = [
                 'role'           => $register->admin_user,
+                'mobile'         => $register->mobile,
                 'email'          => $register->email,
                 'database'       => $register->database_name,
                 'database_user'  => $register->database_user,
@@ -192,6 +193,7 @@ class IzoUser extends Model
             }else{
                 $payload = [
                     'role'           => $user->admin_user,
+                    'mobile'         => $user->mobile,
                     'email'          => $user->email,
                     'database'       => $user->database_name,
                     'database_user'  => $user->database_user,

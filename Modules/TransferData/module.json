@@ -1,0 +1,13 @@
+{
+    "name": "TransferData",
+    "alias": "transferdata",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\TransferData\\Providers\\TransferDataServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

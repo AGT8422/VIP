@@ -1,0 +1,80 @@
+ <tr>
+                        {{-- left --}}
+                        <td class="left_top_table">
+                            <div class="left_invoice_info">
+                                {!! $left_top_table !!} 
+                                <div class="row">
+                                    @if($bold_left_invoice_info_number == true)
+                                    <div class="{{$class_width_left}} bold_left_invoice_info">{{ "Invoice No :"  }}</div>
+                                    <div class="{{$class_width_right}} bold_right_invoice_info">{{($data->invoice_no != null)?$data->invoice_no:$data->ref_no}}</div>
+                                    <div class="clearfix"></div>
+                                    @endif
+                                    @if($bold_left_invoice_info_project == true)
+                                    <div class="{{$class_width_left}} bold_left_invoice_info">{{ "Project No  :"  }}</div>
+                                    <div class="{{$class_width_right}} bold_right_invoice_info">{{($data->project_no != null)?$data->project_no:""}}</div>
+                                    <div class="clearfix"></div>
+                                    @endif
+                                    @if($bold_left_invoice_info_date == true)
+                                    <div class="{{$class_width_left}} bold_left_invoice_info">{{ "Date :"  }}</div>
+                                    <div class="{{$class_width_right}} bold_right_invoice_info">{{($data->transaction_date != null)?   @format_date($data->transaction_date)  :"&nbsp;"}}</div>
+                                    <div class="clearfix"></div>
+                                    @endif
+                                    
+                                </div>
+                            </div>
+                            
+                        </td >
+                        {{-- right --}}
+                        <td class="right_top_table">
+                            <div class="right_invoice_info">
+                                {!! $right_top_table !!}
+                                <div class="row">
+                                    @if($bold_left_invoice_info_customer_number == true )
+                                    <div class="{{$class_width_left_right}} bold_left_invoice_info" >{{ "Customer Name :"  }}</div>
+                                    @php
+                                    if($data->contact->first_name != null){
+                                         $arabic = new ArPHP\I18N\Arabic();
+                                         $p      = $arabic->arIdentify($data->contact->first_name);
+                                         if(count($p)>0){
+                                             for ($i = count($p)-1; $i >= 0; $i-=2) {
+                                                 $utf8ar = $arabic->utf8Glyphs(substr($data->contact->first_name, $p[$i-1], $p[$i] - $p[$i-1]));
+                                                 $name   = substr_replace($data->contact->first_name, $utf8ar, $p[$i-1], $p[$i] - $p[$i-1]);
+                                             }
+                                             $name = "arabic";
+                                         }else{
+                                             
+                                             $name = $data->contact->first_name;
+                                         }
+                                    
+                                    }else{
+                                        $name = "No Have .";
+                                    }
+                                 @endphp
+                                 {{--<div class="{{$class_width_right_right}} bold_right_invoice_info" dir="ltr">{!! ($data->contact->first_name)? " " . $data->contact->first_name  . " ابراهيم ":"No Have." !!}</div>  --}}
+                                 @if($name == "arabic")
+                                     <div class="{{$class_width_right_right}}" style="text-align:right">{!! ($data->contact->first_name)? $data->contact->first_name :"No Have" !!}</div> 
+                                 @else
+                                     <div class="{{$class_width_right_right}} bold_right_invoice_info" >{!! ($data->contact->first_name)? $data->contact->first_name :"No Have" !!}</div> 
+                                 @endif
+                                 <div class="clearfix"></div>
+                                    @endif
+                                    @if($bold_left_invoice_info_customer_address == true )
+                                    <div class="{{$class_width_left_right}} bold_left_invoice_info">{{ "Address :"  }}</div>
+                                    <div class="{{$class_width_right_right}} bold_right_invoice_info">{{ ($data->contact->address != null)?$data->contact->address:"No Have ."}}</div>
+                                    <div class="clearfix"></div>
+                                    @endif
+                                    @if($bold_left_invoice_info_customer_mobile == true )
+                                    <div class="{{$class_width_left_right}} bold_left_invoice_info">{{ "Mobile :" }}</div>
+                                    <div class="{{$class_width_right_right}} bold_right_invoice_info">{{ ($data->contact->mobile != null)?$data->contact->mobile:"No Have ."}}</div>
+                                    <div class="clearfix"></div>
+                                    @endif
+                                    @if($bold_left_invoice_info_customer_tax == true )
+                                    <div class="{{$class_width_left_right}} bold_left_invoice_info">{{ "Tax :" }}</div>
+                                    <div class="{{$class_width_right_right}} bold_right_invoice_info">{{ ($data->contact->tax_number != null)?$data->contact->tax_number:"No Have ."}}</div>
+                                    <div class="clearfix"></div>
+                                    @endif
+                                </div>
+                            </div>
+                        
+                        </td>
+                    </tr>

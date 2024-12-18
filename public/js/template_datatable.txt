@@ -1,0 +1,42 @@
+$(document).ready(function(){
+     
+
+    user_activate_table = $("#user_activation_table").Datatable({
+            processing : true,
+            serverSide : true,
+            scrollY : "75vh",
+            scrollX : false,
+            scrollCollaps : false,
+            ajax : {
+                url : '/user-activation/index',
+                data : function (d) {
+                    d = __datatable_ajax_callback(d);
+                }, 
+                aaSorting: [[1,'desc']],
+                columns: [
+                    {data: ' ',name: '', orderby:false , searchable: false},
+                    {data: ' ',name: ''},
+                    {data: ' ',name: ''},
+                    {data: ' ',name: ''},
+                    {data: ' ',name: ''}
+                ],
+                fnDrawCallback:function(){
+                    __currency_convert_recursively($("#user_activation_table"));
+                },  
+                "footerCallback": function( row,data,start,end,display){
+                    for( var r in data){
+                        
+                    }
+                    $("#foooter_table_id").val();
+                },
+                createdRow: function(row, data, dataIndex) {
+                    $(row)
+                        .find('td:eq(5)')
+                        .attr('class', 'clickable_td');
+                },
+            }
+        
+        })
+
+
+});

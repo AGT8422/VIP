@@ -1,0 +1,42 @@
+<div class="modal-dialog modal-xl" style="width:40%" role="document">
+	<div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close no-print" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="modalTitle"> @lang('business.patterns_name') : (   )</h4>
+        </div>
+        <div class="modal-body">
+              <h4 class="modal-title" id="modalTitle"> @lang('business.business_location') :  "  "</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            
+            <div class="col-sm-6">
+                <strong> @lang('lang_v1.added_by') : </strong>    
+            </div>
+            <div class="col-sm-6">
+                <strong> @lang('messages.date') : </strong>     
+            </div>
+            <div class="col-sm-6">
+                <strong>@lang('invoice.invoice_scheme') :  </strong>     
+            </div>
+            <div class="col-sm-6">
+                <strong>@lang('invoice.invoice_layout') :  </strong>   
+            </div>
+            <div class="col-sm-6">
+                <strong>@lang('business.pos') :  </strong>   
+            </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary no-print" 
+                    aria-label="Print" 
+                    onclick="$(this).closest('div.modal').printThis();">
+                    <i class="fa fa-print"></i> @lang( 'messages.print' )
+            </button>
+            <button type="button" class="btn btn-default no-print" data-dismiss="modal">@lang( 'messages.close' )
+            </button>
+     
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,13 @@
+{
+    "name": "IZOPOS",
+    "alias": "izopos",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\IZOPOS\\Providers\\IZOPOSServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

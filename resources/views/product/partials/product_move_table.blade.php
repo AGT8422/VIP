@@ -1,0 +1,29 @@
+ 
+<table class="table table-bordered table-striped ajax_view hide-footer" id="product_move_table">
+    <thead>
+        <tr>
+            <th>@lang('product.product_name')</th>
+            <th>@lang('lang_v1.unit')</th>
+            <th>@lang('warehouse.nameW')</th>
+            <th>@lang('movement.move')</th>
+            <th>@lang('movement.movePlus')</th>
+            <th>@lang('movement.moveMinus')</th>
+            <th>@lang('movement.total')</th>
+            <th>@lang('lang_v1.price')</th>
+            <th>@lang('lang_v1.date')</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+        </tr>
+    </tfoot>
+</table>

@@ -59,6 +59,7 @@
         "srmklive/paypal": "*",
         "stripe/stripe-php": "^13.6",
         "symfony/mailer": "^6.1",
+        "swiftmailer/swiftmailer": "^6.0",
         "tecnickcom/tcpdf": "^6.6",
         "unicodeveloper/laravel-paystack": "*",
         "yajra/laravel-datatables-oracle": "v9.15.2"

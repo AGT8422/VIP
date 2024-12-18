@@ -113,6 +113,12 @@ return [
     'sorry_cant_delete_admin_user' => 'لا يمكنك حذف هذا المستخدم من هذه النافذة',
     'waiting'                      => 'الرجاء الإنتظار.....',
     'user_number'                  => 'عدد المستخدمين ',
+    'ACTIVATION CODE'              => 'كود التفعيل  ',
+    'to_continue'                  => ' للإستمرار  <br> يجب إدخال كود التفعيل',
+    'enter_code '                  => ' يجب إدخال كود التفعيل',
+    'please_check_email'           => 'قم بمراجعة صندوق البريد وإستخدام كود التفعيل , تنتهي صلاحية الكود بعد ثلاث دقائق',
+    'Activate'                     => 'تفعيل',
+    'resend_code'                  => '<b class="btn-link" style"cursor:pointer;font-size:13px !important;">طلب كود التفعيل </b><br>  <small style"font-size:10px !important;color:red !important;text-decoration:none !important;">( يسمح بإرسال ثلاث مرات فقط )</small>',
 
 
 

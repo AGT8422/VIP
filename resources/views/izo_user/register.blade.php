@@ -104,7 +104,14 @@
                     border-color:#ec6808 !important;
                  outlinel 1px solid or:#ec6808 !important;
                 }
-            .izo-form-input{
+            .link_code{
+            font-size: 10px14}
+                .code_activate_input{
+                font-size: 18px !important;
+            font-family: arial !important;
+            text-align: center;
+            max-width:150p20!important;}
+                .izo-form-input{
             font-family:Georgia, 'Times New Roman', Times, serif;
                 width: 100%;
                 border-radius: 0px;
@@ -357,7 +364,7 @@
                 border-radius: 10px;
                 padding: 10px 30px;
                 height: auto;
-                transform: translateY(10%);
+                transform: translateY(0%);
                 background: rgba(93, 237, 9, 0); 
                 display: flex;
                 justify-content: center;
@@ -411,7 +418,16 @@
                     border-color:#ec6808 !important;
                 outlineo 1px solid lor:#ec6808 !important;
                 }
-            .izo-form-input{
+            .link_code{
+                font-size: 14px;
+            }
+                .code_activate_input{
+                    font-size: 18px !important;
+                font-family: arial !important;
+                text-align: center;
+                max-width:200px !important;
+            }
+                .izo-form-input{
                 font-family:Georgia, 'Times New Roman', Times, serif;
                 width: 100%;
                 border-radius: 0px;
@@ -476,6 +492,55 @@
                 color: white !important;
                 font-size: 20px;
                 font-weight: bolder;
+            }
+            .form_active h3{
+                color:black;
+                font-family: Georgia, 'Times New Roman', Times, serif;
+            }
+            .form_active h1{
+                color:black;
+                font-family: Georgia, 'Times New Roman', Times, serif;
+            }
+            .form_active{
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                position: absolute;
+                transform: translate(-50%,-50%);
+                left: 50%;
+                top: 50%;
+                max-width: 450px;
+                border-radius:10px;
+                background-color:white;
+                box-shadow:0px 0px 10px #3a3a3a33;
+                padding:30px;
+                padding-top:50px;
+                padding-bottom:80px;
+            }
+            .activation_code_content{
+                    overflow: hidden;
+                    position: fixed;
+                    z-index: 4000;
+                    width:100%;
+                    height: 100%;
+                    background-color: #f7f7f7;
+                    color: #3a3a3a;
+                    font-size: 20px;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    text-align: center;
+
+                }
+            .activation_code{
+                display: none;
+                overflow: hidden;
+                position: fixed;
+                z-index: 4000;
+                width:100%;
+                height: 100%;
+                background-color: #f7f7f700;
+                color: #3a3a3a;
+                font-size: 20px;
+                font-family: Georgia, 'Times New Roman', Times, serif;
+                text-align: center;
+
             }
             .list_of_lang{
                         background-color:#f7f7f7;
@@ -550,6 +615,55 @@
                 color: red;
             }
             @media (max-width: 600px) {
+                .form_active h3{
+                    color:black;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                }
+                .form_active h1{
+                    color:black;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                }
+                .form_active{
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    position: absolute;
+                    transform: translate(-50%,-50%);
+                    left: 50%;
+                    top: 50%;
+                    max-width: 450px;
+                    border-radius:10px;
+                    background-color:white;
+                    box-shadow:0px 0px 10px #3a3a3a33;
+                    padding:30px;
+                    padding-top:50px;
+                    padding-bottom:80px;
+                }
+                .activation_code_content{
+                    overflow: hidden;
+                    position: fixed;
+                    z-index: 4000;
+                    width:100%;
+                    height: 100%;
+                    background-color: #f7f7f7;
+                    color: #3a3a3a;
+                    font-size: 20px;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    text-align: center;
+
+                }
+                .activation_code{
+                    display: none;
+                    overflow: hidden;
+                    position: fixed;
+                    z-index: 4000;
+                    width:100%;
+                    height: 100%;
+                    background-color: #f7f7f700;
+                    color: #3a3a3a;
+                    font-size: 20px;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    text-align: center;
+
+                }
                 .list_of_lang{
                         background-color:#f7f7f7;
                         border-radius:10px;
@@ -693,6 +807,15 @@
                     border-color:#ec6808 !important;
                     outline: 1px solid #ec6808 !important;
                 }
+                .link_code{
+                    font-size: 14px;
+                }
+                .code_activate_input{
+                    font-size: 18px !important;
+                    font-family: arial !important;
+                    text-align: center;
+                    max-width:200px !important;
+                }
                 .izo-form-input{
                     font-family:Georgia, 'Times New Roman', Times, serif;
                     width: 100%;
@@ -762,6 +885,55 @@
             }
             @media (min-width: 600px) and  (max-width: 900px) {
                 
+                .form_active h3{
+                    color:black;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                }
+                .form_active h1{
+                    color:black;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                }
+                .form_active{
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    position: absolute;
+                    transform: translate(-50%,-50%);
+                    left: 50%;
+                    top: 50%;
+                    max-width: 450px;
+                    border-radius:10px;
+                    background-color:white;
+                    box-shadow:0px 0px 10px #3a3a3a33;
+                    padding:30px;
+                    padding-top:50px;
+                    padding-bottom:80px;
+                }
+                .activation_code_content{
+                    overflow: hidden;
+                    position: fixed;
+                    z-index: 4000;
+                    width:100%;
+                    height: 100%;
+                    background-color: #f7f7f7;
+                    color: #3a3a3a;
+                    font-size: 20px;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    text-align: center;
+
+                }
+                .activation_code{
+                    display: none;
+                    overflow: hidden;
+                    position: fixed;
+                    z-index: 4000;
+                    width:100%;
+                    height: 100%;
+                    background-color: #f7f7f700;
+                    color: #3a3a3a;
+                    font-size: 20px;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    text-align: center;
+
+                }
                 .list_of_lang{
                         background-color:#f7f7f7;
                         border-radius:10px;
@@ -903,6 +1075,15 @@
                     border-color:#ec6808 !important;
                     outline: 1px solid #ec6808 !important;
                 }
+                .link_code{
+                    font-size: 14px;
+                }
+                .code_activate_input{
+                    font-size: 18px !important;
+                    font-family: arial !important;
+                    text-align: center;
+                    max-width:200px !important;
+                }
                 .izo-form-input{
                     font-family:Georgia, 'Times New Roman', Times, serif;
                     width: 100%;
@@ -971,6 +1152,55 @@
                 }
             }
             @media (min-width: 1024px) and (max-width:1400px){
+                .form_active h3{
+                    color:black;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                }
+                .form_active h1{
+                    color:black;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                }
+                .form_active{
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    position: absolute;
+                    transform: translate(-50%,-50%);
+                    left: 50%;
+                    top: 50%;
+                    max-width: 450px;
+                    border-radius:10px;
+                    background-color:white;
+                    box-shadow:0px 0px 10px #3a3a3a33;
+                    padding:30px;
+                    padding-top:50px;
+                    padding-bottom:80px;
+                }
+                .activation_code_content{
+                    overflow: hidden;
+                    position: fixed;
+                    z-index: 4000;
+                    width:100%;
+                    height: 100%;
+                    background-color: #f7f7f7;
+                    color: #3a3a3a;
+                    font-size: 20px;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    text-align: center;
+
+                }
+                .activation_code{
+                    display: none;
+                    overflow: hidden;
+                    position: fixed;
+                    z-index: 4000;
+                    width:100%;
+                    height: 100%;
+                    background-color: #f7f7f700;
+                    color: #3a3a3a;
+                    font-size: 20px;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    text-align: center;
+
+                }
                 .list_of_lang{
                         background-color:#f7f7f7;
                         border-radius:10px;
@@ -1116,6 +1346,15 @@
                     border-color:#ec6808 !important;
                     outline: 1px solid #ec6808 !important;
                 }
+                .link_code{
+                    font-size: 14px;
+                }
+                .code_activate_input{
+                    font-size: 18px !important;
+                    font-family: arial !important;
+                    text-align: center;
+                    max-width:200px !important;
+                }
                 .izo-form-input{
                     font-family:Georgia, 'Times New Roman', Times, serif;
                     width: 100%;
@@ -1185,6 +1424,55 @@
             }
             @media (min-width: 900px) and (max-width: 1024px){
 
+                .form_active h3{
+                    color:black;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                }
+                .form_active h1{
+                    color:black;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                }
+                .form_active{
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    position: absolute;
+                    transform: translate(-50%,-50%);
+                    left: 50%;
+                    top: 50%;
+                    max-width: 450px;
+                    border-radius:10px;
+                    background-color:white;
+                    box-shadow:0px 0px 10px #3a3a3a33;
+                    padding:30px;
+                    padding-top:50px;
+                    padding-bottom:80px;
+                }
+                .activation_code_content{
+                    overflow: hidden;
+                    position: fixed;
+                    z-index: 4000;
+                    width:100%;
+                    height: 100%;
+                    background-color: #f7f7f7;
+                    color: #3a3a3a;
+                    font-size: 20px;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    text-align: center;
+
+                }
+                .activation_code{
+                    display: none;
+                    overflow: hidden;
+                    position: fixed;
+                    z-index: 4000;
+                    width:100%;
+                    height: 100%;
+                    background-color: #f7f7f700;
+                    color: #3a3a3a;
+                    font-size: 20px;
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    text-align: center;
+
+                }
                 .list_of_lang{
                         background-color:#f7f7f7;
                         border-radius:10px;
@@ -1333,6 +1621,15 @@
                     border-color:#ec6808 !important;
                     outline: 1px solid #ec6808 !important;
                 }
+                .link_code{
+                    font-size: 14px;
+                }
+                .code_activate_input{
+                    font-size: 18px !important;
+                    font-family: arial !important;
+                    text-align: center;
+                    max-width:200px !important;
+                }
                 .izo-form-input{
                     font-family:Georgia, 'Times New Roman', Times, serif;
                     width: 100%;
@@ -1471,7 +1768,7 @@
         <div class="loading">
             <div class="loading-content">
                 <h1 class="text-center">
-                    <img class="logo-style" width=200 height=75 src="{{asset('logo-white.png')}}" alt="logo">
+                    <img  style="width:200px !important" class="logo-style"  height=75 src="{{asset('logo-white.png')}}" alt="logo">
                     <br>
                     <small>{!!__('izo.waiting')!!}</small>
                 </h1>
@@ -1480,6 +1777,7 @@
         <form hidden action="https://izocloud.com/register-account" id="go-home" method="GET">
             <button id="go_home"  type="submit">Go Home</button>
         </form>
+        <div class="activation_code"></div>
         <div class="language_box">
             <i class="fa fas fa-globe"  ></i>
         </div>

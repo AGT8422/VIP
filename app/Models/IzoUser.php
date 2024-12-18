@@ -103,7 +103,7 @@ class IzoUser extends Model
                 'database_user'  => $register->database_user,
                 'domain_url'     => $register->domain_url,
                 'domain'         => $register->domain_name,
-                'have_business'  => $user->have_business,
+                'have_business'  => $register->have_business,
                 'seats'          => $register->seats
             ];
             session(['user_main'  => $payload]);

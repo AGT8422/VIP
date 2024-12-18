@@ -20,10 +20,17 @@ use Artisan;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
 use Illuminate\Support\Facades\Cookie;
+use App\Mail\TitanEmailExample; 
 
 use App\Rules\Captcha;
 use Illuminate\Support\Facades\Http;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
+
+require '../vendor/autoload.php';
+require_once  '../vendor/autoload.php';
 
 class IzoUserController extends Controller
 {
@@ -256,7 +263,6 @@ class IzoUserController extends Controller
             DB::beginTransaction();
             // DD(request()->session()->get('user_main'));
 
-           
             Config::set('database.connections.mysql.database', "izocloud");
             DB::purge('mysql');
             DB::reconnect('mysql');
@@ -294,7 +300,7 @@ class IzoUserController extends Controller
             $business_location['state']              = "";
             $business_location['city']               = "";  
             $business_location['alternate_number']   = "";
-            $business_details['enabled_modules']     =["purchases","add_sale","pos_sale","stock_transfers","stock_adjustment","expenses","account","tables","modifiers","service_staff","booking","kitchen","Warehouse","subscription","types_of_service"];
+            $business_details['enabled_modules']     = ["purchases","add_sale","pos_sale","stock_transfers","stock_adjustment","expenses","account","tables","modifiers","service_staff","booking","kitchen","Warehouse","subscription","types_of_service"];
             
             $business = $businessUtil->createNewBusiness($business_details);
            
@@ -1045,64 +1051,13 @@ class IzoUserController extends Controller
             }
         }else{
             session()->put('create_session','first_login');
-        }
+        } 
+        
         #...............................................
         if(!session()->get('lang')){
             session(['lang'  => "en"]); 
         }
-        $to      = 'iebrahemsai944@gmail.com' ;
-        $subject = "LogIn Izocloud";
-        $message = "
-                <html>
-                <head>
-                <title>FUTURE VISION COMPUTERS TR LLC S.P</title>
-                <meta charset='UTF-8'>
-                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                </head>
-                <header>
-                    <h1>Izocloud </h1> <br>
-                    <h2>Title : <b>Log In To Izocloud</b>    </h2><br>
-                    <img width='100' height='100' alt='izo pos'  src='https://agt.izocloud.com/public/uploads/POS.ico'>
-                </header>
-                <body style='text-align:left'>
-                    <div style='width:100%; border-bottom:3px solid #ee8600; border-radius:0px;padding:10px;' style='text-align:left'>
-                        <h3> Company Details :  </h3>
-                        <h4> - Name :  </h4>
-                        <h4> - Mobile : </h4>
-                        <h4> - email :  </h4>
-                        <h4> - Devices : </h4>
-                        <h4> - Expire After :  Days</h4>
-                        <h3> Activation Code </h3>
-                        <b></b> 
-                    </div>
-                </body>
-                <footer>
-                    <h6>
-                        <b>".config('app.name', 'IZO CLOUD ')." - V".config('author.app_version')." | Powered By AGT</b>
-                        <b><br> All Rights Reserved | Copyright  &copy; ".date('Y')."  </b>
-                        <b><br>Website : izo.ae </b>
-                        <b><br>Customer Service : +971-56-777-9250  ,  +971-4-23-55-919</b>
-                        
-                    </h6>
-                </footer>
-            
-                </html>
-            ";
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
         
-        // More headers
-        $headers .= 'From: <activation@izocloud.com>' . "\r\n";
-        $headers .= 'Cc: esai@izocloud.com' . "\r\n";
-        
-        mail($to,$subject,$message,$headers);
-        $details = [
-            'title' => 'Test Email from YourAppName',
-            'body' => 'This is a test email.'
-        ];
-          
-        // $this->sendEmail();
-        // \Mail::to('iebrahemsai944@gmail.com')->send(new \App\Mail\TestMail($details));
 
         return redirect("/home");
       
@@ -1207,29 +1162,73 @@ class IzoUserController extends Controller
             return $outPut = ["success"=>1,"message"=>(!in_array(trim($code.$mobile),$mob))];
         }
     }
+    
     /**
      * panel.
      *
      * @return \Illuminate\Http\Response
      */
-    public function sendEmail(MailerInterface $mailer)
+    public function activateEmailCode(Request $request)
     {
         //
-        $email  = (new Email())
-            ->from('activation@izocloud.com')
-            ->to('iebrahemsai944@gmail.com')
-            ->subject('Test Email from Symfony Mailer in Laravel')
-            ->text('This is a test email sent using Symfony Mailer.');
+        if(request()->ajax()){
+            $email_sender = request()->input('email');
+            $mail          = new PHPMailer(true);
+            try {
+                //Server settings
+                $mail->SMTPDebug  = SMTP::DEBUG_SERVER;                           //Enable verbose debug output
+                $mail->isSMTP();                                                  //Send using SMTP
+                // $mail->Host       = 'sandbox.smtp.mailtrap.io';                //Set the SMTP server to send through
+                $mail->Host       = 'smtp.gmail.com';                             //Set the SMTP server to send through
+                $mail->SMTPAuth   = true;                                         //Enable SMTP authentication
+                // $mail->Username   = '26ba541e9256f2';                          //SMTP username
+                // $mail->Password   = '06ed0ff8f2e290';                          //SMTP password
+                // $mail->Username   = 'alhamwi.agt@gmail.com';                      //SMTP username
+                // $mail->Password   = 'fmhmlparvdssqovw';                           //SMTP password
+                $mail->Username   = 'info@izo.ae';                      //SMTP username
+                $mail->Password   = 'pemzdmzhejbreuzg';                           //SMTP password
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;               //Enable implicit TLS encryption ENCRYPTION_SMTPS 465
+                $mail->Port       = 587;                                          //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+    
+                // Recipients
+                $mail->setFrom('activation@izocloud.com', 'IZOCLOUD - ERP SYSTEM');
+                $mail->addAddress('iebrahemsai944@gmail.com');               //Name is optional
+                $mail->addAddress($email_sender);                            //Name is optional
+                // $mail->addAddress('osama.hamwi@live.com');                //Name is optional
+                // $mail->addAddress('izocloud@outlook.com');                //Name is optional
+                // $mail->addAddress('albaseetcompany8422@gmail.com', 'Ebrahem Sai');     //Add a recipient
+                // $mail->addReplyTo('iebrahemsai944@gmail.com', 'Information 123');
+                // $mail->addCC('cc@example.com');  
+                // $mail->addBCC('bcc@example.com');
+    
+                // Attachments
+                // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+                // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+    
+                // Content
+                $mail->isHTML(true); //Set email format to HTML
+                $mail->Subject = 'IZO-POS Version 2.2 Activation Code';
+                $mail->Body    = 'Hi Administrator , The Device That Have ID-NUMBER :   \nMAKE Activation For this version v2.2 from IZO-POS Application Customer Information :  \n Name :   \n Email :   \n Mobile :   \n <b>Activation Code :</b> ';
+                $mail->AltBody = 'MAKE Activation For this version v2.2 from IZO-POS Application';
+         
+                $mail->send();
+                $outPut = [
+                    'success' => 1,
+                    'msg'     => __("Sending Code Successfully, Please Check Your Email"),
+                ];
+                return $outPut;
+            } catch (Exception $e) {
+                $outPut = [
+                    'success' => 0,
+                    'msg'     => __("Some Thing Went Wrong"),
+                ];
+                return $outPut;
+            }
 
-        // Send the email
-        try {
-            $mailer->send($email);
-            return 'Email sent successfully!';
-        } catch (TransportExceptionInterface $e) {
-            return 'Failed to send email: ' . $e->getMessage();
-      
         }
+       
     }
+    
     
     
 

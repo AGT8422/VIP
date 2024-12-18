@@ -1463,9 +1463,9 @@
                             <div class="col-xl-12 col-md-12 text-center sign-up-box">
                                 <a href="{{route('izoRegister')}}" class="sign-up-form"   >{{__('izo.signup')}}</a>
                             </div>
-                            <div class="col-xl-12 col-md-12 text-center sign-up-box">
+                            {{-- <div class="col-xl-12 col-md-12 text-center sign-up-box">
                                 <a href="{{\URL::to('/send-symfony-email')}}" class="sign-up-form"   >{{__('test')}}</a>
-                            </div>
+                            </div> --}}
                             
                             <div class="col-xl-12 col-md-12 text-center" style="width: 80% ;margin:auto 10%; font-family:Georgia, 'Times New Roman', Times, serif;"> 
                                     <p style="color:#838383;font-weight:600;text-transform:capitalize">

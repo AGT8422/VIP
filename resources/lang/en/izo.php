@@ -113,8 +113,13 @@ return [
     'sorry_cant_delete_admin_user' => 'You Can\'t Delete This user From This Page',
     'waiting'                      => 'Please Wait.....',
     'user_number'                  => 'Number Of Users',
+    'ACTIVATION CODE'              => 'ACTIVATION CODE',
+    'to_continue'                  => 'To continue <br> you must enter the activation code',
+    'enter_code'                   => 'Enter the activation code',
+    'please_check_email'           => 'Check your mailbox and use the activation code. The code expires after three minutes',
+    'Activate'                     => 'Activate',
+    'resend_code'                  => '<b class="btn-link" style"cursor:pointer;font-size:13px !important;">Get code again</b> <br> <small style"font-size:10px !important;color:red !important;text-decoration:none !important;">(it is allowed to be sent only three times)</small>',
 
-    ''=> ''
 
 
 ];

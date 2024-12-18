@@ -1,6 +1,11 @@
 <?php
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Mailer\MailerInterface;
+// use Symfony\Component\Mime\Email;
+// use Symfony\Component\Mailer\MailerInterface;
+// use PHPMailer\PHPMailer\PHPMailer;
+// use PHPMailer\PHPMailer\SMTP;
+// use PHPMailer\PHPMailer\Exception;
+
+ 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,6 +23,7 @@ include_once('install_r.php');
         Route::get('/login-account','IzoUserController@loginPage')->name('izoLogin');
         Route::get('/login-account-redirect/{id}','IzoUserController@loginPageRedirect')->name('izoRedirectLogin');
         Route::get('/register-account','IzoUserController@register')->name('izoRegister');
+        Route::get('/email-code-activation','IzoUserController@activateEmailCode')->name('izoCodeEmail');
         Route::get('/check-company','IzoUserController@checkCompanyName')->name('checkCompanyName');
         Route::get('/check-domain','IzoUserController@checkDomainName')->name('checkDomainName');
         Route::get('/check-email','IzoUserController@checkEmail')->name('checkEmail');
@@ -32,23 +38,72 @@ include_once('install_r.php');
     });
 
 
-Route::get('/send-symfony-email', function (MailerInterface $mailer) {
-    // Create an email
-    $email  = (new Email())
-        ->from('activation@izocloud.com')
-        ->to('iebrahemsai944@gmail.com')
-        ->subject('Test Email from Symfony Mailer in Laravel')
-        ->text('This is a test email sent using Symfony Mailer.');
+    // Route::get('/send-symfony-email', function () {
+    //     // Create an email
+    //     $mail                         = new PHPMailer(true);
+    //         try {
+    //             //Server settings
+    //             $mail->SMTPDebug  = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+    //             $mail->isSMTP();                                            //Send using SMTP
+    //             // $mail->Host       = 'sandbox.smtp.mailtrap.io';                     //Set the SMTP server to send through
+    //             $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+    //             $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+    //             // $mail->Username   = '26ba541e9256f2';                     //SMTP username
+    //             // $mail->Password   = '06ed0ff8f2e290';                               //SMTP password
+    //             $mail->Username   = 'alhamwi.agt@gmail.com';                     //SMTP username
+    //             $mail->Password   = 'fmhmlparvdssqovw';                               //SMTP password
+    //             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            //Enable implicit TLS encryption ENCRYPTION_SMTPS 465
+    //             $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-    // Send the email
-    try {
-        $mailer->send($email);
-        return 'Email sent successfully!';
-    } catch (TransportExceptionInterface $e) {
-        return 'Failed to send email: ' . $e->getMessage();
+    //             // Recipients
+    //             $mail->setFrom('alhamwi.agt@gmail.com', 'AGT - Al Hamwi General Trading');
+    //             // $mail->addAddress('albaseetcompany8422@gmail.com', 'Ebrahem Sai');     //Add a recipient
+    //             $mail->addAddress('iebrahemsai944@gmail.com');               //Name is optional
+    //             // $mail->addAddress('izocloud@outlook.com');               //Name is optional
+    //             // $mail->addAddress('osama.hamwi@live.com');               //Name is optional
+    //             $mail->addReplyTo('iebrahemsai944@gmail.com', 'Information 123');
+    //             // $mail->addCC('cc@example.com');
+    //             // $mail->addBCC('bcc@example.com');
+
+    //             // Attachments
+    //             // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+    //             // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+
+    //             // Content
+    //             $mail->isHTML(true);                                  //Set email format to HTML
+    //             $mail->Subject = 'IZO-POS Version 2.2 Activation Code';
+    //             $mail->Body    = 'Hi Administrator , The Device That Have ID-NUMBER :   \nMAKE Activation For this version v2.2 from IZO-POS Application Customer Information :  \n Name :   \n Email :   \n Mobile :   \n <b>Activation Code :</b> ';
+    //             $mail->AltBody = 'MAKE Activation For this version v2.2 from IZO-POS Application';
+    //             $mail->send();
+    //         // Mail::to('iebrahemsai944@gmail.com')->send(new TitanEmailExample($details));
+    //         // $this->sendEmail();
+    //         // \Mail::to('iebrahemsai944@gmail.com')->send(new \App\Mail\TestMail($details));
+    //             return redirect("/home");
+    //         } catch (Exception $e) {
+    //             $output = [
+    //                 "success" => 0,
+    //                 "msg"    =>  "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"
+    //             ];
+    //             return  dd($e->getMessage());
+    //         }
+    // });
+// Route::get('/send-symfony-email', function (MailerInterface $mailer) {
+//     // Create an email
+//     $email  = (new Email())
+//         ->from('activation@izocloud.com')
+//         ->to('iebrahemsai944@gmail.com')
+//         ->subject('Test Email from Symfony Mailer in Laravel')
+//         ->text('This is a test email sent using Symfony Mailer.');
+
+//     // Send the email
+//     try {
+//         $mailer->send($email);
+//         return 'Email sent successfully!';
+//     } catch (TransportExceptionInterface $e) {
+//         return 'Failed to send email: ' . $e->getMessage();
     
-    }
-});
+//     }
+// });
     // 13 ***
         Route::get('/qrcode','GenQrcode@index');
         Route::post('/qrcode','GenQrcode@test');

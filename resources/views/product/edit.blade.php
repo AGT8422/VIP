@@ -147,7 +147,8 @@
                               if(count($business_locations) == 1){
                                 $default_location = array_key_first($business_locations->toArray());
                               } 
-                            @endphp
+                             
+                            @endphp 
                             <div class="col-sm-6">
                               <div class="form-group">
                                 {!! Form::label('product_locations', __('business.business_locations') . ':') !!} @show_tooltip(__('lang_v1.product_location_help'))

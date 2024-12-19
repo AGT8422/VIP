@@ -232,11 +232,11 @@
                 @php  $section_left = 1; @endphp
                 <div @if(auth()->user()->can('izo.box_vat')) class="col-md-6" @else  class="col-md-12" @endif>
                     <div class="card1">
-                        <H4>{{__('izo.customers')}} <small class="pull-right D_rang">{{__('izo.date_range')}}</small></H4>
+                        <H4><span >{{__('izo.customers')}}</span> <small class="pull-right D_rang" >{{__('izo.date_range')}}</small></H4>
                         <p>  &nbsp;</p>
                         <p>  &nbsp;</p>
                         @if(auth()->user()->can('izo.box_customer_total'))
-                            <p>{{__('izo.total_customer')}}   <b  class="pull-right big-number number-of-contact standard">{{$contactOfInvoice}}</b></p>
+                            <p>{{__('izo.total_customers')}}   <b  class="pull-right big-number number-of-contact standard" >{{$contactOfInvoice}}</b></p>
                         @endif
                     </div> 
                 </div> 
@@ -340,7 +340,7 @@
             @php  $section_left = 1; @endphp
             <div @if(auth()->user()->can('izo.box_total_supplier')) class="col-md-6" @else  class="col-md-12" @endif>
                 <div class="card1">
-                    <H4><a href="{{\URL::to($customerUrl)}}">{{__('izo.total_customer')}}</a> <small class="pull-right D_rang">{{__('izo.accumulated')}}</small></H4>
+                    <H4><a href="{{\URL::to($customerUrl)}}">{{__('izo.total_customer')}}</a> <small class="pull-right D_rang"  style="font-size:13px !important">{{__('izo.accumulated')}}</small></H4>
                     <p>  &nbsp;</p>
                     <p>  &nbsp;</p>
                     @if(auth()->user()->can('izo.box_total_customer_balance'))
@@ -354,7 +354,7 @@
             @php  $section_left = 1; @endphp
             <div @if(auth()->user()->can('izo.box_total_customer')) class="col-md-6" @else  class="col-md-12" @endif>
                 <div class="card1">
-                    <H4><a href="{{\URL::to($supplierUrl)}}">{{__('izo.total_supplier')}}</a> <small class="pull-right D_rang">{{__('izo.accumulated')}}</small></H4>
+                    <H4><a href="{{\URL::to($supplierUrl)}}">{{__('izo.total_supplier')}}</a> <small class="pull-right D_rang" style="font-size:13px !important">{{__('izo.accumulated')}}</small></H4>
                     <p>  &nbsp;</p>
                     <p>  &nbsp;</p>
                     @if(auth()->user()->can('izo.box_total_supplier_balance'))

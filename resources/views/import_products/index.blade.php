@@ -185,7 +185,7 @@
                                 <td>@lang('lang_v1.selling_price_ins')<br>
                                  <small class="text-muted">{!! __('lang_v1.selling_price_ins1') !!}</small></td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <td>21</td>
                                 <td>@lang('lang_v1.opening_stock') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                                 <td>@lang('lang_v1.opening_stock_ins') {!! __('lang_v1.opening_stock_help_text') !!}<br>
@@ -196,84 +196,84 @@
                                 <td>@lang('lang_v1.opening_stock_location') <small class="text-muted">(@lang('lang_v1.optional')) <br>@lang('lang_v1.location_ins')</small></td>
                                 <td>@lang('lang_v1.location_ins1')<br>
                                 </td>
-                            </tr>
+                            </tr> --}}
                             <tr>
-                                <td>23</td>
+                                <td>21</td>
                                 <td>@lang('lang_v1.expiry_date') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                                 <td>{!! __('lang_v1.expiry_date_ins') !!}<br>
                                 </td>
                             </tr>
                             <tr>
-                                <td>24</td>
+                                <td>22</td>
                                 <td>@lang('lang_v1.enable_imei_or_sr_no') <small class="text-muted">(@lang('lang_v1.optional'), @lang('lang_v1.default'): 0)</small></td>
                                 <td><strong>1 = @lang('messages.yes')<br>
                                     0 = @lang('messages.no')</strong><br>
                                 </td>
                             </tr>
                             <tr>
-                                <td>25</td>
+                                <td>23</td>
                                 <td>@lang('lang_v1.weight') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                                 <td>@lang('lang_v1.optional')<br>
                                 </td>
                             </tr>
                             <tr>
-                                <td>26</td>
+                                <td>24</td>
                                 <td>@lang('lang_v1.rack') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                                 <td>{!! __('lang_v1.rack_help_text') !!}</td>
                             </tr>
                             <tr>
-                                <td>27</td>
+                                <td>25</td>
                                 <td>@lang('lang_v1.row') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                                 <td>{!! __('lang_v1.row_help_text') !!}</td>
                             </tr>
                             <tr>
-                                <td>28</td>
+                                <td>26</td>
                                 <td>@lang('lang_v1.position') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                                 <td>{!! __('lang_v1.position_help_text') !!}</td>
                             </tr>
                             <tr>
-                                <td>29</td>
+                                <td>27</td>
                                 <td>@lang('lang_v1.image') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                                 <td>{!! __('lang_v1.image_help_text', ['path' => 'public/uploads/'.config('constants.product_img_path')]) !!}</td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>30</td>
+                                <td>28</td>
                                 <td>@lang('lang_v1.product_description') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                                 <td></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>31</td>
+                                <td>29</td>
                                 <td>@lang('lang_v1.product_custom_field1') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>32</td>
+                                <td>30</td>
                                 <td>@lang('lang_v1.product_custom_field2') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                             </tr>
                             <tr>
-                                <td>33</td>
+                                <td>31</td>
                                 <td>@lang('lang_v1.product_custom_field3') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>34</td>
+                                <td>32</td>
                                 <td>@lang('lang_v1.product_custom_field4') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                             </tr>
                             <tr>
-                                <td>35</td>
+                                <td>33</td>
                                 <td>@lang('lang_v1.not_for_selling') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                                 <td><strong>1 = @lang('messages.yes')<br>
                                     0 = @lang('messages.no')</strong><br>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>36</td>
+                            {{-- <tr>
+                                <td>34</td>
                                 <td>@lang('lang_v1.product_locations') <small class="text-muted">(@lang('lang_v1.optional'))</small></td>
                                 <td>@lang('lang_v1.product_locations_ins')
                                 </td>
-                            </tr>
+                            </tr> --}}
         
                         </table>
                     @endcomponent

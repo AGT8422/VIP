@@ -44,7 +44,7 @@ class UnitController extends Controller
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
 
-            $unit = Unit::where('business_id', $business_id)->whereNull('product_id')->with(['base_unit'])
+            $unit = Unit::where('business_id', $business_id)->whereNull('product_id')->orderBy('id','asc')->with(['base_unit'])
                          ->select(['actual_name','default','in_product', 'short_name', 'allow_decimal', 'id','base_unit_id', 'base_unit_multiplier']);
 
             return Datatables::of($unit)

@@ -37,8 +37,8 @@ class BusinessLocationController extends Controller
      */
     public function index()
     {
+        abort(403, 'Unauthorized action.');
         if (!auth()->user()->can('business_settings.access')) {
-            abort(403, 'Unauthorized action.');
         }
 
         if (request()->ajax()) { 
@@ -102,8 +102,8 @@ class BusinessLocationController extends Controller
      */
     public function create()
     {
+        abort(403, 'Unauthorized action.');
         if (!auth()->user()->can('business_settings.access')) {
-            abort(403, 'Unauthorized action.');
         }
         $business_id = request()->session()->get('user.business_id');
 
@@ -150,8 +150,8 @@ class BusinessLocationController extends Controller
      */
     public function store(Request $request)
     {
+        abort(403, 'Unauthorized action.');
         if (!auth()->user()->can('business_settings.access')) {
-            abort(403, 'Unauthorized action.');
         }
 
         try {
@@ -216,8 +216,8 @@ class BusinessLocationController extends Controller
      */
     public function edit($id)
     {
+        abort(403, 'Unauthorized action.');
         if (!auth()->user()->can('business_settings.access')) {
-            abort(403, 'Unauthorized action.');
         }
 
         $business_id = request()->session()->get('user.business_id');
@@ -262,8 +262,8 @@ class BusinessLocationController extends Controller
      */
     public function update(Request $request, $id)
     {
+        abort(403, 'Unauthorized action.');
         if (!auth()->user()->can('business_settings.access')) {
-            abort(403, 'Unauthorized action.');
         }
 
         try {

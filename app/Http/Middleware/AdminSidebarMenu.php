@@ -935,14 +935,14 @@ class AdminSidebarMenu
                 $menu->dropdown(
                     __('home.patterns'),
                     function ($sub) use ($enabled_modules) {
-                        if (auth()->user()->can('business_settings.access') || auth()->user()->can('admin_without.views')) {
+                        // if (auth()->user()->can('business_settings.access') || auth()->user()->can('admin_without.views')) {
                              
-                            $sub->url(
-                                action('BusinessLocationController@index'),
-                                __('business.business_locations'),
-                                ['icon' => 'fa fas fa-map-marker', 'active' => request()->segment(1) == 'business-location','style'=>'font-weight:bold']
-                            );
-                        }
+                        //     $sub->url(
+                        //         action('BusinessLocationController@index'),
+                        //         __('business.business_locations'),
+                        //         ['icon' => 'fa fas fa-map-marker', 'active' => request()->segment(1) == 'business-location','style'=>'font-weight:bold']
+                        //     );
+                        // }
                         if (auth()->user()->can('business_settings.access') || auth()->user()->can('admin_without.views')) {
                             $sub->url(
                                 action('PatternController@index'),

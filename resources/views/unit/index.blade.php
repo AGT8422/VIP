@@ -53,3 +53,11 @@
     {{-- ****************************** --}}
     <!-- /.content -->
 @endsection
+
+@section('javascript')
+    <script type="text/javascript">
+        $('#unit_table').ready(function(){
+            $('#unit_table').removeClass('dataTable');
+        });
+    </script>
+@endsection

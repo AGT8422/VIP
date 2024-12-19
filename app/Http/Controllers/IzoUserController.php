@@ -277,8 +277,7 @@ class IzoUserController extends Controller
             DB::reconnect('mysql');
             #.......................................Create User
             $owner_details['last_name']     = $owner_details['second_name'];
-            $owner_details['surname']       = "";
-            $owner_details['first_name']    = request()->session()->get('user_main.email');
+            $owner_details['surname']       = ""; 
             $owner_details['contact_number']= request()->session()->get('user_main.mobile');
             $owner_details['username']      = request()->session()->get('user_main.email');
             $owner_details['email']         = request()->session()->get('user_main.email');
@@ -296,6 +295,7 @@ class IzoUserController extends Controller
                 $business_details['start_date'] = \Carbon::createFromFormat(config('constants.default_date_format'), $business_details['start_date'])->toDateString();
             }
             #.......................................Create BusinessLocation
+            $info                                    = $request->only(['address', 'city',  'zip_code' , 'tax_number']);
             $business_location                       = $request->only(['name', 'country',  'zip_code']);
             $business_location['name']               = request()->session()->get('user_main.domain');
             $business_location['landmark']           = "";
@@ -309,12 +309,14 @@ class IzoUserController extends Controller
             $business = $businessUtil->createNewBusiness($business_details);
            
             #.......................................Update user with business id
-            $user->username     = request()->session()->get('user_main.email');
+            $user->username      = request()->session()->get('user_main.email');
             $user->contact_number= $owner_details['contact_number'];
-            $user->first_name   = $owner_details['first_name'];
-            $user->last_name    = $owner_details['second_name'];
-            $user->business_id  = $business->id;
-            $user->is_admin_izo = 1;
+            $user->first_name    = $owner_details['first_name'];
+            $city                = ($info['city'])?  " , " . $info['city']:"";
+            $user->address       = $info['address']  . $city   ;
+            $user->last_name     = $owner_details['second_name'];
+            $user->business_id   = $business->id;
+            $user->is_admin_izo  = 1;
             $user->update();
             #.......................................Create Location
             $businessUtil->newBusinessDefaultResources($business->id, $user->id);
@@ -363,8 +365,9 @@ class IzoUserController extends Controller
                 "success" => 1,
                 "message" => __('Register Successfully'),
             ];
-            session()->put('log_out_back','logout');
-            return redirect("/home")->with("status",$outPut);
+            // session()->put('log_out_back','logout');
+            // return redirect("/home")->with("status",$outPut);
+            // return view('izo_user.confirm')->with(compact(['login_user']));
         }catch(Exception $e){
             DB::rollBack();
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
@@ -385,6 +388,7 @@ class IzoUserController extends Controller
     {
         // 
         $businessUtil  = new BusinessUtil();
+
         $timeZone      = [
             'Africa/Abidjan' => 'Ivory Coast Time',
             'Africa/Accra' => 'Ghana Time',
@@ -731,11 +735,13 @@ class IzoUserController extends Controller
             "EC" => "Ecuador",
             "VE" => "Venezuela",
         ];
+
         $language     = [];  
         $config_languages = config('constants.langs');
          foreach ($config_languages as $key => $value) {
             $language[$key] = $value['full_name'];
         }
+
         $company_size = [
             "free_worker"    => "Free worker",
             "1_5_worker"     => "1 - 5 Male/female employee",
@@ -745,6 +751,7 @@ class IzoUserController extends Controller
             "201_500_worker" => "201 - 500 Male/female employee",
             "500_worker"     => "More Than 500 employee",
         ]; 
+
         $jobs         = [
             "accounts_officer"           => "Accounts Officer",  
             "sales_officer"              => "Sales Officer",  
@@ -779,12 +786,15 @@ class IzoUserController extends Controller
 
         }
         $subdomain     = $subdomain;  
+        
         if(session()->has('startLogin')){
             if($subdomain == ""){
                 $login_user = (request()->session()->get('login_user'))?request()->session()->get('login_user'):null; 
                 
                 if($login_user == null){
-                    return view('izo_user.confirm');
+                    if(!session()->has('user_main')){
+                        return view('izo_user.confirm');
+                    }
                 }else{ 
                     return view('izo_user.confirm')->with(compact(['login_user']));
                 }
@@ -1090,6 +1100,7 @@ class IzoUserController extends Controller
         session()->forget('currency');
         session()->forget('locale');
         session()->forget('financial_year');
+        session()->put('log_out_back','logout');
         \Auth::logout();
         return redirect('/login-account');
      

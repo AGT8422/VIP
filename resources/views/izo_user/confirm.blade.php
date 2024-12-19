@@ -3339,7 +3339,6 @@
                 @endif
             },1000);
             setTimeout(() => {
-                 
                 // .............................................. platform
                 $(".type_business").on("change",function(){
                     if($(this).is(":checked")){ 

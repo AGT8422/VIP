@@ -73,13 +73,12 @@
                           {{-- ********************** --}}
                           <div class="clearfix"></div>
                           {{-- ********************** --}}
-
-                          <div class="col-sm-6">
-                            @php $unitm = \App\Unit::where("default",1)->first();  @endphp
+                          
+                          <div class="col-sm-6"> 
                             <div class="form-group">
                               {!! Form::label('unit_id', __('product.unit') . ':*') !!}
                               <div class="input-group">
-                                {!! Form::select('unit_id', $units, !empty($unitm) ? $unitm->id : session('business.default_unit'), ['class' => 'form-control select2', 'required']); !!}
+                                {!! Form::select('unit_id', $units, ($unitm != null) ? $unitm->id : session('business.default_unit'), ['class' => 'form-control select2', 'required']); !!}
                                 <span class="input-group-btn">
                                   <button type="button" @if(!auth()->user()->can('unit.create'))   @endif class="btn btn-default bg-white btn-flat btn-modal" data-href="{{action('UnitController@create', ['quick_add' => true])}}" title="@lang('unit.add_unit')" data-container=".view_modal"><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
                                 </span>
@@ -93,9 +92,10 @@
                                 // #6-8-2024 
                                 $allList     = [];
                                 $productUtil = new \App\Utils\ProductUtil() ;
-                                $sub_units   = $productUtil->getSubUnits(session('business.id'), !empty($unitm) ? $unitm->id : session('business.default_unit'), true);
-                                $un_id       = !empty($unitm) ? $unitm->id : session('business.default_unit');
-                              @endphp
+                                $sub_units   = $productUtil->getSubUnits(session('business.id'), ($unitm != null) ? $unitm->id : session('business.default_unit'), true);
+                                $un_id       = ($unitm != null) ? $unitm->id : session('business.default_unit');
+                                @endphp
+                              
                               @foreach ($sub_units as $keies => $item)
                                  @if($keies != $un_id )
                                   @php  $allList[$keies] = $item["name"]; @endphp 
@@ -376,6 +376,7 @@
                             {!! Form::text('product_custom_field4', !empty($duplicate_product->product_custom_field4) ? $duplicate_product->product_custom_field4 : null, ['class' => 'form-control', 'placeholder' => $product_custom_field4]); !!}
                           </div>
                         </div>
+                       
                         <!--custom fields-->
                         <div class="clearfix"></div>
                         <!--@include('layouts.partials.module_form_part')-->
@@ -431,7 +432,7 @@
                                                                                   'product_price'  => $product_price , 
                                                                                   'array_unit'     => $array_unit,
                                                                                   'units'          => $units,
-                                                                                  'unit_id'        => !empty($unitm) ? $unitm->id : session('business.default_unit'),
+                                                                                  'unit_id'        => ($unitm != null) ? $unitm->id : session('business.default_unit'),
                                                                                   'units_main'     => $units_main
                                                                                 ])
                         </div>

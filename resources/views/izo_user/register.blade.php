@@ -1778,6 +1778,7 @@
             <button id="go_home"  type="submit">Go Home</button>
         </form>
         <div class="activation_code"></div>
+        <input type="text" id="otp" hidden value="0">
         <div class="language_box">
             <i class="fa fas fa-globe"  ></i>
         </div>

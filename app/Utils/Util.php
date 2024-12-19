@@ -629,71 +629,73 @@ class Util
   
         $unit =  Unit::where('business_id', $business_id)
                     ->with(['sub_units'])
-                    ->findOrFail($unit_id);
-
-        //Find related subunits for the product.
-        $related_sub_units = [];
-        if (!empty($product_id)) {
-            $product = Product::where('business_id', $business_id)->findOrFail($product_id);
-            $related_sub_units = $product->sub_unit_ids;
-        }
-
-        $sub_units = [];
-         
-        //Add main unit as per given parameter or conditions.
-        if (($return_main_unit_if_empty && count($unit->sub_units) == 0)) {
-            $var   = 0;
+                    ->find($unit_id);
+        if(empty($unit)){
+            $sub_units = []; 
+        }else{
+            //Find related subunits for the product.
+            $related_sub_units = [];
             if (!empty($product_id)) {
-                $product = \App\Product::find($product_id);
-                $var     = $product->variations->first();
-                $var     = ($var)?$var->default_purchase_price:0;
+                $product = Product::where('business_id', $business_id)->findOrFail($product_id);
+                $related_sub_units = $product->sub_unit_ids;
             }
-            $sub_units[$unit->id] = [
-                      'name' => $unit->actual_name,
-                      'multiplier' => 1,
-                      'allow_decimal' => $unit->allow_decimal,
-                      'price' => $var,
-                      'check_price' => 0,
-                      
-                    ];
-        } elseif (empty($related_sub_units) || in_array($unit->id, $related_sub_units)) {
-            $var   = 0;
-            if (!empty($product_id)) {
-                $product = \App\Product::find($product_id);
-                $var     = $product->variations->first();
-                $var     = ($var)?$var->default_purchase_price:0;
-            }
-            $sub_units[$unit->id] = [
-                      'name' => $unit->actual_name,
-                      'multiplier' => 1,
-                      'allow_decimal' => $unit->allow_decimal,
-                      'price' => $var,
-                      'check_price' => 0,
-                    ];
-        }
-        
-        if (count($unit->sub_units) > 0) {
-            foreach ($unit->sub_units as $sub_unit) {
-                $row_price = 0;
-                if(!empty($product_id)){
-                   $row_price =  \App\Models\ProductPrice::where("unit_id",$sub_unit->id)->where("product_id",$product_id)->where("number_of_default",0)->first();
-                   $row_price =  ($row_price)?$row_price->default_purchase_price:0;
+
+            $sub_units = [];
+            
+            //Add main unit as per given parameter or conditions.
+            if (($return_main_unit_if_empty && count($unit->sub_units) == 0)) {
+                $var   = 0;
+                if (!empty($product_id)) {
+                    $product = \App\Product::find($product_id);
+                    $var     = $product->variations->first();
+                    $var     = ($var)?$var->default_purchase_price:0;
                 }
-                
-                //Check if subunit is related to the product or not.
-                if (empty($related_sub_units) || in_array($sub_unit->id, $related_sub_units)) {
-                    $sub_units[$sub_unit->id] = [
-                        'name' => $sub_unit->actual_name,
-                        'multiplier' => $sub_unit->base_unit_multiplier,
-                        'allow_decimal' => $sub_unit->allow_decimal,
-                        'price' => $row_price,
+                $sub_units[$unit->id] = [
+                        'name' => $unit->actual_name,
+                        'multiplier' => 1,
+                        'allow_decimal' => $unit->allow_decimal,
+                        'price' => $var,
                         'check_price' => 0,
-                    ];
+                        
+                        ];
+            } elseif (empty($related_sub_units) || in_array($unit->id, $related_sub_units)) {
+                $var   = 0;
+                if (!empty($product_id)) {
+                    $product = \App\Product::find($product_id);
+                    $var     = $product->variations->first();
+                    $var     = ($var)?$var->default_purchase_price:0;
                 }
-               
+                $sub_units[$unit->id] = [
+                        'name' => $unit->actual_name,
+                        'multiplier' => 1,
+                        'allow_decimal' => $unit->allow_decimal,
+                        'price' => $var,
+                        'check_price' => 0,
+                        ];
+            }
+            
+            if (count($unit->sub_units) > 0) {
+                foreach ($unit->sub_units as $sub_unit) {
+                    $row_price = 0;
+                    if(!empty($product_id)){
+                    $row_price =  \App\Models\ProductPrice::where("unit_id",$sub_unit->id)->where("product_id",$product_id)->where("number_of_default",0)->first();
+                    $row_price =  ($row_price)?$row_price->default_purchase_price:0;
+                    }
+                    
+                    //Check if subunit is related to the product or not.
+                    if (empty($related_sub_units) || in_array($sub_unit->id, $related_sub_units)) {
+                        $sub_units[$sub_unit->id] = [
+                            'name' => $sub_unit->actual_name,
+                            'multiplier' => $sub_unit->base_unit_multiplier,
+                            'allow_decimal' => $sub_unit->allow_decimal,
+                            'price' => $row_price,
+                            'check_price' => 0,
+                        ];
+                    }
+                
+                }
             }
         }
-
         return $sub_units;
     }
 

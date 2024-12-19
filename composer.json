@@ -26,6 +26,7 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "*",
         "intervention/image": "^2.7",
+        "jenssegers/agent": "^2.6",
         "khaled.alshamaa/ar-php": "^6.3",
         "knox/pesapal": "*",
         "laravel/framework": "^8.12",
@@ -58,8 +59,8 @@
         "spatie/laravel-permission": "*",
         "srmklive/paypal": "*",
         "stripe/stripe-php": "^13.6",
-        "symfony/mailer": "^6.1",
         "swiftmailer/swiftmailer": "^6.0",
+        "symfony/mailer": "^6.1",
         "tecnickcom/tcpdf": "^6.6",
         "unicodeveloper/laravel-paystack": "*",
         "yajra/laravel-datatables-oracle": "v9.15.2"

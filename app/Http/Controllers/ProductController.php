@@ -563,7 +563,7 @@ class ProductController extends Controller
         $brands  = Brands::forDropdown($business_id);
         $units   = Unit::forDropdown($business_id, true);
         $unitsm  = Unit::forDropdown($business_id, false);
-
+        $unitm = \App\Unit::where("default",1)->first();
         $tax_dropdown   = TaxRate::forBusinessDropdown($business_id, true, true);
         $taxes          = $tax_dropdown['tax_rates'];
         $tax_attributes = $tax_dropdown['attributes'];
@@ -625,7 +625,7 @@ class ProductController extends Controller
         //product screen view from module
         $pos_module_data = $this->moduleUtil->getModuleData('get_product_screen_top_view');
          return view('product.create')
-            ->with(compact('categories','currencies','currency','currency_details','units_main','array_unit','product_price',  'brands', 'units', 'taxes', 'barcode_types', 'default_profit_percent', 'tax_attributes', 'barcode_default', 'business_locations', 'duplicate_product', 'sub_categories', 'rack_details', 'selling_price_group_count', 'module_form_parts', 'product_types', 'common_settings', 'warranties', 'pos_module_data'));
+            ->with(compact('categories','unitm','currencies','currency','currency_details','units_main','array_unit','product_price',  'brands', 'units', 'taxes', 'barcode_types', 'default_profit_percent', 'tax_attributes', 'barcode_default', 'business_locations', 'duplicate_product', 'sub_categories', 'rack_details', 'selling_price_group_count', 'module_form_parts', 'product_types', 'common_settings', 'warranties', 'pos_module_data'));
     }
 
     private function product_types()

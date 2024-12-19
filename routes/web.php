@@ -24,6 +24,7 @@ include_once('install_r.php');
         Route::get('/login-account-redirect/{id}','IzoUserController@loginPageRedirect')->name('izoRedirectLogin');
         Route::get('/register-account','IzoUserController@register')->name('izoRegister');
         Route::get('/email-code-activation','IzoUserController@activateEmailCode')->name('izoCodeEmail');
+        Route::get('/email-code-check','IzoUserController@checkEmailCodeActivate')->name('izoCheckCodeEmail');
         Route::get('/check-company','IzoUserController@checkCompanyName')->name('checkCompanyName');
         Route::get('/check-domain','IzoUserController@checkDomainName')->name('checkDomainName');
         Route::get('/check-email','IzoUserController@checkEmail')->name('checkEmail');

@@ -48,7 +48,7 @@
                         <div class="panel-heading" role="tab" id="headingTwo{{ $single->id }}">
                             <h4 class="panel-title">
                             <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo{{ $single->id }}" aria-expanded="false" aria-controls="collapseTwo">
-                            {{ $single->name }}
+                                {{ $single->short_code . "  " }}   {{ $single->name }} 
                             </a>
                         </h4>
                         </div>
@@ -58,7 +58,7 @@
                             <ul> 
                                 <li>
                                     <a href="{{ URL::to('products?sub_category_id='.$child->id) }}">
-                                            {{ $child->name }}
+                                        {{ $child->short_code . "  " }}   {{ $child->name }}
                                     </a>
                                 </li>
                             </ul>

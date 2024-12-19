@@ -3241,7 +3241,7 @@
             <div class="loading2">
                 <div class="loading-content">
                     <h1 class="text-center">
-                        <img class="logo-style" width=200 height=75 src="{{asset('logo-white.png')}}" alt="logo">
+                        <img class="logo-style"   style="width:200px !important" height=75 src="{{asset('logo-white.png')}}" alt="logo">
                         <br>
                         <small>{!!__('izo.waiting')!!}</small>
                     </h1>

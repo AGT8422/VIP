@@ -1,24 +1,10 @@
 @section('javascript')
     <script type="text/javascript">
-            function sendCode(){
-                $html  = '<div class="activation_code_content">';
-                $html += '<div class="form_active">';
-                $html += '<h1>{!!__("izo.ACTIVATION CODE")!!}</h1>';
-                $html += '<br>';
-                $html += '<h3>{!!__("izo.enter_code")!!}</h3>';
-                $html += '<p style="font-size:17px;color: #3a3a3a88 !important ;">{!!__("izo.please_check_email")!!}</p>';
-                $html += '<input type="number" id="activation_code" oninput="limitInput(this)" maxlength="6" name="activation_code" class="izo-form-input code_activate_input" placeholder="XXXXXX"><br>';
-                $html += '<span class="btn btn-primary" style="width:100px;font-size: 20px;" onclick="sendCode();">{!!__("izo.Activate")!!}</span>';
-                $html += '<br>';
-                $html += '<span onclick="resendCode();" class="link_code">{!!__("izo.resend_code")!!}</span>';
-                $html += '</div>';
-                $html += '</div>'; 
-                $('.activation_code').css({'display':'block'});
-                $('.activation_code').html($html);
-            }
-            function resendCode(){
-                 alert("send successfully");
-            }
+            
+
+            
+
+            
             $(document).ready(function() {
                 $(document).on('click','.language_box',function(){
                     $(".list_of_lang").toggleClass('hide');
@@ -42,6 +28,50 @@
                 var domain_name       = false;
                 var passwords         = false;
                 var confirm_passwords = false;
+                
+                function sendCode(){
+                    $html  = '<div class="activation_code_content">';
+                    $html += '<div class="form_active">';
+                    $html += '<h1>{!!__("izo.ACTIVATION CODE")!!}</h1>';
+                    $html += '<br>';
+                    $html += '<h3>{!!__("izo.enter_code")!!}</h3>';
+                    $html += '<p style="font-size:17px;color: #3a3a3a88 !important ;">{!!__("izo.please_check_email")!!}</p>';
+                    $html += '<input type="number" id="activation_code_number" oninput="limitInput(this)" maxlength="6" name="activation_code_number" class="izo-form-input code_activate_input" placeholder="XXXXXX"><br>';
+                    // $html += '<span class="btn btn-primary" style="width:100px;font-size: 20px;" onclick="sendCode();">{!!__("izo.Activate")!!}</span>';
+                    $html += '<br>';
+                    $html += '<span onclick="resendCode();" class="link_code">{!!__("izo.resend_code")!!}</span>';
+                    $html += '</div>';
+                    $html += '</div>'; 
+                    $('.activation_code').css({'display':'block'});
+                    $('.activation_code').html($html);
+                    $("#activation_code_number").on('input',debounce(function(){
+                        var parent = $(this) ;
+                        var global = $(this).parent().parent().parent() ;
+                        var form   = $('#first_register_form');
+                        $.ajax({
+                            url:"/email-code-check",
+                            dataType: 'json',
+                            data:{
+                                email:$("#email").val(),
+                                code:$(this).val(),
+                            },
+                            success:function(result){ 
+                                if(result.success == 1){
+                                    parent.css({"border":"2px solid Green","color":"Green"})
+                                    global.css({"display":"none"});
+                                    form.submit()
+                                     
+                                }else{
+                                    parent.css({"border":"2px solid red","color":"red"}); 
+                                }
+                            
+                            },
+                        });	 
+                    },debounceDelay));
+                    function resendCode(){
+                        sendCode();
+                    }
+                }
 
                 $("#company_name").on('input',debounce(function(){
                     
@@ -580,25 +610,30 @@
                     console.log('isValid '  +  isValid);
                     if (isValid) {
                         // If the form is valid, submit it
-                        $(".loading").css({"display":"block"});
-                        this.submit();
-                        // sendCode();
-                        // $.ajax({
-                        //     url:"/email-code-activation",
-                        //     dataType: 'html',
-                        //     data:{
-                        //         email:$("#email").val(),
-                        //     },
-                        //     success:function(data){ 
-                        //         if(data.success == 1){
-                        //         }
-                        //     },
-                        // });	 
-                        
+                        $(".loading").css({"display":"block"}); 
+                        if($("#otp").val()==0){
+                            $("#otp").attr("value",1);
+                            sendCode();
+                            $.ajax({
+                                url:"/email-code-activation",
+                                dataType: 'json',
+                                data:{
+                                    email:$("#email").val(),
+                                },
+                                success:function(result){  
+                                    if(result.success == 1){
+                                    }   
+                                },
+                            });	    
+                        }else{
+                            this.submit();
+                        }
                     }
                 });
                 
-
+                function resendCode(){
+                    sendCode();
+                }
                
 
                 function validateEmail(email) {

@@ -128,6 +128,7 @@ class BusinessUtil extends Util
                     'actual_name' => 'Pieces',
                     'short_name' => 'Pc(s)',
                     'allow_decimal' => 0,
+                    'default' => 1,
                     'created_by' => $user_id
                 ];
         Unit::create($unit);

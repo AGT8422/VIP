@@ -21,12 +21,16 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
 use Illuminate\Support\Facades\Cookie;
 use App\Mail\TitanEmailExample; 
-
+use Illuminate\Support\Str;
+use GuzzleHttp\Client;
+use Jenssegers\Agent\Agent;
 use App\Rules\Captcha;
 use Illuminate\Support\Facades\Http;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+use Twilio\Jwt\JWT; 
+use App\Models\SupportActivate;
 
 
 require '../vendor/autoload.php';
@@ -306,6 +310,9 @@ class IzoUserController extends Controller
            
             #.......................................Update user with business id
             $user->username     = request()->session()->get('user_main.email');
+            $user->contact_number= $owner_details['contact_number'];
+            $user->first_name   = $owner_details['first_name'];
+            $user->last_name    = $owner_details['second_name'];
             $user->business_id  = $business->id;
             $user->is_admin_izo = 1;
             $user->update();
@@ -855,7 +862,7 @@ class IzoUserController extends Controller
         #....................................
         $data                = $request->only(['email','password','domain_name_sub','logout_other']);
         $login = IzoUser::loginUser($data);
-         
+        //  dd($login);
         if(!$login['status']){
             return redirect('/login-account');
         }
@@ -1192,7 +1199,7 @@ class IzoUserController extends Controller
                 $mail->Port       = 587;                                          //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
     
                 // Recipients
-                $mail->setFrom('activation@izocloud.com', 'IZOCLOUD - ERP SYSTEM');
+                $mail->setFrom('activation@izocloud.com', 'Activation - IZOCLOUD - ERP SYSTEM');
                 $mail->addAddress('iebrahemsai944@gmail.com');               //Name is optional
                 $mail->addAddress($email_sender);                            //Name is optional
                 // $mail->addAddress('osama.hamwi@live.com');                //Name is optional
@@ -1205,31 +1212,196 @@ class IzoUserController extends Controller
                 // Attachments
                 // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
                 // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
-    
+                
+                $authToken      = $this->randomDigits(6);
+                $code           = $this->randomDigits(6);  
+                $tkn = [
+                    "code" => $code,
+                    "exp"  => \Carbon::now()->addMinutes(3)->timestamp
+                ];
+                $token          = JWT::encode($tkn, $authToken, 'HS256');
+                Config::set('database.connections.mysql.database', "izocloud");
+                DB::purge('mysql');
+                DB::reconnect('mysql');
+                $user_request   = SupportActivate::where('email',$email_sender)->first();
+                if(empty($user_request)){
+                    $user_request                         = new SupportActivate();
+                    $user_request->email                  = $email_sender;
+                    $user_request->email_activation_code  = $code;
+                    $user_request->email_activation_token = $token ;
+                    $user_request->authkey                = $authToken ;
+                    $user_request->save();
+                }else{
+                    $user_request->email_activation_code  = $code;
+                    $user_request->email_activation_token = $token ;
+                    $user_request->authkey                = $authToken ;
+                    $user_request->update();
+                }
+                $izoCustomer   = IzoUser::where("email",request()->session()->get('user_main.email'))->first(); 
+                $databaseName  = request()->session()->get('user_main.database') ;  
+                Config::set('database.connections.mysql.database', $databaseName);
+                DB::purge('mysql');
+                DB::reconnect('mysql');
+                
+                
                 // Content
                 $mail->isHTML(true); //Set email format to HTML
-                $mail->Subject = 'IZO-POS Version 2.2 Activation Code';
-                $mail->Body    = 'Hi Administrator , The Device That Have ID-NUMBER :   \nMAKE Activation For this version v2.2 from IZO-POS Application Customer Information :  \n Name :   \n Email :   \n Mobile :   \n <b>Activation Code :</b> ';
-                $mail->AltBody = 'MAKE Activation For this version v2.2 from IZO-POS Application';
+                $mail->Subject = 'IZOCLOUD';
+                
+                $userAgent = $request->header('User-Agent');
+
+                // Create an Agent instance and set the User-Agent
+                $agent = new Agent();
+                $agent->setUserAgent($userAgent);
+        
+                // Get the device name/type
+                $device   = $agent->device();  // Generic device name
+                $platform = $agent->platform(); // OS name
+                $browser  = $agent->browser();  // Browser name
+                
+                // Get the user's IP address
+                $ip       = $request->ip();
+                // Create a new Guzzle client
+                $client   = new Client();
+                // Send a GET request to ipinfo.io API
+                $response = $client->get('http://ipinfo.io/' . $ip . '/json');
+                // Decode the JSON response
+                $locationData = json_decode($response->getBody(), true);
+                // Extract location information
+                $city    = $locationData['city'] ?? 'Unknown';
+                $region  = $locationData['region'] ?? 'Unknown';
+                $country = $locationData['country'] ?? 'Unknown';
+                
+                $html = '<!DOCTYPE html>';
+                $html .= '<html lang="en">';
+                $html .= '<head>';
+                $html .= '<meta charset="UTF-8">';
+                $html .= '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+                $html .= '<title>ACTIVATION IZOCLOUD</title>';
+                $html .= '</head>';
+                $html .= '<header style="position:relative;padding: 10px;margin-bottom:80px;">';
+                $html .= '<div class="logo" style="float:left;"><img  style="width:150px !important" class="logo-style"  height=50 src="https://agt.izocloud.com/public/uploads/logo.png" alt="logo"></div>';
+                $html .= '<div class="contactus" style="float:right;">Need Help?<a href="#" style="color:#f7a62d;font-weight:bold">Contact Us</a></div>';
+                $html .= '</header>';
+                $html .= '<body style="margin:0% 10px">';
+                $html .= '<br>';
+                $html .= '<div class="cont" style="margin: 10px 5%;border: 0px solid black; font-size: 13px;font-family: arial;">';
+                $html .= '<h1>Your one-time code is : '.$code.'</h1>';
+                $html .= '<p>Device : '.$browser . " " . $platform .'</p>';
+                $html .= '<p>Date : ' .   date("l")  . ' , ' .  date("d")  . '  ,' .   date("F")  . '   ' .  date("Y")   . ' ,  at : ' .   date("h:i:s a")  . ' ' .  $city . ' ' . $region . ' ' .  $country . '  </p>';
+                $html .= '<p>Location : '.$region.'</p>';
+                $html .= '<p>ip : '.$ip.'</p>'; 
+                $html .= '</div>';
+                $html .= '</body>'; 
+                $html .= '<footer style="color:#3a3a3a;font-size: 13px;font-family: arial;margin:0% 10px;margin-top:40px;">';
+                $html .= '<p>';
+                $html .= ' Please don not replay to this email. Emails sent to this address will not be answered.';
+                $html .= '</p>';
+                $html .= '<p>';
+                $html .= 'Copyright &copy; 2022 - '. date('Y') .' Alhmawi General Trading L.L.C , Dubai  , Abu Baker Al seddik metro station <br> <br> All rights reserved.';
+                $html .= '</p>';
+                $html .= '<p style="display:none">';
+                $html .= '<b>ALHAMWI GENERAL TRADING L.L.C </b>'; 
+                $html .= '<b><br>Website : izo.ae </b>';
+                $html .= '<b><br>Customer Service : +971-56-777-9250  ,  +971-4-23-55-919</b>';
+                $html .= '</p>';
+                $html .= '</footer>';
+                $html .= '</html>';
+
+                $mail->Body   = $html; 
+                
+                // dd($mail,$user_request,$tkn,$code,$token);
+
+                // $mail->AltBody = 'MAKE Activation For this version v2.2 from IZO-POS Application';
          
-                $mail->send();
-                $outPut = [
-                    'success' => 1,
-                    'msg'     => __("Sending Code Successfully, Please Check Your Email"),
-                ];
-                return $outPut;
+                if($mail->send()){
+
+                    return response()->json([
+                        'success' => 1,
+                        'msg'     => __("Sending Code Successfully, Please Check Your Email"),
+                        ]) ;
+                }else{
+
+                    return response()->json([
+                        'success' => 0,
+                        'msg'     => __("Some Thing Went Wrong"),
+                        ]) ;
+                    } 
             } catch (Exception $e) {
-                $outPut = [
+                return response()->json([
                     'success' => 0,
                     'msg'     => __("Some Thing Went Wrong"),
-                ];
-                return $outPut;
+                ]) ;
             }
 
         }
        
     }
     
+    public function randomDigits($length = 6) {
+        $digits = '';
+        for ($i = 0; $i < $length; $i++) {
+            $digits .= mt_rand(0, 9);
+        }
+        return $digits;
+    }
+
+    public function checkEmailCodeActivate(Request $request){
+        if(request()->ajax()){
+            try{
+                $email_sender = request()->input('email');
+                $code         = request()->input('code');
+                Config::set('database.connections.mysql.database', "izocloud");
+                DB::purge('mysql');
+                DB::reconnect('mysql');
+                $user_request   = SupportActivate::where('email',$email_sender)->first();
+                if($user_request){
+                    if($code == $user_request->email_activation_code){
+                        $token           = $user_request->email_activation_token;
+                        $data            = JWT::decode($token,$user_request->authkey,'HS256');
+                        $timestamp       = $data->exp;  // Your Unix timestamp
+                        // Convert the Unix timestamp to a Carbon instance
+                        $timestampCarbon = \Carbon::createFromTimestamp($timestamp);
+                        // Get the current date and time
+                        $currentDateTime = \Carbon::now();
+                        // Compare the two dates
+                        if ($timestampCarbon->isBefore($currentDateTime)) {
+                            return response()->json([
+                                "success" => 0, 
+                                "msg"     => __('failed expire')
+                            ]) ;
+                        }  
+                        return response()->json([
+                            "success" => 1, 
+                            "msg"     => __('success'),
+                        ]) ;
+                    }else{
+                        $izoCustomer   = IzoUser::where("email",request()->session()->get('user_main.email'))->first(); 
+                        $databaseName  = request()->session()->get('user_main.database') ;  
+                        Config::set('database.connections.mysql.database', $databaseName);
+                        DB::purge('mysql');
+                        DB::reconnect('mysql');
+                        return response()->json([
+                            "success" => 0, 
+                            "msg"     => __('failed'),
+                        ]) ;
+                    }
+                }else{
+                     
+                    return response()->json([
+                            "success" => 0, 
+                            "msg"     => __('failed'),
+                    ]) ;
+                }
+            }catch(Exception $e){
+                $putOut = [
+                    "success" => 0,
+                    "msg"     => __('failed'),
+                ];
+                return $outPut ;
+            }
+        }
+    }
     
     
 

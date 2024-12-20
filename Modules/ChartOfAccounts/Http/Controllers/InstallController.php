@@ -27,7 +27,7 @@ class InstallController extends Controller
     public function index()
     {
         if (!auth()->user()->can('superadmin')) {
-            abort(403, 'Unauthorized action.');
+            // abort(403, 'Unauthorized action.');
         }
         ini_set('max_execution_time', 0);
         ini_set('memory_limit', '512M');
@@ -105,7 +105,7 @@ class InstallController extends Controller
         }*/
 
         return redirect()
-            ->action('\App\Http\Controllers\Install\ModulesController@index')
+            ->action('\App\Http\Controllers\Install\ModulesController@ModulesController')
             ->with('status', $output);
     }
 

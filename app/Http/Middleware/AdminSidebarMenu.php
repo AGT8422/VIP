@@ -29,23 +29,23 @@ class AdminSidebarMenu
                 \App::setlocale('ar');
             }
             Menu::create('admin-sidebar-menu', function ($menu) {
+
+            #....... all subscription    
             $enabled_modules = !empty(session('business.enabled_modules')) ? session('business.enabled_modules') : [];
-
-
+            #....... check if admin    
             $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
-            /*  dd(session('business.id'), auth()->user()->hasRole('Admin#' . session('business.id')));*/
- 
-       
+            
+            
+            
             //Home  5
             $menu->url(action('HomeController@index'), __('home.home'), ['icon' => 'fa fas fa-home', 'active' => request()->segment(1) == 'home'])->order(5);
              
            
             //User management dropdown  10
-            if ( request()->session()->get("user.id") == 1 || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8) {
+            if ( request()->session()->get("user.id") == 1) {
                 $menu->dropdown(
                     __('user.user_management'),
                     function ($sub) {
-                        
                         if (auth()->user()->can('user.view') || auth()->user()->can('ReadOnly.views') || auth()->user()->can('admin_without.views')) {
                             $sub->url(
                                 action('ManageUserController@index'),
@@ -120,14 +120,14 @@ class AdminSidebarMenu
             }
 
             //Products dropdown  20
-            if (auth()->user()->can('product.view')  || auth()->user()->can('product.create')  ||
+            if (in_array('product', $enabled_modules) && (auth()->user()->can('product.view')  || auth()->user()->can('product.create')  ||
                 auth()->user()->can('brand.view')    || auth()->user()->can('unit.view')       ||
                 auth()->user()->can('category.view') || auth()->user()->can('brand.create')    ||
                 auth()->user()->can('unit.create')   || auth()->user()->can('category.create') ||
                 auth()->user()->can('admin_without.views') || auth()->user()->can('manufuctoring.views') ||
                 auth()->user()->can('SalesMan.views') || auth()->user()->can('Accountant.views')||
                 auth()->user()->can('warehouse.views') || auth()->user()->can('admin_supervisor.views')
-                ) {
+            )) {
                 $menu->dropdown(
                     __('sale.products'),
                     function ($sub) {
@@ -299,9 +299,8 @@ class AdminSidebarMenu
                 )->order(25);
             }
 
-            
             //Sell dropdown  30
-            if ($is_admin || auth()->user()->hasAnyPermission(['sell.view','sell.create', 'manufuctoring.views' , 'direct_sell.access', 'view_own_sell_only', 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping', 'access_sell_return'   ]) ||auth()->user()->can('admin_without.views') ) {
+            if (in_array('add_sale', $enabled_modules) && ( $is_admin || auth()->user()->hasAnyPermission(['sell.view','sell.create', 'manufuctoring.views' , 'direct_sell.access', 'view_own_sell_only', 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping', 'access_sell_return'   ]) ||auth()->user()->can('admin_without.views') )) {
                 $menu->dropdown(
                     __('sale.sale'),
                     function ($sub) use ($enabled_modules, $is_admin) {
@@ -395,9 +394,9 @@ class AdminSidebarMenu
                     ['icon' => 'fa fas fa-money-check-alt', 'id' => 'tour_step7']
                 )->order(26);
             }
-
+            
             // .....  pos ...  
-            // if (auth()->user()->can('pos.view')  ){
+            if (in_array('pos_sale', $enabled_modules) && (auth()->user()->can('pos.view'))  ){
                 $menu->dropdown(
                     __('home.pos'),
                     function ($sub){
@@ -425,13 +424,13 @@ class AdminSidebarMenu
                     },
                     ['icon'=>'fa fas fa-window-maximize']
                 )->order(27);
-            // }
+            } 
 
-            // warehouse menu  in_array('Warehouse', $enabled_modules)
-            if (auth()->user()->can('warehouse.view') || auth()->user()->can('admin_without.views')|| auth()->user()->can('warehouse.views') || auth()->user()->hasAnyPermission(['manufacturing_module']) || auth()->user()->can('admin_supervisor.views' )|| auth()->user()->can('manufuctoring.views' ) || auth()->user()->can('SalesMan.views' )){
+            
+            if (in_array('warehouse', $enabled_modules) && (auth()->user()->can('warehouse.view') || auth()->user()->can('admin_without.views')|| auth()->user()->can('warehouse.views') || auth()->user()->hasAnyPermission(['manufacturing_module']) || auth()->user()->can('admin_supervisor.views' )|| auth()->user()->can('manufuctoring.views' ) || auth()->user()->can('SalesMan.views' ))){
                 $menu->dropdown(
                     __('warehouse.warehouse'),
-                    function ($sub){
+                    function ($sub) use($enabled_modules){
                         if(auth()->user()->can('warehouse.view')|| auth()->user()->can('admin_without.views') || auth()->user()->can('warehouse.views')  || auth()->user()->can('manufuctoring.views') || auth()->user()->can('admin_supervisor.views' ) || auth()->user()->can('SalesMan.views' )){
                                 $sub->url(
                                         action('WarehouseController@index'),
@@ -474,7 +473,7 @@ class AdminSidebarMenu
                         }
                     
                         //Stock transfer dropdown  35
-                        if (auth()->user()->can('purchase.view')|| auth()->user()->can('admin_without.views') || auth()->user()->can('warehouse.views')|| auth()->user()->can('manufuctoring.views')) {
+                        if (in_array('stock_transfers', $enabled_modules) && (auth()->user()->can('purchase.view')|| auth()->user()->can('admin_without.views') || auth()->user()->can('warehouse.views')|| auth()->user()->can('manufuctoring.views'))) {
                                 // $sub->dropdown(
                                 //     __('lang_v1.stock_transfers'),
                                 //     function ($sub) {
@@ -496,7 +495,7 @@ class AdminSidebarMenu
                                     // ['icon' => 'fa fas fa-truck']
                                 // )->order(35);
                         }
-                        if (auth()->user()->can('warehouse.invetory')|| auth()->user()->can('admin_without.views') || !auth()->user()->can('warehouse.views')|| auth()->user()->can('manufuctoring.views')|| auth()->user()->can('manufuctoring.views')) {
+                        if (in_array('stock_tacking', $enabled_modules) && (auth()->user()->can('warehouse.invetory')|| auth()->user()->can('admin_without.views') || !auth()->user()->can('warehouse.views')|| auth()->user()->can('manufuctoring.views')|| auth()->user()->can('manufuctoring.views'))) {
                                     // $sub->dropdown(
                                     //     __('lang_v1.Inventory_of_stores'),
                                     //     function ($sub) {
@@ -518,7 +517,7 @@ class AdminSidebarMenu
                                     // )->order(35);
                         }
 
-                        if ((auth()->user()->can('warehouse.add_adjustment')|| auth()->user()->can('admin_without.views') ) && !auth()->user()->can("manufuctoring.views") && !auth()->user()->can("warehouse.views") ) {
+                        if (in_array('stock_adjustment', $enabled_modules) && ((auth()->user()->can('warehouse.add_adjustment')|| auth()->user()->can('admin_without.views') ) && !auth()->user()->can("manufuctoring.views") && !auth()->user()->can("warehouse.views") )) {
                             // $sub->dropdown(
                             //     __('stock_adjustment.stock_adjustment'),
                             //     function ($sub) {
@@ -545,11 +544,9 @@ class AdminSidebarMenu
                     ['icon'=>'fa fas fa-list']
                 )->order(35);
             }
-
             
-
             // cash and bank   
-            if (auth()->user()->can('cashandbank.view')  || auth()->user()->can('admin_without.views')  ){
+            if (in_array('cash_and_bank', $enabled_modules) && (auth()->user()->can('cashandbank.view')  || auth()->user()->can('admin_without.views'))  ){
                 $menu->dropdown(
                     __('lang_v1.cash_and_bank'),
                     function ($sub){
@@ -572,7 +569,7 @@ class AdminSidebarMenu
                     )->order(36);
             }
                  
-            if (in_array('stock_adjustment', $enabled_modules) && (auth()->user()->can('contact_bank.view') || auth()->user()->can('admin_without.views')|| auth()->user()->can('contact_bank.create')|| auth()->user()->can('cheque.view') || auth()->user()->can('cheque.create'))) {
+            if (in_array('check', $enabled_modules) && (auth()->user()->can('contact_bank.view') || auth()->user()->can('admin_without.views')|| auth()->user()->can('contact_bank.create')|| auth()->user()->can('cheque.view') || auth()->user()->can('cheque.create'))) {
                $menu->dropdown(__('home.Cheques'),function($sub){
                         if(auth()->user()->can('cheque.view')|| auth()->user()->can('admin_without.views')){
                             $sub->url(
@@ -605,7 +602,8 @@ class AdminSidebarMenu
                 )->order(29);
              
             }
-            if (in_array('stock_adjustment', $enabled_modules) && (auth()->user()->can('payment_voucher.view') ||
+
+            if (in_array('voucher', $enabled_modules) && (auth()->user()->can('payment_voucher.view') ||
                              auth()->user()->can('gournal_voucher.view')|| auth()->user()->can('admin_without.views') )) {
                 $menu->dropdown(__('home.Vouchers'),function($sub){
                         if (auth()->user()->can('payment_voucher.view')|| auth()->user()->can('admin_without.views')) {
@@ -652,7 +650,7 @@ class AdminSidebarMenu
              
 
             //Accounts dropdown 50
-            if (auth()->user()->can('account.view') && in_array('account', $enabled_modules)|| auth()->user()->can('admin_without.views')) {
+            if (in_array('account', $enabled_modules) && (auth()->user()->can('account.view') && in_array('account', $enabled_modules)|| auth()->user()->can('admin_without.views'))) {
                 $menu->dropdown(
                     __('lang_v1.payment_accounts'),
                     function ($sub) {
@@ -711,7 +709,8 @@ class AdminSidebarMenu
                 )->order(50);
             }
     
-
+           
+            
             if(!$is_admin ){
                 if(!auth()->user()->can("SalesMan.views") ){
               
@@ -909,9 +908,9 @@ class AdminSidebarMenu
             }
 
             //Modules menu 61
-            if (auth()->user()->can('manage_modules')  ) {
+            // if (auth()->user()->can('manage_modules')  ) {
                 $menu->url(action('Install\ModulesController@index'), __('lang_v1.modules'), ['icon' => 'fa fas fa-plug', 'active' => request()->segment(1) == 'manage-modules','style'=>'font-weight:bold'])->order(61);
-            }
+            // }
 
             //Booking menu 65
 
@@ -921,17 +920,18 @@ class AdminSidebarMenu
             // if (auth()->user()->can('send_notifications')) {
             //     $menu->url(action('NotificationTemplateController@index'), __('lang_v1.notification_templates'), ['icon' => 'fa fas fa-envelope', 'active' => request()->segment(1) == 'notification-templates'])->order(80);
             // }
-          
+           
+            # .. stock_tacking warehouse cash_and_bank check voucher account product pattern log_file user_activation mobile_section react_section in_array('account', $enabled_modules) && (
 
             // if(!auth()->user()->can('SalesMan.views')){
             //Settings Dropdown
-            if (auth()->user()->can('business_settings.access') ||
+            if (in_array('pattern', $enabled_modules) && (auth()->user()->can('business_settings.access') ||
                 auth()->user()->can('barcode_settings.access') ||
                  auth()->user()->can('invoice_settings.access') ||(
                 auth()->user()->can('tax_rate.view') && !auth()->user()->can("SalesMan.views") )||(
                 auth()->user()->can('tax_rate.create') && !auth()->user()->can("SalesMan.views") )||
                 auth()->user()->can('access_package_subscriptions')
-                || auth()->user()->can('admin_without.views')) {
+                || auth()->user()->can('admin_without.views'))) {
                 $menu->dropdown(
                     __('home.patterns'),
                     function ($sub) use ($enabled_modules) {
@@ -1038,8 +1038,7 @@ class AdminSidebarMenu
                     )->order(85);
                 // }
             }
-
-            if(request()->session()->get("user.id") == 1){
+            if(in_array('log_file', $enabled_modules) && (request()->session()->get("user.id") == 1)){
                 $menu->dropdown(
                     __('lang_v1.log_file'),
                     function ($sub) use ($enabled_modules) {
@@ -1065,7 +1064,7 @@ class AdminSidebarMenu
                     ['icon' => 'fa fas fa-file', 'id' => 'log-file']
                 )->order(86); 
             }
-            if(request()->session()->get("user.id") == 1){
+            if(in_array('user_activation', $enabled_modules) && (request()->session()->get("user.id") == 1)){
                 $menu->dropdown(
                     __('lang_v1.user_activation'),
                     function ($sub) use ($enabled_modules) {
@@ -1098,8 +1097,7 @@ class AdminSidebarMenu
                     ['icon' => 'fa fas fa-user-check', 'id' => 'user-activate']
                 )->order(86); 
             }
-         
-            if(request()->session()->get("user.id") == 1){
+            if(in_array('mobile_section', $enabled_modules) && (request()->session()->get("user.id") == 1)){
                 $menu->dropdown(
                     __('home.Mobile_Section'),
                     function ($sub) use ($enabled_modules) {
@@ -1114,8 +1112,7 @@ class AdminSidebarMenu
                 ,['icon' => 'fa fas fa-mobile', 'id' => 'mobile-app']
                 )->order(87);
             }
-
-            if(request()->session()->get("user.id") == 1){
+            if(in_array('react_section', $enabled_modules) && (request()->session()->get("user.id") == 1)){
                 $menu->dropdown(
                      __('home.React_Section'),
                     function ($sub) use ($enabled_modules) {
@@ -1135,7 +1132,6 @@ class AdminSidebarMenu
         // Add menus from modules
         $moduleUtil = new ModuleUtil;
         $moduleUtil->getModuleData('modifyAdminMenu');
-
 
         return $next($request);
     }

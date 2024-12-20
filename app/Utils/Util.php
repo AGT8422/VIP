@@ -1097,7 +1097,7 @@ class Util
      */
     public function getUserRoleName($user_id)
     {
-        $user = User::findOrFail($user_id);
+        $user  = User::findOrFail($user_id);
         $roles = $user->getRoleNames();
 
         $role_name = '';

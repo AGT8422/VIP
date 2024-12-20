@@ -119,7 +119,17 @@ return [
     'please_check_email'           => 'قم بمراجعة صندوق البريد وإستخدام كود التفعيل , تنتهي صلاحية الكود بعد ثلاث دقائق',
     'Activate'                     => 'تفعيل',
     'resend_code'                  => '<b class="btn-link" style"cursor:pointer;font-size:13px !important;">طلب كود التفعيل </b><br>  <small style"font-size:10px !important;color:red !important;text-decoration:none !important;">( يسمح بإرسال ثلاث مرات فقط )</small>',
-
+    'stock_tacking'                => 'تتبع المستودعات',
+    'warehouse'                    => 'المستودعات',
+    'cash_and_bank'                => 'النقدية والبنوك',
+    'check'                        => 'الشيكات',
+    'voucher'                      => 'السندات', 
+    'product'                      => 'المنتجات',
+    'pattern'                      => 'الأنماط',
+    'log_file'                     => 'ملف السجل',
+    'user_activation'              => 'إشتراكات المستخدمين',
+    'mobile_section'               => 'قسم المحمول',
+    'react_section'                => 'قسم الواجهات',         
 
 
 

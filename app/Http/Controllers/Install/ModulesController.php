@@ -79,7 +79,7 @@ class ModulesController extends Controller
         $is_demo = (config('app.env') == 'demo');
         $mods = $this->__available_modules();
 
-
+        // dd($modules);
 
         return view('install.modules.index')
             ->with(compact('modules', 'is_demo','languages', 'mods'));

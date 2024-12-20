@@ -197,7 +197,7 @@ class BusinessController extends Controller
             
             //default enabled modules edit 2021-5-2
            /* $business_details['enabled_modules'] = ['purchases','add_sale','pos_sale','stock_transfers','stock_adjustment','expenses'];*/
-            $business_details['enabled_modules'] =["purchases","add_sale","pos_sale","stock_transfers","stock_adjustment","expenses","account","tables","modifiers","service_staff","booking","kitchen","Warehouse","subscription","types_of_service"];
+            $business_details['enabled_modules'] =["purchases","add_sale","pos_sale","stock_transfers","stock_adjustment","expenses","account","tables","modifiers","service_staff","booking","kitchen","Warehouse","subscription","types_of_service","stock_tacking","warehouse","cash_and_bank","check","voucher","account","product","pattern","log_file","user_activation","mobile_section","react_section"];
             
             $business = $this->businessUtil->createNewBusiness($business_details);
 

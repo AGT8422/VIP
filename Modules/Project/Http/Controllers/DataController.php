@@ -120,7 +120,7 @@ class DataController extends Controller
         
         $is_project_enabled = (boolean)$module_util->hasThePermissionInSubscription($business_id, 'project_module');
 
-        // if ($is_project_enabled) {
+        if ($is_project_enabled) {
             Menu::modify(
                 'admin-sidebar-menu',
                 function ($menu) use ($is_admin) {
@@ -133,7 +133,7 @@ class DataController extends Controller
                     ->order(86);
                 }
             );
-        // }
+        }
     }
 
     /**

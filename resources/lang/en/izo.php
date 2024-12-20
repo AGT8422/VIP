@@ -119,7 +119,17 @@ return [
     'please_check_email'           => 'Check your mailbox and use the activation code. The code expires after three minutes',
     'Activate'                     => 'Activate',
     'resend_code'                  => '<b class="btn-link" style"cursor:pointer;font-size:13px !important;">Get code again</b> <br> <small style"font-size:10px !important;color:red !important;text-decoration:none !important;">(it is allowed to be sent only three times)</small>',
-
+    'stock_tacking'                => 'Stock Tracking',
+    'warehouse'                    => 'Warehouses',
+    'cash_and_bank'                => 'Cash & Bank',
+    'check'                        => 'Cheques',
+    'voucher'                      => 'Vouchers', 
+    'product'                      => 'Products',
+    'pattern'                      => 'Patterns',
+    'log_file'                     => 'Log File',
+    'user_activation'              => 'User Activation',
+    'mobile_section'               => 'Mobile Section',
+    'react_section'                => 'React Section', 
 
 
 ];

@@ -54,7 +54,7 @@ class DataController extends Controller
                 return null;
             }
 
-            $email = System::getProperty('email');
+            $email    = System::getProperty('email');
             $business = $data['business'];
             
             if (!empty($email) && $is_notif_enabled == 1) {
@@ -67,11 +67,11 @@ class DataController extends Controller
             
             if (isset($welcome_email_settings['enable_welcome_email']) && $welcome_email_settings['enable_welcome_email'] == 1 && !empty($welcome_email_settings['welcome_email_subject']) && !empty($welcome_email_settings['welcome_email_body'])) {
                 $subject = $this->removeTags($welcome_email_settings['welcome_email_subject'], $business);
-                $body = $this->removeTags($welcome_email_settings['welcome_email_body'], $business);
+                $body    = $this->removeTags($welcome_email_settings['welcome_email_body'], $business);
 
                 $welcome_email_data = [
                     'subject' => $subject,
-                    'body' => $body
+                    'body'    => $body
                 ];
 
                 Notification::route('mail', $business->owner->email)
@@ -154,7 +154,7 @@ class DataController extends Controller
                 ['icon' => 'fa fas fa-users-cog']
                 )->order(1);
         }
-
+         
         if (auth()->user()->can('superadmin.access_package_subscriptions') && request()->session()->get("user.id") == 1 ) {
             $menu->whereTitle(__('business.settings'), function ($sub) {
                 $sub->url(
@@ -174,8 +174,8 @@ class DataController extends Controller
     {
         return [
             [
-                'value' => 'superadmin.access_package_subscriptions',
-                'label' => __('superadmin::lang.access_package_subscriptions'),
+                'value'   => 'superadmin.access_package_subscriptions',
+                'label'   => __('superadmin::lang.access_package_subscriptions'),
                 'default' => false
             ]
         ];

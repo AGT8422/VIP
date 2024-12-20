@@ -517,7 +517,18 @@ class ModuleUtil extends Util
             'subscription' => ['name' => __('lang_v1.enable_subscription')],
             'types_of_service' => ['name' => __('lang_v1.types_of_service'),
                         'tooltip' => __('lang_v1.types_of_service_help_long')
-                    ]
+            ],
+            'stock_tacking'   => ['name' => __('izo.stock_tacking')], 
+            'warehouse'       => ['name' => __('izo.warehouse')], 
+            'cash_and_bank'   => ['name' => __('izo.cash_and_bank')], 
+            'check'           => ['name' => __('izo.check')], 
+            'voucher'         => ['name' => __('izo.voucher')],  
+            'product'         => ['name' => __('izo.product')], 
+            'pattern'         => ['name' => __('izo.pattern')], 
+            'log_file'        => ['name' => __('izo.log_file')], 
+            'user_activation' => ['name' => __('izo.user_activation')], 
+            'mobile_section'  => ['name' => __('izo.mobile_section')], 
+            'react_section'   => ['name' => __('izo.react_section')],
         ];
     }
 

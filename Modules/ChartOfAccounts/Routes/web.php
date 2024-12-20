@@ -12,7 +12,7 @@
 */
 
 
-Route::middleware(['web',  'SetSessionData', 'auth', 'language', 'timezone', 'AdminSidebarMenu'])->prefix('chartofaccounts')->group(function() {
+Route::middleware(['web',  'SetSessionData',  'language', 'timezone', 'AdminSidebarMenu'])->prefix('chartofaccounts')->group(function() {
     // Route::get('/', 'ChartOfAccountsController@index');
     Route::get('/home', 'ChartOfAccountsController@index');
     Route::get('/install', 'InstallController@index');

@@ -159,8 +159,8 @@ class ModuleUtil extends Util
             if(auth()->user()->can('superadmin')){
                 return true;
             }
-
             $package = \Modules\Superadmin\Entities\Subscription::active_subscription($business_id);
+            
            
             if (empty($package)) {
                 return false;
@@ -168,7 +168,7 @@ class ModuleUtil extends Util
                 if (!is_null($callback_function)) {
                     $obj = new ModuleUtil();
                     $permissions = $obj->getModuleData($callback_function);
-
+                    
                     $permission_formatted = [];
                     foreach ($permissions as $per) {
                         foreach ($per as $details) {
@@ -181,10 +181,10 @@ class ModuleUtil extends Util
                     } else {
                         return false;
                     }
-                } else {
+                } else { 
                     return $package['package_details'][$permission];
                 }
-            } else {
+            } else { 
                 return false;
             }
         }

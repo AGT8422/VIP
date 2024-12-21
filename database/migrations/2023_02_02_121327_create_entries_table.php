@@ -18,7 +18,7 @@ class CreateEntriesTable extends Migration
             $table->integer("business_id")->unsigned();
             $table->foreign("business_id")->references("id")->on("business")->onDelete("cascade")->onUpdate("cascade");
             $table->string("refe_no_e",191)->nullable();
-            $table->integer("account_transaction")->unsigned();
+            $table->integer("account_transaction")->unsigned()->nullable();
             $table->foreign("account_transaction")->references("id")->on("transactions")->onDelete("cascade")->onUpdate("cascade")->nullable();
             $table->string("ref_no_e",191)->nullable();
             $table->double("debit");

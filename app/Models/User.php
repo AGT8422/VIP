@@ -13,6 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable implements JWTSubject
 

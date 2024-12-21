@@ -42,11 +42,12 @@
             }
             body{
                 box-sizing: border-box;
-                background-image:url("../../../uploads/IZO-D2.gif");
+                /* background-image:url("../../../uploads/IZO-D2.gif"); */
                 background-size: cover;
-                    background-attachment: fixed;
-                    background-repeat:  no-repeat; 
-                    background-position: center;
+                background-attachment: fixed;
+                background-repeat:  no-repeat; 
+                background-position: center;
+                background-color: #fff !important;
                 /* background:linear-gradient(to top left ,rgb(235, 249, 255) 10% , rgb(255, 239, 223) 40% ,#cecece 100%); */
             }
             .left_form_first_login h1{
@@ -324,11 +325,12 @@
                 }
                 body{
                     box-sizing: border-box;
-                    background-image:url("../../../uploads/IZO-D2.gif");
+                    /* background-image:url("../../../uploads/IZO-D2.gif"); */
                     background-size: cover;
                     background-attachment: fixed;
                     background-repeat:  no-repeat; 
                     background-position: center;
+                    background-color: #fff !important;
                     /* background:linear-gradient(to top left ,rgb(235, 249, 255) 10% , rgb(255, 239, 223) 100% ,#cecece 90%); */
                 }
                 .left_form_first_login h1{
@@ -344,15 +346,15 @@
                 }
                 .left_form_first_login{
                     border: 0px solid black;
-                    border-radius: 10px;
+                    border-radius: 00px;
                     padding: 10px;
-                    box-shadow:1px 1px 100px #797979;
+                    box-shadow:1px 1px 100px #79797900;
                     background: rgb(255, 255, 255);
                 }
                 .right_form_first_login{
                     display: none !important;
                     border: 2px solid black;
-                    border-radius: 10px;
+                    border-radius: 00px;
                     padding: 10px; 
                     background: rgba(64, 64, 110, 0);
                     display: none;
@@ -360,14 +362,14 @@
                 .right_form_first_login_top{
                     display: none !important;
                     border: 2px solid black;
-                    border-radius: 10px;
+                    border-radius: 00px;
                     padding: 10px; 
                     background: rgba(64, 64, 110, 0);
                     display: none;
                 }
                 .mainbox{
                         border: 0px solid rgb(4, 0, 249);
-                        border-radius: 10px;
+                        border-radius: 00px;
                         padding: 0px 0px;
                         background: rgba(0, 0, 0, 0);
                         width: 100%;
@@ -376,8 +378,8 @@
                 .childbox{
                     border: 0px solid rgb(4, 0, 249);
                     width: 100%;
-                    border-radius: 10px;
-                    padding: 10px 10px;
+                    border-radius: 00px;
+                    padding: 00px 00px;
                     height: 100%;
                     margin: 0px;
                     transform: translateY(0%);
@@ -569,11 +571,12 @@
                 }
                 body{
                     box-sizing: border-box;
-                    background-image:url("../../../uploads/IZO-D2.gif");
+                    /* background-image:url("../../../uploads/IZO-D2.gif"); */
                     background-size: cover;
                     background-attachment: fixed;
                     background-repeat:  no-repeat; 
                     background-position: center;
+                    background-color: #fff  !important;
                     /* background:linear-gradient(to top left ,rgb(235, 249, 255) 10% , rgb(255, 239, 223) 100% ,#cecece 90%); */
                 }
                 .left_form_first_login h1{
@@ -589,15 +592,15 @@
                 }
                 .left_form_first_login{
                     border: 0px solid black;
-                    border-radius: 10px;
+                    border-radius: 00px;
                     padding: 10px;
-                    box-shadow:1px 1px 100px #797979;
+                    box-shadow:1px 1px 100px #79797900;
                     background: rgb(255, 255, 255);
                 }
                 .right_form_first_login{
                     display: none !important;
                     border: 2px solid black;
-                    border-radius: 10px;
+                    border-radius: 00px;
                     padding: 10px; 
                     background: rgba(64, 64, 110, 0);
                     display: none;
@@ -605,15 +608,15 @@
                 .right_form_first_login_top{
                     display: none !important;
                     border: 2px solid black;
-                    border-radius: 10px;
+                    border-radius: 00px;
                     padding: 10px; 
                     background: rgba(64, 64, 110, 0);
                     display: none;
                 }
                 .mainbox{
                     border: 0px solid rgb(66, 249, 0);
-                    border-radius: 10px;
-                    padding: 3%;
+                    border-radius: 00px;
+                    padding: 0%;
                     background: rgba(0, 0, 0, 0);
                     width: 100%; 
                     display: block; 
@@ -621,7 +624,7 @@
                 .childbox{
                     border: 0px solid rgb(0, 249, 0);
                     width: 100%;
-                    border-radius: 10px;
+                    border-radius: 00px;
                     padding: 0px; 
                     margin: 0px;
                     transform: translateY(0%);
@@ -1058,11 +1061,12 @@
                     }
                     body{
                         box-sizing: border-box;
-                        background-image:url("../../../uploads/IZO-D2.gif");
+                        /* background-image:url("../../../uploads/IZO-D2.gif"); */
                         background-size: cover;
-                    background-attachment: fixed;
-                    background-repeat:  no-repeat; 
-                    background-position: center;
+                        background-attachment: fixed;
+                        background-repeat:  no-repeat; 
+                        background-position: center;
+                        background-color: #fff !important;
                         /* background:linear-gradient(to top left ,rgb(235, 249, 255) 10% , rgb(255, 239, 223) 100% ,#cecece 90%); */
                     }
                     .left_form_first_login h1{
@@ -1078,15 +1082,15 @@
                     }
                     .left_form_first_login{
                         border: 0px solid black;
-                        border-radius: 10px;
+                        border-radius: 00px;
                         padding: 10px;
-                        box-shadow:1px 1px 100px #797979;
+                        box-shadow:1px 1px 100px #79797900;
                         background: rgb(255, 255, 255);
                     }
                     .right_form_first_login{
                         display: none !important;
                         border: 0px solid black;
-                        border-radius: 10px;
+                        border-radius: 00px;
                         padding: 10px; 
                         background: rgba(64, 64, 110, 0);
                         display: none;
@@ -1094,7 +1098,7 @@
                     .right_form_first_login_top{
                         display: none !important;
                         border: 0px solid black;
-                        border-radius: 10px;
+                        border-radius: 00px;
                         padding: 10px; 
                         font-family:Georgia, 'Times New Roman', Times, serif;
                         background: rgba(64, 64, 110, 0);
@@ -1102,8 +1106,8 @@
                     }
                     .mainbox{
                         border: 0px solid rgb(249, 0, 0);
-                        border-radius: 10px;
-                        padding: 10px ;
+                        border-radius: 00px;
+                        padding: 00px ;
                         background: rgba(0, 0, 0, 0);
                         width: 100%;
                         height: auto;
@@ -1114,8 +1118,8 @@
                         border: 0px solid rgb(249, 0, 0);
                         width: 100%;
                         margin: 0px;
-                        border-radius: 10px;
-                        padding: 10px 30px;
+                        border-radius: 00px;
+                        padding: 00px 00px;
                         height: auto;
                         transform: translateY(0%);
                         background: rgba(93, 237, 9, 0); 
@@ -1259,8 +1263,20 @@
                         font-size: 20px;
                         font-weight: bolder;
                     }
+            }
+            @media (min-width:1400px){
+                body{
+                    box-sizing: border-box;
+                    background-image:url("../../../uploads/IZO-D2.gif");
+                    background-size: cover;
+                    background-attachment: fixed;
+                    background-repeat:  no-repeat; 
+                    background-position: center;
+                    
+                    /* background-color:#fff !important; */
+                    /* background:linear-gradient(to top left ,rgb(235, 249, 255) 10% , rgb(255, 239, 223) 40% ,#cecece 100%); */
                 }
-            
+            }
         </style>
     @endsection
     <body lang="{{ session()->get('lang', config('app.locale')) }}" dir="{{in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'rtl' : 'ltr'}}">

@@ -74,7 +74,7 @@ class Subscription extends Model
      */
     public static function active_subscription($business_id)
     {
-        $date_today = \Carbon::today()->toDateString();
+        $date_today   = \Carbon::today()->toDateString();
         
         $subscription = Subscription::where('business_id', $business_id)
                             ->whereDate('start_date', '<=', $date_today)

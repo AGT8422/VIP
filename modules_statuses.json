@@ -14,8 +14,6 @@
     "Inventory": true,
     "Restaurant": true,
     "Web": true,
-    "ChartOfAccounts": true,
-    "Warranties": true,
-    "TransferData": true,
+    "ChartOfAccounts": true, 
     "IZOPOS": true
 }

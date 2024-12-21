@@ -29,16 +29,21 @@ class BusinessUtil extends Util
      *
      * @return boolean
      */
-    public function newBusinessDefaultResources($business_id, $user_id)
+    public function newBusinessDefaultResources($business_id, $user_id,$other_user_id = null)
     {
         $user = User::find($user_id);
-
+        
         //create Admin role and assign to user
         $role = Role::create([ 'name' => 'Admin#' . $business_id,
-                            'business_id' => $business_id,
-                            'guard_name' => 'web', 'is_default' => 1
-                        ]);
+            'business_id' => $business_id,
+            'guard_name' => 'web', 'is_default' => 1
+        ]);
         $user->assignRole($role->name);
+    
+        if($other_user_id != null){
+            $izo_user = User::find($other_user_id);
+            $izo_user->assignRole($role->name);
+        }
 
         //Create Cashier role for a new business
         $cashier_role = Role::create([ 'name' => 'Cashier#' . $business_id,

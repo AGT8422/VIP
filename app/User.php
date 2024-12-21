@@ -12,7 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Laravel\Passport\HasApiTokens;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+ class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
     use SoftDeletes;
@@ -87,7 +87,7 @@ class User extends Authenticatable implements JWTSubject
                     'contact_number' => $details['contact_number'],
                     'username' => $details['username'],
                     'email' => $details['email'],
-                    'password' => Hash::make($details['password']),
+                    'password' => \Hash::make($details['password']),
                     'language' => !empty($details['language']) ? $details['language'] : 'en'
                 ]);
 

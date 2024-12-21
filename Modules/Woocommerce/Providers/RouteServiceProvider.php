@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\TransferData\Providers;
+namespace Modules\Woocommerce\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -12,7 +12,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $moduleNamespace = 'Modules\TransferData\Http\Controllers';
+    protected $moduleNamespace = 'Modules\Woocommerce\Http\Controllers';
 
     /**
      * Called before routes are registered.
@@ -49,7 +49,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware('web')
             ->namespace($this->moduleNamespace)
-            ->group(module_path('TransferData', '/Routes/web.php'));
+            ->group(__DIR__ . '/../Routes/web.php');
     }
 
     /**
@@ -64,6 +64,6 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('api')
             ->middleware('api')
             ->namespace($this->moduleNamespace)
-            ->group(module_path('TransferData', '/Routes/api.php'));
+            ->group(__DIR__ . '/../Routes/api.php');
     }
 }

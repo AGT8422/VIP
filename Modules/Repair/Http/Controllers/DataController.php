@@ -159,7 +159,7 @@ class DataController extends Controller
                 $menu->url(
                             action('\Modules\Repair\Http\Controllers\DashboardController@index'),
                             __('repair::lang.repair'),
-                            ['icon' => 'fa fas fa-wrench', 'active' => request()->segment(1) == 'repair', 'style' => 'background-color:black']
+                            ['icon' => 'fa fas fa-wrench', 'active' => request()->segment(1) == 'repair']
                         )
                 ->order(24);
             });

@@ -85,8 +85,8 @@ class PaymentVoucherController extends Controller
     {
 
         # note 0=> supplier , 1 =>customer
-        $business_id      = request()->session()->get('user.business_id');
         DB::beginTransaction();
+        $business_id      = request()->session()->get('user.business_id');
         # Generate reference number
         $ref_count             =  $this->productUtil->setAndGetReferenceCount("voucher");
         $ref_no                =  $this->productUtil->generateReferenceNumber("voucher" , $ref_count);

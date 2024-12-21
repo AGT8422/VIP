@@ -17,7 +17,7 @@
     $margin_sec   = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'0% 5% 0% 0%' : '0% 0% 0% 5%';
     $margin_left  = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'initial' : '50%';
     $margin_right = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'50%' : 'initial';
-    
+   
 @endphp 
 
 @section('special_css')

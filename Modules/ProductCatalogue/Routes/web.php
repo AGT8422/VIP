@@ -16,7 +16,7 @@ Route::group(['namespace' => '\Modules\ProductCatalogue\Http\Controllers'], func
 	Route::get('/show-catalogue/{business_id}/{product_id}', 'ProductCatalogueController@show');
 });
 
-Route::group(['middleware' => ['web', 'authh', 'auth', 'SetSessionData', 'language', 'timezone', 'AdminSidebarMenu'], 'namespace' => '\Modules\ProductCatalogue\Http\Controllers', 'prefix' => 'product-catalogue'], function () {
+Route::group(['middleware' => ['web',   'SetSessionData', 'language', 'timezone', 'AdminSidebarMenu'], 'namespace' => '\Modules\ProductCatalogue\Http\Controllers', 'prefix' => 'product-catalogue'], function () {
     Route::get('catalogue-qr', 'ProductCatalogueController@generateQr');
 
     Route::get('install', 'InstallController@index');

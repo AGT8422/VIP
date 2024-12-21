@@ -39,18 +39,18 @@ class DataController extends Controller
         $module_util = new ModuleUtil();
         $background_color = '#fff !important';
         $is_mfg_enabled = (boolean)$module_util->hasThePermissionInSubscription($business_id, 'partners_module');
-        // if ($is_mfg_enabled){
-        //     if(auth()->user()->can('partner_view')){
+        if ($is_mfg_enabled){
+            if(auth()->user()->can('partner_view')){
                 Menu::modify('admin-sidebar-menu', function ($menu) use ($background_color) {
                     $menu->url(
                         action('\Modules\Partners\Http\Controllers\PartnersController@index'),
                         __('partners::lang.partners'),
-                        ['icon' => 'fa fas fa-user-friends', 'active' => request()->segment(1) == 'partners', 'style' => 'background-color:black']
+                        ['icon' => 'fa fas fa-user-friends', 'active' => request()->segment(1) == 'partners']
                     )
                         ->order(7);
                 });
-        //     }
-        // }
+            }
+        }
 
 
 
@@ -62,12 +62,12 @@ class DataController extends Controller
                                     $sub->url(
                                             action('\Modules\Partners\Http\Controllers\PartnersController@index'),
                                             __('partners::lang.pateners'),
-                                            ['icon' => 'fa fas fa-address-book', 'active' => request()->segment(2) == 'partners', 'style' => 'background-color:#fff !important']
+                                            ['icon' => 'fa fas fa-address-book', 'active' => request()->segment(2) == 'partners']
                                           );
                                     $sub->url(
                                             action('\Modules\Partners\Http\Controllers\AssetsController@index'),
                                             __('partners::lang.assets'),
-                                            ['icon' => 'fa fas fa-user', 'active' => request()->segment(2) == 'assets', 'style' => 'background-color:#fff !important']
+                                            ['icon' => 'fa fas fa-user', 'active' => request()->segment(2) == 'assets']
                                          );
 
                                },

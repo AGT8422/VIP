@@ -47,7 +47,7 @@ class DataController extends Controller
                 $menu->url(
                     action('\Modules\Assets\Http\Controllers\AssetsController@index'),
                     __('assets::lang.assets'),
-                    ['icon' => 'fa fas fa-cube', 'active' => request()->segment(1) == 'Assets', 'style' => 'background-color:black']
+                    ['icon' => 'fa fas fa-cube', 'active' => request()->segment(1) == 'Assets']
                 )->order(6);
             });
         }

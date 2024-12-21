@@ -74,7 +74,7 @@ class Entry extends Model
             ($credit == null )? $credit = 0:"";
             $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$data->business_id);
             //Generate reference number
-            DB::beginTransaction();
+            
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count,$data->business_id);
             $entries                         = new Entry;
             $entries->business_id            = $data->business_id;
@@ -86,7 +86,7 @@ class Entry extends Model
             $entries->credit                 = $credit;
             
             $entries->save();
-            DB::commit();
+            
         }
         if($type == "Sale"){
             ($debit  == null )? $debit  = 0:"";
@@ -97,7 +97,7 @@ class Entry extends Model
                 $ref_count  = ProductUtil::setAndGetReferenceCount("entries" ,$data->business_id);
             }
             //Generate reference number
-            DB::beginTransaction();
+            
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count,$data->business_id);
             $entries                         = new Entry;
             $entries->business_id            = $data->business_id;
@@ -108,14 +108,14 @@ class Entry extends Model
             $entries->debit                  = $credit;
             $entries->credit                 = $debit;
             $entries->save();
-            DB::commit();
+            
         }
         if($type == "Production"){
             ($debit  == null )? $debit  = 0:"";
             ($credit == null )? $credit = 0:"";
             $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$data->business_id);
             //Generate reference number
-            DB::beginTransaction();
+            
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count,$data->business_id);
             $entries                         = new Entry;
             $entries->business_id            = $data->business_id;
@@ -127,7 +127,7 @@ class Entry extends Model
             $entries->credit                 = $data->final_total;
             $entries->save();
             $dat = \App\AccountTransaction::where("transaction_id",$data->id)->update(["entry_id"=>$entries->id]);
-            DB::commit();
+            
         }
         // if($transaction != NULL){
         //     foreach($transaction as $id){
@@ -141,7 +141,7 @@ class Entry extends Model
             if(empty($o)){
                 $ref_count  = ProductUtil::setAndGetReferenceCount("entries" ,$data->business_id);
                 //Generate reference number
-                DB::beginTransaction();
+                
                 $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count ,$data->business_id);
                 
                 $entries                         = new Entry;
@@ -154,7 +154,7 @@ class Entry extends Model
                 $entries->save();
                 
                 $dat = \App\AccountTransaction::where('return_transaction_id',$data->id)->update(["entry_id"=>$entries->id]);
-                DB::commit();
+                
                 
             }else{
                 $dat = \App\AccountTransaction::where('return_transaction_id',$data->id)->update(["entry_id"=>$o->id]);
@@ -165,7 +165,7 @@ class Entry extends Model
             if(empty($o)){
                 $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$data->business_id);
                 //Generate reference number
-                DB::beginTransaction();
+                
                 $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count, $data->business_id);
                 $entries                         = new Entry;
                 $entries->business_id            = $data->business_id;
@@ -176,7 +176,7 @@ class Entry extends Model
                 $entries->return_id              = $return_id;
                 $entries->save();
                 $dat = \App\AccountTransaction::where("return_transaction_id",$data->id)->update(["entry_id"=>$entries->id]);
-                DB::commit();
+                
             }else {
                 $dat = \App\AccountTransaction::where('return_transaction_id',$data->id)->update(["entry_id"=>$o->id]);
             }
@@ -184,7 +184,7 @@ class Entry extends Model
         if($type == "Payment"){
             $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$data->business_id);
             //Generate reference number
-            DB::beginTransaction();
+            
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count , $data->business_id);
             $entries                         = new Entry;
             $entries->business_id            = $data->business_id;
@@ -196,12 +196,12 @@ class Entry extends Model
             $entries->payment_id             = $data->id;
             $entries->save();
             $dat = \App\AccountTransaction::where("transaction_payment_id",$data->id)->update(["entry_id"=>$entries->id]);
-            DB::commit();
+            
         }
         if($type == "PCheck"){
             $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$data->business_id);
             //Generate reference number
-            DB::beginTransaction();
+            
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count, $data->business_id);
             $entries                         = new Entry;
             $entries->business_id            = $data->business_id;
@@ -215,12 +215,12 @@ class Entry extends Model
             $entries->save();
             $dat = \App\AccountTransaction::where("check_id",$data->id)->update(["entry_id"=>$entries->id]);
            
-            DB::commit();
+            
         }
         if($type == "check"){
             $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$data->business_id);
             //Generate reference number
-            DB::beginTransaction();
+            
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count ,$data->business_id);
             $entries                         = new Entry;
             $entries->business_id            = $data->business_id;
@@ -232,12 +232,12 @@ class Entry extends Model
             $entries->check_id               = $data->id;
             $entries->save();
             $dat = \App\AccountTransaction::where("check_id",$data->id)->update(["entry_id"=>$entries->id]);
-            DB::commit();
+            
         }
         if($type == "Collect Cheque"){
             $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$data->business_id);
             //Generate reference number
-            DB::beginTransaction();
+            
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count,$data->business_id);
             $entries                         = new Entry;
             $entries->business_id            = $data->business_id;
@@ -255,12 +255,12 @@ class Entry extends Model
                     $it->update();
                  }
             }
-            DB::commit();
+            
         }
         if($type == "UNCollect Cheque"){
             $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$data->business_id);
             //Generate reference number
-            DB::beginTransaction();
+            
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count,$data->business_id);
             $entries                         = new Entry;
             $entries->business_id            = $data->business_id;
@@ -278,12 +278,12 @@ class Entry extends Model
                     $it->update();
                  }
             }
-            DB::commit();
+            
         }
         if($type == "Return Voucher"){
             $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$data->business_id);
             //Generate reference number
-            DB::beginTransaction();
+            
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count,$data->business_id);
             $entries                         = new Entry;
             $entries->business_id            = $data->business_id;
@@ -294,12 +294,12 @@ class Entry extends Model
             $entries->state                  = 'Return Voucher';           
             $entries->voucher_id             = $data->id;
             $entries->save();
-            DB::commit();
+            
         }
         if($type == "Refund Cheque"){
             $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$data->business_id);
             //Generate reference number
-            DB::beginTransaction();
+            
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count,$data->business_id);
             $entries                         = new Entry;
             $entries->business_id            = $data->business_id;
@@ -317,13 +317,13 @@ class Entry extends Model
                     $it->update();
                  }
             }
-            DB::commit();
+            
         }
         if($type == "voucher"){
             $vouchers = \App\Models\PaymentVoucher::find($data->id);
             $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$vouchers->business_id);
             //Generate reference number
-            DB::beginTransaction();
+            
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count,$vouchers->business_id);
             $entries                         = new Entry;
             $entries->business_id            = $data->business_id;
@@ -343,12 +343,12 @@ class Entry extends Model
             $dat = \App\AccountTransaction::where("payment_voucher_id",$data->id)->update([
                                                  "entry_id"=>$entries->id
                                             ]);
-            DB::commit();
+            
         }
         if($type == "journalV"){
             $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$data->business_id);
             //Generate reference number
-            DB::beginTransaction();
+            
 
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count,$data->business_id);
             $entries                         = new Entry;
@@ -363,12 +363,12 @@ class Entry extends Model
             $entries->journal_voucher_id     = $data->id;
             $entries->save();
             $dat = \App\AccountTransaction::whereIn("daily_payment_item_id",$data->items->pluck("id"))->update(["entry_id"=>$entries->id]);
-            DB::commit();
+            
         }
         if($type == "journalEx"){
             $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$data->gournal_voucher->business_id);
             //Generate reference number
-            DB::beginTransaction();
+            
              
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count,$data->gournal_voucher->business_id);
             $entries                         = new Entry;
@@ -388,12 +388,12 @@ class Entry extends Model
                                                     }); 
                                             })->update(["entry_id"=>$entries->id]);
 
-            DB::commit();
+            
         }
         if($type == "Shipping"){ 
             $ref_count  = ProductUtil::setAndGetReferenceCount("entries",$data->additional_shipping->transaction->business_id);
             //Generate reference number
-            DB::beginTransaction();
+            
             $refence_no = ProductUtil::generateReferenceNumber("entries" , $ref_count,$data->additional_shipping->transaction->business_id);
             $entries                         = new Entry;
             $entries->business_id            = $data->additional_shipping->transaction->business_id;
@@ -413,7 +413,7 @@ class Entry extends Model
             $entries->save();
             $dat = \App\AccountTransaction::where("additional_shipping_item_id",$data->id)->update(["entry_id"=>$entries->id]);
 
-            DB::commit();
+            
         }
 
         

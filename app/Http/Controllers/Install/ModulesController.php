@@ -30,8 +30,10 @@ class ModulesController extends Controller
      */
     public function index()
     {
+
+        
         if (!auth()->user()->can('manage_modules')) {
-            // abort(403, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
 
         //Get list of all modules.
@@ -44,7 +46,6 @@ class ModulesController extends Controller
         foreach ($config_languages as $key => $value) {
             $languages[$key] = $value['full_name'];
         }
-
 
         foreach ($modules as $module => $details) {
             $modules[$module]['is_installed'] = $this->moduleUtil->isModuleInstalled($details['name']) ? true : false;
@@ -79,7 +80,7 @@ class ModulesController extends Controller
         $is_demo = (config('app.env') == 'demo');
         $mods = $this->__available_modules();
 
-        // dd($modules);
+        
 
         return view('install.modules.index')
             ->with(compact('modules', 'is_demo','languages', 'mods'));

@@ -11,7 +11,7 @@
 |
 */
 
-Route::middleware(['web',  'SetSessionData', 'auth', 'language', 'timezone', 'AdminSidebarMenu'])->prefix('restaurant')->group(function() {
+Route::middleware(['web',  'SetSessionData', 'language', 'timezone', 'AdminSidebarMenu'])->prefix('restaurant')->group(function() {
     Route::get('/', 'RestaurantController@index');
     Route::get('/install', 'InstallController@index');
     Route::post('/install', 'InstallController@install');

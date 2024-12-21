@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['middleware' => ['web', 'authh', 'SetSessionData', 'auth', 'language', 'timezone', 'AdminSidebarMenu'], 'prefix' => 'manufacturing', 'namespace' => 'Modules\Manufacturing\Http\Controllers'], function () {
+Route::group(['middleware' => ['web',   'SetSessionData',   'language', 'timezone', 'AdminSidebarMenu'], 'prefix' => 'manufacturing', 'namespace' => 'Modules\Manufacturing\Http\Controllers'], function () {
     Route::get('/install', 'InstallController@index');
     Route::post('/install', 'InstallController@install');
     Route::get('/install/update', 'InstallController@update');

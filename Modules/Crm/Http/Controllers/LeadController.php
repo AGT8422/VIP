@@ -41,7 +41,7 @@ class LeadController extends Controller
      */
     public function index()
     {
-        $business_id = request()->session()->get('user.business_id');
+        $business_id          = request()->session()->get('user.business_id');
         $can_access_all_leads = auth()->user()->can('crm.access_all_leads');
         $can_access_own_leads = auth()->user()->can('crm.access_own_leads');
 

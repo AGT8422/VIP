@@ -27,7 +27,7 @@ class InstallController extends Controller
     public function index()
     {
         if (!auth()->user()->can('superadmin')) {
-            // abort(403, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
 
         ini_set('max_execution_time', 0);

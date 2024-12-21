@@ -98,7 +98,7 @@ class DataController extends Controller
      */
     public function modifyAdminMenu() 
     {
-        $menu = Menu::instance('admin-sidebar-menu');
+        $menu = Menu::instance('admin-sidebar-menu'); 
         if (auth()->user()->can('superadmin')) {
             $menu->dropdown(
                 __('superadmin::lang.superadmin'),

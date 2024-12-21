@@ -20,8 +20,8 @@ class DataController extends Controller
     {
         return [
             [
-                'name' => 'installment_module',
-                'label' => __('Installment::lang.installment_module'),
+                'name'    => 'installment_module',
+                'label'   => __('Installment::lang.installment_module'),
                 'default' => false
             ]
         ];

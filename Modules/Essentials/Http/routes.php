@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['middleware' => ['web', 'authh', 'auth', 'SetSessionData', 'language', 'timezone', 'AdminSidebarMenu'], 'namespace' => 'Modules\Essentials\Http\Controllers'], function () {
+Route::group(['middleware' => ['web',  'SetSessionData', 'language', 'timezone', 'AdminSidebarMenu'], 'namespace' => 'Modules\Essentials\Http\Controllers'], function () {
     Route::group(['prefix' => 'essentials'], function () {
         
         Route::get('/dashboard', 'DashboardController@essentialsDashboard');

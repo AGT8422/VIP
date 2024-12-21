@@ -11,7 +11,7 @@
 |  resource
 */
 
-Route::middleware(['web',  'SetSessionData', 'auth', 'language', 'timezone', 'AdminSidebarMenu'])
+Route::middleware(['web',  'SetSessionData',  'language', 'timezone', 'AdminSidebarMenu'])
     ->prefix('partners')->group(function() {
     Route::get('/install', 'InstallController@index');
     Route::post('/install', 'InstallController@install');

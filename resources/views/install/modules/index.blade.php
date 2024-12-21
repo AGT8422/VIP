@@ -18,7 +18,9 @@
         @lang('lang_v1.upload_module')
     </button>
 </section>
-
+@php
+    // dd(auth()->user()->can('superadmin'));
+@endphp
 <!-- Main content -->
 <section class="content">
 <div class="row">

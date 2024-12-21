@@ -14,7 +14,11 @@
 
 
 
-
-Route::prefix('web')->group(function() {
+ 
+Route::group(['middleware' => ['web',   'SetSessionData', 'language', 'timezone', 'AdminSidebarMenu'], 'prefix' => 'web', 'namespace' => 'Modules\Web\Http\Controllers'], function () {
     Route::get('/web', 'WebController@index');
+    Route::get('/install', 'InstallController@index');
+    Route::post('/install', 'InstallController@install');
+    Route::get('/install/uninstall', 'InstallController@uninstall');
+    Route::get('/install/update', 'InstallController@update');
 });

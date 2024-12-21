@@ -32,8 +32,8 @@ class DataController extends Controller
         $module_util = new ModuleUtil();
         $background_color = '#fff !important';
         $is_mfg_enabled = (boolean)$module_util->hasThePermissionInSubscription($business_id, 'inventory_module');
-        // if ($is_mfg_enabled){
-        //     if(auth()->user()->can('inventory_view')){
+        if ($is_mfg_enabled){
+            if(auth()->user()->can('inventory_view')){
                 Menu::modify('admin-sidebar-menu', function ($menu) use ($background_color) {
                    $menu->dropdown(
                        __('inventory::lang.inventory'),
@@ -59,8 +59,8 @@ class DataController extends Controller
                    )->order(35);
 
                 });
-            // }
-        // }
+            }
+        }
 
     }
 

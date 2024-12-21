@@ -21,15 +21,15 @@ class InstallController extends Controller
     public function __construct()
     {
         $this->module_name = 'installment';
-        $this->appVersion =config('installment.module_version');
+        $this->appVersion  = config('installment.module_version');
     }
 
     public function index()
     {
         if (!auth()->user()->can('superadmin')) {
-            // abort(403, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
-
+        
         ini_set('max_execution_time', 0);
         ini_set('memory_limit', '512M');
 
@@ -42,11 +42,10 @@ class InstallController extends Controller
         if (!empty($is_installed)) {
             abort(404);
         }
-
         $action_url = action('\Modules\Installment\Http\Controllers\InstallController@install');
+       
 
-        return view('install.install-module')
-            ->with(compact('action_url'));
+        return view('install.install-module')->with(compact('action_url'));
     }
 
     private function installSettings()
@@ -130,7 +129,7 @@ class InstallController extends Controller
     public function uninstall()
     {
         if (!auth()->user()->can('superadmin')) {
-            // abort(403, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
 
         try {
@@ -158,7 +157,7 @@ class InstallController extends Controller
         //If appVersion > installment_version - run update script.
         //Else there is some problem.
         if (!auth()->user()->can('superadmin')) {
-            // abort(403, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
 
         try {

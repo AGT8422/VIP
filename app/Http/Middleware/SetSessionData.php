@@ -60,9 +60,9 @@ class SetSessionData
             $request->session()->put('financial_year', $financial_year);
             session()->put('financial_year', $financial_year);
             //set current financial year to session
-            // dd($user); 
             // dd(session()->all());
         }
+        // dd("auth",auth()->user()); 
         return $next($request);
     }
 }

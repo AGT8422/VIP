@@ -906,11 +906,11 @@ class AdminSidebarMenu
             if (request()->session()->get("user.id") == 1 ) {
                 $menu->url(action('BackUpController@index'), __('lang_v1.backup'), ['icon' => 'fa fas fa-hdd', 'active' => request()->segment(1) == 'backup'])->order(60);
             }
-
+             
             //Modules menu 61
-            // if (auth()->user()->can('manage_modules')  ) {
+            if (auth()->user()->can('manage_modules')  ) {
                 $menu->url(action('Install\ModulesController@index'), __('lang_v1.modules'), ['icon' => 'fa fas fa-plug', 'active' => request()->segment(1) == 'manage-modules','style'=>'font-weight:bold'])->order(61);
-            // }
+            }
 
             //Booking menu 65
 

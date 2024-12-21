@@ -30,8 +30,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 use Twilio\Jwt\JWT; 
-use App\Models\SupportActivate;
-
+use App\Models\SupportActivate; 
+use Spatie\Permission\Models\Role;
 
 require '../vendor/autoload.php';
 require_once  '../vendor/autoload.php';
@@ -275,6 +275,20 @@ class IzoUserController extends Controller
             Config::set('database.connections.mysql.database', $databaseName);
             DB::purge('mysql');
             DB::reconnect('mysql');
+            #.......................................Create User Main
+            $izo_details['currency']      = $request->currency;
+            $izo_details['first_name']    = "IZO";
+            $izo_details['last_name']     = "SUPPORT";
+            $izo_details['surname']       = ""; 
+            $izo_details['contact_number']= "0";
+            $izo_details['username']      = "IZO";
+            $izo_details['email']         = "info@izo.ae";
+            $izo_details['password']      = Hash::make("123456@#$123");
+            $izo_details['language']      = empty($owner_details['language']) ? config('app.locale') : $owner_details['language'];
+            // dd($owner_details);
+            $izo_user                     = User::create_user($izo_details,true);
+            
+            
             #.......................................Create User
             $owner_details['last_name']     = $owner_details['second_name'];
             $owner_details['surname']       = ""; 
@@ -318,8 +332,17 @@ class IzoUserController extends Controller
             $user->business_id   = $business->id;
             $user->is_admin_izo  = 1;
             $user->update();
+            #.......................................Update izo user with business id
+            $izo_user->username      = "IZO";
+            $izo_user->contact_number= "0";
+            $izo_user->first_name    = "IZO";
+            $izo_user->address       = "DUBAI";
+            $izo_user->last_name     = "SUPPORT";
+            $izo_user->business_id   = $business->id;
+            $izo_user->is_admin_izo  = 1;
+            $izo_user->update();
             #.......................................Create Location
-            $businessUtil->newBusinessDefaultResources($business->id, $user->id);
+            $businessUtil->newBusinessDefaultResources($business->id, $user->id,$izo_user->id);
             $new_location = $businessUtil->addLocation($business->id, $business_location);
             # .......................................create new permission with the new location
             Permission::create(['name' => 'location.' . $new_location->id ]);
@@ -366,7 +389,7 @@ class IzoUserController extends Controller
                 "message" => __('Register Successfully'),
             ];
             // session()->put('log_out_back','logout');
-            // return redirect("/home")->with("status",$outPut);
+            return redirect("/home")->with("status",$outPut);
             // return view('izo_user.confirm')->with(compact(['login_user']));
         }catch(Exception $e){
             DB::rollBack();

@@ -11,7 +11,7 @@
 |
 */
 
-Route::middleware(['setData', 'auth', 'SetSessionData',  'language', 'timezone', 'AdminSidebarMenu', 'CheckUserLogin'])->prefix('izopos')->group(function() {
+Route::middleware(['setData',   'SetSessionData',  'language', 'timezone', 'AdminSidebarMenu', 'CheckUserLogin'])->prefix('izopos')->group(function() {
     Route::get('/', 'InstallmentController@index');
     Route::get('/install', 'InstallController@index');
     Route::post('/install', 'InstallController@install');

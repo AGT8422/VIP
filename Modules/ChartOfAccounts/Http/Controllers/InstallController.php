@@ -27,7 +27,7 @@ class InstallController extends Controller
     public function index()
     {
         if (!auth()->user()->can('superadmin')) {
-            // abort(403, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
         ini_set('max_execution_time', 0);
         ini_set('memory_limit', '512M');
@@ -62,50 +62,52 @@ class InstallController extends Controller
      */
     public function install()
     {
-        // try {
-        DB::beginTransaction();
-        request()->validate([
-            'license_code' => 'required',
-            'login_username' => 'required'
-        ],
-            [
-                'license_code.required' => 'License code is required',
-                'login_username.required' => 'Username is required'
-            ]
-        );
+         try {
+                DB::beginTransaction();
+                request()->validate([
+                    'license_code' => 'required',
+                    'login_username' => 'required'
+                ],
+                [
+                    'license_code.required' => 'License code is required',
+                    'login_username.required' => 'Username is required'
+                ]
+                );
 
-        $license_code = request()->license_code;
-        $email = request()->email;
-        $login_username = request()->login_username;
-        $pid = config('chartofaccounts.pid');
-        $is_installed = System::getProperty($this->module_name . '_version');
-        if (!empty($is_installed)) {
-            abort(404);
-        }
+                $license_code   = request()->license_code;
+                $email          = request()->email;
+                $login_username = request()->login_username;
+                $pid            = config('chartofaccounts.pid');
+                $is_installed   = System::getProperty($this->module_name . '_version');
+                
+                if (!empty($is_installed)) {
+                    abort(404);
+                }
 
-        DB::statement('SET default_storage_engine=INNODB;');
+                DB::statement('SET default_storage_engine=INNODB;');
+                Artisan::call('module:migrate-reset', ['module' => "chartofaccounts"]); // delete tabels that in migration used by module
+                Artisan::call('module:migrate', ['module' => "chartofaccounts"]);       // add tables that in migartion
+                System::addProperty($this->module_name . '_version', $this->appVersion);
 
-        Artisan::call('module:migrate-reset', ['module' => "chartofaccounts"]); // delete tabels that in migration used by module
-        Artisan::call('module:migrate', ['module' => "chartofaccounts"]);       // add tables that in migartion
-        System::addProperty($this->module_name . '_version', $this->appVersion);
 
-        DB::commit();
+                DB::commit();
 
-        $output = ['success' => 1,
-            'msg' => 'Chart of Accounts module installed succesfully'
-        ];
-        /*} catch (\Exception $e) {
+                $output = [
+                    'success' => 1,
+                    'msg'     => 'Chart of Accounts module installed successfully'
+                ];
+         } catch (\Exception $e) {
             DB::rollBack();
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
 
             $output = [
                 'success' => false,
-                'msg' => $e->getMessage()
+                'msg'     => $e->getMessage()
             ];
-        }*/
+        } 
 
         return redirect()
-            ->action('\App\Http\Controllers\Install\ModulesController@ModulesController')
+            ->action('\App\Http\Controllers\Install\ModulesController@index')
             ->with('status', $output);
     }
 
@@ -120,8 +122,10 @@ class InstallController extends Controller
         }
 
         try {
+            $database = request()->session()->get("user_main.database");
+            $query    = 'DROP TABLE '.$database.'.chartofaccounts';
+            DB::statement($query);
             System::removeProperty($this->module_name . '_version');
-
             $output = ['success' => true,
                 'msg' => __("lang_v1.success")
             ];

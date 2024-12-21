@@ -1,7 +1,6 @@
 <?php
 
-namespace Modules\IZOPOS\Http\Controllers;
-
+namespace Modules\Web\Http\Controllers;
 
 use App\System;
 use Composer\Semver\Comparator;
@@ -12,18 +11,17 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
 class InstallController extends Controller
-      {
+{
+    public function __construct()
+    {
+        $this->module_name = 'repair';
+        $this->appVersion = config('repair.module_version');
+    }
+
     /**
      * Display a listing of the resource.
      * @return Response
      */
-
-    public function __construct()
-    {
-        $this->module_name = 'IZOPOS';
-        $this->appVersion =config('installment.module_version');
-    }
-
     public function index()
     {
         if (!auth()->user()->can('superadmin')) {
@@ -34,21 +32,22 @@ class InstallController extends Controller
         ini_set('memory_limit', '512M');
 
         $this->installSettings();
-       
+
         //Check if installed or not.
         $is_installed = System::getProperty($this->module_name . '_version');
-
-
         if (!empty($is_installed)) {
             abort(404);
         }
 
-        $action_url = action('\Modules\IZOPOS\Http\Controllers\InstallController@install');
+        $action_url = action('\Modules\Web\Http\Controllers\InstallController@install');
 
         return view('install.install-module')
             ->with(compact('action_url'));
     }
 
+    /**
+     * Initialize all install functions
+     */
     private function installSettings()
     {
         config(['app.debug' => true]);
@@ -57,58 +56,47 @@ class InstallController extends Controller
     }
 
     /**
-     * Installing installment Module
+     * Installing Repair Module
      */
     public function install()
     {
+        try {
+            DB::beginTransaction();
 
+            request()->validate(
+                ['license_code' => 'required',
+                        'login_username' => 'required'],
+                ['license_code.required' => 'License code is required',
+                'login_username.required' => 'Username is required']
+            );
 
-        // try {
-        DB::beginTransaction();
-        request()->validate([
-            'license_code' => 'required',
-            'login_username' => 'required'
-        ],
-            [
-                'license_code.required' => 'License code is required',
-                'login_username.required' => 'Username is required'
-            ]
-        );
+            $license_code = request()->license_code;
+            $email = request()->email;
+            $login_username = request()->login_username;
+            $pid = config('repair.pid');
 
-        /*$license_code = request()->license_code;
-        $email = request()->email;
-        $login_username = request()->login_username;
-        $pid = config('installment.pid');
+            //Validate
+           /* $response = pos_boot(url('/'), __DIR__, $license_code, $email, $login_username, $type = 1, $pid);
 
-        //Validate
-        $response = pos_boot(url('/'), __DIR__, $license_code, $email, $login_username, $type = 1, $pid);
+            if (empty($response)) {
+                return $response;
+            }*/
 
+            $is_installed = System::getProperty($this->module_name . '_version');
+            if (!empty($is_installed)) {
+                abort(404);
+            }
 
-        if (empty($response)) {
-            return $response;
-        }*/
+            DB::statement('SET default_storage_engine=INNODB;');
+            Artisan::call('module:migrate', ['module' => "Repair"]);
+            System::addProperty($this->module_name . '_version', $this->appVersion);
 
-        
-
-        $is_installed = System::getProperty($this->module_name . '_version');
-        if (!empty($is_installed)) {
-            abort(404);
-        }
-
-        Artisan::call('module:migrate-reset', ['module' => "IZOPOS"]);
-        Artisan::call('module:migrate', ['module' => "IZOPOS"]);
-
-        DB::statement('SET default_storage_engine=INNODB;');
-
-
-        System::addProperty($this->module_name . '_version', $this->appVersion);
-
-        DB::commit();
-
-        $output = ['success' => 1,
-            'msg' => 'installment module installed succesfully'
-        ];
-        /*} catch (\Exception $e) {
+            DB::commit();
+            
+            $output = ['success' => 1,
+                    'msg' => 'Repair module installed succesfully'
+                ];
+        } catch (\Exception $e) {
             DB::rollBack();
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
 
@@ -116,11 +104,11 @@ class InstallController extends Controller
                 'success' => false,
                 'msg' => $e->getMessage()
             ];
-        }*/
+        }
 
         return redirect()
-            ->action('\App\Http\Controllers\Install\ModulesController@index')
-            ->with('status', $output);
+                ->action('\App\Http\Controllers\Install\ModulesController@index')
+                ->with('status', $output);
     }
 
     /**
@@ -137,12 +125,12 @@ class InstallController extends Controller
             System::removeProperty($this->module_name . '_version');
 
             $output = ['success' => true,
-                'msg' => __("lang_v1.success")
-            ];
+                            'msg' => __("lang_v1.success")
+                        ];
         } catch (\Exception $e) {
             $output = ['success' => false,
-                'msg' => $e->getMessage()
-            ];
+                        'msg' => $e->getMessage()
+                    ];
         }
 
         return redirect()->back()->with(['status' => $output]);
@@ -154,11 +142,11 @@ class InstallController extends Controller
      */
     public function update()
     {
-        //Check if installment_version is same as appVersion then 404
-        //If appVersion > installment_version - run update script.
+        //Check if repair_version is same as appVersion then 404
+        //If appVersion > repair_version - run update script.
         //Else there is some problem.
         if (!auth()->user()->can('superadmin')) {
-            // abort(403, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
 
         try {
@@ -166,25 +154,25 @@ class InstallController extends Controller
             ini_set('max_execution_time', 0);
             ini_set('memory_limit', '512M');
 
-            $installment_version = System::getProperty($this->module_name . '_version');
+            $repair_version = System::getProperty($this->module_name . '_version');
 
-            if (Comparator::greaterThan($this->appVersion, $installment_version)) {
+            if (Comparator::greaterThan($this->appVersion, $repair_version)) {
                 ini_set('max_execution_time', 0);
                 ini_set('memory_limit', '512M');
                 $this->installSettings();
-
+                
                 DB::statement('SET default_storage_engine=INNODB;');
-                Artisan::call('module:migrate', ['module' => "installment"]);
+                Artisan::call('module:migrate', ['module' => "Repair"]);
                 System::setProperty($this->module_name . '_version', $this->appVersion);
             } else {
                 abort(404);
             }
 
             DB::commit();
-
+            
             $output = ['success' => 1,
-                'msg' => 'installment module updated Succesfully to version ' . $this->appVersion . ' !!'
-            ];
+                        'msg' => 'Repair module updated Succesfully to version ' . $this->appVersion . ' !!'
+                    ];
 
             return redirect()->back()->with(['status' => $output]);
         } catch (Exception $e) {

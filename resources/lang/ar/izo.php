@@ -130,6 +130,7 @@ return [
     'user_activation'              => 'إشتراكات المستخدمين',
     'mobile_section'               => 'قسم المحمول',
     'react_section'                => 'قسم الواجهات',         
+    'choose_website'               => 'اختر الدومين',         
 
 
 

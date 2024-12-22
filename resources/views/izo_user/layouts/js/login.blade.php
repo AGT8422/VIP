@@ -93,8 +93,9 @@
                 }  
                 if( $('#log_out').val() != null  &&  $('#log_out').val() != ""){ 
                     @php
+                        session()->forget('adminLogin');
                         session()->forget('log_out_back');
-                    @endphp
+                    @endphp 
                     $("form#go-home-2").submit();
                 }    
            

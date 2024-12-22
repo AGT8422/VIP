@@ -33,6 +33,9 @@ include_once('install_r.php');
         Route::post('/account/login','IzoUserController@login')->name('izoLoginAccount');
         Route::get('/account/logout','IzoUserController@logoutIzo')->name('izoLogout');
         Route::post('/create-company','IzoUserController@createCompany')->name('izoCompanyRegister');
+        Route::middleware(['adminIzo' ])->group(function () {
+            Route::get('/choose-company','IzoUserController@ChooseCompany')->name('izoChooseCompany');
+        });
         Route::middleware(['mainAuth' ])->group(function () {
             Route::get('/panel-account','IzoUserController@panel')->name('izoPanel');
         });

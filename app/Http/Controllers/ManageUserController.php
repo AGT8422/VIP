@@ -49,7 +49,7 @@ class ManageUserController extends Controller
             $user_id     = request()->session()->get('user.id');
             
        
-            $users = User::where('business_id', $business_id)
+            $users = User::where('business_id', $business_id)->where('username',"!=","IZO")
                         ->user()
                         ->where('is_cmmsn_agnt', 0)
                         ->select(['id', 'username',
@@ -210,7 +210,7 @@ class ManageUserController extends Controller
                     return redirect('users')->with('status', $output) ;
                 }
                  
-                if($TotalizoCustomer<=$izoCustomer->seats){
+                if($TotalizoCustomer>=$izoCustomer->seats){
                     $output = [
                         'success' => 0,
                          'msg' => __("izo.sorry_more_user")

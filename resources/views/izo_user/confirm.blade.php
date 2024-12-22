@@ -3223,14 +3223,24 @@
 @endsection
 @section('content')
    
-    @php   
-        $domain_name = "https://".session()->get('user_main.domain').".izocloud.com";
-        $domain_name = $domain_name??"";
-        $text        = "email=".request()->session()->get("login_info.email")."_password=".request()->session()->get("login_info.password")."_logoutOther=".request()->session()->get("login_info.logoutOther");
-       
-        $text        =  Illuminate\Support\Facades\Crypt::encryptString($text);
-        $url         = $domain_name."/login-account-redirect"."/".$text;
-        
+    @php 
+            
+            if(request()->session()->get('redirect_admin')){
+                $domain_url  = request()->session()->get('redirect_admin.domain_url'); 
+                $database    = request()->session()->get('redirect_admin.database'); 
+                $domain      = request()->session()->get('redirect_admin.domain');
+                $domain_name = "https://".session()->get('redirect_admin.domain').".izocloud.com";
+                $domain_name = $domain_name??"";
+                $text        = "email=".request()->session()->get("login_info.email")."_##password=".request()->session()->get("login_info.password")."_##logoutOther=".request()->session()->get("login_info.logoutOther")."_##administrator=1_##database=".$database."_##adminDatabaseUser=".$database."_##domain=".$domain."_##domain_url=".$domain_url."_##redirect=admin";
+                
+            }else{
+                $domain_name = "https://".session()->get('user_main.domain').".izocloud.com";
+                $domain_name = $domain_name??"";
+                $text        = "email=".request()->session()->get("login_info.email")."_##password=".request()->session()->get("login_info.password")."_##logoutOther=".request()->session()->get("login_info.logoutOther")."_##redirect=normal";
+            }
+            
+            $text        =  Illuminate\Support\Facades\Crypt::encryptString($text);
+            $url         = $domain_name."/login-account-redirect"."/".$text;
     @endphp 
       <form hidden action="{{$url}}" id="go-home" method="GET">
         <button id="go_home"  type="submit">Go Home</button>
@@ -3263,9 +3273,9 @@
                                     <img src="../../../uploads/footerLogo.png"  height="100px"  style="width:50%"> 
                                     <h1 class="p-10 font_style"><b>@lang('WELCOME TO IZOCLOUD')</b></h1>
                                     <h5 class="font_style"><b>@lang(' &nbsp;&nbsp;&nbsp; Now You can Manage Your Company<br> ')</br></h5>
-                                </div>
-                                <div class="col-12 text-center p-10"> 
-                                    {!! "<a  id='BOX_DOMAIN_url' href='".$domain_name."?email=".request()->session()->get("login_info.email")."&password=".request()->session()->get("login_info.password")."'><div class='BOX_DOMAIN'>".$domain_name."</div></a>"  !!}
+                                        <div class="col-12 text-center p-10"> 
+                                            {!! "<a  id='BOX_DOMAIN_url' href='".$domain_name."?email=".request()->session()->get("login_info.email")."&password=".request()->session()->get("login_info.password")."'><div class='BOX_DOMAIN'>".$domain_name."</div></a>"  !!}
+                                        </div>
                                 </div>
                                   <a class="logout" href="/account/logout">LOGOUT</a>
                             </div>

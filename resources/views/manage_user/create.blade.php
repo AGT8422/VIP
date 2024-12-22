@@ -52,11 +52,21 @@
         </div>
       </div>
 
-  
-    <div class="col-sm-4 ">
+       
+      @if(count($allLocations) >= 1)
+      @php 
+          $default_location =  array_key_first($allLocations);
+          $search_disable = false; 
+        @endphp
+      @else
+        @php $default_location = null;
+        $search_disable = true;
+        @endphp
+      @endif
+    <div class="col-sm-4 hide">
       <div class="form-group">
         {!! Form::label('location', __('Location') . ':') !!} @show_tooltip(__('lang_v1.product_location_help'))
-        {!! Form::select('location', $allLocations ,null, ['class' => 'form-control select2' , 'placeholder' => __( 'messages.please_select' ), 'required' ,'id' => 'location']); !!}
+        {!! Form::select('location', $allLocations ,$default_location, ['class' => 'form-control select2' ,  'placeholder' => __( 'messages.please_select' ), 'required' ,'id' => 'location']); !!}
       </div>
     </div>
 
@@ -73,66 +83,7 @@
       </div>
       
   @endcomponent
-  @component("components.widget",["title"=>__("lang_v1.mobile_app"),"class"=>"box-primary"])
-  <div class="col-md-4">
-    <div class="form-group">
-       
-        <div class="form-group">
-          {!! Form::label('user_account_id', __( 'lang_v1.cash' ) . ': ') !!}
-            {!! Form::select('user_account_id', $accounts,null, ['class' => 'form-control select2',  "id"=>"user_account_id", 'placeholder' => __( 'messages.please_select' ) ]); !!}
-        </div>
-        
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="form-group">
-       
-        <div class="form-group">
-          {!! Form::label('user_visa_account_id', __( 'lang_v1.visa_account' ) . ': ') !!}
-            {!! Form::select('user_visa_account_id', $accounts,null, ['class' => 'form-control select2',  "id"=>"user_visa_account_id", 'placeholder' => __( 'messages.please_select' ) ]); !!}
-        </div>
-        
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="form-group">
-       
-        <div class="form-group">
-          {!! Form::label('user_agent_id', __( 'home.Agent' ) . ': ') !!}
-            {!! Form::select('user_agent_id', $agents,null, ['class' => 'form-control select2',  "id"=>"user_agent_id", 'placeholder' => __( 'messages.please_select' ) ]); !!}
-        </div>
-        
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="form-group">
-       
-        <div class="form-group">
-          {!! Form::label('user_cost_center_id', __( 'home.Cost Center' ) . ': ') !!}
-            {!! Form::select('user_cost_center_id', $cost_center,null, ['class' => 'form-control select2',  "id"=>"user_cost_center_id", 'placeholder' => __( 'messages.please_select' ) ]); !!}
-        </div>
-        
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="form-group">
-       
-        <div class="form-group">
-          {!! Form::label('user_store_id', __( 'warehouse.nameW' ) . ': ') !!}
-            {!! Form::select('user_store_id', $stores,null, ['class' => 'form-control select2',  "id"=>"user_store_id", 'placeholder' => __( 'messages.please_select' ) ]); !!}
-        </div>
-        
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="form-group">
-      {!! Form::label('user_pattern_id', __( 'business.patterns' ) . ':') !!} 
-      {!! Form::select('user_pattern_id', $patterns,  null, ['class' => 'form-control select2',"id"=>"user_pattern_id", 'placeholder' => __( 'messages.please_select' ), 'style' => 'width: 100%;']); !!}
-    </div>
-  </div>
-  
-  <div class="clearfix"></div>
-  @endcomponent
+
   </div>
   <div class="col-md-12">
     @component('components.widget', ['title' => __('lang_v1.roles_and_permissions')])
@@ -225,10 +176,20 @@
             {!! Form::text('max_sales_discount_percent', null, ['class' => 'form-control input_number', 'id'=>'max_sales_discount_percent','placeholder' => __( 'lang_v1.max_sales_discount_percent' ) ]); !!}
         </div>
       </div>
+      @if(count($patterns) >= 1)
+        @php 
+          $default_pattern =  array_key_first($patterns);
+      
+        @endphp
+      @else
+        @php $default_pattern = null;
+        
+        @endphp
+      @endif
       <div class="col-md-4">
         <div class="form-group">
-          {!! Form::label('pattern_id', __( 'business.patterns' ) . ':') !!}  
-            {!! Form::select('pattern_id[]', $patterns , null, ['class' => 'form-control select2 ',"required",'multiple'=>'true', 'id'=>'pattern_id'   ]); !!}
+          {!! Form::label('pattern_id', __( 'business.patterns' ) . ':*') !!}  
+            {!! Form::select('pattern_id[]', $patterns , $default_pattern, ['class' => 'form-control select2 ',"required",'multiple'=>'true', 'id'=>'pattern_id'   ]); !!}
         </div>
       </div>
       <div class="clearfix"></div>
@@ -265,6 +226,68 @@
         {!! $partial !!}
       @endforeach
     @endif
+
+    @component("components.widget",["title"=>__("lang_v1.mobile_app"),"class"=>"box-primary"])
+    <div class="col-md-4">
+      <div class="form-group">
+        
+          <div class="form-group">
+            {!! Form::label('user_account_id', __( 'lang_v1.cash' ) . ': ') !!}
+              {!! Form::select('user_account_id', $accounts,null, ['class' => 'form-control select2',  "id"=>"user_account_id", 'placeholder' => __( 'messages.please_select' ) ]); !!}
+          </div>
+          
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        
+          <div class="form-group">
+            {!! Form::label('user_visa_account_id', __( 'lang_v1.visa_account' ) . ': ') !!}
+              {!! Form::select('user_visa_account_id', $accounts,null, ['class' => 'form-control select2',  "id"=>"user_visa_account_id", 'placeholder' => __( 'messages.please_select' ) ]); !!}
+          </div>
+          
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        
+          <div class="form-group">
+            {!! Form::label('user_agent_id', __( 'home.Agent' ) . ': ') !!}
+              {!! Form::select('user_agent_id', $agents,null, ['class' => 'form-control select2',  "id"=>"user_agent_id", 'placeholder' => __( 'messages.please_select' ) ]); !!}
+          </div>
+          
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        
+          <div class="form-group">
+            {!! Form::label('user_cost_center_id', __( 'home.Cost Center' ) . ': ') !!}
+              {!! Form::select('user_cost_center_id', $cost_center,null, ['class' => 'form-control select2',  "id"=>"user_cost_center_id", 'placeholder' => __( 'messages.please_select' ) ]); !!}
+          </div>
+          
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        
+          <div class="form-group">
+            {!! Form::label('user_store_id', __( 'warehouse.nameW' ) . ': ') !!}
+              {!! Form::select('user_store_id', $stores,null, ['class' => 'form-control select2',  "id"=>"user_store_id", 'placeholder' => __( 'messages.please_select' ) ]); !!}
+          </div>
+          
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        {!! Form::label('user_pattern_id', __( 'business.patterns' ) . ':') !!} 
+        {!! Form::select('user_pattern_id', $patterns,  null, ['class' => 'form-control select2',"id"=>"user_pattern_id", 'placeholder' => __( 'messages.please_select' ), 'style' => 'width: 100%;']); !!}
+      </div>
+    </div>
+    
+    <div class="clearfix"></div>
+@endcomponent
+
   <div class="row">
     <div class="col-md-12">
       <button type="submit"   class="btn btn-primary pull-right" id="submit_user_button">@lang( 'messages.save' )</button>

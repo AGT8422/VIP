@@ -129,7 +129,8 @@ return [
     'log_file'                     => 'Log File',
     'user_activation'              => 'User Activation',
     'mobile_section'               => 'Mobile Section',
-    'react_section'                => 'React Section', 
+    'react_section'                => 'React Section',      
+    'choose_website'               => 'Choose Domain',    
 
 
 ];

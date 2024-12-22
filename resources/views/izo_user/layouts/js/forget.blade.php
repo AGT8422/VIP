@@ -78,10 +78,9 @@
                     if(list_domain[i] == window.location.hostname){ 
                         checked = 1;
                     } 
-                }  
+                }   
                 if( window.location.hostname != "izocloud.com" ){
-                    if(checked == 0 ){ 
-                         
+                    if(checked == 0 ){  
                         $("form#go-home").submit();
                     }   
                 }   

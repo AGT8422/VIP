@@ -29,12 +29,17 @@ class mainAuth
         Config::set('database.connections.mysql.database', "izocloud");
         DB::purge('mysql');
         DB::reconnect('mysql');
+        
         if (!(session()->has('user_main'))) {
             return redirect('/login-account');
         }else{
             $customer     = IzoUser::where('email',session('user_main')['email'])->first();
             if(!empty($customer)){
-                $databaseName = $customer->database_name ;  
+                if(request()->session()->get('redirect_admin')){
+                    $databaseName = request()->session()->get('redirect_admin.database');  
+                }else{
+                    $databaseName = $customer->database_name ;  
+                }
                 Config::set('database.connections.mysql.database', $databaseName);
                 DB::purge('mysql');
                 DB::reconnect('mysql');
@@ -54,10 +59,11 @@ class mainAuth
                     Config::set('database.connections.mysql.database', $databaseName);
                     DB::purge('mysql');
                     DB::reconnect('mysql');
-                }
+                } 
                 if($customer->admin_user  != 1){
                     return redirect('/');
                 }
+
             } 
         } 
         return $next($request);

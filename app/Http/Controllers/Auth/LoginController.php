@@ -96,6 +96,7 @@ class LoginController extends Controller
         session()->forget('currency');
         session()->forget('locale');
         session()->forget('financial_year');
+        session()->forget('adminLogin');
         session()->put('log_out_back','logout');
         \Auth::logout(); 
         

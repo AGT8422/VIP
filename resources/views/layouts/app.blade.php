@@ -74,7 +74,7 @@
     </head>
 
     @php
-        // dd(session()->get('change_lang'));
+        // dd(session()->all());
     @endphp
     <body class=" @if($pos_layout) hold-transition lockscreen @else hold-transition skin-@if(!empty(session('business.theme_color'))){{session('business.theme_color')}}@else{{'black-light'}}@endif sidebar-mini @endif">
         @if(session()->get('change_lang'))
@@ -249,6 +249,8 @@
         });
          
         setTimeout(() => {
+             
+            
             @if(session()->get('change_lang'))
                 @php
                     session()->forget('change_lang')

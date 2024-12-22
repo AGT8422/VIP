@@ -270,6 +270,19 @@
                  width: 100% !important; 
             }
             
+            .item_domains{
+                box-shadow: 0px 0px 10px #3a3a3a33;
+                background-color:#fff;
+                margin:3px 0px;
+                padding:10px;
+            }
+            .box_domains{
+                outline:2px solid black;
+                border-radius:10px;
+                padding:10px;
+                height:300px;
+                overflow-y:scroll;
+            }
             .izo-form-input-save{
                 font-family:Georgia, 'Times New Roman', Times, serif;   
                 width: 100%;
@@ -556,6 +569,19 @@
                      width: 100% !important; 
                 }
                 
+                .item_domains{
+                    box-shadow: 0px 0px 10px #3a3a3a33;
+                    background-color:#fff;
+                    margin:3px 0px;
+                    padding:10px;
+                }
+                .box_domains{
+                    outline:2px solid black;
+                    border-radius:10px;
+                    padding:10px;
+                    height:300px;
+                    overflow-y:scroll;
+                }
                 .izo-form-input-save{
                     font-family:Georgia, 'Times New Roman', Times, serif;   
                     width: 100%;
@@ -799,6 +825,19 @@
                      width: 100% !important; 
                 }
                 
+                .item_domains{
+                    box-shadow: 0px 0px 10px #3a3a3a33;
+                    background-color:#fff;
+                    margin:3px 0px;
+                    padding:10px;
+                }
+                .box_domains{
+                    outline:2px solid black;
+                    border-radius:10px;
+                    padding:10px;
+                    height:300px;
+                    overflow-y:scroll;
+                }
                 .izo-form-input-save{
                     font-family:Georgia, 'Times New Roman', Times, serif;   
                     width: 100%;
@@ -1044,6 +1083,19 @@
                      width: 100% !important; 
                 }
                 
+                .item_domains{
+                    box-shadow: 0px 0px 10px #3a3a3a33;
+                    background-color:#fff;
+                    margin:3px 0px;
+                    padding:10px;
+                }
+                .box_domains{
+                    outline:2px solid black;
+                    border-radius:10px;
+                    padding:10px;
+                    height:300px;
+                    overflow-y:scroll;
+                }
                 .izo-form-input-save{
                     font-family:Georgia, 'Times New Roman', Times, serif;   
                     width: 100%;
@@ -1295,6 +1347,19 @@
                          width: 100% !important; 
                     }
                     
+                    .item_domains{
+                        box-shadow: 0px 0px 10px #3a3a3a33;
+                        background-color:#fff;
+                        margin:3px 0px;
+                        padding:10px;
+                    }
+                    .box_domains{
+                        outline:2px solid black;
+                        border-radius:10px;
+                        padding:10px;
+                        height:300px;
+                        overflow-y:scroll;
+                    }
                     .izo-form-input-save{
                         font-family:Georgia, 'Times New Roman', Times, serif;   
                         width: 100%;
@@ -1324,63 +1389,9 @@
             
         </style>
     @endsection
-    @php
-        
-    @endphp
     <body lang="{{ session()->get('lang', config('app.locale')) }}" dir="{{in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'rtl' : 'ltr'}}">
-        @php 
-             
-            $url       = request()->root();
-            $parsedUrl = parse_url($url);
-            $host      = $parsedUrl['host'] ?? '';  
-            $hostParts = explode('.', $host);
-            
-            if (count($hostParts) == 3) {
-                // Remove the last two parts (domain and TLD)
-                array_pop($hostParts); // TLD
-                array_pop($hostParts); // Domain
-
-                // The remaining parts are the subdomain
-                $subdomain = implode('.', $hostParts);
-            } else if(count($hostParts) == 3){
-                // Remove the last two parts (domain and TLD)
-                array_pop($hostParts); // TLD
- 
-                // The remaining parts are the subdomain
-                $subdomain = implode('.', $hostParts);
-            } else {
-                // No subdomain
-                $subdomain = '';
-
-            }
-            $subdomain = $subdomain; 
-       		
-            //  dd(session()->all());
-        @endphp
-        @if(isset($email))
-            @if($email != null && $password != null)
-                <div class="loading">
-                    <div class="loading-content">
-                        <h1 class="text-center">
-                            <img class="logo-style" style='width:200px !important' height=75 src="{{asset('logo-white.png')}}" alt="logo">
-                            <br>
-                            <small>{!!__('izo.waiting')!!}</small>
-                        </h1>
-                    </div>
-                </div>
-            @endif
-        @endif
-        <form hidden action="https://izocloud.com" id="go-home" method="GET">
-            <button id="go_home"  type="submit">Go Home</button>
-        </form>
-        <form hidden action="https://izocloud.com" id="go-home-2" method="GET">
-            <input type="hidden" name="delete_log_out_back" value="yes">
-            <button id="go_home"  type="submit">Go Home</button>
-        </form>
-        @php
-            $dr = isset($logoutBack)?$logoutBack:'';
-        @endphp
-        <input type="hidden" name="log_out" id="log_out" value="{{$dr}}">
+        
+         
         {{-- @if(request()->session()->get('url.intended') != null && request()->session()->get('url.intended') != 'http://localhost:8000')
             @if( request()->session()->get('url.intended') != null && !in_array(request()->session()->get('url.intended'),$list_domains))
             @endif
@@ -1392,18 +1403,6 @@
         @endif
         <input type="hidden" id="domain_name_current" value="{{parse_url(request()->root(),PHP_URL_HOST)}}">
         
-       
-
-        <div class="language_box">
-            <i class="fa fas fa-globe"  ></i>
-        </div>
-        <div class="list_of_lang hide">
-            {{-- <small style="color: #0c0c0c">{{__("izo.change_lang")}}</small><br> --}}
-            <p style="line-height: 2px;">&nbsp;</p>
-            <a  href="{{action("HomeController@changeLanguageApp",["lang"=>"en"])}}" >  &nbsp;&nbsp; {{__('izo.english')}} </a>
-            <p style="line-height: 2px;">&nbsp;</p>
-            <a  href="{{action("HomeController@changeLanguageApp",["lang"=>"ar"])}}" > &nbsp;&nbsp; {{__('izo.arabic')}} </a>
-        </div>
 
 
         <h3 class="title_main" > {{"IZO CLOUD"}}</h3>
@@ -1425,80 +1424,37 @@
                         <div class="col-xl-12 col-md-12 text-center" style="text-transform: uppercase;background-color:#fff;font-weight:bolder;">
                         
                             <img class="logo-style"  src="{{asset('logo.png')}}" alt="logo">
-                            
                              
                         </div> 
                         <br>
-                        {!! Form::open(['url' => route('izoLoginAccount'), 'method' => 'post', 'id' => 'first_login_form','files' => true ]) !!}
-                        <input type="hidden" id="domain_name_sub" name="domain_name_sub" value="{{$subdomain}}">
-                        @if(isset($email))
-                            @if($email != null && $password != null)
-                                <input type="hidden" id="redirect" name="redirect" value="{{$redirect}}">
-                            @endif
-                        @endif
-                        
-                        <div class="col-xs-12">
-                            <h3 style="color: #000 !important;font-family:Georgia, 'Times New Roman', Times, serif;" ><b>{{__('izo.login')}}</b></h3>
-                            <br>
-                        </div>
-                        <div class="col-xl-12 col-md-12">
-                                @if(isset($list))
-                                    <input type="hidden" name="info_database"      value="{{$list['database']}}" >
-                                    <input type="hidden" name="info_database_user" value="{{$list['database_user']}}" >
-                                    <input type="hidden" name="info_domain_url"    value="{{$list['domain_url']}}" >
-                                    <input type="hidden" name="info_domain"        value="{{$list['domain']}}" >
-                                @endif
-                                <b style="font-size:17px;color: #ec6808 !important;font-family:Georgia, 'Times New Roman', Times, serif;">{{__('izo.email_address')}}</b>
-                                {!! Form::text('email',(isset($email))?$email:null,['class' => 'izo-form-input','id'=>'email', 'placeholder' => __('izo.email_placeholder') ]) !!}
-                                <span class="error" id="emailError"></span>
+                         
+                            <div class="col-xs-12">
+                                <h3 style="color: #ec6808 !important;font-family:Georgia, 'Times New Roman', Times, serif;" ><b>{{__('izo.choose_website')}}</b> <small class="pull-right">{{__('Administrator')}}</small></h3>
+                                <br>
                             </div>
-                            @php 
-                                $pass = (isset($password))?$password:null;
-                                @endphp 
+                   
+
                             <div class="col-xl-12 col-md-12">
-                                <b  style="font-size:17px;color: #ec6808 !important;font-family:Georgia, 'Times New Roman', Times, serif;">{{__('izo.password')}}</b>
-                                <input type="password" class="izo-form-input-password" id='password' value="{{$pass}}" name="password" placeholder="{{__('izo.password_placeholder')}}">
-                                <span class="error" id="passwordError"></span>
-                            </div>
-                            <div class="col-xl-12 col-md-12">
-                                <b  style="font-size:17px;color: #ec6808 !important;font-family:Georgia, 'Times New Roman', Times, serif;"><a href="{{\URL::to('/forget-password')}}">{{__('izo.forget_password')}}</a></b>
-                            </div>
-                            <div class="col-xl-12 col-md-12">
-                                <div class="form-group">
-                                    <div class="checkbox icheck col-md-12 col-12 text-left py-5">
-                                    <div class=" col-12 ">
-                                        <label style="color: #0c0c0c ; font-size:15px;margin-left:{{$parent_left_margin}};margin-right:{{$parent_right_margin}} ">
-                                            <small>&nbsp;</small>    
-                                            {!! Form::checkbox('logout_other', 1, (isset($logoutOther))?$logoutOther:null, [ 'class' => 'input-icheck', 'id' => 'logout_other']); !!}
-                                            <span class="custom-checkbox"></span>
-                                            <span style="position:relative;font-family:Georgia, 'Times New Roman', Times, serif;top:-5px;left:{{$left_margin}};right:{{$right_margin}}">{{ __( 'izo.logout_form_other_device' ) }} </span> 
-                                        </label>
-                                    </div>
-                                    <div class=" col-12 " style="line-height: 8px">
-                                        &nbsp;
-                                    </div>
-                                    <div class=" col-12 ">
-                                        <label style="color: #0c0c0c; font-size:15px;margin-left:{{$parent_left_margin}};margin-right:{{$parent_right_margin}} ">
-                                            <small>&nbsp;</small>   
-                                            {!! Form::checkbox('remember', 1, old('remember') ? true : false, [ 'class' => 'input-icheck', 'id' => 'remember']); !!}
-                                        <span class="custom-checkbox"></span>
-                                        <span style="position:relative;top:-5px;font-family:Georgia, 'Times New Roman', Times, serif;left:{{$left_margin}};right:{{$right_margin}}">{{ __( 'izo.remember_me' ) }} </span>
-                                        </label>
-                                    </div>
-                                    </div>
+                                 <div class="box_domains">
+                                    @foreach($list_domains as $l =>  $i)
+                                        @if($i != "izo.izocloud.com")
+                                            <div class="col-xl-12 col-md-12 item_domains">
+                                                @php
+                                                    $domain_name = "";
+                                                    $text        = "email=".request()->session()->get("login_info.email")."_##password=".request()->session()->get("login_info.password")."_##logoutOther=1_##administrator=1_##database=".$list_database[$l]."_##domain_url=".$i."_##domain=".$list_dom[$l]."_##redirect=admin";
+                                                    $text        =  Illuminate\Support\Facades\Crypt::encryptString($text);
+                                                    $url         = $domain_name."/login-account-redirect"."/".$text;
+                                                    
+                                                @endphp
+                                                <b  style="font-size:17px;color: #000 !important;font-family:Georgia, 'Times New Roman', Times, serif;"><a style="color: #000 !important;" href="{{\URL::to($url)}}">{{$i}}</a></b>
+                                            </div>
+                                        @endif
+                                    @endforeach
                                 </div>
-                                 
                             </div>
-                            
-                            <div class="col-xl-12 col-md-12">
-                                {!! Form::submit(__('izo.login'),['class' => 'izo-form-input-save']) !!}
-                            </div>
-                            <div class="col-xl-12 col-md-12 text-center sign-up-box">
-                                <a href="{{route('izoRegister')}}" class="sign-up-form"   >{{__('izo.signup')}}</a>
-                            </div>
-                            {{-- <div class="col-xl-12 col-md-12 text-center sign-up-box">
-                                <a href="{{\URL::to('/send-symfony-email')}}" class="sign-up-form"   >{{__('test')}}</a>
-                            </div> --}}
+                         
+
+                             
                             
                             <div class="col-xl-12 col-md-12 text-center" style="width: 80% ;margin:auto 10%; font-family:Georgia, 'Times New Roman', Times, serif;"> 
                                     <p style="color:#838383;font-weight:600;text-transform:capitalize">
@@ -1510,7 +1466,7 @@
                                  
                             </div>
                             <div class="clearfix"></div>
-                        {!! Form::close(); !!}
+                         
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 right_form_first_login">
                         <H1 class="text-center title_izo">
@@ -1524,27 +1480,11 @@
                 {{-- </div> --}}
             </div>
         </div>
-        <script src="{{ asset('/sw.js') }}"></script>
-        <script>
-        if ("serviceWorker" in navigator) {
-            // Register a service worker hosted at the root of the
-            // site using the default scope.
-            navigator.serviceWorker.register("/sw.js").then(
-            (registration) => {
-                console.log("Service worker registration succeeded:", registration);
-            },
-            (error) => {
-                console.error(`Service worker registration failed: ${error}`);
-            },
-            );
-        } else {
-            console.error("Service workers are not supported.");
-        }
-        </script>
+         
+         
     </body>
 @endsection
-
-@include('izo_user.layouts.js.login')
+ 
 
 
  

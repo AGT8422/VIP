@@ -71,7 +71,7 @@ class BusinessUtil extends Util
                         'credit_limit' => 0
                     ];
         Contact::create($customer);
-
+          
         //create default invoice setting for new business
         InvoiceScheme::create(['name' => 'Default',
                             'scheme_type' => 'blank',

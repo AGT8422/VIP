@@ -86,6 +86,7 @@
                         checked = 1;
                     } 
                 } 
+                
                 if( window.location.hostname != "izocloud.com" ){ 
                     if(checked == 0 ){ 
                         $("form#go-home").submit();
@@ -100,5 +101,21 @@
                 }    
            
             });
+            document.addEventListener('DOMContentLoaded', function () {
+                    const togglePassword = document.querySelector('#togglePassword');
+                    const password = document.querySelector('#password');
+                    // const confirm_password = document.querySelector('#confirm_password');
+
+                    togglePassword.addEventListener('click', function () {
+                        // Toggle the type attribute using getAttribute() and setAttribute()
+                        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                        // const confirm_type = confirm_password.getAttribute('type') === 'password' ? 'text' : 'password';
+                        password.setAttribute('type', type);
+                        // confirm_password.setAttribute('type', confirm_type);
+
+                        // Toggle the eye icon
+                        this.classList.toggle('eye-icon--active');
+                    });
+                });
     </script>
 @endsection

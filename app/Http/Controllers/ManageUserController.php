@@ -210,7 +210,7 @@ class ManageUserController extends Controller
                     return redirect('users')->with('status', $output) ;
                 }
                  
-                if($TotalizoCustomer>=$izoCustomer->seats){
+                if($TotalizoCustomer>=($izoCustomer->seats-1)){
                     $output = [
                         'success' => 0,
                          'msg' => __("izo.sorry_more_user")

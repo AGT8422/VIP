@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\IzoUser;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Artisan;
 
 class mainAuth
@@ -61,7 +61,17 @@ class mainAuth
                     DB::reconnect('mysql');
                 } 
                 if($customer->admin_user  != 1){
-                    return redirect('/');
+                    $login_user = 1; 
+                    $domain_url  = request()->session()->get('user_main.domain_url'); 
+                    $database    = request()->session()->get('user_main.database'); 
+                    $domain      = request()->session()->get('user_main.domain');
+                    $domain_name = "https://".session()->get('user_main.domain').".izocloud.com";
+                    $domain_name = $domain_name??"";
+                    $text        = "email=".request()->session()->get("login_info.email")."_##password=".request()->session()->get("login_info.password")."_##logoutOther=".request()->session()->get("login_info.logoutOther")."_##administrator=1_##database=".$database."_##adminDatabaseUser=".$database."_##domain=".$domain."_##domain_url=".$domain_url."_##redirect=admin";
+                    $text        =  Crypt::encryptString($text);
+                    $url         = $domain_name."/login-account-redirect"."/".$text;    
+                    return redirect($url);
+                    // dd($url,session()->all()); 
                 }
 
             } 

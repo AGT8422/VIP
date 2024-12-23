@@ -40,8 +40,8 @@
                     {{  Form::select('parent_id',$parents,null,['class'=>'form-control','placeholder'=>trans('home.please choose the main store if it exists')]) }}
                 </div>
                 <div class="form-group col-lg-12">
-                    <label for="formGroupExampleInputText">@lang('purchase.additional_notes')</label>
-                    <textarea type="text" class="form-control" name="descript"   id="formGroupExampleInputText"  placeholder=""></textarea>  
+                    <label for="formGroupExampleInputText">@lang('purchase.additional_notes')  {{" *"}}</label>
+                    <textarea type="text" class="form-control" name="descript" required   id="formGroupExampleInputText"  placeholder=""></textarea>  
                 </div>
                 @if(!empty( $mainstore_categories))
                 {{-- <div class="form-group col-lg-6">

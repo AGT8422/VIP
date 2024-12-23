@@ -7,8 +7,9 @@
 
 
 @php  
-    $CashBal = 0;
-    $BankBal = 0;
+    
+    $CashBal      = 0;
+    $BankBal      = 0;
     $p_font       = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'18px' : '16px';
     $h4_font      = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'22px' : '20px';
     $D_rang_font  = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')))?'18px' : '16px';

@@ -43,8 +43,8 @@
                 </div>
                 <input type="hidden"  value="{{ $data->id }}" name="store_id" >
                 <div class="form-group col-lg-12">
-                    <label for="formGroupExampleInput">@lang('purchase.additional_notes')</label>
-                    <textarea type="text" class="form-control" name="descript"  id="formGroupExampleInputText"  placeholder="">{{$data->description}}</textarea>  
+                    <label for="formGroupExampleInput">@lang('purchase.additional_notes') {{" *"}}</label>
+                    <textarea type="text" class="form-control" name="descript" required  id="formGroupExampleInputText"  placeholder="">{{$data->description}}</textarea>  
                 </div>
                 
                

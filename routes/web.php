@@ -149,6 +149,8 @@ include_once('install_r.php');
             Route::get('/business/register', 'BusinessController@getRegister')->name('business.getRegister');
             Route::post('/business/register', 'BusinessController@postRegister')->name('business.postRegister');
             Route::post('/business/register/check-username', 'BusinessController@postCheckUsername')->name('business.postCheckUsername');
+            Route::post('/business/register/check-password', 'BusinessController@postCheckPassword')->name('business.postCheckPassword');
+            Route::post('/business/register/check-mobile', 'BusinessController@postCheckMobile')->name('business.postCheckMobile');
             Route::post('/business/register/check-email', 'BusinessController@postCheckEmail')->name('business.postCheckEmail');
             Route::get('/invoice/{token}', 'SellPosController@showInvoice')->name('show_invoice');
             Route::get('/quote/{token}', 'SellPosController@showInvoice')->name('show_quote');

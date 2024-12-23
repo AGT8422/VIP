@@ -8,7 +8,26 @@ use Illuminate\Database\Eloquent\Model;
 class SystemAccount extends Model
 {
     use HasFactory;
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'business_id',
+        'pattern_id',
+        'purchase',
+        'purchase_tax',
+        'sale',
+        'sale_tax',
+        'cheque_debit',
+        'cheque_collection',
+        'journal_expense_tax',
+        'sale_return',
+        'sale_discount',
+        'purchase_return',
+        'purchase_discount'
+    ];
     // ** Relation's functions
     
     // *1* accounts purchase

@@ -20,7 +20,8 @@ use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Permission; 
+use Illuminate\Support\Facades\Config; 
 
 class BusinessController extends Controller
 {
@@ -281,13 +282,99 @@ class BusinessController extends Controller
         if (!empty($request->input('username_ext'))) {
             $username .= $request->input('username_ext');
         }
-        
+            
+ 
+             
+      
+        $total = 0;
         $count = User::where('username', $username)->count();
-        
-        if ($count == 0) {
+        if ($count > 0) {
+            $total = 1;
+        } 
+
+        Config::set('database.connections.mysql.database', "izocloud");
+        DB::purge('mysql');
+        DB::reconnect('mysql');
+        $userIzo         = \App\Models\IzoUser::where('email',$username)->count();
+        if ($userIzo > 0) {
+            $total = 1;
+        }  
+        $database_name  = request()->session()->get('user_main.database');
+        Config::set('database.connections.mysql.database', $database_name);
+        DB::purge('mysql');
+        DB::reconnect('mysql');
+         
+        if($total == 0){
             echo "true";
             exit;
-        } else {
+        }else{
+            echo "false";
+            exit;
+        }
+    }
+    /**
+     * Handles the validation username
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function postCheckMobile(Request $request)
+    {
+        $mobile = $request->input('contact_number');
+        $total = 0;
+        
+         
+        
+
+        $count = User::where('contact_number', $mobile)->count();
+        if ($count > 0) {
+            $total = 1;
+        } 
+
+        Config::set('database.connections.mysql.database', "izocloud");
+        DB::purge('mysql');
+        DB::reconnect('mysql');
+        $userIzo         = \App\Models\IzoUser::where('mobile',$mobile)->count();
+        if ($userIzo > 0) {
+            $total = 1;
+        }  
+        $database_name  = request()->session()->get('user_main.database');
+        Config::set('database.connections.mysql.database', $database_name);
+        DB::purge('mysql');
+        DB::reconnect('mysql');
+         
+        if($total == 0){
+            echo "true";
+            exit;
+        }else{
+            echo "false";
+            exit;
+        }
+    }
+    /**
+     * Handles the validation username
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function postCheckPassword(Request $request)
+    {
+        $password = $request->input('password');
+        $total = 0;
+        if(strlen($password) >  6){
+            if(!preg_match('/[a-z]/', $password)){
+                $total = 1;
+            }else if(!preg_match('/[A-Z]/', $password)){
+                $total = 1;
+            }else if(!preg_match('/[0-9]/', $password)){
+                $total = 1;
+            } 
+        } else{
+            $total = 1; 
+        } 
+         
+        if($total == 0){
+            echo "true";
+            exit;
+        }else{
             echo "false";
             exit;
         }

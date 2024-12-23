@@ -158,7 +158,7 @@ class Category extends Model
     }
     public function childs()
     {
-        return $this->hasMany('\App\Category','parent_id');
+        return $this->hasMany('\App\Category','parent_id')->orderBy('short_code', 'asc');
     }
     
 }

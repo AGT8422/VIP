@@ -18,6 +18,23 @@
 @section('content')
     @section('app_css')
         <style>
+                .pas {
+                position: relative;
+                }
+                .toggle-password {
+                    position: absolute;
+                    top: 55px;
+                    right: 20px;
+                    z-index:10000;
+                    transform: translateY(-50%);
+                    cursor: pointer;
+                }
+
+                /* Optional: Style for the eye icon */
+                .eye-icon::before {
+                    content: '\1F441'; /* Unicode character for an eye symbol */
+                    font-size: 1.5em;
+                }
                 /* Hide the default checkbox */
                 input[type="checkbox"] {
                     position: absolute;
@@ -1455,10 +1472,13 @@
                             @php 
                                 $pass = (isset($password))?$password:null;
                                 @endphp 
-                            <div class="col-xl-12 col-md-12">
+                            <div class="col-xl-12 col-md-12 pas">
                                 <b  style="font-size:17px;color: #ec6808 !important;font-family:Georgia, 'Times New Roman', Times, serif;">{{__('izo.password')}}</b>
                                 <input type="password" class="izo-form-input-password" id='password' value="{{$pass}}" name="password" placeholder="{{__('izo.password_placeholder')}}">
                                 <span class="error" id="passwordError"></span>
+                                <span class="toggle-password">
+                                    <i class="eye-icon" id="togglePassword"></i>
+                                </span>
                             </div>
                             <div class="col-xl-12 col-md-12">
                                 <b  style="font-size:17px;color: #ec6808 !important;font-family:Georgia, 'Times New Roman', Times, serif;"><a href="{{\URL::to('/forget-password')}}">{{__('izo.forget_password')}}</a></b>
@@ -1489,7 +1509,18 @@
                                 </div>
                                  
                             </div>
-                            
+                            <div class="col-xl-12 col-md-12">
+                                {{-- <div class="g-recaptcha" data-sitekey="6LczVIkqAAAAADNyyHb1kHh9okAGJuqAOG9YgUM3" data-action="LOGIN"></div>
+                               <br/>  --}}
+                               
+                               {{-- {!! NoCaptcha::renderJs() !!} --}}
+                               {!! NoCaptcha::display() !!}
+                               @if ($errors->has('g-recaptcha-response'))
+                                   <span class="text-danger">
+                                       {{ $errors->first('g-recaptcha-response') }}
+                                   </span>
+                               @endif
+                           </div> 
                             <div class="col-xl-12 col-md-12">
                                 {!! Form::submit(__('izo.login'),['class' => 'izo-form-input-save']) !!}
                             </div>

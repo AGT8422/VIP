@@ -16,6 +16,8 @@ use Anhskohbo\NoCaptcha\Facades\NoCaptcha;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail; 
 use App\Utils\ModuleUtil;
+use App\InvoiceLayout;
+use App\InvoiceScheme;
 use Artisan;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
@@ -32,6 +34,10 @@ use PHPMailer\PHPMailer\Exception;
 use Twilio\Jwt\JWT; 
 use App\Models\SupportActivate; 
 use Spatie\Permission\Models\Role;
+use App\Models\Pattern;
+use App\Models\Warehouse;
+use App\Models\SystemAccount;
+
 
 require '../vendor/autoload.php';
 require_once  '../vendor/autoload.php';
@@ -266,9 +272,7 @@ class IzoUserController extends Controller
     public function forgetPassword(Request $request)
     {
         //
-        
-        
-         
+ 
         if(!$request->session()->get('user')){
             if ($request->session()->get('startLogin')) {
                 // return redirect('/panel-account');
@@ -438,6 +442,61 @@ class IzoUserController extends Controller
             $new_location = $businessUtil->addLocation($business->id, $business_location);
             # .......................................create new permission with the new location
             Permission::create(['name' => 'location.' . $new_location->id ]);
+            $id_invoice        = InvoiceLayout::where("business_id",$business->id)->first();
+            $id_invoice_schema = InvoiceScheme::where("business_id",$business->id)->first();
+            Pattern::create(
+                [
+                    "code"          => "0001",
+                    "business_id"   => $business->id,
+                    "location_id"   => $new_location->id,
+                    "name"          => "Default",
+                    "invoice_scheme"=> $id_invoice->id,
+                    "invoice_layout"=> $id_invoice_schema->id,
+                    "pos"           => "Default",
+                    "user_id"       => $user->id,
+                    "default_p"     => 1 
+                ],$business->id,$user->id
+            );
+            $pattern = Pattern::first();
+
+            SystemAccount::create(
+                [ 
+                    "business_id"        => $business->id,
+                    "pattern_id"         => $pattern->id,
+                    "purchase"           => 7,
+                    "purchase_tax"       => 16,
+                    "sale"               => 11,
+                    "sale_tax"           => 17,
+                    "cheque_debit"       => 4,
+                    "cheque_collection"  => 2, 
+                    "journal_expense_tax"=> 15,
+                    "sale_return"        => 12, 
+                    "sale_discount"      => 13, 
+                    "purchase_return"    => 8, 
+                    "purchase_discount"  => 9    
+                ]
+            );
+            Warehouse::create(
+                [
+                    "name"          => "Main",
+                    "mainStore"     => "",
+                    "business_id"   => $business->id,
+                    "status"        => 0,
+                    "description"   => "Main",
+                    "parent_id"     => null, 
+                ]
+            );
+            $warehouse = Warehouse::first();          
+            Warehouse::create(
+                [
+                    "name"          => "Main Store",
+                    "mainStore"     => "",
+                    "business_id"   => $business->id,
+                    "status"        => 0,
+                    "description"   => "Main Store",
+                    "parent_id"     => $warehouse->id, 
+                ]
+            );
             # .......................................Create Currency 
             $currency_details = $request->only(["currency_id"]);
             $exchange_rate    = \App\Models\ExchangeRate::where("currency_id",$currency_details)->where("source",1)->first();
@@ -506,8 +565,19 @@ class IzoUserController extends Controller
                 "success" => 1,
                 "message" => __('Register Successfully'),
             ];
+            $login_user = 1; 
+            session()->put(['login_user',$login_user]); 
+            $domain_url  = request()->session()->get('user_main.domain_url'); 
+            $database    = request()->session()->get('user_main.database'); 
+            $domain      = request()->session()->get('user_main.domain');
+            $domain_name = "https://".session()->get('user_main.domain').".izocloud.com";
+            $domain_name = $domain_name??"";
+            $text        = "email=".request()->session()->get("login_info.email")."_##password=".request()->session()->get("login_info.password")."_##logoutOther=".request()->session()->get("login_info.logoutOther")."_##administrator=1_##database=".$database."_##adminDatabaseUser=".$database."_##domain=".$domain."_##domain_url=".$domain_url."_##redirect=admin";
+            $text        =  Crypt::encryptString($text);
+            $url         = $domain_name."/login-account-redirect"."/".$text;    
+            return redirect($url);
             // session()->put('log_out_back','logout');
-            return redirect("/home")->with("status",$outPut);
+            // return redirect("/home")->with("status",$outPut);
             // return view('izo_user.confirm')->with(compact(['login_user']));
         }catch(Exception $e){
             DB::rollBack();
@@ -779,6 +849,7 @@ class IzoUserController extends Controller
         #......................................................................
         #..................................................REDIRECT TO LOGIN...
            
+         
             if(session()->has('startLogin')){
                 if($subdomain == ""){
                     $login_user = (request()->session()->get('login_user'))?request()->session()->get('login_user'):null; 
@@ -1006,13 +1077,17 @@ class IzoUserController extends Controller
     protected function login(Request $request)
     {
         // 
-
-       
         #.....................................every time from the main
         Config::set('database.connections.mysql.database', "izocloud");
         DB::purge('mysql');
         DB::reconnect('mysql');
         #....................................
+        if(!isset($request->redirect)){
+            $request->validate([
+                'g-recaptcha-response' => ['required', new Captcha], 
+                // Other validation rules...
+            ] );
+        }
         $data                = $request->only(['email','password','domain_name_sub','logout_other']);
         $login = IzoUser::loginUser($data);
         
@@ -1045,7 +1120,7 @@ class IzoUserController extends Controller
 
         }
         $subdomain     = $subdomain;
-         
+        
         if(!isset($request->redirect)){
             if($subdomain == "" && $data['email'] == "info@izo.ae"){
             // if(request()->session()->get('adminLogin')){
@@ -1099,6 +1174,7 @@ class IzoUserController extends Controller
         //     //  return parent::login($request);
         //     return $this->traitLogin($request,$database_name);
         // }
+
         if($subdomain == ""){
             $payload =  [
                 "value1" => Hash::make("success"),
@@ -1108,7 +1184,7 @@ class IzoUserController extends Controller
             $database_info["database"] = $login['database'];
             $database_info["admin"]    = $login['admin'];
             $database_name             = $database_info ;
-            // dd($subdomain != $login['domain']);
+            
             if($subdomain == ""){
                 $domain_name =  $login['domain'];
                 $payload2 =  [
@@ -1132,6 +1208,7 @@ class IzoUserController extends Controller
                 } 
                 // dd($login,session()->all(),request()->session()->get('adminLogin'));
                 $login_user = 1;
+                
                 if(isset($request->redirect)){
                     if($request->redirect == "admin"){
                         return redirect($login['url'])->with('login_user',$login_user)->with('redirect_admin',$login);
@@ -1155,8 +1232,8 @@ class IzoUserController extends Controller
                 $login['domain']        = $request->info_domain;
             }
             
-            // dd(session()->all(),$login,request()->session()->get('adminLogin'));
-            if($subdomain != $login['domain']){
+             
+            if($subdomain != strtolower($login['domain'])){
                 // dd($login);
                 request()->session()->flush();
                 // $url = 
@@ -1186,7 +1263,7 @@ class IzoUserController extends Controller
                     return redirect($login['url'])->with(compact('domain_name'));
                 }
                 
-                  
+                
               
                 //  return parent::login($request);
                 return $this->traitLogin($request,$database_name);
@@ -1205,6 +1282,7 @@ class IzoUserController extends Controller
     public function traitLogin(Request $request,$databaseInfo=null)
     { 
         $this->validateLogin($request);
+       
         if($databaseInfo != null){
             $database = $databaseInfo['database'];
         }else{
@@ -1221,7 +1299,7 @@ class IzoUserController extends Controller
             $this->fireLockoutEvent($request);
             return $this->sendLockoutResponse($request);
         }
-         
+        
         if ($this->attemptLogin($request)) {
             $credentials = $request->only('email', 'password');
             \Auth::attempt($credentials);
@@ -1258,6 +1336,7 @@ class IzoUserController extends Controller
         // $domain_url  = request()->session()->get('user_main.domain_url') ;
         // $final_url   = "http://".$domain_url.":8000/home";
         // return redirect()->away($final_url);
+        
         
         #...............................................
         if($user->user_account_id != null || $user->user_visa_account_id != null){

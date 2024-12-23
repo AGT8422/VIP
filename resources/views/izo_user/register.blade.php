@@ -149,7 +149,8 @@
             }
             .izo-form-input-mobile{
             font-family:Georgia, 'Times New Roman', Times, serif;   
-                width: 100%;
+            font-family: arial;    
+            width: 100%;
                 border-radius: 0px;
                 padding: 10px;
                 margin: 10px auto ;
@@ -469,6 +470,7 @@
             }
             .izo-form-input-mobile{
                 font-family:Georgia, 'Times New Roman', Times, serif;   
+                font-family: arial;
                 width: 100%;
                 border-radius: 0px;
                 padding: 10px;
@@ -859,6 +861,7 @@
                 }
                 .izo-form-input-mobile{
                     font-family:Georgia, 'Times New Roman', Times, serif;   
+                    font-family: arial;
                     width: 100%;
                     border-radius: 0px;
                     padding: 10px;
@@ -1128,6 +1131,7 @@
                 }
                 .izo-form-input-mobile{
                     font-family:Georgia, 'Times New Roman', Times, serif;   
+                    font-family: arial;
                     width: 100%;
                     border-radius: 0px;
                     padding: 10px;
@@ -1399,6 +1403,7 @@
                 }
                 .izo-form-input-mobile{
                     font-family:Georgia, 'Times New Roman', Times, serif;   
+                    font-family: arial;
                     width: 100%;
                     border-radius: 0px;
                     padding: 10px;
@@ -1675,6 +1680,7 @@
                 }
                 .izo-form-input-mobile{
                     font-family:Georgia, 'Times New Roman', Times, serif;   
+                    font-family: arial;
                     width: 100%;
                     border-radius: 0px;
                     padding: 10px;
@@ -2005,7 +2011,7 @@
                                             </div>
                                         </div>
                                         {{-- {!! Form::select('mobile_code',$list_of_code,null,['class' => 'izo-form-input-mobile',  'id'=>'mobile_code' , 'style' => 'font-size:13px;position:absolute;right:'.$right_mobile.' !important;left:'.$left_mobile.' !important;top:5px;width:20%'  ]) !!} --}}
-                                        {!! Form::number('mobile',null,['class' => 'izo-form-input',  'id'=>'mobile' ,'data-max' => "9" , 'min'=>0,'max'=>9999999999 ,'style' => 'padding-left:'.$padding_left.';padding-right:'.$padding_right.';width:100%' , 'placeholder' => __('00 0000 000')  ]) !!}
+                                        {!! Form::number('mobile',null,['class' => 'izo-form-input',  'id'=>'mobile' ,'data-max' => "9" , 'min'=>0,'max'=>9999999999 ,'style' => 'font-family:arial !important;padding-left:'.$padding_left.';padding-right:'.$padding_right.';width:100%' , 'placeholder' => __('00 0000 000')  ]) !!}
                                     </div>
                                     <span class="error" id="mobileError"></span>
                                     @if ($errors->has('mobile'))

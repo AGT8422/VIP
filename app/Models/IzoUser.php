@@ -45,7 +45,7 @@ class IzoUser extends Model
             $register->ip                      = $ip;
             $register->domain_name             = $data['domain_name'];
             $register->domain_url              = $data['domain_name'].".izocloud.com";
-            $register->seats                   = 3; # number of user allowed
+            $register->seats                   = 2; # number of user allowed
             $register->subscribe_date          = \Carbon::now();
             $register->subscribe_expire_date   = \Carbon::now()->addWeeks(3);
             $register->not_active	           = 0;
@@ -162,7 +162,7 @@ class IzoUser extends Model
                  
                 return   $outPut = [
                     'status'          => true,
-                    'url'             => ($user->admin_user == 1)?'/panel-account':'/home',
+                    'url'             => ($user->admin_user == 1)?'/panel-account':'/panel-account',
                     'database'        => $user->database_name,
                     'database_user'   => $user->database_user,
                     'domain'          => $user->domain_name,

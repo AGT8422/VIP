@@ -2,143 +2,163 @@
 
 @section('title', __( 'user.add_user' ))
 
+
+@section('special_css')
+<style>
+    .pas {
+      position: relative;
+    }
+    .toggle-password {
+        position: absolute;
+        top: 40px;
+        right: 20px;
+        z-index:10000;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+
+    /* Optional: Style for the eye icon */
+    .eye-icon::before {
+        content: '\1F441'; /* Unicode character for an eye symbol */
+        font-size: 1.5em;
+    }
+</style>
+@endsection
 @section('content')
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>@lang( 'user.add_user' )</h1>
+  @php $mainUrl = '/users';  @endphp  
+  <h5><i><b><a href="{{\URL::to($mainUrl)}}">{{ "   User Management  >  " }}</a></b>{{ __("user.add_user")   }} <b> {{"   "}} </b></i></h5>
+
 </section>
 
 <!-- Main content -->
 <section class="content">
 {!! Form::open(['url' => action('ManageUserController@store'), 'method' => 'post', 'id' => 'user_add_form' ]) !!}
   <div class="row">
-    <div class="col-md-12">
-  @component('components.widget')
-      <div class="col-md-2">
-        <div class="form-group">
-          {!! Form::label('surname', __( 'business.prefix' ) . ': *') !!}
-            {!! Form::text('surname', null, ['class' => 'form-control', "id"=>"surname",'required', 'placeholder' => __( 'business.prefix_placeholder' ) ]); !!}
-        </div>
-      </div>
-      <div class="col-md-5">
-        <div class="form-group">
-          {!! Form::label('first_name', __( 'business.first_name' ) . ':*') !!}
-            {!! Form::text('first_name', null, ['class' => 'form-control',"id"=>"first_name", 'required', 'placeholder' => __( 'business.first_name' ) ]); !!}
-        </div>
-      </div>
-      
-      <div class="col-md-5">
-        <div class="form-group">
-          {!! Form::label('last_name', __( 'business.last_name' ) . ':') !!}
-            {!! Form::text('last_name', null, ['class' => 'form-control', "id"=>"last_name",'placeholder' => __( 'business.last_name' ) ]); !!}
-        </div>
-      </div>
-      <div class="clearfix"></div>
-      <div class="col-md-4">
-        <div class="form-group">
-           
-            <div class="form-group">
-              {!! Form::label('user_account_id', __( 'lang_v1.account' ) . ': ') !!}
-                {!! Form::select('user_account_id', $accounts,null, ['class' => 'form-control select2',  "id"=>"user_account_id", 'placeholder' => __( 'messages.please_select' ) ]); !!}
-            </div>
-            
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          {!! Form::label('email', __( 'business.email' ) . ': ') !!}
-            {!! Form::text('email', null, ['class' => 'form-control',  "id"=>"email", 'placeholder' => __( 'business.email' ) ]); !!}
-        </div>
-      </div>
-
-       
-      @if(count($allLocations) >= 1)
-      @php 
-          $default_location =  array_key_first($allLocations);
-          $search_disable = false; 
-        @endphp
-      @else
-        @php $default_location = null;
-        $search_disable = true;
-        @endphp
-      @endif
-    <div class="col-sm-4 hide">
-      <div class="form-group">
-        {!! Form::label('location', __('Location') . ':') !!} @show_tooltip(__('lang_v1.product_location_help'))
-        {!! Form::select('location', $allLocations ,$default_location, ['class' => 'form-control select2' ,  'placeholder' => __( 'messages.please_select' ), 'required' ,'id' => 'location']); !!}
-      </div>
-    </div>
-
-      <div class="col-md-4">
-        <div class="form-group">
-          <div class="checkbox">
-            <br/>
-            <label>
-                 {!! Form::checkbox('is_active', 'active', true, ['id'=>'is_active' , "class" => 'input-icheck status']); !!} {{ __('lang_v1.status_for_user') }}
-            </label>
-            @show_tooltip(__('lang_v1.tooltip_enable_user_active'))
-          </div>
-        </div>
-      </div>
-      
-  @endcomponent
-
-  </div>
+   
   <div class="col-md-12">
     @component('components.widget', ['title' => __('lang_v1.roles_and_permissions')])
-      <div class="col-md-4">
-        <div class="form-group">
-            <div class="checkbox">
-              <label>
-                {!! Form::checkbox('allow_login', 1, true, 
-                [ 'class' => 'input-icheck', 'id' => 'allow_login']); !!} {{ __( 'lang_v1.allow_login' ) }}
-              </label>
+        <div class="col-md-12">
+          <div class="col-md-6 text-center">
+            <div class="form-group">
+                <div class="checkbox pull-left">
+                  <label>
+                    {!! Form::checkbox('allow_login', 1, true, 
+                    [ 'class' => 'input-icheck', 'id' => 'allow_login']); !!} {{ __( 'lang_v1.allow_login' ) }}
+                  </label>
+                </div>
+                <div class="checkbox pull-right" style="position: relative;top:10px">
+                    <label>
+                        {!! Form::checkbox('is_active', 'active', true, ['id'=>'is_active' , "class" => 'input-icheck status']); !!} {{ __('lang_v1.status_for_user') }}
+                    </label>
+                    @show_tooltip(__('lang_v1.tooltip_enable_user_active'))
+                </div>
             </div>
+          </div>
         </div>
-      </div>
-      <div class="clearfix"></div>
-      <div class="user_auth_fields">
-      <div class="col-md-4">
-        <div class="form-group">
-          {!! Form::label('username', __( 'business.username' ) . ':') !!}
-          @if(!empty($username_ext))
-            <div class="input-group">
-              {!! Form::text('username', null, ['id'=>'username','class' => 'form-control', 'placeholder' => __( 'business.username' ) ]); !!}
-              <span class="input-group-addon">{{$username_ext}}</span>
+        <div class="clearfix"></div>
+        <div class="col-md-3">
+          <div class="form-group">
+            {!! Form::label('surname', __( 'business.prefix' ) . ': *') !!}
+              {!! Form::text('surname', null, ['class' => 'form-control', "id"=>"surname",'required', 'placeholder' => __( 'business.prefix_placeholder' ) ]); !!}
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            {!! Form::label('first_name', __( 'business.first_name' ) . ':*') !!}
+              {!! Form::text('first_name', null, ['class' => 'form-control',"id"=>"first_name", 'required', 'placeholder' => __( 'business.first_name' ) ]); !!}
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            {!! Form::label('last_name', __( 'business.last_name' ) . ':') !!}
+              {!! Form::text('last_name', null, ['class' => 'form-control', "id"=>"last_name",'placeholder' => __( 'business.last_name' ) ]); !!}
+          </div>
+        </div>
+        <div class="col-md-6 hide">
+          <div class="form-group">
+            {!! Form::label('email', __( 'business.email' ) . ': ') !!}
+            {!! Form::text('email', null, ['class' => 'form-control',  "id"=>"email", 'placeholder' => __( 'business.email' ) ]); !!}
+          </div>
+        </div>
+
+        @if(count($allLocations) >= 1)
+        @php 
+            $default_location =  array_key_first($allLocations);
+            $search_disable = false; 
+          @endphp
+        @else
+          @php $default_location = null;
+          $search_disable = true;
+          @endphp
+        @endif
+        <div class="col-sm-4 hide">
+          <div class="form-group">
+            {!! Form::label('location', __('Location') . ':') !!} @show_tooltip(__('lang_v1.product_location_help'))
+            {!! Form::select('location', $allLocations ,$default_location, ['class' => 'form-control select2' ,  'placeholder' => __( 'messages.please_select' ), 'required' ,'id' => 'location']); !!}
+          </div>
+        </div>  
+        <div class="user_auth_fields">
+        <div class="col-md-3">
+          <div class="form-group">
+            {!! Form::label('username', __( 'business.email' ) . ':*') !!}
+            @if(!empty($username_ext))
+              <div class="input-group">
+                {!! Form::text('username', null, ['id'=>'username','class' => 'form-control' ,'required', 'placeholder' => __( 'business.email' ) ]); !!}
+                <span class="input-group-addon">{{$username_ext}}</span>
+              </div>
+              {{-- <p class="help-block" id="show_username"></p> --}}
+            @else
+            {!! Form::text('username', null, ['id'=>'username','class' => 'form-control', 'placeholder' => __( 'business.email' ) ]); !!}
+            @endif
+            {{-- <p class="help-block">@lang('lang_v1.username_help')</p> --}}
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group col-md-3">
+          {!! Form::label('contact_number', __( 'lang_v1.mobile_number' ) . ': *') !!}
+          {!! Form::text('contact_number', !empty($user->contact_number) ? $user->contact_number : null, ['class' => 'form-control','required', 'placeholder' => __( 'lang_v1.mobile_number') ]); !!}
+        </div>
+        
+        <div class="col-md-3">
+          <div class="form-group">
+            {!! Form::label('role', __( 'user.role' ) . ':*') !!} @show_tooltip(__('lang_v1.admin_role_location_permission_help'))
+              {!! Form::select('role', $roles, null, ['id'=>'role','class' => 'form-control select2']); !!}
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group pas">
+            {!! Form::label('password', __( 'business.password' ) . ':*') !!}
+              {!! Form::password('password', ['id'=>'password','class' => 'form-control', 'required', 'placeholder' => __( 'business.password' ) ]); !!}
             </div>
-            <p class="help-block" id="show_username"></p>
-          @else
-              {!! Form::text('username', null, ['id'=>'username','class' => 'form-control', 'placeholder' => __( 'business.username' ) ]); !!}
-          @endif
-          <p class="help-block">@lang('lang_v1.username_help')</p>
+            <span class="toggle-password">
+                <i class="eye-icon" id="togglePassword"></i>
+            </span>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          {!! Form::label('password', __( 'business.password' ) . ':*') !!}
-            {!! Form::password('password', ['id'=>'password','class' => 'form-control', 'required', 'placeholder' => __( 'business.password' ) ]); !!}
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          {!! Form::label('confirm_password', __( 'business.confirm_password' ) . ':*') !!}
-            {!! Form::password('confirm_password', ['id'=>'confirm_password','class' => 'form-control', 'required', 'placeholder' => __( 'business.confirm_password' ) ]); !!}
-        </div>
-      </div>
-    </div>
-      <div class="clearfix"></div>
-      <div class="col-md-6">
-        <div class="form-group">
-          {!! Form::label('role', __( 'user.role' ) . ':*') !!} @show_tooltip(__('lang_v1.admin_role_location_permission_help'))
-            {!! Form::select('role', $roles, null, ['id'=>'role','class' => 'form-control select2']); !!}
+        <div class="col-md-3">
+          <div class="form-group">
+            {!! Form::label('confirm_password', __( 'business.confirm_password' ) . ':*') !!}
+              {!! Form::password('confirm_password', ['id'=>'confirm_password','class' => 'form-control','id'=>'confirm_password', 'required', 'placeholder' => __( 'business.confirm_password' ) ]); !!}
+          </div>
         </div>
       </div>
       <div class="clearfix"></div>
       <div class="col-md-3">
+        <div class="form-group">
+            <div class="form-group">
+              {!! Form::label('user_account_id', __( 'lang_v1.account' ) . ': ') !!}
+                {!! Form::select('user_account_id', $accounts,null, ['class' => 'form-control select2',  "id"=>"user_account_id", 'placeholder' => __( 'messages.please_select' ) ]); !!}
+            </div>
+        </div>
+      </div>
+      <div class="col-md-3 hide">
           <h4>@lang( 'role.access_locations' ) @show_tooltip(__('tooltip.access_locations_permission'))</h4>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-9 hide">
           <div class="col-md-12">
             <div class="checkbox">
                 <label>
@@ -297,6 +317,24 @@
   @stop
 @section('javascript')
 <script type="text/javascript">
+
+document.addEventListener('DOMContentLoaded', function () {
+          const togglePassword = document.querySelector('#togglePassword');
+          const password = document.querySelector('#password');
+          const confirm_password = document.querySelector('#confirm_password');
+
+          togglePassword.addEventListener('click', function () {
+              // Toggle the type attribute using getAttribute() and setAttribute()
+              const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+              const confirm_type = confirm_password.getAttribute('type') === 'password' ? 'text' : 'password';
+              password.setAttribute('type', type);
+              confirm_password.setAttribute('type', confirm_type);
+
+              // Toggle the eye icon
+              this.classList.toggle('eye-icon--active');
+          });
+        });
+
 function register_user(){
         var surname  = $("#surname").val();
         var first_name = $("#first_name").val();
@@ -363,62 +401,99 @@ function register_user(){
 
   
 
-
-  $('form#user_add_form').validate({
-                rules: {
-                    first_name: {
-                        required: true,
-                    },
-                    email: {
-                        email: true,
-                        remote: {
-                            url: "/business/register/check-email",
-                            type: "post",
-                            data: {
-                                email: function() {
-                                    return $( "#email" ).val();
-                                }
-                            }
+  $.validator.addMethod("noPlusFirst", function(value, element) {
+            return this.optional(element) || value.charAt(0) === '+';
+        }, "Invalid Mobile Number Should Start with (+)");
+        
+    $('form#user_add_form').validate({
+        rules: {
+            first_name: {
+                required: true,
+            },
+            contact_number: {
+                noPlusFirst: true,
+                required: true,
+                minlength: 6,
+                remote: {
+                    url: "/business/register/check-mobile",
+                    type: "post",
+                    data: {
+                      contact_number: function() {
+                            return $( "#contact_number" ).val();
                         }
-                    },
-                    password: {
-                        required: true,
-                        minlength: 5
-                    },
-                    confirm_password: {
-                        equalTo: "#password"
-                    },
-                    username: {
-                        minlength: 3,
-                        remote: {
-                            url: "/business/register/check-username",
-                            type: "post",
-                            data: {
-                                username: function() {
-                                    return $( "#username" ).val();
-                                },
-                                @if(!empty($username_ext))
-                                  username_ext: "{{$username_ext}}"
-                                @endif
-                            }
-                        }
-                    }
-                },
-                messages: {
-                    password: {
-                        minlength: 'Password should be minimum 3 characters',
-                    },
-                    confirm_password: {
-                        equalTo: 'Should be same as password'
-                    },
-                    username: {
-                        remote: 'Invalid username or User already exist'
-                    },
-                    email: {
-                        remote: '{{ __("validation.unique", ["attribute" => __("business.email")]) }}'
                     }
                 }
-            });
+            },
+            email: {
+                email: true,
+                remote: {
+                    url: "/business/register/check-email",
+                    type: "post",
+                    data: {
+                        email: function() {
+                            return $( "#email" ).val();
+                        }
+                    }
+                }
+            },
+            password: {
+                required: true,
+                minlength: 6,
+                remote: {
+                    url: "/business/register/check-password",
+                    type: "post",
+                    data: {
+                        password: function() {
+                            return $( "#password" ).val();
+                        },
+                    }
+                }
+            },
+            confirm_password: {
+                equalTo: "#password"
+            },
+            username: {
+                minlength: 3,
+                remote: {
+                    url: "/business/register/check-username",
+                    type: "post",
+                    data: {
+                        username: function() {
+                            return $( "#username" ).val();
+                        },
+                        @if(!empty($username_ext))
+                          username_ext: "{{$username_ext}}"
+                        @endif
+                    }
+                }
+            }
+        },
+        messages: {
+            contact_number: {
+                minlength: 'Should be at least 6 digits',
+                remote: 'Mobile Number Already Exist',
+                noPlusFirst:'Invalid Mobile Number Should Start with (+)',
+            },
+            password: {
+                minlength: '{!!__("izo.desc_password")!!}',
+                remote: '{!!__("izo.desc_password")!!}',
+                
+            },
+            confirm_password: {
+                equalTo: 'Should Be Same As Password'
+            },
+            username: {
+                remote: 'Invalid Email Or User Already Exist'
+            },
+            email: {
+                remote: '{{ __("validation.unique", ["attribute" => __("business.email")]) }}'
+            }
+        }
+    });
+  
+  $('#username').on('input', function(){
+    $("#email").val($(this).val());
+  });
   $('#username').change( function(){
     if($('#show_username').length > 0){
       if($(this).val().trim() != ''){

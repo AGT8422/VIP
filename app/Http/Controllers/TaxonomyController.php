@@ -74,7 +74,7 @@ class TaxonomyController extends Controller
         }
 
         $module_category_data = $this->moduleUtil->getTaxonomyData($category_type);
-        $parents  =  Category::where('business_id',$business_id)->where('parent_id',0)->get();
+        $parents  =  Category::where('business_id',$business_id)->where('parent_id',0)->orderBy("short_code","asc")->get();
         return view('taxonomy.index')->with(compact('module_category_data', 'module_category_data','parents'));
     }
 

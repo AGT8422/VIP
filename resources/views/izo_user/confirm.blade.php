@@ -3224,7 +3224,7 @@
 @section('content')
    
     @php 
-            
+             
             if(request()->session()->get('redirect_admin')){
                 $domain_url  = request()->session()->get('redirect_admin.domain_url'); 
                 $database    = request()->session()->get('redirect_admin.database'); 

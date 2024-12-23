@@ -32,7 +32,7 @@ return [
     'all_users' => 'All users',
     'name' =>'Name',
     'role' => 'Role',
-    'add_user' => 'Add user',
+    'add_user' => 'Add User',
     'user_added' => 'User added successfully',
     'role_is_default' => 'You can not modify this role',
     'edit_user' => 'Edit user',

@@ -383,7 +383,7 @@ class ImportProductsController extends Controller
                         }
 
                         //Calculate Selling price
-                        $selling_price = !empty(trim($value[19])) ? trim($value[21]) : 0 ;
+                        $selling_price = !empty(trim($value[21])) ? trim($value[21]) : 0 ;
 
                         //Calculate product prices
                         $product_prices = $this->calculateVariationPrices($dpp_exc_tax, $dpp_inc_tax, $selling_price, $tax_amount, $tax_type, $profit_margin);

@@ -52,27 +52,34 @@
                                     {!! Form::select('product_name', $list_product , null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_name', 'placeholder' => __('lang_v1.all')]); !!}
                                 </div>
                             </div>
-                            <div class="col-md-4" >
-                                <div class="form-group">
-                                    {!! Form::label('type', __('product.product_type') . ':') !!}
-                                    {!! Form::select('type', ['single' => __('lang_v1.single'), 'variable' => __('lang_v1.variable'), 'combo' => __('lang_v1.combo')], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_list_filter_type', 'placeholder' => __('lang_v1.all')]); !!}
-                                </div>
-                            </div>
-                            <div class="col-md-4" id="location_filter">
-                                    <div class="form-group">
-                                        {!! Form::label('location_id',  __('purchase.business_location') . ':') !!}
-                                        {!! Form::select('location_id', $business_locations, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
-                                    </div>
-                                </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     {!! Form::label('category_id', __('product.category') . ':') !!}
                                     {!! Form::select('category_id', $categories, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_list_filter_category_id', 'placeholder' => __('lang_v1.all')]); !!}
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 hide" id="location_filter">
                                 <div class="form-group">
-                                    {!! Form::label('sub_category_id', __('product.sub_category') . ':') !!}
+                                    {!! Form::label('location_id',  __('purchase.business_location') . ':') !!}
+                                    {!! Form::select('location_id', $business_locations, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4" >
+                                <div class="form-group">
+                                    {!! Form::label('type', __('product.product_type') . ':') !!}
+                                    {!! Form::select('type', ['single' => __('lang_v1.single'), 'variable' => __('lang_v1.variable'), 'combo' => __('lang_v1.combo')], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_list_filter_type', 'placeholder' => __('lang_v1.all')]); !!}
+                                </div>
+                            </div>
+                            <div class="col-md-4" >
+                                <div class="form-group">
+                                    {!! Form::label('product_sku',__('product.sku'). ':') !!}
+                                    {!! Form::select('product_sku', $products_code, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_list_filter_product_sku', 'placeholder' => __('lang_v1.all')]); !!}
+                                </div>
+                            </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        {!! Form::label('sub_category_id', __('product.sub_category') . ':') !!}
                                     {!! Form::select('sub_category_id', $sub_cat, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_list_filter_sub_category_id', 'placeholder' => __('lang_v1.all')]); !!}
                                 </div>
                             </div>
@@ -109,7 +116,7 @@
                             <div class="col-md-4" >
                                 <div class="form-group">
                                     {!! Form::label('image',__('report.current_stock'). ':') !!}
-                                    {!! Form::select('current_stock', ['zero' =>'Zero', 'gtzero' => 'اكبر من الصفر','lszero' => 'اقل من الصفر'], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_list_filter_current_stock', 'placeholder' => __('lang_v1.all')]); !!}
+                                    {!! Form::select('current_stock', ['zero' =>__('izo.zero'), 'gtzero' => __('izo.more_than_zero') ,'lszero' => __('izo.less_than_zero')], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'product_list_filter_current_stock', 'placeholder' => __('lang_v1.all')]); !!}
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -264,6 +271,7 @@
                                 d.image_type=$("#product_list_filter_image").val();
                                 d.default_selling_price=$("#default_selling_price").val();
                                 d.product_name=$("#product_name").val();
+                                d.product_sku=$("#product_list_filter_product_sku").val();
                                 d.sub_category_id=$("#product_list_filter_sub_category_id").val();
 
 
@@ -289,7 +297,7 @@
                                 { data: 'image', name: 'products.image'  },
                                 { data: 'action', name: 'action'},
                                 { data: 'product', name: 'products.name'  },
-                                { data: 'product_locations', name: 'product_locations'  },
+                                { data: 'product_locations', name: 'product_locations' ,class:'hide' },
                                 @can('view_purchase_price')
                                     { data: 'purchase_price', name: 'max_purchase_price', searchable: false},
                                 @endcan
@@ -558,7 +566,7 @@
                     }
                 });
             });
-            $(document).on('change', '#product_name,#product_list_filter_sub_category_id,#default_selling_price,#product_list_filter_image,#product_list_filter_current_stock,#product_list_filter_current_stock,#product_list_filter_type, #product_list_filter_category_id, #product_list_filter_brand_id, #product_list_filter_unit_id, #product_list_filter_tax_id, #location_id, #active_state, #repair_model_id',
+            $(document).on('change', '#product_name,#product_list_filter_product_sku,#product_list_filter_sub_category_id,#default_selling_price,#product_list_filter_image,#product_list_filter_current_stock,#product_list_filter_current_stock,#product_list_filter_type, #product_list_filter_category_id, #product_list_filter_brand_id, #product_list_filter_unit_id, #product_list_filter_tax_id, #location_id, #active_state, #repair_model_id',
                 function() {
                     if ($("#product_list_tab").hasClass('active')) {
                         product_table.ajax.reload();

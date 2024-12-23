@@ -15,16 +15,16 @@ return [
     'exc_of_tax' => 'Exc. tax',
     'inc_of_tax' => 'Inc. tax',
     'profit_percent' => 'x Margin(%)',
-    'add_new_product' => 'Add new product',
+    'add_new_product' => 'Add New Product',
     'add_product_for_labels' => 'Add products to generate Labels',
     'product_type' => 'Product Type',
     'category' => 'Category',
-    'sub_category' => 'Sub category',
+    'sub_category' => 'Sub Category',
     'unit' => 'Unit',
     'brand' => 'Brand', 
     'tax' => 'Tax',
-    'sku' => 'Item Code',
-    "sku2" => "Item Code 2",
+    'sku' => 'Product Code',
+    "sku2" => "Product Code 2",
 
     'FirstTerm' => 'Add Opening Stock',
 
@@ -68,7 +68,7 @@ return [
     //...................
     "WareHouses" => "Quantities in warehouses",
     //................................ 19-12-2022
-    "active_state" => "Active state",  
+    "active_state" => "Active State",  
     "add_column" => "Add Column",  
     "add_row" => "Add Row",  
     "list_of_price" => "List Of Price",  

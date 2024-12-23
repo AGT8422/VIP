@@ -130,8 +130,8 @@
   @includeIf('essentials::layouts.partials.footer_part')
 @endif
         
-<script src="{{asset('assets/vendor/libs/apex-charts/apexcharts.js')}}"></script>
-<script src="{{asset('assets/js/dashboards-analytics.js')}}"></script>
+{{-- <script src="{{asset('assets/vendor/libs/apex-charts/apexcharts.js')}}"></script> --}}
+{{-- <script src="{{asset('assets/js/dashboards-analytics.js')}}"></script> --}}
 <script type="text/javascript">
     $(document).ready( function(){
         

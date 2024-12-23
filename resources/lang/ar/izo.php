@@ -131,7 +131,9 @@ return [
     'mobile_section'               => 'قسم المحمول',
     'react_section'                => 'قسم الواجهات',         
     'choose_website'               => 'اختر الدومين',         
-
+    'more_than_zero'               => 'أكبر من الصفر',
+    'less_than_zero'               => 'أقل من الصفر ',
+    'zero'                         => ' صفر',
 
 
 ];

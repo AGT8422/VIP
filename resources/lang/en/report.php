@@ -31,7 +31,7 @@ return [
     'contact' => 'Contact',
     'stock_report' => 'Inventory Report',
     'products' => 'Products',
-    'current_stock' => 'Current stock',
+    'current_stock' => 'Current Stock',
     'total_unit_sold' => 'Total unit sold',
     'tax_report' => 'Tax Report',
     'tax_report_msg' => 'Tax details for  the selected date range',

@@ -10,7 +10,7 @@
             <th >image</th> 
             <th>@lang('messages.action')</th>
             <th>@lang('sale.product')</th>
-            <th>@lang('purchase.business_location') @show_tooltip(__('lang_v1.product_business_location_tooltip'))</th>
+            <th class="hide">@lang('purchase.business_location') @show_tooltip(__('lang_v1.product_business_location_tooltip'))</th>
             @can('view_purchase_price')
                 @php
                     $colspan++;

@@ -193,14 +193,18 @@ class ProductController extends Controller
                 $products->where('products.type', $type);
             }
              $image_type = request()->get('image_type', null);
-            if ($image_type=='default') {
-                $products->whereNull('products.image');
+             if ($image_type=='default') {
+                 $products->whereNull('products.image');
             }
-             if ($image_type=='image') {
+            if ($image_type=='image') {
                 $products->where('products.image','!=', '');
             }
             if ($product_name != null) {
                 $products->where('products.id' , $product_name);
+            }
+            $sku_product = request()->get('product_sku', null);
+            if ($sku_product != null) {
+                $products->where('products.sku' , $sku_product);
             }
 
            $current_stock = request()->get('current_stock', null);
@@ -477,12 +481,14 @@ class ProductController extends Controller
         }
         
 
-        $rack_enabled = (request()->session()->get('business.enable_racks') || request()->session()->get('business.enable_row') || request()->session()->get('business.enable_position'));
-        $categories   = Category::forDropdown($business_id, 'product');
-        $brands       = Brands::forDropdown($business_id);
-        $units        = Unit::forDropdown($business_id);
-        $tax_dropdown = TaxRate::forBusinessDropdown($business_id, false);
-        $taxes        = $tax_dropdown['tax_rates'];
+        $rack_enabled   = (request()->session()->get('business.enable_racks') || request()->session()->get('business.enable_row') || request()->session()->get('business.enable_position'));
+        $categories     = Category::forDropdown($business_id, 'product');
+        $brands         = Brands::forDropdown($business_id);
+        $units          = Unit::forDropdown($business_id);
+        $tax_dropdown   = TaxRate::forBusinessDropdown($business_id, false);
+        $taxes          = $tax_dropdown['tax_rates'];
+        $products_code  = [];
+        $products_codes = Product::select('id','sku')->get();
 
         $business_locations = BusinessLocation::forDropdown($business_id);
         $business_locations->prepend(__('lang_v1.none'), 'none');
@@ -493,8 +499,11 @@ class ProductController extends Controller
             $show_manufacturing_data = false;
         }
 
+        foreach($products_codes as $key => $value){
+            $products_code[$value->sku] = $value->sku; 
+        }
         foreach($product_l as $key => $value){
-            $list_product[$value->id] = $value->name; 
+            $list_product[$value->id] = $value->name . " || " . $value->sku; 
         }
         foreach($sub_categories_ as $key => $value){
             $sub_cat[$value->id] = $value->name;
@@ -512,6 +521,7 @@ class ProductController extends Controller
                 'list_product',
                 'categories',
                 'sub_cat',
+                'products_code',
                 'currency_details',
                 'brands',
                 'units',

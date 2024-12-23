@@ -192,6 +192,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach($array_ids as $key => $i)
+                                           
                                             <tr class="account_type_{{$i->id}}">
                                                 <td>{{$i->code}}</td>
                                                 @if($i->parent_account_type_id == null)

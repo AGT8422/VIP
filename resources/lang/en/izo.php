@@ -130,7 +130,11 @@ return [
     'user_activation'              => 'User Activation',
     'mobile_section'               => 'Mobile Section',
     'react_section'                => 'React Section',      
-    'choose_website'               => 'Choose Domain',    
+    'choose_website'               => 'Choose Domain',
+    'more_than_zero'               => 'More Than Zero',
+    'less_than_zero'               => 'Less Than Zero',
+    'zero'                         => 'Zero',
+
 
 
 ];

@@ -659,6 +659,7 @@ class ImportProductsController extends Controller
                                 $variation_data['dsp_exc_tax'],
                                 $variation_data['dsp_inc_tax']
                             );
+                            
                             $arrayA = [
                                  0 => "Default Price",
                                  1 => "Whole Price",
@@ -671,16 +672,18 @@ class ImportProductsController extends Controller
                                  8 => "Custom Price 2",
                                  9 => "Custom Price 3"
                             ];
+                            
                             foreach($arrayA as $k => $va){
                                 $product_id_price                         =  new \App\Models\ProductPrice();
                                 $product_id_price->product_id             =  $product->id ;   
                                 $product_id_price->business_id            =  $business_id ;   
                                 $product_id_price->name                   =  $va;   
-                                $product_id_price->default_purchase_price =  ($k == 0)?$variation_data['dpp_exc_tax']:0;   
-                                $product_id_price->dpp_inc_tax            =  ($k == 0)?$variation_data['dpp_inc_tax']:0;   
-                                $product_id_price->profit_percent         =  ($k == 0)?$variation_data['profit_percent']:0;   
-                                $product_id_price->default_sell_price     =  ($k == 0)?$variation_data['dsp_exc_tax']:0;   
-                                $product_id_price->sell_price_inc_tax     =  ($k == 0)?$variation_data['dsp_inc_tax']:0;   
+                                $product_id_price->date                   =  \Carbon::now();   
+                                $product_id_price->default_purchase_price =  ($k == 0)?$this->productUtil->num_uf($variation_data['dpp_exc_tax']):0;   
+                                $product_id_price->dpp_inc_tax            =  ($k == 0)?$this->productUtil->num_uf($variation_data['dpp_inc_tax']):0;   
+                                $product_id_price->profit_percent         =  ($k == 0)?$this->productUtil->num_uf($variation_data['profit_percent']):0;   
+                                $product_id_price->default_sell_price     =  ($k == 0)?$this->productUtil->num_uf($variation_data['dsp_exc_tax']):0;   
+                                $product_id_price->sell_price_inc_tax     =  ($k == 0)?$this->productUtil->num_uf($variation_data['dsp_inc_tax']):0;   
                                 $product_id_price->number_of_default      =  $k ;     
                                 $product_id_price->unit_id                =  $product->unit_id ;
                                 $product_id_price->save();

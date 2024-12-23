@@ -29,7 +29,7 @@
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="icon" type="image/x-icon" href="{{ asset('/public/uploads/POS.ico') }}">
-        <link rel="stylesheet" href="{{asset('assets/vendor/libs/apex-charts/apex-charts.css')}}">
+        {{-- <link rel="stylesheet" href="{{asset('assets/vendor/libs/apex-charts/apex-charts.css')}}"> --}}
 
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -212,14 +212,14 @@
                 // site using the default scope.
                 navigator.serviceWorker.register("/sw.js").then(
                 (registration) => {
-                    console.log("Service worker registration succeeded:", registration);
+                    // console.log("Service worker registration succeeded:", registration);
                 },
                 (error) => {
-                    console.error(`Service worker registration failed: ${error}`);
+                    // console.error(`Service worker registration failed: ${error}`);
                 },
                 );
             } else {
-                console.error("Service workers are not supported.");
+                // console.error("Service workers are not supported.");
             }
         </script>
     </body>

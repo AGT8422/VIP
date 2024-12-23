@@ -1415,14 +1415,14 @@
             // site using the default scope.
             navigator.serviceWorker.register("/sw.js").then(
             (registration) => {
-                console.log("Service worker registration succeeded:", registration);
+                // console.log("Service worker registration succeeded:", registration);
             },
             (error) => {
-                console.error(`Service worker registration failed: ${error}`);
+                // console.error(`Service worker registration failed: ${error}`);
             },
             );
         } else {
-            console.error("Service workers are not supported.");
+            // console.error("Service workers are not supported.");
         }
         </script>
     </body>

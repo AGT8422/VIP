@@ -58,14 +58,15 @@ class Util
     public function num_f($input_number, $add_symbol = false, $business_details = null, $is_quantity = false)
     {
         $thousand_separator = !empty($business_details) ? $business_details->thousand_separator : session('currency')['thousand_separator'];
-        $decimal_separator = !empty($business_details) ? $business_details->decimal_separator : session('currency')['decimal_separator'];
-
+        $decimal_separator  = !empty($business_details) ? $business_details->decimal_separator : session('currency')['decimal_separator'];
         $currency_precision = config('constants.currency_precision', 2);
+        
 
         if ($is_quantity) {
             $currency_precision = config('constants.quantity_precision', 2);
         }
-
+         
+        
         $formatted = number_format($input_number, $currency_precision, $decimal_separator, $thousand_separator);
 
         if ($add_symbol) {

@@ -256,7 +256,8 @@ class AccountController extends Controller
                 $account                =  \App\AccountType::find($check);
                 $array_ids[$item->id]   =  $item ;
                 $check                  =  $account->parent_account_type_id;
-            }   
+               
+            } 
          }
            
         //.......................eb 27-12-2022

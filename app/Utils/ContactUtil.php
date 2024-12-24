@@ -76,7 +76,7 @@ class ContactUtil extends Util
     {
         $contact = Contact::where('contacts.id', $contact_id)
                     ->where('contacts.business_id', $business_id)
-                    ->join('transactions AS t', 'contacts.id', '=', 't.contact_id')
+                    ->leftJoin('transactions AS t', 'contacts.id', '=', 't.contact_id')
                     ->with(['business']) 
                     ->select(
                         DB::raw("SUM(IF(t.type = 'purchase', final_total, 0)) as total_purchase"),

@@ -26,6 +26,14 @@
 	* Pattern direction
 	* http://ignitersworld.com/lab/patternLock.html
 	*/
+	.font_text{
+		font-family:Georgia, 'Times New Roman', Times, serif !important;
+
+	}
+	.font_number{
+		font-family: arial !important;
+	}
+
 	.loading{
                 position: fixed;
                 left: 0px;
@@ -186,6 +194,13 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #ec6608;
       }
+	  .box-title{
+		font-family:Georgia, 'Times New Roman', Times, serif !important;
+	}
+	a,b{
+		font-family:Georgia, 'Times New Roman', Times, serif !important;
+		
+	}
 </style>
 @if(!empty($__system_settings['additional_css']))
     {!! $__system_settings['additional_css'] !!}

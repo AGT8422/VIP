@@ -4,7 +4,7 @@
 @section('content')
 
 <!-- Main content -->
-<section class="content no-print">
+<section class="content no-print font_text">
     <!-- Page level currency setting -->
 	<input type="hidden" id="p_code" value="{{$currency_details->code}}">
 	<input type="hidden" id="p_symbol" value="{{$currency_details->symbol}}">
@@ -12,9 +12,9 @@
 	<input type="hidden" id="p_decimal" value="{{$currency_details->decimal_separator}}">
     <div class="row no-print">
         <div class="col-md-4">
-            <h3>@lang('contact.view_contact')</h3>
+            <h3 class="font_text">@lang('contact.view_contact')</h3>
             @php $account = \App\Account::where("contact_id",$id)->first();  @endphp 
-            <strong><a href="/account/account/{{$account->id}}"> :: :: {{($contact->name)?$contact->name:""}} :: ::</a></strong>
+            <strong><a href="/account/account/{{$account->id}}"> :: :: {{($account->name)?$account->name:""}} :: ::</a></strong>
         </div>
         <div class="col-md-4 col-xs-12 mt-15 pull-right">
             {!! Form::select('contact_id', $contact_dropdown, $id , ['class' => 'form-control select2', 'id' => 'contact_id']); !!}

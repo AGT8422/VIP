@@ -10,12 +10,12 @@
 @endif
 @section('content')
 <!-- Content Header (Page header) -->
-<section class="content-header">
-    <h1> <b>@lang('lang_v1.'.$type.'s')</b>
-        <small>@lang( 'contact.manage_your_contact', ['contacts' =>  __('lang_v1.'.$type.'s') ])</small>
+<section class="content-header font_text">
+    <h1 class="font_text"> <b>@lang('lang_v1.'.$type.'s')</b>
+        <small class="font_text">@lang( 'contact.manage_your_contact', ['contacts' =>  __('lang_v1.'.$type.'s') ])</small>
     </h1>
     @php $mainUrl = '/contacts?type='.$type  @endphp
-    <h5><i><b><a href="{{\URL::to($mainUrl)}}">{{ "   Contacts  >  " }}</a>  </b> {{" List Of "}} @lang('lang_v1.'.$type.'s') <b> {{"   "}} </b></i></h5>  
+    <h5 class="font_text"><i class="font_text"><b class="font_text"><a class="font_text" href="{{\URL::to($mainUrl)}}">{{ __("izo.contacts") }} {{ __("izo.>") }}</a>  </b> {{__("izo.list_of")}} @lang('lang_v1.'.$type.'s') <b> {{"   "}} </b></i></h5>  
 </section>
 
 <!-- Main content -->

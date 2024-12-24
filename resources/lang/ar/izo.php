@@ -134,6 +134,10 @@ return [
     'more_than_zero'               => 'أكبر من الصفر',
     'less_than_zero'               => 'أقل من الصفر ',
     'zero'                         => ' صفر',
-
+    'main_currency'                => ' العملة الرئيسية',
+    'list_of'                      => 'قائمة',
+    'contacts'                     => 'العملاء والمردون',
+    '>'                            => '>',
+    'user_management'              => 'إدارة المستخدمين',
 
 ];

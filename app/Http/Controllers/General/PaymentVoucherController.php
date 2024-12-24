@@ -72,7 +72,7 @@ class PaymentVoucherController extends Controller
         foreach($currency as $i){
             $currencies[$i->currency->id] = $i->currency->country . " " . $i->currency->currency . " ( " . $i->currency->code . " )";
         }
-        $accountsS          = Account::where("business_id",$business_id)->get();
+        $accountsS          = Account::where("business_id",$business_id)->where('is_closed',0)->get();
         $account_list       = [];
         foreach($accountsS as $act){
             $account_list[$act->id] = $act->name . " || " . $act->account_number;
@@ -175,7 +175,7 @@ class PaymentVoucherController extends Controller
         foreach($currency as $i){
             $currencies[$i->currency->id] = $i->currency->country . " " . $i->currency->currency . " ( " . $i->currency->code . " )";
         }
-        $accountsS          = Account::where("business_id",$business_id)->get();
+        $accountsS          = Account::where("business_id",$business_id)->where('is_closed',0)->get();
         $account_list       = [];
         foreach($accountsS as $act){
             $account_list[$act->id] = $act->name . " || " . $act->account_number;

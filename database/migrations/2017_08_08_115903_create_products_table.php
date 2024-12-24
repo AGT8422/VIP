@@ -33,7 +33,7 @@ class CreateProductsTable extends Migration
             $table->boolean('enable_stock')->default(0);
             $table->decimal('alert_quantity', 22, 4)->default(0);
             $table->string('sku');
-            $table->string('sku2');
+            $table->string('sku2')->nullable();
             $table->enum('barcode_type', ['C39', 'C128', 'EAN-13', 'EAN-8', 'UPC-A', 'UPC-E', 'ITF-14']); 
             $table->tinyInteger('enable_sr_no')->default(0);
             $table->string('weight')->nullable();

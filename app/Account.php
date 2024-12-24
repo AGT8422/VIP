@@ -99,9 +99,10 @@ class Account extends Model
     }
     public static function items($type=NULL,$user=null)
     {
-        $business_id = ($user==null)?session()->get('user.id'):$user->business_id;
+        $business_id = ($user==null)?session()->get('user.business_id'):$user->business_id;
         $allData     = Account::where('business_id',$business_id)
                                 ->OrderBy('id','desc')
+                                ->where('is_closed',0) 
                                 ->where('cost_center',0) 
                                 ->where(function($query) use($type,$business_id){
                                     if ($type > 0) {
@@ -169,7 +170,7 @@ class Account extends Model
         $ids[]       = $bank;
         $ids[]       = $cash;
         $types       = AccountType::whereIn("id",$ids)->pluck("id");
-        $allData     = Account::whereIn('account_type_id',$types)->get();
+        $allData     = Account::whereIn('account_type_id',$types)->where("is_closed",0)->get();
         $arr         = [];
         foreach ($allData as $data) {
             $arr[$data->id] =  $data->name;

@@ -112,28 +112,28 @@ class ContactController extends Controller
                     <ul class="dropdown-menu dropdown-menu-left" role="menu">';
                     
                     if (auth()->user()->can('supplier.view') ) {
-                        $html .= '<li><a href="' . action('TransactionPaymentController@getPayContactDue', [$row->id]) . '?type=purchase" class="pay_purchase_due"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>' . __("lang_v1.pay") . '</a></li>';
+                        $html .= '<li><a href="' . action('TransactionPaymentController@getPayContactDue', [$row->id]) . '?type=purchase" class="pay_purchase_due"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>&nbsp;&nbsp;' . __("lang_v1.pay") . '</a></li>';
                     }
                     
                     $return_due = $row->total_purchase_return - $row->purchase_return_paid;
                     if ($return_due > 0) {
-                        $html .= '<li><a href="' . action('TransactionPaymentController@getPayContactDue', [$row->id]) . '?type=purchase_return" class="pay_purchase_due"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>' . __("lang_v1.receive_purchase_return_due") . '</a></li>';
+                        $html .= '<li><a href="' . action('TransactionPaymentController@getPayContactDue', [$row->id]) . '?type=purchase_return" class="pay_purchase_due"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>&nbsp;&nbsp;' . __("lang_v1.receive_purchase_return_due") . '</a></li>';
                     }
 
                     if (auth()->user()->can('supplier.view') || auth()->user()->can('ReadOnly.views')  || auth()->user()->can('warehouse.views')) {
-                        $html .= '<li><a href="' . action('ContactController@show', [$row->id]) . '"><i class="fas fa-eye" aria-hidden="true"></i>' . __("messages.view") . '</a></li>';
+                        $html .= '<li><a href="' . action('ContactController@show', [$row->id]) . '"><i class="fas fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;' . __("messages.view") . '</a></li>';
                     }
                     
                     if (auth()->user()->can('supplier.update') || auth()->user()->can('warehouse.views')) {
-                        $html .= '<li><a href="' . action('ContactController@edit', [$row->id]) . '" class="edit_contact_button"><i class="glyphicon glyphicon-edit"></i>' .  __("messages.edit") . '</a></li>';
+                        $html .= '<li><a href="' . action('ContactController@edit', [$row->id]) . '" class="edit_contact_button"><i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;' .  __("messages.edit") . '</a></li>';
                     }
                     
                     if (request()->session()->get("user.id") == 1  ) {
-                        $html .= '<li><a href="' . action('ContactController@destroy', [$row->id]) . '" class="delete_contact_button"><i class="glyphicon glyphicon-trash"></i>' . __("messages.delete") . '</a></li>';
+                        $html .= '<li><a href="' . action('ContactController@destroy', [$row->id]) . '" class="delete_contact_button"><i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;' . __("messages.delete") . '</a></li>';
                     }
 
                     if (auth()->user()->can('customer.update')|| auth()->user()->can('warehouse.views')) {
-                        $html .= '<li><a href="' . action('ContactController@updateStatus', [$row->id]) . '"class="update_contact_status"><i class="fas fa-power-off"></i>';
+                        $html .= '<li><a href="' . action('ContactController@updateStatus', [$row->id]) . '"class="update_contact_status"><i class="fas fa-power-off"></i>&nbsp;&nbsp;';
 
                         if ($row->contact_status == "active") {
                             $html .= __("messages.deactivate");
@@ -178,7 +178,7 @@ class ContactController extends Controller
                             </li>';
                         }
 
-                        $html .= '<li>
+                        $html_canceled = '<li>
                                 <a href="' . action('ContactController@show', [$row->id]) . '?view=documents_and_notes">
                                     <i class="fas fa-paperclip" aria-hidden="true"></i>
                                      ' . __("lang_v1.documents_and_notes") . '
@@ -274,25 +274,25 @@ class ContactController extends Controller
                     <ul class="dropdown-menu dropdown-menu-left" role="menu">';
 
                     if (auth()->user()->can('customer.view')) {
-                    $html .= '<li><a href="' . action('TransactionPaymentController@getPayContactDue', [$row->id]) . '?type=sell" class="pay_sale_due"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>' . __("lang_v1.pay") . '</a></li>';
+                    $html .= '<li><a href="' . action('TransactionPaymentController@getPayContactDue', [$row->id]) . '?type=sell" class="pay_sale_due"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>&nbsp;&nbsp;' . __("lang_v1.pay") . '</a></li>';
                     }
                     $return_due = $row->total_sell_return - $row->sell_return_paid;
                     if ($return_due > 0) {
-                        $html .= '<li><a href="' . action('TransactionPaymentController@getPayContactDue', [$row->id]) . '?type=sell_return" class="pay_purchase_due"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>' . __("lang_v1.pay_sell_return_due") . '</a></li>';
+                        $html .= '<li><a href="' . action('TransactionPaymentController@getPayContactDue', [$row->id]) . '?type=sell_return" class="pay_purchase_due"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>&nbsp;&nbsp;' . __("lang_v1.pay_sell_return_due") . '</a></li>';
                     }
 
                     if (auth()->user()->can('customer.view') || auth()->user()->can('ReadOnly.views')  || auth()->user()->can('warehouse.views')   ) {
-                        $html .= '<li><a href="' . action('ContactController@show', [$row->id]) . '"><i class="fas fa-eye" aria-hidden="true"></i>' . __("messages.view") . '</a></li>';
+                        $html .= '<li><a href="' . action('ContactController@show', [$row->id]) . '">&nbsp;<i class="fas fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;' . __("messages.view") . '</a></li>';
                     }
                     if (auth()->user()->can('customer.update')|| auth()->user()->can('warehouse.views')) {
-                        $html .= '<li><a href="' . action('ContactController@edit', [$row->id]) . '" class="edit_contact_button"><i class="glyphicon glyphicon-edit"></i>' .  __("messages.edit") . '</a></li>';
+                        $html .= '<li><a href="' . action('ContactController@edit', [$row->id]) . '" class="edit_contact_button"><i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;' .  __("messages.edit") . '</a></li>';
                     }
                     if (request()->session()->get("user.id") == 1   ) {
-                        $html .= '<li><a href="' . action('ContactController@destroy', [$row->id]) . '" class="delete_contact_button"><i class="glyphicon glyphicon-trash"></i>' . __("messages.delete") . '</a></li>';
+                        $html .= '<li><a href="' . action('ContactController@destroy', [$row->id]) . '" class="delete_contact_button"><i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;' . __("messages.delete") . '</a></li>';
                     }
 
                     if (auth()->user()->can('customer.update')|| auth()->user()->can('warehouse.views')) {
-                        $html .= '<li><a href="' . action('ContactController@updateStatus', [$row->id]) . '"class="update_contact_status"><i class="fas fa-power-off"></i>';
+                        $html .= '<li><a href="' . action('ContactController@updateStatus', [$row->id]) . '"class="update_contact_status"><i class="fas fa-power-off"></i>&nbsp;&nbsp;';
 
                         if ($row->contact_status == "active") {
                             $html .= __("messages.deactivate");
@@ -337,7 +337,7 @@ class ContactController extends Controller
                             </li>';
                         }
 
-                        $html .= '<li>
+                       $html_canceled = '<li>
                                 <a href="' . action('ContactController@show', [$row->id]) . '?view=documents_and_notes">
                                     <i class="fas fa-paperclip" aria-hidden="true"></i>
                                      ' . __("lang_v1.documents_and_notes") . '
@@ -1319,6 +1319,9 @@ class ContactController extends Controller
             $contact     = Contact::where('business_id', $business_id)->find($id);
             $contact->contact_status = $contact->contact_status == 'active' ? 'inactive' : 'active';
             $contact->save();
+            $account     = \App\Account::where('contact_id', $id)->first();
+            $account->is_closed = $contact->contact_status == 'active' ? 0 : 1;
+            $account->update();
             $output      = ['success' => true,
                                 'msg' => __("contact.updated_success")
                                 ];

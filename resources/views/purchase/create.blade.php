@@ -3,20 +3,24 @@
 @section('title', __('purchase.add_purchase'))
 {{-- *2* --}}
 @section('content')
+@php
+	 $pull            = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'pull-left' : 'pull-right';
+@endphp
+
 	<!-- Content Header (Page header) -->
 	{{-- *1* SECTION HEADER PAGE --}}
 	{{-- **************************************** --}}
 		<section class="content-header">
 			<h1>@lang('purchase.add_purchase') <i class="fa fa-keyboard-o hover-q text-muted" aria-hidden="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="@include('purchase.partials.keyboard_shortcuts_details')" data-html="true" data-trigger="hover" data-original-title="" title=""></i></h1>
-			<h5><i><b>{{ "   Purchases  >  " }} </b>{{ "Create Purchase   "   }} <b> {{ " " }} </b> {{""}}</i></h5>
-			<br> 
+			<h5><i><b>{{ "   Purchases  >  " }} </b>{{ "Create Purchase   "   }} <b> {{ " " }} </b> {{""}}</i> <b class="{{$pull}}">{!!__('izo.main_currency')!!} : {{$currency_details->symbol}}</b></h5>
+			 
 		</section>
 	{{-- **************************************** --}}
 
 	<!-- Main content -->
 	{{-- *2* SECTION PURCHASE BILL --}}
 	{{-- **************************************** --}}
-		<section class="content" style="margin:0px 10%;padding:10px;">
+		<section class="content" style="padding:10px;">
 
 			<!-- Page level currency setting -->
 			{{-- *2/1* CURRENCY SEC --}}
@@ -174,6 +178,7 @@
 									<div class="form-group">
 										<div class="multi-input">
 											{!! Form::label('currency_id', __('business.currency') . ':') !!}  
+											@show_tooltip(__('tooltip.currency_blank'))
 											<br/>
 											{!! Form::select('currency_id', $currencies, null, ['class' => 'form-control width-60 currency_id  select2', 'placeholder' => __('messages.please_select') ]); !!}
 											{!! Form::text('currency_id_amount', null, ['class' => 'form-control width-40 pull-right currency_id_amount'   ]); !!}

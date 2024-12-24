@@ -320,6 +320,8 @@ class BusinessController extends Controller
     public function postCheckMobile(Request $request)
     {
         $mobile = $request->input('contact_number');
+        $old    = $request->input('old_number');
+        $edit   = $request->input('edit');
         $total = 0;
         
          
@@ -327,7 +329,17 @@ class BusinessController extends Controller
 
         $count = User::where('contact_number', $mobile)->count();
         if ($count > 0) {
-            $total = 1;
+            if($edit != null){
+                if($old != null){
+                    if ($old != $mobile ) {
+                        $total = 1;
+                    }
+                }else{
+                    $total = 1;
+                }
+            }else{
+                $total = 1;
+            }
         } 
 
         Config::set('database.connections.mysql.database', "izocloud");
@@ -335,7 +347,17 @@ class BusinessController extends Controller
         DB::reconnect('mysql');
         $userIzo         = \App\Models\IzoUser::where('mobile',$mobile)->count();
         if ($userIzo > 0) {
-            $total = 1;
+            if($edit != null){
+                if($old != null){
+                    if ($old != $mobile ) {
+                        $total = 1;
+                    }
+                }else{
+                    $total = 1;
+                }
+            }else{
+                $total = 1;
+            }
         }  
         $database_name  = request()->session()->get('user_main.database');
         Config::set('database.connections.mysql.database', $database_name);

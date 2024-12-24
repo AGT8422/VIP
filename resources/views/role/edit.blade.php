@@ -9,16 +9,18 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         @if($role->id)
-          <h1>@lang( 'role.edit_role' )</h1>
+          <h1 class="font_text">@lang( 'role.edit_role' )</h1>
         @else
-            <h1>@lang( 'role.add_role' )</h1>
+            <h1 class="font_text">@lang( 'role.add_role' )</h1>
         @endif
-
+        @php $mainUrl = '/roles';  @endphp  
+        <h5 class="font_text"><i><b class="font_text"><a  class="font_text"href="{{\URL::to($mainUrl)}}">{{ __("izo.user_management") }} {{ __("izo.>") . " " }}</a></b>{{ __("izo.list_of")  ." " }} @if($role->id) {{__("role.edit_role")   }}     @else {{__("role.add_role")   }} @endif <b> {{"   "}} </b></i></h5>
+     
     </section>
 
     <!-- Main content -->
-    <section class="content">
-        @component('components.widget', ['class' => 'box-primary'])
+    <section class="content font_text">
+        @component('components.widget', ['class' => 'box-primary font_text'])
             @if($role->id)
                 {!! Form::open(['url' => action('RoleController@update', [$role->id]), 'id' => 'role_form' ]) !!}
                 <input name="_method" type="hidden" value="PUT">

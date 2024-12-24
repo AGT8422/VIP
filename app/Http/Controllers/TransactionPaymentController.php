@@ -2003,7 +2003,7 @@ class TransactionPaymentController extends Controller
 
             $due_payment_type = request()->input('type');
             $query = Contact::where('contacts.id', $contact_id)
-                            ->join('transactions AS t', 'contacts.id', '=', 't.contact_id');
+                            ->leftJoin('transactions AS t', 'contacts.id', '=', 't.contact_id');
             if ($due_payment_type == 'purchase') {
                 $query->select(
                     DB::raw("SUM(IF(t.type = 'purchase', final_total, 0)) as total_purchase"),

@@ -70,13 +70,13 @@ class ManageUserController extends Controller
                 )
                 ->addColumn(
                     'action',function ($row) use($user_id) {
-                        $html = '<a href="'. action('ManageUserController@edit', [$row->id]) .'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>'. __("messages.edit").'</a>
+                        $html = '<a href="'. action('ManageUserController@edit', [$row->id]) .'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;'. __("messages.edit").'</a>
                                 &nbsp;';
 
-                        $html .=' <a href="'.action('ManageUserController@show', [$row->id]).'" class="btn btn-xs btn-info"><i class="fa fa-eye"></i>'. __("messages.view").'</a>&nbsp; ';
+                        $html .=' <a href="'.action('ManageUserController@show', [$row->id]).'" class="btn btn-xs btn-info"><i class="fa fa-eye"></i>&nbsp;&nbsp;'. __("messages.view").'</a>&nbsp; ';
                         
                         if($user_id == 1 && $row->id != 1){
-                          $html.=  '<button data-href="'.action('ManageUserController@destroy', [$row->id]).'" class="btn btn-xs btn-danger delete_user_button"><i class="glyphicon glyphicon-trash"></i>'.__("messages.delete").'</button>';
+                          $html.=  '<button data-href="'.action('ManageUserController@destroy', [$row->id]).'" class="btn btn-xs btn-danger delete_user_button"><i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;'.__("messages.delete").'</button>';
 
                         }
                         return $html;
@@ -505,7 +505,7 @@ class ManageUserController extends Controller
             #.......................................
             // $newIzoCustomer->surname       = $request->surname;
             $listOfUsers        = IzoUser::where("id","!=",$izoUserId)->pluck("email")->toArray();
-                 
+                  
             if(in_array($request->email,$listOfUsers) || in_array($request->username,$listOfUsers) ){
                 $output = [
                     'success' => 0,

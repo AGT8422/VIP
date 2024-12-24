@@ -7,7 +7,7 @@
 <section class="content-header">
     <h1><b>@lang( 'lang_v1.customer_groups' )</h1></b>
     @php $mainUrl = '/contacts?type=customer';  @endphp  
-    <h5><i><b><a href="{{\URL::to($mainUrl)}}">{{ "   Contacts  >  " }}</a></b>{{ "Customer Groups"   }} <b> {{"   "}} </b></i></h5>
+    <h5><i><b><a href="{{\URL::to($mainUrl)}}"> {{__('izo.contacts')}} {{ __('izo.>') . " " }}</a></b>{{ __("lang_v1.customer_groups")   }} <b> {{"   "}} </b></i></h5>
  
 </section>
 

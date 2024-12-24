@@ -15,6 +15,10 @@
 @section('title', $title)
 {{-- *2* --}}
 @section('content')
+@php
+	 $pull            = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'pull-left' : 'pull-right';
+@endphp
+
 		{{-- *2/1* CURRENCY SECTION --}}
 		<!-- Page level currency setting -->
 		<input type="hidden" id="type_of_sell" value="{{$title}}">
@@ -27,8 +31,8 @@
 		{{-- ****************************************** --}}
 			<section class="content-header">
 				<h1>{{$title}}</h1>
-				<h5><i><b>{{ "   Sales  >  " }} </b>{{ "Create " . $title }}  <b> {{"   "}} </b></i></h5>
-                <br> 
+				<h5><i><b>{{ "   Sales  >  " }} </b>{{ "Create " . $title }}  <b> {{"   "}} </b></i><b class="{{$pull}}">{!!__('izo.main_currency')!!} : {{$currency_details->symbol}}</b></h5>
+            
 			</section>
 		{{-- ****************************************** --}}
 		<!-- /. Header -->
@@ -36,7 +40,7 @@
 		<!-- Main Content -->
 		{{-- *2/3* MAIN PAGE SECTION --}}
 		{{-- ****************************************** --}}
-			<section class="content no-print" style="margin:0px 5%">
+			<section class="content no-print" >
 				<input type="hidden" id="amount_rounding_method" value="{{$pos_settings['amount_rounding_method'] ?? ''}}">
 				@if(!empty($pos_settings['allow_overselling']))
 					<input type="hidden" id="is_overselling_allowed">

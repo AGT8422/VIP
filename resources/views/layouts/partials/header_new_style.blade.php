@@ -531,9 +531,11 @@
         @php
         
         @endphp
+        
         <div class="col-md-2 p-10 text-center"> 
-           <h3> {{ Session::get('business.name') }}</h3>
+           <h3 class="hide"> {{ Session::get('business.name') }}</h3>
         </div>
+
         <div class="col-md-7 parent_right_header" @if(in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl'))) dir="ltr" @else dir="rtl" @endif>
                  <div class="item-one">
                     <ul class="nav navbar-nav">

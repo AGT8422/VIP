@@ -5,7 +5,7 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>@lang( 'user.roles' )
+    <h1 class="font_text">@lang( 'user.roles' )
         <small>@lang( 'user.manage_roles' )</small>
     </h1>
     <!-- <ol class="breadcrumb">
@@ -13,12 +13,12 @@
         <li class="active">Here</li>
     </ol> -->
     @php $mainUrl = '/roles';  @endphp  
-    <h5><i><b><a href="{{\URL::to($mainUrl)}}">{{ "   User Management  >  " }}</a></b>{{ "List Of Roles"   }} <b> {{"   "}} </b></i></h5>
+    <h5 class="font_text"><i><b class="font_text"><a  class="font_text"href="{{\URL::to($mainUrl)}}">{{ __("izo.user_management") }} {{ __("izo.>") . " " }}</a></b>{{ __("izo.list_of")  ." ".__("user.roles")   }} <b> {{"   "}} </b></i></h5>
  
 </section>
 
 <!-- Main content -->
-<section class="content">
+<section class="content font_text">
     @component('components.widget', ['class' => 'box-primary', 'title' => __( 'user.all_roles' )])
         @if($user_id == 1)
             @slot('tool')

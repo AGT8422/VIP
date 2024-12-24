@@ -17,7 +17,7 @@
 
 <!-- Main content -->
 <section class="content no-print" >
-    @component('components.filters', ['title' => __('report.filters')])
+    @component('components.filters', ['class' => 'box-primary','title' => __('report.filters')])
         <div class="col-md-4">
             <div class="form-group">
                 {!! Form::label('purchase_list_filter_location_id',  __('purchase.business_location') . ':') !!}

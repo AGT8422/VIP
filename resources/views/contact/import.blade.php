@@ -5,14 +5,14 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1><b>@lang('lang_v1.import_contacts')</b>
+    <h1 class="font_text"><b>@lang('lang_v1.import_contacts')</b>
     </h1>
     @php $mainUrl = '/contacts?type=customer';  @endphp               
-    <h5><i><b><a href="{{\URL::to($mainUrl)}}">{{ "   Contacts  >  " }}</a> </b>{{ "Import Contacts"   }} <b> {{"   "}} </b></i></h5>  
+    <h5 class="font_text"><i><b class="font_text"><a class="font_text" href="{{\URL::to($mainUrl)}}"> {{__('izo.contacts')}} {{ __('izo.>') . " " }}</a> </b>{{  __('lang_v1.import_contacts')   }} <b> {{"   "}} </b></i></h5>  
 </section>
 
 <!-- Main content -->
-<section class="content">
+<section class="content font_text">
     
     @if (session('notification') || !empty($notification))
         <div class="row">

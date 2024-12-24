@@ -33,7 +33,8 @@
 "transaction_edit_not_allowed" => "لا يُسمح بإصدار المعاملة بعد days: الأيام.",
 "tarnsaction_has_installments"=>"عفوا الفاتورة يوجد بها أقساط",
 "Unauthorized_action"=>"عفوا لا تملك صلاحية",
-
+'activate'    => 'تنشيط',
+'deactivate'  => 'إلغاء تنشيط',
 //.................................. 12-12-2022
 "movement" => "حركة المادة ",
 "Equal" => "متوازن",
@@ -61,11 +62,11 @@
 "please_enter_desc"=>"النص التعريفي",
 "name_section"=>"اسم القسم",
 "enter_mobile"=>"ادخل رقم التواصل",
-"please_fill"=>"إملأ الحقل ",
-"related_check"                                => "شيكات غير محصلة",
-"there_is_cheques"                             => "يوجد شيكات مترابطة",
-"there_is_invoices"                            => "يوجد فواتير مترابطة",
-"sure"                                         => "تأكيد",
+"please_fill" =>"إملأ الحقل ",
+"related_check"     => "شيكات غير محصلة",
+"there_is_cheques"  => "يوجد شيكات مترابطة",
+"there_is_invoices" => "يوجد فواتير مترابطة",
+"sure"              => "تأكيد",
 
 ];
 

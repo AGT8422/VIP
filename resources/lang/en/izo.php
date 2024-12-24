@@ -134,7 +134,11 @@ return [
     'more_than_zero'               => 'More Than Zero',
     'less_than_zero'               => 'Less Than Zero',
     'zero'                         => 'Zero',
-
+    'main_currency'                => 'Main Currency',
+    'list_of'                      => 'List Of',
+    'contacts'                     => 'Contacts',
+    '>'                            => '>',
+    'user_management'              => 'User Management',
 
 
 ];

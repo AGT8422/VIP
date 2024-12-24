@@ -23,24 +23,24 @@
 @endif
 
 <strong><i class="fa fa-mobile margin-r-5"></i> @lang('contact.mobile')</strong>
-<p class="text-muted">
+<p class="text-muted font_number">
     {{ $contact->mobile }}
 </p>
 @if($contact->landline)
     <strong><i class="fa fa-phone margin-r-5"></i> @lang('contact.landline')</strong>
-    <p class="text-muted">
+    <p class="text-muted font_number">
         {{ $contact->landline }}
     </p>
 @endif
 @if($contact->alternate_number)
     <strong><i class="fa fa-phone margin-r-5"></i> @lang('contact.alternate_contact_number')</strong>
-    <p class="text-muted">
+    <p class="text-muted font_number">
         {{ $contact->alternate_number }}
     </p>
 @endif
 @if($contact->dob)
     <strong><i class="fa fa-calendar margin-r-5"></i> @lang('lang_v1.dob')</strong>
-    <p class="text-muted">
+    <p class="text-muted font_number">
         {{ @format_date($contact->dob) }}
     </p>
 @endif

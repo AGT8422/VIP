@@ -19,7 +19,7 @@
 		<table class="table table-condensed text-left align-left no-border @if(!empty($for_pdf)) table-pdf @endif">
 			<tr>
 				<td>@lang('lang_v1.opening_balance')</td>
-				<td class="align-right">@format_currency($ledger_details['beginning_balance'])</td>
+				<td class="align-right font_number">@format_currency($ledger_details['beginning_balance'])</td>
 			</tr>
 		<?php $diff =  0; ?>
 		@if( $contact->type == 'supplier' || $contact->type == 'both')
@@ -44,21 +44,21 @@
 				
 				$diff       =   $pr_payed - $pr_amount;
 								?>
-				<td class="align-right">@format_currency($pr_amount)</td>
+				<td class="align-right font_number">@format_currency($pr_amount)</td>
 			</tr>
 			<tr>
 			
 				<td>@lang('sale.total_paid')</td>
-				<td class="align-right">@format_currency($pr_payed)</td>
+				<td class="align-right font_number">@format_currency($pr_payed)</td>
 			</tr>
 			<tr>
 				<td>@lang('lang_v1.advance_balance')</td>
 				{{-- $ledger_details['total_purchase']-$ledger_details['total_credit'] --}}
-				<td class="align-right"> @format_currency(($diff > 0)?$diff:0 ) </td>
+				<td class="align-right font_number"> @format_currency(($diff > 0)?$diff:0 ) </td>
 			</tr>
 			<tr>
 				<td><strong>@lang('lang_v1.balance_due')</strong></td>
-				<td class="align-right">@format_currency(($diff*-1 > 0)?abs($diff):0 ) </td>
+				<td class="align-right font_number">@format_currency(($diff*-1 > 0)?abs($diff):0 ) </td>
 			</tr>
 		@endif
 		@if( $contact->type == 'customer' || $contact->type == 'both')
@@ -77,20 +77,20 @@
 					?>
 			<tr>
 				<td>@lang('lang_v1.total_invoice')</td>
-				<td class="align-right">@format_currency($pr_amount)</td>
+				<td class="align-right font_number">@format_currency($pr_amount)</td>
 			</tr>
 			<tr>
 				<td>@lang('sale.total_received')</td>
-				<td class="align-right">@format_currency($pr_payed )   </td>
+				<td class="align-right font_number">@format_currency($pr_payed )   </td>
 			</tr>
 			<tr>
 				<td>@lang('lang_v1.advance_balance')</td>
 				{{-- $ledger_details['total_purchase']-$ledger_details['total_credit'] --}}
-				<td class="align-right"> @format_currency(($diff > 0)?$diff:0 ) </td>
+				<td class="align-right font_number"> @format_currency(($diff > 0)?$diff:0 ) </td>
 			</tr>
 			<tr>
 				<td><strong>@lang('lang_v1.balance_due')</strong></td>
-				<td class="align-right">@format_currency(($diff*-1 > 0)?abs($diff):0 )</td>
+				<td class="align-right font_number">@format_currency(($diff*-1 > 0)?abs($diff):0 )</td>
 			</tr>
 		@endif
 	
@@ -186,7 +186,7 @@
 											{{-- <td  class="hide">{{$data['payment_status']}}</td> --}}
 											@if($data['type'] == "Purchase" || $data['type'] == "Sales" || $data['type'] == "Purchase Return" )
 												{{-- <td class="ws-nowrap align-right hide">@if($data['total'] !== '') @format_currency($data['total'] - $shipItems) @endif</td> --}}
-												<td class="ws-nowrap align-right">
+												<td class="ws-nowrap align-right font_number">
 													@if($data['debit'] != '' )
 													@format_currency($data['debit'] - $shipItems)
 														@php
@@ -195,7 +195,7 @@
 														@endphp
 													@endif
 												</td>
-												<td class="ws-nowrap align-right">
+												<td class="ws-nowrap align-right font_number">
 													@if($data['credit'] != '')
 														@format_currency($data['credit']- $shipItems) 
 														@php   $credit += doubleVal($data['credit']) - $shipItems; 
@@ -204,7 +204,7 @@
 													@endif</td>
 											@else
 												{{-- <td class="ws-nowrap align-right hide">@if($data['total']  !== '') @format_currency($data['total']) @endif</td> --}}
-												<td class="ws-nowrap align-right">
+												<td class="ws-nowrap align-right font_number">
 													@if($data['debit']  != '' )
 													@format_currency($data['debit']) 
 													@php 
@@ -213,7 +213,7 @@
 													@endphp 
 													@endif
 												</td>
-												<td class="ws-nowrap align-right">
+												<td class="ws-nowrap align-right font_number">
 													@if($data['credit'] != '')
 														@format_currency($data['credit']) 
 														@php
@@ -227,7 +227,7 @@
 											@endif
 											{{-- <td class="hide">{{$data['payment_method']}}</td> --}}
 											<td>{!! $data['others'] !!}</td>
-											<td>{{  ($balance>0) ? number_format($balance,2)  . " / Credit" :  number_format($balance*-1,2) . " / Debit"  }}</td>
+											<td class="font_number">{{  ($balance>0) ? number_format($balance,2)  . " / Credit" :  number_format($balance*-1,2) . " / Debit"  }}</td>
 										</tr>
 								
 								@endif
@@ -287,11 +287,11 @@
 									{{-- <td  class="hide">{{$data['payment_status']}}</td> --}}
 									{{-- <td class="ws-nowrap align-right hide">@if($data['total'] !== '') @format_currency($data['total']) @endif</td> --}}
 									
-										<td class="ws-nowrap align-right">@if($data['debit'] != '' ) @format_currency($data['debit']) @endif</td>
-										<td class="ws-nowrap align-right">@if($data['credit'] != '') @format_currency($data['credit']) @endif</td>
+										<td class="ws-nowrap align-right font_number">@if($data['debit'] != '' ) @format_currency($data['debit']) @endif</td>
+										<td class="ws-nowrap align-right font_number">@if($data['credit'] != '') @format_currency($data['credit']) @endif</td>
 										{{-- <td class="hide">{{$data['payment_method']}}</td> --}}
 										<td >{!! $data['others'] !!}</td>
-										<td>{{  ($balance>0) ? $balance . " / Credit" :  $balance*-1  . " / Debit"  }}</td>
+										<td class="font_number">{{  ($balance>0) ? $balance . " / Credit" :  $balance*-1  . " / Debit"  }}</td>
 							</tr>
 						@else
 							<tr @if(!empty($for_pdf) && $loop->iteration % 2 == 0) class="odd" @endif>
@@ -344,11 +344,11 @@
 									{{-- <td  class="hide">{{$data['payment_status']}}</td> --}}
 									{{-- <td class="ws-nowrap align-right hide">@if($data['total'] !== '') @format_currency($data['total']) @endif</td> --}}
 									
-										<td class="ws-nowrap align-right"> </td>
-										<td class="ws-nowrap align-right"> @format_currency($cheque->amount)  </td>
+										<td class="ws-nowrap align-right font_number"> </td>
+										<td class="ws-nowrap align-right font_number"> @format_currency($cheque->amount)  </td>
  										{{-- <td class="hide">{{$data['payment_method']}}</td> --}}
 										<td >{!! $data['others'] !!}</td>
-										<td>{{  ($balance>0) ? $balance . " / Credit" :  $balance*-1  . " / Debit"  }}</td>
+										<td class="font_number">{{  ($balance>0) ? $balance . " / Credit" :  $balance*-1  . " / Debit"  }}</td>
 							</tr>
 							<tr @if(!empty($for_pdf) && $loop->iteration % 2 == 0) class="odd" @endif>
 								<td class="row-border" style="text-align:center !important;">{{$data['date']}}  </td>
@@ -400,11 +400,11 @@
 									{{-- <td  class="hide">{{$data['payment_status']}}</td> --}}
 									{{-- <td class="ws-nowrap align-right hide">@if($data['total'] !== '') @format_currency($data['total']) @endif</td> --}}
 									
-										<td class="ws-nowrap align-right"> @format_currency($cheque->amount)  </td>
-										<td class="ws-nowrap align-right">  </td>
+										<td class="ws-nowrap align-right font_number"> @format_currency($cheque->amount)  </td>
+										<td class="ws-nowrap align-right font_number">  </td>
 										{{-- <td class="hide">{{$data['payment_method']}}</td> --}}
 										<td >{!! $data['others'] !!}</td>
-										<td>{{  ($balance>0) ? $balance . " / Credit" :  $balance*-1  . " / Debit"  }}</td>
+										<td class="font_number">{{  ($balance>0) ? $balance . " / Credit" :  $balance*-1  . " / Debit"  }}</td>
 							</tr>
 						@endif
 					@elseif($data["type"] == "Voucher")
@@ -428,11 +428,11 @@
 									{{-- <td  class="hide">{{$data['location']}}</td> --}}
 									{{-- <td  class="hide">{{$data['payment_status']}}</td> --}}
 									{{-- <td class="ws-nowrap align-right hide">@if($data['total']  !=='' ) @format_currency( $data['total'] ) @endif</td> --}}
-									<td class="ws-nowrap align-right">@if($data['debit']  != '' ) @format_currency( $data['debit'] ) @endif</td>
-									<td class="ws-nowrap align-right">@if($data['credit'] != '' ) @format_currency( $data['credit']) @endif</td>
+									<td class="ws-nowrap align-right font_number">@if($data['debit']  != '' ) @format_currency( $data['debit'] ) @endif</td>
+									<td class="ws-nowrap align-right font_number">@if($data['credit'] != '' ) @format_currency( $data['credit']) @endif</td>
 									{{-- <td class="hide">{{$data['payment_method']}}</td> --}}
 									<td>{!! $data['others'] !!}</td>
-									<td>{{  ($balance>0) ? $balance . " / Credit" : $balance*-1 . " / Debit"  }}</td>
+									<td class="font_number">{{  ($balance>0) ? $balance . " / Credit" : $balance*-1 . " / Debit"  }}</td>
 							</tr>
 						
 					@elseif($data["type"] == "Journal-Voucher")
@@ -454,11 +454,11 @@
 							{{-- <td  class="hide">{{$data['location']}}</td> --}}
 							{{-- <td  class="hide">{{$data['payment_status']}}</td> --}}
 							{{-- <td class="ws-nowrap align-right hide">@if($data['total'] !== '') @format_currency($data['total']) @endif</td> --}}
-							<td class="ws-nowrap align-right">@if($data['debit'] != '' ) @format_currency($data['debit']) @endif</td>
-							<td class="ws-nowrap align-right">@if($data['credit'] != '') @format_currency($data['credit']) @endif</td>
+							<td class="ws-nowrap align-right font_number">@if($data['debit'] != '' ) @format_currency($data['debit']) @endif</td>
+							<td class="ws-nowrap align-right font_number">@if($data['credit'] != '') @format_currency($data['credit']) @endif</td>
 							{{-- <td class="hide">{{$data['payment_method']}}</td> --}}
 							<td>{!! $data['others'] !!}</td>
-							<td>{{  ($balance>0) ? $balance . " / Credit" : $balance*-1 . " / Debit"  }}</td>
+							<td class="font_number">{{  ($balance>0) ? $balance . " / Credit" : $balance*-1 . " / Debit"  }}</td>
 						</tr>
 					@elseif($data["type"] == "Expenses")
 						<tr @if(!empty($for_pdf) && $loop->iteration % 2 == 0) class="odd" @endif>
@@ -476,11 +476,11 @@
 							{{-- <td  class="hide">{{$data['location']}}</td> --}}
 							{{-- <td  class="hide">{{$data['payment_status']}}</td> --}}
 							{{-- <td class="ws-nowrap align-right hide">@if($data['total'] !== '') @format_currency($data['total']) @endif</td> --}}
-							<td class="ws-nowrap align-right">@if($data['debit'] != '' ) @format_currency($data['debit']) @endif</td>
-							<td class="ws-nowrap align-right">@if($data['credit'] != '') @format_currency($data['credit']) @endif</td>
+							<td class="ws-nowrap align-right font_number">@if($data['debit'] != '' ) @format_currency($data['debit']) @endif</td>
+							<td class="ws-nowrap align-right font_number">@if($data['credit'] != '') @format_currency($data['credit']) @endif</td>
 							{{-- <td class="hide">{{$data['payment_method']}}</td> --}}
 							<td>{!! $data['others'] !!}</td>
-							<td>{{  ($balance>0) ? $balance . " / Credit" : $balance*-1 . " / Debit"  }}</td>
+							<td  class="font_number">{{  ($balance>0) ? $balance . " / Credit" : $balance*-1 . " / Debit"  }}</td>
 						</tr>
 					@endif
 					
@@ -499,10 +499,10 @@
 				@endphp
 				<tr class="row-border blue-heading">
 					<td colspan="4"></td>
-					<td >@format_currency($debit)</td>
-					<td >@format_currency($credit)</td>
+					<td class="font_number">@format_currency($debit)</td>
+					<td class="font_number">@format_currency($credit)</td>
 					<td ></td>
-					<td >@format_currency($balance)  {{ $type }}</td>
+					<td class="font_number">@format_currency($balance)  {{ $type }}</td>
 				</tr>
 			</tfoot>
 		</table>

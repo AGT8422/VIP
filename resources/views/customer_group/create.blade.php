@@ -1,11 +1,11 @@
-<div class="modal-dialog" role="document">
+<div class="modal-dialog font_text" role="document">
   <div class="modal-content">
 
     {!! Form::open(['url' => action('CustomerGroupController@store'), 'method' => 'post', 'id' => 'customer_group_add_form' ]) !!}
 
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <h4 class="modal-title">@lang( 'lang_v1.add_customer_group' )</h4>
+      <h4 class="modal-title font_text">@lang( 'lang_v1.add_customer_group' )</h4>
     </div>
 
     <div class="modal-body">
@@ -22,7 +22,7 @@
       <div class="form-group percentage-field">
         {!! Form::label('amount', __( 'lang_v1.calculation_percentage' ) . ':') !!}
         @show_tooltip(__('lang_v1.tooltip_calculation_percentage'))
-        {!! Form::text('amount', null, ['class' => 'form-control input_number','placeholder' => __( 'lang_v1.calculation_percentage')]); !!}
+        {!! Form::text('amount', null, ['class' => 'form-control input_number font_number','placeholder' => __( 'lang_v1.calculation_percentage')]); !!}
       </div>
 
       <div class="form-group selling_price_group-field hide">

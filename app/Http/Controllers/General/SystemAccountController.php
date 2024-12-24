@@ -21,7 +21,7 @@ class SystemAccountController extends Controller
 
         $business_id                =  request()->session()->get('user.business_id');
         $data                       =  SystemAccount::where('business_id',$business_id)->first();
-        $accounts                   =  Account:: items();
+        $accounts                   =  Account::items();
         $patterns                   =  \App\Models\Pattern::allname_id($business_id);
         $business_locations         =  \App\BusinessLocation::allLocation($business_id);
         
@@ -81,7 +81,7 @@ class SystemAccountController extends Controller
                     ])
                     ->rawColumns(['actions','location_id','created_at','user_id'])
                     ->make(true);
-    }
+        }
 
 
 

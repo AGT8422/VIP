@@ -426,6 +426,7 @@ class IzoUserController extends Controller
             $user->address       = $info['address']  . $city   ;
             $user->last_name     = $owner_details['second_name'];
             $user->business_id   = $business->id;
+            $user->izo_user_id   = $izoCustomer->id;
             $user->is_admin_izo  = 1;
             $user->update();
             #.......................................Update izo user with business id
@@ -457,8 +458,16 @@ class IzoUserController extends Controller
                     "default_p"     => 1 
                 ],$business->id,$user->id
             );
-            $pattern = Pattern::first();
-
+            $pattern                    =  Pattern::first();
+            $business->cash             =  15; 
+            $business->bank             =  16; 
+            $business->assets           =  1; 
+            $business->liability        =  18; 
+            $business->supplier_type_id =  23; 
+            $business->customer_type_id =  8; 
+            $business->update();
+            $user->pattern_id           = '["'.$pattern->id.'"]';
+            $user->update();
             SystemAccount::create(
                 [ 
                     "business_id"        => $business->id,

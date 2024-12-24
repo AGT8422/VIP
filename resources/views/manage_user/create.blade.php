@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
 @section('title', __( 'user.add_user' ))
-
+@php
+  $left_shift             = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? '20px' : 'initial';
+  $right_shift            = in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '20px';
+@endphp
 
 @section('special_css')
 <style>
@@ -11,7 +14,8 @@
     .toggle-password {
         position: absolute;
         top: 40px;
-        right: 20px;
+        left: {{$left_shift}};
+        right: {{$right_shift}};
         z-index:10000;
         transform: translateY(-50%);
         cursor: pointer;
@@ -28,14 +32,14 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
-  <h1>@lang( 'user.add_user' )</h1>
+  <h1 class="font_text">@lang( 'user.add_user' )</h1>
   @php $mainUrl = '/users';  @endphp  
-  <h5><i><b><a href="{{\URL::to($mainUrl)}}">{{ "   User Management  >  " }}</a></b>{{ __("user.add_user")   }} <b> {{"   "}} </b></i></h5>
+  <h5 class="font_text"><i><b class="font_text"><a class="font_text" href="{{\URL::to($mainUrl)}}">{{ __('izo.user_management') }} {{__("izo.>") . " "}}</a></b>{{ __("user.add_user")   }} <b> {{"   "}} </b></i></h5>
 
 </section>
 
 <!-- Main content -->
-<section class="content">
+<section class="content font_text">
 {!! Form::open(['url' => action('ManageUserController@store'), 'method' => 'post', 'id' => 'user_add_form' ]) !!}
   <div class="row">
    
@@ -101,27 +105,10 @@
             {!! Form::select('location', $allLocations ,$default_location, ['class' => 'form-control select2' ,  'placeholder' => __( 'messages.please_select' ), 'required' ,'id' => 'location']); !!}
           </div>
         </div>  
-        <div class="user_auth_fields">
-        <div class="col-md-3">
-          <div class="form-group">
-            {!! Form::label('username', __( 'business.email' ) . ':*') !!}
-            @if(!empty($username_ext))
-              <div class="input-group">
-                {!! Form::text('username', null, ['id'=>'username','class' => 'form-control' ,'required', 'placeholder' => __( 'business.email' ) ]); !!}
-                <span class="input-group-addon">{{$username_ext}}</span>
-              </div>
-              {{-- <p class="help-block" id="show_username"></p> --}}
-            @else
-            {!! Form::text('username', null, ['id'=>'username','class' => 'form-control', 'placeholder' => __( 'business.email' ) ]); !!}
-            @endif
-            {{-- <p class="help-block">@lang('lang_v1.username_help')</p> --}}
-          </div>
-        </div>
-
-        <div class="clearfix"></div>
+        
         <div class="form-group col-md-3">
           {!! Form::label('contact_number', __( 'lang_v1.mobile_number' ) . ': *') !!}
-          {!! Form::text('contact_number', !empty($user->contact_number) ? $user->contact_number : null, ['class' => 'form-control','required', 'placeholder' => __( 'lang_v1.mobile_number') ]); !!}
+          {!! Form::text('contact_number', !empty($user->contact_number) ? $user->contact_number : null, ['class' => 'form-control font_number','required', 'placeholder' => __( 'lang_v1.mobile_number') ]); !!}
         </div>
         
         <div class="col-md-3">
@@ -130,22 +117,38 @@
               {!! Form::select('role', $roles, null, ['id'=>'role','class' => 'form-control select2']); !!}
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="form-group pas">
-            {!! Form::label('password', __( 'business.password' ) . ':*') !!}
-              {!! Form::password('password', ['id'=>'password','class' => 'form-control', 'required', 'placeholder' => __( 'business.password' ) ]); !!}
+        <div class="user_auth_fields">
+            <div class="col-md-3">
+              <div class="form-group">
+                {!! Form::label('username', __( 'business.email' ) . ':*') !!}
+                @if(!empty($username_ext))
+                  <div class="input-group">
+                    {!! Form::text('username', null, ['id'=>'username','class' => 'form-control' ,'required', 'placeholder' => __( 'business.email' ) ]); !!}
+                    <span class="input-group-addon">{{$username_ext}}</span>
+                  </div>
+                  {{-- <p class="help-block" id="show_username"></p> --}}
+                @else
+                {!! Form::text('username', null, ['id'=>'username','class' => 'form-control', 'placeholder' => __( 'business.email' ) ]); !!}
+                @endif
+                {{-- <p class="help-block">@lang('lang_v1.username_help')</p> --}}
+              </div>
+            </div>  
+            <div class="col-md-3">
+              <div class="form-group pas">
+                {!! Form::label('password', __( 'business.password' ) . ':*') !!}
+                  {!! Form::password('password', ['id'=>'password','class' => 'form-control', 'required', 'placeholder' => __( 'business.password' ) ]); !!}
+                </div>
+                <span class="toggle-password">
+                    <i class="eye-icon" id="togglePassword"></i>
+                </span>
             </div>
-            <span class="toggle-password">
-                <i class="eye-icon" id="togglePassword"></i>
-            </span>
+            <div class="col-md-3">
+              <div class="form-group">
+                {!! Form::label('confirm_password', __( 'business.confirm_password' ) . ':*') !!}
+                  {!! Form::password('confirm_password', ['id'=>'confirm_password','class' => 'form-control','id'=>'confirm_password', 'required', 'placeholder' => __( 'business.confirm_password' ) ]); !!}
+              </div>
+            </div>
         </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            {!! Form::label('confirm_password', __( 'business.confirm_password' ) . ':*') !!}
-              {!! Form::password('confirm_password', ['id'=>'confirm_password','class' => 'form-control','id'=>'confirm_password', 'required', 'placeholder' => __( 'business.confirm_password' ) ]); !!}
-          </div>
-        </div>
-      </div>
       <div class="clearfix"></div>
       <div class="col-md-3">
         <div class="form-group">
@@ -187,13 +190,13 @@
       <div class="col-md-4">
         <div class="form-group">
           {!! Form::label('cmmsn_percent', __( 'lang_v1.cmmsn_percent' ) . ':') !!} @show_tooltip(__('lang_v1.commsn_percent_help'))
-            {!! Form::text('cmmsn_percent', null, ['class' => 'form-control input_number','id'=>'cmmsn_percent', 'placeholder' => __( 'lang_v1.cmmsn_percent' ) ]); !!}
+            {!! Form::text('cmmsn_percent', null, ['class' => 'form-control input_number font_number','id'=>'cmmsn_percent', 'placeholder' => __( 'lang_v1.cmmsn_percent' ) ]); !!}
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           {!! Form::label('max_sales_discount_percent', __( 'lang_v1.max_sales_discount_percent' ) . ':') !!} @show_tooltip(__('lang_v1.max_sales_discount_percent_help'))
-            {!! Form::text('max_sales_discount_percent', null, ['class' => 'form-control input_number', 'id'=>'max_sales_discount_percent','placeholder' => __( 'lang_v1.max_sales_discount_percent' ) ]); !!}
+            {!! Form::text('max_sales_discount_percent', null, ['class' => 'form-control input_number font_number', 'id'=>'max_sales_discount_percent','placeholder' => __( 'lang_v1.max_sales_discount_percent' ) ]); !!}
         </div>
       </div>
       @if(count($patterns) >= 1)

@@ -4264,9 +4264,13 @@ class ReportController extends Controller
         $business_id = request()->session()->get('user.business_id');
         $business_locations = BusinessLocation::forDropdown($business_id, false);
         $customers = Contact::customersDropdown($business_id, false);
-
+        $patterns  = [];
+        $patterns_ = \App\Models\Pattern::select()->get();
+        foreach($patterns_ as $it){
+                $patterns[$it->id] = $it->name;
+        }
         return view('report.sale_report')
-            ->with(compact('business_locations', 'customers'));
+            ->with(compact('business_locations', 'customers','patterns'));
     }
 
     /**

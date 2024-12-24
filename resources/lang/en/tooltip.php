@@ -114,4 +114,5 @@ return [
     'sub_sku'               => "Sku is optional. <br><br><small>Keep it blank to automatically generate sku.<small>",
     'shipping'              => "Set shipping details and shipping charges. Click on the edit icon below to add/update shipping details and charges.",
     'dis_currency'          => "Currency Discount Depending. <br><small>If Checked , Discount Become Depending on The Selected Currency.<small>",
+    'currency_blank'        => "If The Main Currency is licensed, This Business Will Be Saved", 
 ];

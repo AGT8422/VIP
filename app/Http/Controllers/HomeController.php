@@ -566,19 +566,28 @@ class HomeController extends Controller
             
             switch ($type){
                 case 'purchase'://
-                        $source     = \App\Transaction::find($source_id); 
-                        $ref_no     = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
-                        $url        = '/purchases';
+                        $source          = \App\Transaction::find($source_id); 
+                        $ref_no          = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url             = '/purchases';
+                        $dir             = 'purchase/';
+                        $dir_back_right  = '/purchase';
+                        $dir_back_left   = '\purchase';
                         break;
                 case 'purchase_return'://
-                        $source     = \App\Transaction::find($source_id); 
-                        $ref_no     = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
-                        $url        = '/purchase-return';
+                        $source          = \App\Transaction::find($source_id); 
+                        $ref_no          = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url             = '/purchase-return';
+                        $dir             = 'purchase_return/';
+                        $dir_back_right  = '/purchase_return';
+                        $dir_back_left   = '\purchase_return';
                         break;
                 case 'sale'://
-                        $source     = \App\Transaction::find($source_id);
-                        $ref_no     = $source->invoice_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
-                        $url        = '/sells';
+                        $source          = \App\Transaction::find($source_id);
+                        $ref_no          = $source->invoice_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url             = '/sells';
+                        $dir             = 'sale/';
+                        $dir_back_right  = '/sale';
+                        $dir_back_left   = '\sale' ;
                         if ($source->status == 'quotation') { $url = '/sells/quotations'; 
                         }  else if ($source->status == 'ApprovedQuotation') { $url = '/sells/QuatationApproved';
                         }  else if ($source->status == 'final' || $source->status == 'Delivered') { $url = '/sells';
@@ -590,34 +599,50 @@ class HomeController extends Controller
                         }
                         break;
                 case 'sell_return'://
-                        $source     = \App\Transaction::find($source_id);
-                        $ref_no     = $source->invoice_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
-                        $url        = '/sell-return';
+                        $source          = \App\Transaction::find($source_id);
+                        $ref_no          = $source->invoice_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url             = '/sell-return';
+                        $dir             = 'sale_return/';
+                        $dir_back_right  = '/sale_return';
+                        $dir_back_left   = '\sale_return';
                         break;                    
                 case 'payment_voucher':// 
-                        $source     = \App\Models\PaymentVoucher::find($source_id);
-                        $ref_no     = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
-                        $url        = '/payment-voucher';
+                        $source          = \App\Models\PaymentVoucher::find($source_id);
+                        $ref_no          = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url             = '/payment-voucher';
+                        $dir             = 'voucher/';
+                        $dir_back_right  = '/voucher';
+                        $dir_back_left   = '\voucher';
                         break;
                 case 'daily_payment'://
-                        $source     = \App\Models\DailyPayment::find($source_id);
-                        $ref_no     = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
-                        $url        = '/daily-payment';
+                        $source          = \App\Models\DailyPayment::find($source_id);
+                        $ref_no          = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url             = '/daily-payment';
+                        $dir             = 'journal-voucher/';
+                        $dir_back_right  = '/journal-voucher';
+                        $dir_back_left   = '\journal-voucher';
                         break;
                 case 'expense_voucher'://
-                        $source     = \App\Models\GournalVoucher::find($source_id);
-                        $ref_no     = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
-                        $url        = '/gournal-voucher';
-                        break;  
+                        $source          = \App\Models\GournalVoucher::find($source_id);
+                        $ref_no          = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url             = '/gournal-voucher';
+                        $dir             = 'expense-voucher/';
+                        $dir_back_right  = '/expense-voucher';
+                        $dir_back_left   = '\expense-voucher';
+                        break; 
                 case 'check'://
-                        $source     = \App\Models\Check::find($source_id);
-                        $ref_no     = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
-                        $url        = '/cheque'; 
+                        $source          = \App\Models\Check::find($source_id);
+                        $ref_no          = $source->ref_no; $document_attach   = ($source->document != "[]" && $source->document != null)?$source->document:[] ; 
+                        $url             = '/cheque'; 
+                        $dir             = 'check/';
+                        $dir_back_right  = '/check';
+                        $dir_back_left   = '\check';
                         break;                    
                 default:
                     $source            = null;
                     $ref_no            = ""; $document_attach   = [] ; 
                     $url               = "/";
+                    $dir               = '';
                     break;
 
             }
@@ -630,8 +655,12 @@ class HomeController extends Controller
                     if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
                         if ($file->getSize() <= config('constants.document_size_limit')){ 
                             $file_name_m    =  time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
-                            $file->move('uploads/companies/'.$company_name.'/documents/purchase',$file_name_m);
-                            $file_name      =  'uploads/companies/'.$company_name.'/documents/purchase/'. $file_name_m;
+                            $destinationPath = public_path('uploads/companies/'.$company_name.'/documents'.$dir_back_right);
+                            if (!file_exists($destinationPath)) {
+                                mkdir($destinationPath, 0755, true);
+                            }
+                            $file->move('uploads/companies/'.$company_name.'/documents'.$dir_back_right,$file_name_m);
+                            $file_name      =  'uploads/companies/'.$company_name.'/documents/'.$dir. $file_name_m;
                         }
                     }else{
                         if ($file->getSize() <= config('constants.document_size_limit')) {
@@ -642,8 +671,12 @@ class HomeController extends Controller
                             $half_width    = $width/2;
                             $half_height   = $height/2; 
                             $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
-                            $file_name =  'uploads/companies/'.$company_name.'/documents/purchase/'. $new_file_name;
-                            if ($imgs->save(public_path("uploads\companies\\$company_name\documents\purchase\\$new_file_name"),20)) {
+                            $file_name =  'uploads/companies/'.$company_name.'/documents/'.$dir. $new_file_name;
+                            // if ($imgs->save(public_path("uploads\companies\\$company_name\documents$dir_back_left\\$new_file_name"),20)) {
+                            //     $uploaded_file_name = $new_file_name;
+                            // }
+                            $public_path = public_path('uploads/companies/'.$company_name.'/documents/'.$dir);
+                            if ($imgs->save($public_path . $new_file_name)) {
                                 $uploaded_file_name = $new_file_name;
                             }
                         }

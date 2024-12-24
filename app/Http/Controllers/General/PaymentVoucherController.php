@@ -113,7 +113,14 @@ class PaymentVoucherController extends Controller
                         $half_height   = $height/2; 
                         $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
                         $file_name =  'uploads/companies/'.$company_name.'/documents/voucher/'. $new_file_name;
-                        if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\voucher\\$new_file_name"),20)) {
+                        // if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\voucher\\$new_file_name"),20)) {
+                        //     $uploaded_file_name = $new_file_name;
+                        // }
+                        $public_path = public_path('uploads/companies/'.$company_name.'/documents/voucher');
+                        if (!file_exists($public_path)) {
+                            mkdir($public_path, 0755, true);
+                        }
+                        if ($imgs->save($public_path ."/" . $new_file_name)) {
                             $uploaded_file_name = $new_file_name;
                         }
                             
@@ -224,7 +231,14 @@ class PaymentVoucherController extends Controller
                         $half_height   = $height/2; 
                         $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
                         $file_name =  'uploads/companies/'.$company_name.'/documents/voucher/'. $new_file_name;
-                        if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\voucher\\$new_file_name"),20)) {
+                        // if ($imgs->save(public_path("uploads\companies\\$company_name\documents\\voucher\\$new_file_name"),20)) {
+                        //     $uploaded_file_name = $new_file_name;
+                        // }
+                        $public_path = public_path('uploads/companies/'.$company_name.'/documents/voucher');
+                        if (!file_exists($public_path)) {
+                            mkdir($public_path, 0755, true);
+                        }
+                        if ($imgs->save($public_path ."/" . $new_file_name)) {
                             $uploaded_file_name = $new_file_name;
                         }
                             
@@ -239,7 +253,14 @@ class PaymentVoucherController extends Controller
         }
         #..........................................
         $data->save();
-        $voucherAccountTransaction  = \App\AccountTransaction::where('payment_voucher_id',$id)->where('account_id',$old_id)->get();
+        $type      =  $data->type;
+        $state     =  'debit';
+        $re_state  =  'credit';
+        if ($type == 1 ) {
+            $state     =  'credit';
+            $re_state  =  'debit';
+        }
+        $voucherAccountTransaction  = \App\AccountTransaction::where('payment_voucher_id',$id)->where("type",$re_state)->where('account_id',$old_id)->get();
         foreach($voucherAccountTransaction as $items){
             # .......................................
             $account_old            = $items->account_id;
@@ -264,7 +285,7 @@ class PaymentVoucherController extends Controller
             $old_account_id     =  \App\Account::where('id',$old_contact)->first();
         }
         
-        $accountAccountTransactionOld   = \App\AccountTransaction::where('payment_voucher_id',$id)->where('account_id',$old_account_id->id)->get();
+        $accountAccountTransactionOld   = \App\AccountTransaction::where('payment_voucher_id',$id)->where("type",$state)->where('account_id',$old_account_id->id)->get();
         foreach($accountAccountTransactionOld as $items){
             # .......................................
             $account_old            = $items->account_id;
@@ -282,7 +303,25 @@ class PaymentVoucherController extends Controller
             if($accountONE->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountONE->id,$data->business_id,$account_date_old); }
             if($accountTWO->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountTWO->id,$data->business_id,$account_date_new); }
         } 
-                                   
+        if(count($voucherAccountTransaction)==0){
+            $voucherAccountTransaction   = \App\AccountTransaction::where('payment_voucher_id',$id)->where("type",$state)->where('account_id',$old_id)->delete();
+             # effect cash  account 
+            $credit_data = [
+                'amount'             => $data->amount,
+                'account_id'         => $data->account_id,
+                'type'               => $re_state,
+                'sub_type'           => 'deposit',
+                'operation_date'     => $data->date,
+                'created_by'         => session()->get('user.id'),
+                'note'               => $data->text,
+                'payment_voucher_id' => $id
+            ];
+            $credit  = \App\AccountTransaction::createAccountTransaction($credit_data);
+            $_account = \App\Account::find($data->account_id);
+            if($_account->cost_center!= 1){
+                \App\AccountTransaction::nextRecords($_account->id,$data->business_id,$data->date);
+            }
+        }                           
         $bills                       =  $request->only([
             'bill_id','bill_amount','old_bill_id','old_bill_amount','payment_id'
         ]);

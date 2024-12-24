@@ -87,7 +87,14 @@ class DailyPaymentController extends Controller
                         $half_height   = $height/2; 
                         $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
                         $source_file_name =  'uploads/companies/'.$company_name.'/documents/journal-voucher/'. $new_file_name;
-                        if ($imgs->save(public_path("uploads\companies\\$company_name\documents\journal-voucher\\$new_file_name"),20)) {
+                        // if ($imgs->save(public_path("uploads\companies\\$company_name\documents\journal-voucher\\$new_file_name"),20)) {
+                        //     $uploaded_file_name = $new_file_name;
+                        // }
+                        $public_path = public_path('uploads/companies/'.$company_name.'/documents/journal-voucher');
+                        if (!file_exists($public_path)) {
+                            mkdir($public_path, 0755, true);
+                        }
+                        if ($imgs->save($public_path ."/" . $new_file_name)) {
                             $uploaded_file_name = $new_file_name;
                         }
                          
@@ -216,10 +223,16 @@ class DailyPaymentController extends Controller
                         $half_height   = $height/2; 
                         $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
                         $file_name =  'uploads/companies/'.$company_name.'/documents/journal-voucher/'. $new_file_name;
-                        if ($imgs->save(public_path("uploads\companies\\$company_name\documents\journal-voucher\\$new_file_name"),20)) {
-                            $uploaded_file_name = $new_file_name;
+                        // if ($imgs->save(public_path("uploads\companies\\$company_name\documents\journal-voucher\\$new_file_name"),20)) {
+                        //     $uploaded_file_name = $new_file_name;
+                        // }
+                        $public_path = public_path('uploads/companies/'.$company_name.'/documents/journal-voucher');
+                        if (!file_exists($public_path)) {
+                            mkdir($public_path, 0755, true);
                         }
-                            
+                        if ($imgs->save($public_path ."/" . $new_file_name)) {
+                            $uploaded_file_name = $new_file_name;
+                        }  
                     }
                 }
                 #................
@@ -376,17 +389,16 @@ class DailyPaymentController extends Controller
         $data    =  DailyPayment::find($id);
         $dp      =  DailyPaymentItem::where("daily_payment_id",$data->id)->get();
         foreach($dp as $i){$ids[]=$i->id;}
-        $entry   =  \App\AccountTransaction::whereIn('daily_payment_item_id',$ids)->whereHas("account",function($query){
-                                                                                    $query->where("cost_center",0);
-                                                                            })
-                                                                ->where('amount','>',0)->groupBy("entry_id")->whereNull("deleted_at")->get();
-
         $allData =  \App\AccountTransaction::whereIn('daily_payment_item_id',$ids)->whereHas("account",function($query){
                                                                                     $query->where("cost_center",0);
                                                                             })
                                                                 ->where('amount','>',0)->get();
-        // $entry   =  Entry::where()->select()->get(); 
-      
+        $entry_id = null;
+        foreach($allData as $i){
+            $entry_id = $i->entry_id;
+            break;
+        }
+        $entry   =  Entry::where("id",$entry_id)->get(); 
         return view('daily_payments.entry')
                    ->with('allData', $allData)
                    ->with('entry', $entry)

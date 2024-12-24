@@ -40,7 +40,7 @@
                 @if(in_array('service_staff', $enabled_modules))
                         <div class="col-md-4 text-center">
                             <div class="form-group">
-                                <h4>@lang( 'lang_v1.user_type' )</h4>
+                                <h4 class="font_text">@lang( 'lang_v1.user_type' )</h4>
                             </div>
                         </div>
                         <div class="col-md-4  ">
@@ -82,7 +82,7 @@
                         <div class="checkbox">
                             <label><b>
                                 {!! Form::checkbox('permissions[]', 'sidBar.Dashboard', in_array('sidBar.Dashboard', $role_permissions),
-                                [ 'class' => 'input-icheck']); !!} {{ __( 'role.Dashboard' ) }}
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'home.home' ) }}
                             </b></label>
                         </div>
                     </div>
@@ -335,7 +335,7 @@
                         <div class="checkbox ">
                             <label><b>
                                 {!! Form::checkbox('permissions[]', 'sidBar.UserManagement', in_array('sidBar.UserManagement', $role_permissions),
-                                [ 'class' => 'input-icheck']); !!} {{ __( 'role.UserManagement' ) }}
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'user.user_management' ) }}
                             </b></label>
                         </div>
                     </div>
@@ -361,7 +361,7 @@
                         <div class="checkbox">
                             <label><b>
                                 {!! Form::checkbox('permissions[]', 'sidBar.Contacts', in_array('sidBar.Contacts', $role_permissions),
-                                [ 'class' => 'input-icheck']); !!} {{ __( 'role.Contacts' ) }}
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'contact.contacts' ) }}
                             </b></label>
                         </div>
                     </div>
@@ -404,7 +404,7 @@
                         <div class="checkbox">
                             <label><b>
                                 {!! Form::checkbox('permissions[]', 'sidBar.Products', in_array('sidBar.Products', $role_permissions),
-                                [ 'class' => 'input-icheck']); !!} {{ __( 'role.Products' ) }}
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'sale.products' ) }}
                             </b></label>
                         </div>
                     </div>
@@ -502,7 +502,7 @@
                         <div class="checkbox">
                             <label><b>
                                 {!! Form::checkbox('permissions[]', 'sidBar.Inventory', in_array('sidBar.Inventory', $role_permissions),
-                                [ 'class' => 'input-icheck']); !!} {{ __( 'role.Inventory' ) }}
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'lang_v1.inventory_' ) }}
                                 </b>
                             </label>
                         </div>
@@ -573,7 +573,7 @@
                         <div class="checkbox">
                             <label><b>
                                 {!! Form::checkbox('permissions[]', 'sidBar.Purchases', in_array('sidBar.Purchases', $role_permissions),
-                                [ 'class' => 'input-icheck']); !!} {{ __( 'role.Purchases' ) }}
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'purchase.purchases' ) }}
                             </b></label>
                         </div>
                     </div>
@@ -608,7 +608,7 @@
                         <div class="checkbox">
                             <label><b>
                                 {!! Form::checkbox('permissions[]', 'sidBar.Sales', in_array('sidBar.Sales', $role_permissions),
-                                [ 'class' => 'input-icheck']); !!} {{ __( 'role.Sales' ) }}
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'sale.sale' ) }}
                             </b></label>
                         </div>
                     </div>
@@ -871,7 +871,7 @@
                         <div class="checkbox">
                             <label><b>
                                 {!! Form::checkbox('permissions[]', 'sidBar.Warehouses', in_array('sidBar.Warehouses', $role_permissions),
-                                [ 'class' => 'input-icheck']); !!} {{ __( 'role.Warehouses' ) }}
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'warehouse.warehouse' ) }}
                             </b></label>
                         </div>
                     </div>

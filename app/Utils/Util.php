@@ -802,11 +802,13 @@ class Util
                     $half_height   = $height/2; 
                     $imgs = \Image::make($request->$file_name)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
                     if($file_name=='business_logo'){
-                        if ($imgs->save(public_path("uploads\companies\\$company_name\business_logo\\$new_file_name"),20)) {
+                        $public_path = public_path('uploads/companies/'.$company_name.'/business_logo');
+                        if ($imgs->save($public_path ."/" . $new_file_name)) {
                             $uploaded_file_name = $new_file_name;
                         }
                     }else{
-                        if ($imgs->save(public_path("uploads\companies\\$company_name\img\\$new_file_name"),20)) {
+                        $public_path = public_path('uploads/companies/'.$company_name.'/img');
+                        if ($imgs->save($public_path ."/" . $new_file_name)) {
                             $uploaded_file_name = $new_file_name;
                         }
                     }

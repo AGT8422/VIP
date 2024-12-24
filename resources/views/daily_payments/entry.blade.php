@@ -17,8 +17,7 @@
                               $entry_ref    = [];
                           ?>
                         @foreach($allData as $key=>$item)
-                           @foreach($entry as $key=>$ref)
-                             {{-- @php dd($item->gournal_voucher); @endphp  --}}
+                           @foreach($entry as $key=>$ref) 
                               @if(!in_array($ref->refe_no_e,$entry_ref))
                                  @if($item->daily_payment_item->daily_payment->ref_no == $ref->ref_no_e  )
                                     @php array_push($entry_ref,$ref->refe_no_e); @endphp 
@@ -55,15 +54,14 @@
                            {{ date('Y-m-d',strtotime($item->operation_date)) }}
                           </td>
                           <td>
-                            <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'debit')?number_format($item->amount,config('constants.currency_precision')):0 }}</span>
+                            <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'debit')?number_format($item->amount,2):0 }}</span>
                           </td>
                           <td>
-                            <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'credit')?number_format($item->amount,config('constants.currency_precision')):0 }} </span>
+                            <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'credit')?number_format($item->amount,2):0 }} </span>
                           </td>
                           
                        </tr>
-                   @endif
-                   @endforeach
+                       @endforeach
                        <tfoot>
 
                           <tr role="row" class="odd">
@@ -73,10 +71,10 @@
                         </td>
                         <td>
                           <span class="display_currency" data-currency_symbol="true">
-                             {{ number_format($total_debit,config('constants.currency_precision')) }}</span>
+                             {{ number_format($total_debit,2) }}</span>
                            </td>
                            <td>
-                          <span class="display_currency" data-currency_symbol="true">{{ number_format($total_credit,config('constants.currency_precision')) }} </span>
+                          <span class="display_currency" data-currency_symbol="true">{{ number_format($total_credit,2) }} </span>
                         </td>
                         </tfoot>
                         

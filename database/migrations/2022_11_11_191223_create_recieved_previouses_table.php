@@ -21,6 +21,7 @@ class CreateRecievedPreviousesTable extends Migration
             $table->double('total_qty');
             $table->double('current_qty');
             $table->double('remain_qty');
+            $table->integer('transaction_deliveries_id')->nullable();
             $table->integer('store_id')->unsigned();
             $table->foreign('store_id')->references('id')->on('warehouses')->onDelete('cascade');
             $table->integer('line_id')->nullable();

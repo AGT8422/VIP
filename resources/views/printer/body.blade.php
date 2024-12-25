@@ -22,6 +22,7 @@
                   "product"                    => [ "name"                 => "Test Product",
                                                     "sku"                  => "6123363743673",
                                                     "product_description"  => "Test Product 7452544",
+                                                    "image"                => null,
                                                   ] 
             ];
     $lis[] = [    "item_tax"                   => 0,
@@ -34,6 +35,7 @@
                   "product"                    => [ "name"                 => "Test Product",
                                                     "sku"                  => "6123363743673",
                                                     "product_description"  => "Test Product 7452544",
+                                                    "image"                => null,
                                                   ] 
             ];
     $data = [
@@ -49,6 +51,8 @@
         "discount_amount"   => 0,
         "tax_id"            => 1,
         "sell_lines"        =>  $lis,
+        "additional_notes"  =>  '',
+        
     ];
      
     $data = json_decode(json_encode($data)); 
@@ -1190,23 +1194,27 @@
                                     @endif
                                     @if($table_th_img == true)
                                         @php
-                                            if($item->product->image_url){
-                                                $path_image  = $item->product->image_path_second ;
-                                                // $path_image  = public_path("image_path") ;
-                                                try{
-                                                    if($path_image != null){
-                                                        $img_dir     = file_get_contents($path_image);
-                                                        $row_type    = pathinfo($path_image,PATHINFO_EXTENSION);
-                                                        $row_pic     = 'data:image/' . $row_type . ';base64,' . base64_encode($img_dir);
-                                                        $row_img_url   =    $row_pic;
-                                                    }else{
+                                            if($item->product->image){
+                                                if($item->product->image_url){
+                                                    $path_image  = $item->product->image_path_second ;
+                                                    // $path_image  = public_path("image_path") ;
+                                                    try{
+                                                        if($path_image != null){
+                                                            $img_dir     = file_get_contents($path_image);
+                                                            $row_type    = pathinfo($path_image,PATHINFO_EXTENSION);
+                                                            $row_pic     = 'data:image/' . $row_type . ';base64,' . base64_encode($img_dir);
+                                                            $row_img_url   =    $row_pic;
+                                                        }else{
+                                                            $row_img_url = null;
+                                                        }
+                                                    }catch(Exception $ex){
+                                                        //Process the exception
                                                         $row_img_url = null;
                                                     }
-                                                }catch(Exception $ex){
-                                                    //Process the exception
+                                                
+                                                }else{
                                                     $row_img_url = null;
                                                 }
-                                                
                                             }else{
                                                 $row_img_url = null;
                                             }
@@ -1279,26 +1287,30 @@
                                         @endif
                                         @if($table_th_img == true)
                                             @php
-                                                if($item->product->image_url){
-                                                    $path_image  = $item->product->image_path_second ;
-                                                    // $path_image  = public_path("image_path") ;
-                                                    try{
-                                                        if($path_image != null){
-                                                            $img_dir       = file_get_contents($path_image);
-                                                            $row_type      = pathinfo($path_image,PATHINFO_EXTENSION);
-                                                            $row_pic       = 'data:image/' . $row_type . ';base64,' . base64_encode($img_dir);
-                                                            $list_img[]    = $path_image;
+                                                if($item->product->image){
+                                                    if($item->product->image_url){
+                                                        $path_image  = $item->product->image_path_second ;
+                                                        // $path_image  = public_path("image_path") ;
+                                                        try{
+                                                            if($path_image != null){
+                                                                $img_dir       = file_get_contents($path_image);
+                                                                $row_type      = pathinfo($path_image,PATHINFO_EXTENSION);
+                                                                $row_pic       = 'data:image/' . $row_type . ';base64,' . base64_encode($img_dir);
+                                                                $list_img[]    = $path_image;
+                                                                
+                                                                $row_img_url   = $row_pic;
                                                             
-                                                            $row_img_url   = $row_pic;
-                                                         
-                                                        }else{
+                                                            }else{
+                                                                $row_img_url = null;
+                                                            }
+                                                        }catch(Exception $ex){
+                                                            //Process the exception
                                                             $row_img_url = null;
                                                         }
-                                                    }catch(Exception $ex){
-                                                        //Process the exception
+                                                        
+                                                    }else{
                                                         $row_img_url = null;
                                                     }
-                                                    
                                                 }else{
                                                     $row_img_url = null;
                                                 }
@@ -1438,23 +1450,28 @@
                                 @endif
                                 @if($table_th_img == true)
                                     @php
-                                        if($item->product->image_url){
-                                            $path_image  = $item->product->image_path_second ;
-                                            // $path_image  = public_path("image_path") ;
-                                            try{
-                                                if($path_image != null){
-                                                    $img_dir     = file_get_contents($path_image);
-                                                    $row_type    = pathinfo($path_image,PATHINFO_EXTENSION);
-                                                    $row_pic     = 'data:image/' . $row_type . ';base64,' . base64_encode($img_dir);
-                                                    $row_img_url   =    $row_pic;
-                                                }else{
+                                    
+                                        if($item->product->image){
+                                            if($item->product->image_url){
+                                                $path_image  = $item->product->image_path_second ;
+                                                // $path_image  = public_path("image_path") ;
+                                                try{
+                                                    if($path_image != null){
+                                                        $img_dir     = file_get_contents($path_image);
+                                                        $row_type    = pathinfo($path_image,PATHINFO_EXTENSION);
+                                                        $row_pic     = 'data:image/' . $row_type . ';base64,' . base64_encode($img_dir);
+                                                        $row_img_url   =    $row_pic;
+                                                    }else{
+                                                        $row_img_url = null;
+                                                    }
+                                                }catch(Exception $ex){
+                                                    //Process the exception
                                                     $row_img_url = null;
                                                 }
-                                            }catch(Exception $ex){
-                                                //Process the exception
+                                                
+                                            }else{
                                                 $row_img_url = null;
                                             }
-                                            
                                         }else{
                                             $row_img_url = null;
                                         }

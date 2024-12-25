@@ -139,6 +139,10 @@ return [
     'contacts'                     => 'Contacts',
     '>'                            => '>',
     'user_management'              => 'User Management',
+    'Send Whatsapp'                => 'Send Whatsapp',
+    'Return Voucher'               => 'Return Voucher',
+    'Delete'                       => 'Delete',
+    '>'                            => '>',
 
 
 ];

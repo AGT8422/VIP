@@ -20,6 +20,9 @@
         font-size:17px;
         text-align:center;
     }
+    .company_name_style{
+        /* outline:1px solid #000; */
+    }
     #header_shortcut_dropdown i{
         color:#ec8608;
     }
@@ -114,6 +117,9 @@
         border:1px solid #f7f7f7;
     }
     @media (max-width: 600px) {
+        .company_name_style{
+            /* outline:1px solid #000; */
+        }
         #header_shortcut_dropdown i{
             color:#ec8608;
         }
@@ -212,6 +218,9 @@
         
     }
     @media (min-width: 600px)  and  (max-width: 900px) {
+        .company_name_style{
+            /* outline:1px solid #000; */
+        }
         #header_shortcut_dropdown i{
             color:#ec8608;
         }
@@ -310,6 +319,9 @@
         
     }
     @media (min-width: 1024px) and  (max-width:1400px) {
+        .company_name_style{
+            /* outline:1px solid #000; */
+        }
         #header_shortcut_dropdown i{
             color:#ec8608;
         }
@@ -408,6 +420,9 @@
         
     }
     @media (min-width: 900px)  and  (max-width: 1024px){
+        .company_name_style{
+            /* outline:1px solid #000; */
+        }
         #header_shortcut_dropdown i{
             color:#ec8608;
         }
@@ -532,15 +547,15 @@
         
         @endphp
         
-        <div class="col-md-2 p-10 text-center"> 
-           <h3 class="hide"> {{ Session::get('business.name') }}</h3>
+        <div class="col-md-2 p-10 text-center company_name_style"> 
+           <h3  style="font-size: 14px"> {{ Session::get('business.name') }}</h3>
         </div>
 
         <div class="col-md-7 parent_right_header" @if(in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl'))) dir="ltr" @else dir="rtl" @endif>
                  <div class="item-one">
                     <ul class="nav navbar-nav">
                         <!-- User Account Menu -->
-                        <li class="dropdown user user-menu">
+                        <li class="dropdown user user-menu" style="position: relative">
                             <!-- Menu Toggle Button -->
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <!-- The user image in the navbar-->
@@ -548,10 +563,12 @@
                                 $profile_photo = auth()->user()->media;
                                 @endphp
                                 @if(!empty($profile_photo))
-                                <img src="{{$profile_photo->display_url}}" class="user-image pull-right"  alt="User Image">
+                                    <img style="position: relative;" src="{{$profile_photo->display_url}}" class="user-image pull-right"  alt="User Image">
+                                @else
+                                    <img style="position: relative;" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png" class="user-image pull-right"  alt="User Image">
                                 @endif
                                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                                <span>{{ Auth::User()->first_name }} {{ Auth::User()->last_name }}</span>
+                                <span style="font-size: 14px;">{{ Auth::User()->first_name }} {{ Auth::User()->last_name }}</span>
                             </a>
                             @php 
                             $company_name = request()->session()->get("user_main.domain");

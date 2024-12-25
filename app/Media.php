@@ -42,7 +42,7 @@ class Media extends Model
         $path ='';
         if (!empty($this->file_name)) {
             $company_name = request()->session()->get("user_main.domain");
-             $path = asset('public/uploads/media/'.$company_name.'/' . rawurlencode($this->file_name));
+             $path = asset('uploads/companies/'.$company_name.'/media/' . rawurlencode($this->file_name));
         } 
         return $path;
     }
@@ -65,7 +65,8 @@ class Media extends Model
     {
         $path ='';
         if (!empty($this->file_name)) {
-             $path = asset('public/uploads/media/' . rawurlencode($this->file_name));
+            $company_name = request()->session()->get("user_main.domain");
+             $path = asset('uploads/companies/'.$company_name.'/media/' . rawurlencode($this->file_name));
         } 
         return $path;
     }
@@ -75,7 +76,8 @@ class Media extends Model
      */
     public function getDisplayPathAttribute()
     {
-        $path = public_path('public/uploads/media') . '/' . rawurlencode($this->file_name);
+        $company_name = request()->session()->get("user_main.domain");
+        $path = public_path('uploads/companies/'.$company_name.'/media/') . '/' . rawurlencode($this->file_name);
 
         return $path;
     }
@@ -165,7 +167,7 @@ class Media extends Model
                 $imgs = \Image::make($file)->resize($half_width,$half_height);//$file->storeAs('/media', $new_file_name)
                 // if ($imgs->save(public_path("uploads\\".."\media\\$new_file_name"),20)) {
                 $company_name = request()->session()->get("user_main.domain");
-                $public_path = public_path('uploads/companies/'.$company_name.'/media');
+                $public_path = public_path('uploads/companies/'.$company_name.'/media');$public_path = public_path('uploads/companies/'.$company_name.'/media');
                 // if ($imgs->save(public_path("uploads\companies\\$company_name\media\\$new_file_name"),20)) {
                     
                 //     $file_name = $new_file_name;

@@ -28,8 +28,8 @@
                                           <tr role="row">
                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 187px;">Account</th>
                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 187px;">Date</th>
-                                             <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 79px;">Debit</th>
-                                             <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 188px;">Credit</th>
+                                           <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 79px;">Credit</th>
+                                             <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 188px;">Debit</th>
                                           </tr>
                                        </thead>
                                  @endif
@@ -46,18 +46,41 @@
                            }
                              
                             ?>
+                             @php
+                                 $dt =  date('Y-m-d',strtotime($item->operation_date));
+                                 $formats = [
+                                    'Y-m-d', // 2024-12-25
+                                    'd/m/Y', // 25/12/2024
+                                    'm/d/Y', // 12/25/2024
+                                    'd-m-Y', // 25-12-2024
+                                    'Y/m/d', // 2024/12/25
+                                    'Y-m-d H:i:s', // 2024-12-25 14:30:00
+                                    'd-m-Y H:i:s', // 25-12-2024 14:30:00    
+                                 ];
+                                 $D_format = "ops";
+                                 foreach ($formats as $format) {
+                                    try {
+                                          $date = \Carbon::createFromFormat($format, $dt);
+                                          // Check if the parsed date matches the input date string
+                                          if ($date && $date->format($format) === $dt) {
+                                             $D_format = $format;
+                                          }
+                                    } catch (\Exception $e) {
+                                          // Continue to the next format
+                                    }
+                                 } 
+                              @endphp
                        <tr role="row" class="odd {{ ($item->account->cost_center > 0)?'alert-tr':' ' }}">
                           <td> 
-                            <a target="_blank" href="{{ URL::to('account/account/'.$item->account_id) }}">{{ $item->account->name }}</a> 
-                          </td>
-                          <td>
-                           {{ date('Y-m-d',strtotime($item->operation_date)) }}
-                          </td>
+                             <a target="_blank" href="{{ URL::to('account/account/'.$item->account_id) }}">{{ $item->account->name }}</a> 
+                           </td>
+                           <td>{{\Carbon::createFromFormat($D_format,date('Y-m-d',strtotime($item->operation_date)))->format(session()->get('business.date_format'))}}</td>
+                            
+                        <td>
+                          <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'credit')?number_format($item->amount,2):0 }} </span>
+                        </td>
                           <td>
                             <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'debit')?number_format($item->amount,2):0 }}</span>
-                          </td>
-                          <td>
-                            <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'credit')?number_format($item->amount,2):0 }} </span>
                           </td>
                           
                        </tr>
@@ -70,12 +93,12 @@
                         <td>
                         </td>
                         <td>
+                           <span class="display_currency" data-currency_symbol="true">{{ number_format($total_credit,2) }} </span>
+                        </td>
+                        <td>
                           <span class="display_currency" data-currency_symbol="true">
                              {{ number_format($total_debit,2) }}</span>
                            </td>
-                           <td>
-                          <span class="display_currency" data-currency_symbol="true">{{ number_format($total_credit,2) }} </span>
-                        </td>
                         </tfoot>
                         
                      </tr>

@@ -58,6 +58,9 @@ class CreatePrinterTemplateContainsTable extends Migration
             $table->text("center_middle_footer_radio",10)->nullable();
             $table->text("center_last_footer_radio",10)->nullable();
             
+            $table->text("margin_bottom_page",10)->nullable();
+            $table->text("margin_top_page",10)->nullable();
+            
             $table->integer("printer_templates_id");
             $table->integer("created_by");
             

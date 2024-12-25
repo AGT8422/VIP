@@ -184,6 +184,32 @@ class AppServiceProvider extends ServiceProvider
                 return null;
             }
         });
+        //Blade directive to convert.
+        Blade::directive('detectDateFormat', function ($dateString) {
+                $formats = [
+                    'Y-m-d', // 2024-12-25
+                    'd/m/Y', // 25/12/2024
+                    'm/d/Y', // 12/25/2024
+                    'd-m-Y', // 25-12-2024
+                    'Y/m/d', // 2024/12/25
+                    'Y-m-d H:i:s', // 2024-12-25 14:30:00
+                    'd-m-Y H:i:s', // 25-12-2024 14:30:00    
+                ];
+                
+                foreach ($formats as $format) {
+                    try {
+                        $date = \Carbon::createFromFormat($format, $dateString);
+                        // Check if the parsed date matches the input date string
+                        if ($date && $date->format($format) === $dateString) {
+                            return $format;
+                        }
+                    } catch (\Exception $e) {
+                        // Continue to the next format
+                    }
+                }
+                return null; // No matching format found
+             
+        });
 
         Blade::directive('format_datetime', function ($date) {
             if (!empty($date)) {

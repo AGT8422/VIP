@@ -77,7 +77,31 @@
                         data-container=".view_modal">{{ $item->ref_no}} </a>
                  </td>
                 <td>{{ $item->amount }}</td> 
-                <td>{{ $item->date }}</td>
+                @php
+                    $dt = $item->date;
+                    $formats = [
+                        'Y-m-d', // 2024-12-25
+                        'd/m/Y', // 25/12/2024
+                        'm/d/Y', // 12/25/2024
+                        'd-m-Y', // 25-12-2024
+                        'Y/m/d', // 2024/12/25
+                        'Y-m-d H:i:s', // 2024-12-25 14:30:00
+                        'd-m-Y H:i:s', // 25-12-2024 14:30:00    
+                    ];
+                    $D_format = "ops";
+                    foreach ($formats as $format) {
+                        try {
+                            $date = \Carbon::createFromFormat($format, $dt);
+                            // Check if the parsed date matches the input date string
+                            if ($date && $date->format($format) === $dt) {
+                                $D_format = $format;
+                            }
+                        } catch (\Exception $e) {
+                            // Continue to the next format
+                        }
+                    } 
+                @endphp
+                <td>{{\Carbon::createFromFormat($D_format,$item->date)->format(session()->get('business.date_format'))}}</td>
                 <td>
                     <div class="btn-group">
                         <button type="button" class="btn btn-info dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">@lang('home.Action')<span class="caret"></span><span class="sr-only">Toggle Dropdown </span></button>

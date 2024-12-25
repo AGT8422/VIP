@@ -21,7 +21,7 @@
         {{ session('yes')  }}
     </div>
     @endif
-    @component('components.filters', ['title' => $title])
+    @component('components.filters', ['title' => __('report.filters') , ])
         <form action="{{ URL::to('payment-voucher') }}" method="GET">
             <div class="col-md-2">
                 <div class="form-group">
@@ -57,7 +57,7 @@
             
             <div class="col-md-1">
                 <label for="purchase_list_filter_location_id" class="label-control" style="width: 100%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-               <button type="submit" class="btn btn-md btn-primary">  Filter</button>
+               <button type="submit" class="btn btn-md btn-primary">  {{__('report.filters')}}</button>
             </div>
             
         </form>
@@ -81,8 +81,8 @@
                </tr>
                @foreach ($allData as $item)
                 <tr  class="{{ (($item->amount - $item->payments->sum('amount')) > 0 )?'alert':'' }}" style="border:1px solid #f1f1f1;">
-                    <td>
-                        <a style="color:black" href="#" data-href="{{ action('General\PaymentVoucherController@show', [$item->id]) }}" class="btn-modal"
+                    <td class="font_number">
+                        <a style="color:black " href="#" data-href="{{ action('General\PaymentVoucherController@show', [$item->id]) }}" class="btn-modal font_number"
                             data-container=".view_modal">
                         {{ $item->ref_no}}
                         </a>
@@ -143,14 +143,38 @@
                     </td>
                     <td>{{ $item->account?$item->account->name:'--' }}</td>
                     <td>{{ isset($types[$item->type])?$types[$item->type]:'' }}</td>
-                    <td>{{ $item->date }}</td>
+                    @php
+                        $dt = $item->date;
+                        $formats = [
+                            'Y-m-d', // 2024-12-25
+                            'd/m/Y', // 25/12/2024
+                            'm/d/Y', // 12/25/2024
+                            'd-m-Y', // 25-12-2024
+                            'Y/m/d', // 2024/12/25
+                            'Y-m-d H:i:s', // 2024-12-25 14:30:00
+                            'd-m-Y H:i:s', // 25-12-2024 14:30:00    
+                        ];
+                        $D_format = "ops";
+                        foreach ($formats as $format) {
+                            try {
+                                $date = \Carbon::createFromFormat($format, $dt);
+                                // Check if the parsed date matches the input date string
+                                if ($date && $date->format($format) === $dt) {
+                                    $D_format = $format;
+                                }
+                            } catch (\Exception $e) {
+                                // Continue to the next format
+                            }
+                        } 
+                    @endphp
+                    <td>{{\Carbon::createFromFormat($D_format,$item->date)->format(session()->get('business.date_format'))}}</td>
                     <td>
                         <div class="btn-group">
                             <button type="button" class="btn btn-info dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">@lang('home.Action')<span class="caret"></span><span class="sr-only">Toggle Dropdown </span></button>
                             <ul class="dropdown-menu dropdown-menu-left" role="menu"> 
                                 <li>
-                                    <a href="#" data-href="{{ action('General\PaymentVoucherController@show', [$item->id]) }}" class="btn-modal"
-                                         data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i>@lang('home.View')</a>
+                                    <a href="#" style="text-decoration:none" data-href="{{ action('General\PaymentVoucherController@show', [$item->id]) }}" class="btn-modal"
+                                         data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i>&nbsp;&nbsp; @lang('home.View')</a>
                                 </li>
                                 <li>
                                 </li>
@@ -158,23 +182,23 @@
                                  @if($item->return_voucher == 0 || $item->return_voucher == null)
                                     <li>
                                          @php  $types_s = ($item->account_type == 0)?(($item->contact->type == "customer")?0:1):0;  @endphp
-                                        <a href="{{ URL::to('payment-voucher/edit/'.$item->id.'&type='.$types_s) }}"><i class="fas fa-edit"></i>@lang('home.Edit')</a>
+                                        <a style="text-decoration:none" href="{{ URL::to('payment-voucher/edit/'.$item->id.'&type='.$types_s) }}"><i class="fas fa-edit"></i>&nbsp;&nbsp;@lang('home.Edit')</a>
                                          
                                     </li>
                                 @endif
                                 <li>
                                     @php  $types_s = ($item->account_type == 0)?(($item->contact->type == "customer")?0:1):0;  @endphp
                                     @if($types_s == 0)
-                                        <a href="{{ URL::to('reports/r-vh/'.$item->id) }}" target="_blank"><i class="fas fa-print"></i>@lang('messages.print')</a>
+                                        <a style="text-decoration:none" href="{{ URL::to('reports/r-vh/'.$item->id) }}" target="_blank"><i class="fas fa-print"></i>&nbsp;&nbsp;@lang('messages.print')</a>
                                     @else
-                                        <a href="{{ URL::to('reports/p-vh/'.$item->id) }}" target="_blank"><i class="fas fa-print"></i>@lang('messages.print')</a>
+                                        <a style="text-decoration:none" href="{{ URL::to('reports/p-vh/'.$item->id) }}" target="_blank"><i class="fas fa-print"></i>&nbsp;&nbsp;@lang('messages.print')</a>
                                     @endif
                                 </li>
                                 @if($item->document && $item->document != [])
                                     <li>
                                     {{-- @php dd($item->image); @endphp --}}
-                                        <a class="btn-modal" data-href="{{URL::to('payment-voucher/attachment/'.$item->id)}}" data-container=".view_modal">
-                                            <i class="fas fa-file"></i>
+                                        <a style="text-decoration:none"  style="text-decoration:none" class="btn-modal" data-href="{{URL::to('payment-voucher/attachment/'.$item->id)}}" data-container=".view_modal">
+                                            <i class="fas fa-file"></i>&nbsp;&nbsp;
                                             @lang("home.attachment")
                                             {{-- <iframe src="{{ URL::to($data->image) }}" height="150" width="150" frameborder="0"></iframe> --}}  
                                         </a>
@@ -182,24 +206,24 @@
                                     </li>
                                 @endif
                                 <li>
-                                     <a class="btn-modal " data-href="{{ URL::to('payment-voucher/whatsapp/'.$item->id) }}" data-container=".view_modal"><i class="fab fa-whatsapp-square" ></i> @lang('Send Whatsapp')</a>
+                                     <a style="text-decoration:none"  class="btn-modal " data-href="{{ URL::to('payment-voucher/whatsapp/'.$item->id) }}" data-container=".view_modal"><i class="fab fa-whatsapp-square" ></i>&nbsp;&nbsp; @lang('izo.Send Whatsapp')</a>
                                 </li>
                                 <li>
-                                     <a class="btn-modal " data-href="{{ URL::to('payment-voucher/entry/'.$item->id) }}" data-container=".view_modal"><i class="fa fa-align-justify"></i>@lang('home.Entry')</a>
+                                     <a style="text-decoration:none"  class="btn-modal " data-href="{{ URL::to('payment-voucher/entry/'.$item->id) }}" data-container=".view_modal"><i class="fa fa-align-justify"></i>&nbsp;&nbsp;@lang('home.Entry')</a>
                                 </li>
                                 @if($item->return_voucher == 0 || $item->return_voucher == null)
                                     <li>
-                                        <a class=" return_sure" data-href="{{ URL::to('payment-voucher/return/'.$item->id) }}"  ><i class="fa fa-undo" aria-hidden="true"></i>@lang('Return Voucher')</a>
+                                        <a style="text-decoration:none"  class=" return_sure" data-href="{{ URL::to('payment-voucher/return/'.$item->id) }}"  ><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;&nbsp;@lang('izo.Return Voucher')</a>
                                     </li>
                                 @endif
                                 <li>
-                                    <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "payment_voucher","id" => $item->id]) }}" target="_blank" class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>@lang('Add Attachment')</a>
+                                    <a href="#"  style="text-decoration:none" data-href="{{  action('HomeController@formAttach', ["type" => "payment_voucher","id" => $item->id]) }}" target="_blank" class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;@lang('Add Attachment')</a>
                                 </li>
                                 @if(request()->session()->get("user.id") == 1 || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8)
                                     @if($item->status == 0)
                                     <li>
-                                        <a   data-toggle="modal" 
-                                        data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>@lang('home.Delete')</a>
+                                        <a style="text-decoration:none"  data-toggle="modal" 
+                                        data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>&nbsp;&nbsp;@lang('izo.Delete')</a>
                                     </li>
                                     @endif
                                 @endif

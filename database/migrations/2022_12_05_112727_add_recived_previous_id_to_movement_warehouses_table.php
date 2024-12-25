@@ -14,8 +14,8 @@ class AddRecivedPreviousIdToMovementWarehousesTable extends Migration
     public function up()
     {
         Schema::table('movement_warehouses', function (Blueprint $table) {
-            $table->integer('recived_previous_id')->unsigned()->nullable();
-            $table->integer('recieved_wrong_id')->unsigned()->nullable();
+            $table->integer('recived_previous_id')->nullable();
+            $table->integer('recieved_wrong_id')->nullable();
 
         });
     }

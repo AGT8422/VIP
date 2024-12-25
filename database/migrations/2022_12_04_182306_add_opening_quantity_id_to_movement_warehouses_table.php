@@ -14,7 +14,7 @@ class AddOpeningQuantityIdToMovementWarehousesTable extends Migration
     public function up()
     {
         Schema::table('movement_warehouses', function (Blueprint $table) {
-            $table->integer('opening_quantity_id')->unsigned()->nullable();
+            $table->integer('opening_quantity_id')->nullable();
         });
     }
 

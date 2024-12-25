@@ -139,5 +139,8 @@ return [
     'contacts'                     => 'العملاء والمردون',
     '>'                            => '>',
     'user_management'              => 'إدارة المستخدمين',
+    'Send Whatsapp'                => 'إرسال واتساب',
+    'Return Voucher'               => 'إرجاع السند',
+    'Delete'                       => 'حذف',
 
 ];

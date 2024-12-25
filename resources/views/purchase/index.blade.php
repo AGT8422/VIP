@@ -54,12 +54,7 @@
                 {!! Form::text('purchase_list_filter_date_range', null, ['placeholder' => __('lang_v1.select_a_date_range'), 'class' => 'form-control', 'readonly']); !!}
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <button id="startWorker">Start Worker</button>
-                <div id="result"></div>
-            </div>
-        </div>
+         
 
     @endcomponent
 

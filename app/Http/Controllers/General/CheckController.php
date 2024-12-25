@@ -165,10 +165,16 @@ class CheckController extends Controller
                         $half_height   = $height/2; 
                         $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
                         $file_name =  'uploads/companies/'.$company_name.'/documents/check/'. $new_file_name;
-                        if ($imgs->save(public_path("uploads\companies\\$company_name\documents\check\\$new_file_name"),20)) {
-                            $uploaded_file_name = $new_file_name;
+                        // if ($imgs->save(public_path("uploads\companies\\$company_name\documents\check\\$new_file_name"),20)) {
+                        //     $uploaded_file_name = $new_file_name;
+                        // }
+                        $public_path = public_path('uploads/companies/'.$company_name.'/documents/check');
+                        if (!file_exists($public_path)) {
+                            mkdir($public_path, 0755, true);
                         }
-                            
+                        if ($imgs->save($public_path ."/" . $new_file_name)) {
+                            $uploaded_file_name = $new_file_name;
+                        }    
                     }
                 }
                 #................
@@ -308,10 +314,16 @@ class CheckController extends Controller
                         $half_height   = $height/2; 
                         $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
                         $file_name =  'uploads/companies/'.$company_name.'/documents/check/'. $new_file_name;
-                        if ($imgs->save(public_path("uploads\companies\\$company_name\documents\check\\$new_file_name"),20)) {
-                            $uploaded_file_name = $new_file_name;
+                        // if ($imgs->save(public_path("uploads\companies\\$company_name\documents\check\\$new_file_name"),20)) {
+                        //     $uploaded_file_name = $new_file_name;
+                        // }
+                        $public_path = public_path('uploads/companies/'.$company_name.'/documents/check');
+                        if (!file_exists($public_path)) {
+                            mkdir($public_path, 0755, true);
                         }
-                            
+                        if ($imgs->save($public_path ."/" . $new_file_name)) {
+                            $uploaded_file_name = $new_file_name;
+                        }     
                     }
                 }
                 #................

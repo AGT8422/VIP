@@ -819,7 +819,7 @@ class Util
                     return redirect('products')->with('status', $output);
                 }
             } 
-             
+            //  dd($uploaded_file_name);
         }
          return $uploaded_file_name;
     }

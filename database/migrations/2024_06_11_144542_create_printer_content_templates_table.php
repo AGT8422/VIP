@@ -116,7 +116,10 @@ class CreatePrinterContentTemplatesTable extends Migration
             $table->text("content_table_font_weight_price_adi",40)->nullable();
             $table->text("content_table_td_price_adi_font_size",40)->nullable();
             $table->text("content_table_td_price_adi_text_align",40)->nullable();
-
+            
+            $table->text("content_table_td_code_text_align",40)->nullable();
+            $table->text("content_table_td_img_text_align",40)->nullable();
+            
             $table->text("table_th_subtotal",40)->nullable();
             $table->text("content_table_width_subtotal",40)->nullable();
             $table->text("content_table_font_weight_subtotal",40)->nullable();

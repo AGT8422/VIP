@@ -555,9 +555,9 @@
 													@lang('sale.cost_inc_new_currency')
 												</th>
 
-											
+												@if(!empty($common_settings['enable_product_warranty']) && !empty($is_direct_sell))
 												<th>@lang('lang_v1.warranty')</th>
-											
+												@endif
 
 												<th class="text-center">
 													@lang('sale.subtotal'). {{$currency_details->symbol}}

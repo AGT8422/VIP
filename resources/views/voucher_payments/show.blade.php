@@ -1,18 +1,42 @@
-<div class="modal-dialog modal-xl" role="document">
+<div class="modal-dialog modal-xl font_text" role="document">
 	<div class="modal-content">
       <div class="modal-header">
          <button type="button" class="close no-print" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-         <h4 class="modal-title" id="modalTitle"> @lang('home.Payment Voucher') (<b> @lang('home.Ref No'):</b> #{{ $data->ref_no }})
+         <h4 class="modal-title font_text" id="modalTitle"> @lang('home.Payment Voucher') (<b> @lang('home.Ref No'):</b> #{{ $data->ref_no }})
          </h4>
      </div>
+      @php
+         $dt =  date('d/m/Y',strtotime($data->created_at));
+         $formats = [
+            'Y-m-d',       // 2024-12-25
+            'd/m/Y',       // 25/12/2024
+            'm/d/Y',       // 12/25/2024
+            'd-m-Y',       // 25-12-2024
+            'Y/m/d',       // 2024/12/25
+            'Y-m-d H:i:s', // 2024-12-25 14:30:00
+            'd-m-Y H:i:s', // 25-12-2024 14:30:00    
+         ];
+         $D_format = "ops";
+         foreach ($formats as $format) {
+            try {
+                  $date = \Carbon::createFromFormat($format, $dt);
+                  // Check if the parsed date matches the input date string
+                  if ($date && $date->format($format) === $dt) {
+                     $D_format = $format;
+                  }
+            } catch (\Exception $e) {
+                  // Continue to the next format
+            }
+         } 
+      @endphp
 		<div class="modal-body">
          <div class="col-sm-12">
-            <p class="pull-right"><b>@lang('home.Date'):</b> {{  date('d/m/Y',strtotime($data->created_at)) }}</p>
+            <p class="pull-right"><b>@lang('home.Date'):</b> {{\Carbon::createFromFormat($D_format,date('d/m/Y',strtotime($data->created_at)))->format(session()->get('business.date_format'))}}</p>
             
             
          </div>
         
-         <div class="row invoice-info">
+         <div class="row invoice-info font_number">
             <div class="col-sm-4 invoice-col">
                @if($data->transaction)
                <b>@lang('home.Transaction'):</b> #<button type="button" class="btn btn-link btn-modal"
@@ -47,13 +71,36 @@
                    @lang('home.Phone') : {{ $account->contact? $account->contact->mobile:' ' }}
                </address>
             </div>
-         
-           
-            <div class="col-sm-4 invoice-col">
+            @php
+                  $dt =$data->date;
+                  $formats = [
+                     'Y-m-d',       // 2024-12-25
+                     'd/m/Y',       // 25/12/2024
+                     'm/d/Y',       // 12/25/2024
+                     'd-m-Y',       // 25-12-2024
+                     'Y/m/d',       // 2024/12/25
+                     'Y-m-d H:i:s', // 2024-12-25 14:30:00
+                     'd-m-Y H:i:s', // 25-12-2024 14:30:00    
+                  ];
+                  $D_format = "ops";
+                  foreach ($formats as $format) {
+                     try {
+                           $date = \Carbon::createFromFormat($format, $dt);
+                           // Check if the parsed date matches the input date string
+                           if ($date && $date->format($format) === $dt) {
+                              $D_format = $format;
+                           }
+                     } catch (\Exception $e) {
+                           // Continue to the next format
+                     }
+                  } 
+               @endphp
+            
+            <div class="col-sm-4 invoice-col font_number">
                <b>@lang('home.Ref No'):</b> #{{ $data->ref_no }}<br />
-               <b>@lang('home.Due Date')</b> {{ $data->date }}<br />
+               <b>@lang('home.Due Date')</b> {{\Carbon::createFromFormat($D_format,$data->date)->format(session()->get('business.date_format'))}}<br />
             </div>
-            <div class="col-sm-4 invoice-col">
+            <div class="col-sm-4 invoice-col font_number">
                <b>@lang('home.Account'):</b> {{ $data->account?$data->account->name:'---' }}<br />
                <b>@lang('home.Amount'):</b> {{ $data->amount }}<br />
             </div>
@@ -92,9 +139,9 @@
                               {{ $pay->payment_ref_no }}
                            </button>   
                         </th>
-                        <th>@format_currency($data->amount)</th>
-                        <th>@format_currency($pay->source)</th>
-                        <th>@format_currency($data->amount - $pay->source)</th>
+                        <th class="font_number">@format_currency($data->amount)</th>
+                        <th class="font_number">@format_currency($pay->source)</th>
+                        <th class="font_number">@format_currency($data->amount - $pay->source)</th>
                         <th>{{ $pay->method }}</th>
                         <th>{{ $pay->note }}</th>
                         <th>{{ $pay->paid_on }}</th>

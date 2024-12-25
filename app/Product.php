@@ -39,7 +39,7 @@ class Product extends Model
         $image_url ='';
         $company_name = request()->session()->get("user_main.domain");
         if (!empty($this->image)) {
-            $image_url = asset('public/uploads/'.$company_name.'/img/' . rawurlencode($this->image));
+            $image_url = asset('uploads/companies/'.$company_name.'/img/' . rawurlencode($this->image));
         } 
         return $image_url;
     }
@@ -52,7 +52,8 @@ class Product extends Model
     public function getImagePathAttribute()
     {
         if (!empty($this->image)) {
-            $image_path = public_path('public/uploads') . '/' . config('constants.product_img_path') . '/' . $this->image;
+            $company_name = request()->session()->get("user_main.domain");
+            $image_path = public_path('uploads') . '/companies/'.$company_name ."/". config('constants.product_img_path') . '/' . $this->image;
         } else {
             $image_path = null;
         }
@@ -66,7 +67,8 @@ class Product extends Model
     public function getImagePathSecondAttribute()
     {
         if (!empty($this->image)) {
-            $image_path = public_path('/uploads') . '/' . config('constants.product_img_path') . '/' . $this->image;
+            $company_name = request()->session()->get("user_main.domain");
+            $image_path = public_path('/uploads') . '/companies/' .$company_name ."/". config('constants.product_img_path') . '/' . $this->image;
         } else {
             $image_path = null;
         }
@@ -80,7 +82,8 @@ class Product extends Model
     public function getImagePathBaseAttribute()
     {
         if (!empty($this->image)) {
-            $image_path = base_path('uploads') . '/' . config('constants.product_img_path') . '/' . $this->image;
+            $company_name = request()->session()->get("user_main.domain");
+            $image_path = base_path('uploads') . '/companies/' .$company_name ."/". config('constants.product_img_path') . '/' . $this->image;
         } else {
             $image_path = null;
         }

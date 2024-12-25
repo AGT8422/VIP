@@ -2852,6 +2852,28 @@ class AccountTransaction extends Model
              * # get usually second row and get ( current_balance ) value from it .    
              * 
              */
+            $first         = \App\AccountTransaction::whereHas("account",function($query) use($id,$business_id){ 
+                                                                $query->where("id",$id); 
+                                                                $query->where('business_id', $business_id);
+                                                                $query->where("cost_center","=",0);
+                                                            })
+                                                            ->where("amount",">",0) 
+                                                            ->whereNull("deleted_at") 
+                                                            ->whereNull('for_repeat')  
+                                                            ->orderBy('operation_date','asc')
+                                                            ->orderBy('id','asc') 
+                                                            ->select([
+                                                                'id',
+                                                                'account_id',
+                                                                'type',
+                                                                'for_repeat',
+                                                                'amount',
+                                                                'operation_date',
+                                                                'deleted_at',
+                                                                'current_balance',
+                                                                'balance_type' 
+                                                            ]) 
+                                                            ->first();
             $balance_account = 0; 
             $before_one_day  = (strlen($date)<19)?(\Carbon::createFromFormat('Y-m-d',$date)->subDay()->format('Y-m-d')):(\Carbon::createFromFormat('Y-m-d H:i:s',$date)->subDay()->format('Y-m-d H:i:s')); 
             $before_id       = \App\AccountTransaction::whereHas("account",function($query) use($id,$business_id){ 
@@ -2879,6 +2901,7 @@ class AccountTransaction extends Model
                                                             ->limit(2)
                                                             ->get();
             $current_balance = 0;
+            
             if(count($before_id)>0){
                 if(count($before_id)==1){
                     foreach($before_id as $ii){
@@ -2892,7 +2915,13 @@ class AccountTransaction extends Model
                     $line  = null;
                     foreach($before_id as $key => $ii){
                         if($key == 0){$line = $ii;}
-                        $current_balance = $ii->current_balance ;
+                        if($ii->id == $first->id){
+                            $current_balance = ($ii->type == "credit")?$ii->amount*-1:$ii->amount;
+                            $ii->current_balance = $current_balance;
+                            $ii->update();
+                        }else{
+                            $current_balance = $ii->current_balance ;
+                        }
                     }
                     if($line!=null){
                         $current_amount        =  ($line->type == "credit")?$line->amount*-1:$line->amount;
@@ -2942,7 +2971,13 @@ class AccountTransaction extends Model
                         $line  = null;
                         foreach($before_id as $key => $ii){
                             if($key == 0){$line = $ii;}
-                            $current_balance = $ii->current_balance ;
+                            if($ii->id == $first->id){
+                                $current_balance = ($ii->type == "credit")?$ii->amount*-1:$ii->amount;
+                                $ii->current_balance = $current_balance;
+                                $ii->update();
+                            }else{
+                                $current_balance = $ii->current_balance ;
+                            }
                         }
                         if($line!=null){
                             $current_amount        =  ($line->type == "credit")?$line->amount*-1:$line->amount;
@@ -2981,6 +3016,9 @@ class AccountTransaction extends Model
                                                                 'balance_type' 
                                                             ]) 
                                                             ->get();
+            // if($id == 28){
+            //     dd($before_one_day ,$list_after_id,$before_id,$balance_account,$current_balance,$first);
+            // }
             if(count($list_after_id)>0){
                 foreach($list_after_id as $key => $one){
                     $main                 = ($one->type == "credit")?$one->amount*-1:$one->amount ;

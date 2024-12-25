@@ -20,7 +20,8 @@ class PrinterTemplateContain extends Model
         $image_url ='';
         if (!empty($this->header_image)) {
             // $image_url = asset('public/uploads/img/' . rawurlencode($this->header_image));
-            $image_url = asset('uploads/img/' . rawurlencode($this->header_image));
+            $company_name = request()->session()->get("user_main.domain");
+            $image_url = asset('uploads/companies/'.$company_name.'/img/' . rawurlencode($this->header_image));
         } 
         return $image_url;
     }
@@ -32,7 +33,8 @@ class PrinterTemplateContain extends Model
     public function getImagePathAttribute()
     {
         if (!empty($this->header_image)) {
-            $image_path = public_path('public/uploads') . '/' . config('constants.product_img_path') . '/' . $this->header_image;
+            $company_name = request()->session()->get("user_main.domain");
+            $image_path = public_path('uploads/companies/'.$company_name) . '/' . config('constants.product_img_path') . '/' . $this->header_image;
         } else {
             $image_path = null;
         }
@@ -45,7 +47,8 @@ class PrinterTemplateContain extends Model
     public function getImagePathSecondAttribute()
     {
         if (!empty($this->header_image)) {
-            $image_path = public_path('/uploads') . '/' . config('constants.product_img_path') . '/' . $this->header_image;
+            $company_name = request()->session()->get("user_main.domain");
+            $image_path = public_path('/uploads/companies/'.$company_name) . '/' . config('constants.product_img_path') . '/' . $this->header_image;
         } else {
             $image_path = null;
         }
@@ -61,7 +64,8 @@ class PrinterTemplateContain extends Model
         $image_url ='';
         if (!empty($this->footer_image)) {
             // $image_url = asset('public/uploads/img/' . rawurlencode($this->footer_image));
-            $image_url = asset('uploads/img/' . rawurlencode($this->footer_image));
+            $company_name = request()->session()->get("user_main.domain");
+            $image_url = asset('uploads/companies/'.$company_name.'/img/' . rawurlencode($this->footer_image));
         } 
         return $image_url;
     }
@@ -73,7 +77,8 @@ class PrinterTemplateContain extends Model
     public function getFooterImagePathAttribute()
     {
         if (!empty($this->footer_image)) {
-            $image_path = public_path('public/uploads') . '/' . config('constants.product_img_path') . '/' . $this->footer_image;
+            $company_name = request()->session()->get("user_main.domain");
+            $image_path = public_path('uploads/companies/'.$company_name) . '/' . config('constants.product_img_path') . '/' . $this->footer_image;
         } else {
             $image_path = null;
         }
@@ -87,7 +92,8 @@ class PrinterTemplateContain extends Model
     public function getFooterImagePathSecondAttribute()
     {
         if (!empty($this->footer_image)) {
-            $image_path = public_path('/uploads') . '/' . config('constants.product_img_path') . '/' . $this->footer_image;
+            $company_name = request()->session()->get("user_main.domain");
+            $image_path = public_path('uploads/companies/'.$company_name) . '/' . config('constants.product_img_path') . '/' . $this->footer_image;
         } else {
             $image_path = null;
         }

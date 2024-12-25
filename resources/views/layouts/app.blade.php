@@ -28,7 +28,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-        <link rel="icon" type="image/x-icon" href="{{ asset('/public/uploads/POS.ico') }}">
+         <link rel="icon" type="image/x-icon" href="{{ asset('POS.ico') }}">
         {{-- <link rel="stylesheet" href="{{asset('assets/vendor/libs/apex-charts/apex-charts.css')}}"> --}}
 
         <!-- CSRF Token -->

@@ -14,8 +14,8 @@ class AddDeliveredPreviouseIdToMovementWarehousesTable extends Migration
     public function up()
     {
         Schema::table('movement_warehouses', function (Blueprint $table) {
-            $table->integer('delivered_previouse_id')->unsigned();
-            $table->foreign('delivered_previouse_id')->references('id')->on('delivered_previouses')->nullable();
+            $table->integer('delivered_previouse_id')->nullable();
+            // $table->foreign('delivered_previouse_id')->references('id')->on('delivered_previouses')->nullable();
         });
     }
 

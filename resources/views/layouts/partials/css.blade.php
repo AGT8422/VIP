@@ -197,6 +197,12 @@
 	  .box-title{
 		font-family:Georgia, 'Times New Roman', Times, serif !important;
 	}
+	.btn-danger{
+		color : #fff !important;
+	}
+	.btn-danger a{
+		color : #fff !important;
+	}
 	a,b{
 		font-family:Georgia, 'Times New Roman', Times, serif !important;
 		

@@ -676,6 +676,9 @@ class HomeController extends Controller
                             //     $uploaded_file_name = $new_file_name;
                             // }
                             $public_path = public_path('uploads/companies/'.$company_name.'/documents/'.$dir);
+                            if (!file_exists($public_path)) {
+                                mkdir($public_path, 0755, true);
+                            }
                             if ($imgs->save($public_path . $new_file_name)) {
                                 $uploaded_file_name = $new_file_name;
                             }

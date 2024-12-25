@@ -165,10 +165,17 @@
 
 								{{-- *2/3/1-9* Store--}}
 								<div class="col-sm-6">
+									@php
+										$store = "";
+										foreach ($mainstore_categories as  $key => $value) {
+											$store = $key;
+											break;
+										}
+									@endphp
 									<div class="form-group">
 										{!! Form::label('store_id', __('warehouse.warehouse').':*') !!}
 										{{-- @show_tooltip(__('tooltip.purchase_location')) --}}
-										{!! Form::select('store_id', $mainstore_categories, null, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'required'], $bl_attributes); !!}
+										{!! Form::select('store_id', $mainstore_categories, $store, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'required'], $bl_attributes); !!}
 									</div>
 								</div>
 								

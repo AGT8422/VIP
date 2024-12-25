@@ -194,10 +194,11 @@ class PaymentVoucherController extends Controller
     public function post_edit(Request $request,$id)
     {
         DB::beginTransaction();
+        $entry                 =  \App\Models\Entry::where("voucher_id",$id)->first();
         $data                  =  PaymentVoucher::find($id);
-        $old_id                =  $data->account_id;
-        $old_contact           =  $data->contact_id;
-        $old_type              =  $data->account_type;
+        $old_id                =  $data->account_id; #... main box
+        $old_contact           =  $data->contact_id; #... ebrahem 0001
+        $old_type              =  $data->account_type; #... 1
         $data->currency_id     =  $request->currency_id;
         $data->currency_amount =  $request->amount_currency;
         $data->exchange_price  =  $request->currency_id_amount;
@@ -261,6 +262,7 @@ class PaymentVoucherController extends Controller
             $re_state  =  'debit';
         }
         $voucherAccountTransaction  = \App\AccountTransaction::where('payment_voucher_id',$id)->where("type",$re_state)->where('account_id',$old_id)->get();
+        
         foreach($voucherAccountTransaction as $items){
             # .......................................
             $account_old            = $items->account_id;
@@ -271,6 +273,8 @@ class PaymentVoucherController extends Controller
             $items->amount          = $request->amount;
             $items->operation_date  = $request->date;
             $items->account_id      = $request->account_id;
+            $items->payment_voucher_id  = $data->id;
+            $items->entry_id        = ($entry)?$entry->id:null;
             $items->update();
             # .......................................
             $accountONE             = \App\Account::find($account_old);
@@ -286,6 +290,7 @@ class PaymentVoucherController extends Controller
         }
         
         $accountAccountTransactionOld   = \App\AccountTransaction::where('payment_voucher_id',$id)->where("type",$state)->where('account_id',$old_account_id->id)->get();
+        
         foreach($accountAccountTransactionOld as $items){
             # .......................................
             $account_old            = $items->account_id;
@@ -296,6 +301,8 @@ class PaymentVoucherController extends Controller
             $items->amount          = $request->amount;
             $items->operation_date  = $request->date;
             $items->account_id      = $request->contact_id;
+            $items->payment_voucher_id  = $data->id;
+            $items->entry_id        = ($entry)?$entry->id:null;
             $items->update();
             # .......................................
             $accountONE             = \App\Account::find($account_old);
@@ -303,8 +310,9 @@ class PaymentVoucherController extends Controller
             if($accountONE->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountONE->id,$data->business_id,$account_date_old); }
             if($accountTWO->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountTWO->id,$data->business_id,$account_date_new); }
         } 
+        
         if(count($voucherAccountTransaction)==0){
-            $voucherAccountTransaction   = \App\AccountTransaction::where('payment_voucher_id',$id)->where("type",$state)->where('account_id',$old_id)->delete();
+            $voucherAccountTransaction   = \App\AccountTransaction::where('payment_voucher_id',$id)->where("type",$re_state)->where('account_id',"!=",$old_id)->delete();
              # effect cash  account 
             $credit_data = [
                 'amount'             => $data->amount,
@@ -314,8 +322,10 @@ class PaymentVoucherController extends Controller
                 'operation_date'     => $data->date,
                 'created_by'         => session()->get('user.id'),
                 'note'               => $data->text,
-                'payment_voucher_id' => $id
+                'payment_voucher_id' => $data->id,
+                'entry_id'           => ($entry)?$entry->id:null
             ];
+            
             $credit  = \App\AccountTransaction::createAccountTransaction($credit_data);
             $_account = \App\Account::find($data->account_id);
             if($_account->cost_center!= 1){
@@ -423,6 +433,7 @@ class PaymentVoucherController extends Controller
         // }
         #..........................................................................
         DB::commit();
+       
         return redirect('payment-voucher')
                    ->with('yes',trans('home.Done Successfully'));
     }

@@ -41,7 +41,7 @@ class PackagesController extends BaseController
     public function index()
     {
         if (!auth()->user()->can('superadmin')) {
-            // abort(403, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
 
         $packages = Package::orderby('sort_order', 'asc')
@@ -87,7 +87,7 @@ class PackagesController extends BaseController
     public function store(Request $request)
     {
         if (!auth()->user()->can('superadmin')) {
-            // abort(403, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
 
         try {
@@ -159,7 +159,7 @@ class PackagesController extends BaseController
     public function update(Request $request, $id)
     {
         if (!auth()->user()->can('superadmin')) {
-            // abort(403, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.');
         }
 
         try {

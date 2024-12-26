@@ -14,7 +14,7 @@
     <div class="print_section"><h2>{{session()->get('business.name')}} - @lang( 'manufacturing::lang.manufacturing_report' )</h2></div>
     
     <div class="row no-print">
-        <div class="col-md-3 col-md-offset-7 col-xs-6">
+        <div class="col-md-3 col-md-offset-7 col-xs-6 hide">
             <div class="input-group">
                 <span class="input-group-addon bg-light-blue"><i class="fa fa-map-marker"></i></span>
                  <select class="form-control select2" id="mfg_report_location_filter">

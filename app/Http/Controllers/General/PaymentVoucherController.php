@@ -279,8 +279,8 @@ class PaymentVoucherController extends Controller
             # .......................................
             $accountONE             = \App\Account::find($account_old);
             $accountTWO             = \App\Account::find($account_new);
-            if($accountONE->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountONE->id,$data->business_id,$account_date_old); }
             if($accountTWO->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountTWO->id,$data->business_id,$account_date_new); }
+            if($accountONE->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountONE->id,$data->business_id,$account_date_old); }
         } 
 
         if($old_type == 0){

@@ -336,7 +336,7 @@ class ModuleUtil extends Util
                     return true;
                 } else {
                     $count = $this->countUsers($business_id);
-                    if ($count >= $max_allowed) {
+                    if (($count-1) >= $max_allowed) {
                         return false;
                     }
                 }

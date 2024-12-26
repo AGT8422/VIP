@@ -40,7 +40,9 @@ class ManageUserController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1) {
+        #....... check if admin    
+        $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        if (!$is_admin) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -112,9 +114,11 @@ class ManageUserController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1   && $user_id != 7) {
-            abort(403, 'Unauthorized action.');
-        }
+         #....... check if admin    
+         $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+         if (!$is_admin) {
+             abort(403, 'Unauthorized action.');
+         }
         $business_id = request()->session()->get('user.business_id');
 
         //Check if subscribed or not, then check for users quota
@@ -194,7 +198,9 @@ class ManageUserController extends Controller
                 abort(403, 'Unauthorized action.');
             }
             $user_id     = request()->session()->get('user.id');
-            if ($user_id != 1   && $user_id != 7) {
+             #....... check if admin    
+            $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+            if (!$is_admin) {
                 abort(403, 'Unauthorized action.');
             }
             try {
@@ -374,9 +380,11 @@ class ManageUserController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1 && $user_id != 7) {
-            abort(403, 'Unauthorized action.');
-        }
+         #....... check if admin    
+         $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+         if (!$is_admin) {
+             abort(403, 'Unauthorized action.');
+         }
         $business_id = request()->session()->get('user.business_id');
 
         $user = User::where('business_id', $business_id)
@@ -408,9 +416,11 @@ class ManageUserController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1) {
-            abort(403, 'Unauthorized action.');
-        }
+         #....... check if admin    
+         $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+         if (!$is_admin) {
+             abort(403, 'Unauthorized action.');
+         }
         $business_id = request()->session()->get('user.business_id');
         $user        = User::where('business_id', $business_id)
                              ->with(['contactAccess'])
@@ -493,7 +503,9 @@ class ManageUserController extends Controller
         }
         $user_id     = request()->session()->get('user.id');
         $business_id     = request()->session()->get('user.business_id');
-        if ($user_id != 1 && $user_id != 7) {
+        #....... check if admin    
+        $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        if (!$is_admin) {
             abort(403, 'Unauthorized action.');
         }
         try {
@@ -655,9 +667,11 @@ class ManageUserController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1 && $user_id != 7) {
-            abort(403, 'Unauthorized action.');
-        }
+         #....... check if admin    
+         $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+         if (!$is_admin) {
+             abort(403, 'Unauthorized action.');
+         }
         if (request()->ajax()) {
             try {
                 \DB::beginTransaction();

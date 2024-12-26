@@ -539,8 +539,8 @@
                 @include('layouts.partials.header-notifications')
             </ul>--}}
             {{-- 2 --}}
-            
-            <div class="col-md-12 m-8  mt-15 hidden-xs time_header"  ><strong>{{ \Carbon::now()->format($date_format) }}</strong></div>
+           
+            <div class="col-md-12 m-8  mt-15 hidden-xs time_header"  ><strong>{{  \Carbon::now()->format($date_format) }}</strong></div>
 
         </div>
         @php

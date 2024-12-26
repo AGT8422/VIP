@@ -91,12 +91,12 @@ class DataController extends Controller
                             $sub->url(
                                 action('\Modules\Manufacturing\Http\Controllers\ProductionController@create'),
                                 __('manufacturing::lang.add_production'),
-                                ['icon' => 'fa fas fa-plus', 'active' => request()->segment(2) == 'production' && request()->segment(3) == 'create']
+                                ['icon' => 'fa fas fa-plus', 'active' => request()->segment(2) == 'production' && request()->segment(3) == 'create','style'=>'font-weight:bold']
                             );
                             $sub->url(
                                 action('\Modules\Manufacturing\Http\Controllers\SettingsController@index'),
                                 __('messages.settings'),
-                                ['icon' => 'fa fas fa-wrench', 'active' => request()->segment(1) == 'manufacturing' && request()->segment(2) == 'settings']
+                                ['icon' => 'fa fas fa-wrench', 'active' => request()->segment(1) == 'manufacturing' && request()->segment(2) == 'settings','style'=>'font-weight:bold']
                             );
                             $sub->url(
                                 action('\Modules\Manufacturing\Http\Controllers\ProductionController@getManufacturingReport'),

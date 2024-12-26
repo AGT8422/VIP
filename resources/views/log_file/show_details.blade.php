@@ -47,14 +47,14 @@
             <br>@lang('business.email'): {{$purchase->contact->email}}
           @endif
         </address>
-        @if($purchase->document_path)
+        {{-- @if($purchase->document_path)
           
           <a @if($purchase->document_path !=  $new_purchase->document_path) class="change-bill btn btn-sm btn-success pull-left no-print" @else class="btn btn-sm btn-success pull-left no-print" @endif href="{{$purchase->document_path}}" 
           download="{{$purchase->document_name}}"  >
             <i class="fa fa-download"></i> 
               &nbsp;{{ __('purchase.download_document') }}
           </a>
-        @endif
+        @endif --}}
         @php
           
           
@@ -934,14 +934,14 @@
             <br>@lang('business.email'): {{$new_purchase->contact->email}}
           @endif
         </address>
-        @if($new_purchase->document_path)
+        {{-- @if($new_purchase->document_path)
           
           <a href="{{$new_purchase->document_path}}" 
           download="{{$new_purchase->document_name}}" class="btn btn-sm btn-success pull-left no-print">
             <i class="fa fa-download"></i> 
               &nbsp;{{ __('purchase.download_document') }}
           </a>
-        @endif
+        @endif --}}
         @php
           
           

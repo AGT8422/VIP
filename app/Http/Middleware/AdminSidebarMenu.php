@@ -42,10 +42,10 @@ class AdminSidebarMenu
              
            
             //User management dropdown  10
-            if ( request()->session()->get("user.id") == 1) {
+            if ( $is_admin ) {
                 $menu->dropdown(
                     __('user.user_management'),
-                    function ($sub) {
+                    function ($sub) use($is_admin) {
                         if (auth()->user()->can('user.view') || auth()->user()->can('ReadOnly.views') || auth()->user()->can('admin_without.views')) {
                             $sub->url(
                                 action('ManageUserController@index'),
@@ -53,7 +53,7 @@ class AdminSidebarMenu
                                 ['icon' => 'fa fas fa-user', 'active' => request()->segment(1) == 'users' ,'style'=>'font-weight:bold']
                             );
                         }
-                        if ( request()->session()->get("user.id") == 1) {
+                        if ( $is_admin ) {
                             $sub->url(
                                 action('RoleController@index'),
                                 __('user.roles'),
@@ -287,7 +287,7 @@ class AdminSidebarMenu
                             // );
                         }
 
-                        if (auth()->user()->can('status_view.index') || auth()->user()->can('purchase.view') || auth()->user()->can('view_own_purchase')|| auth()->user()->can('admin_without.views') ||     auth()->user()->can('SalesMan.views') ||  auth()->user()->can('admin_supervisor.views') ) {
+                        if (auth()->user()->can('status_view.index')) {
                             $sub->url(
                                 action('StatusLiveController@index'),
                                 __('home.Status Live'),

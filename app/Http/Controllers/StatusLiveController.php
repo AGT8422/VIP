@@ -9,7 +9,7 @@ class StatusLiveController extends Controller
 {
     public function index()
     {
-        if(!auth()->user()->can("status_view.index") &&   !auth()->user()->can('SalesMan.views') && !auth()->user()->can('admin_supervisor.views')){
+        if(!auth()->user()->can("status_view.index")){
             abort(403,"Unauthorized action.");
         }
         $business_id = request()->session()->get("user.business_id");

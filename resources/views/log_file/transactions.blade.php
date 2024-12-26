@@ -5,14 +5,14 @@
 @section("content")
 
 <!-- Content Header (Page header) -->
-<section class="content-header">
-    <h1>@lang('home.bill_active') </h1>
+<section class="content-header font_text">
+    <h1 class="font_text">@lang('home.bill_active') </h1>
     {{-- <strong> :::  {{ $user->name }} :::   </strong> --}}
 </section>
 
 <section class="content">
   
-    @component('components.filters', ['title' => __('report.filters')])
+    @component('components.filters', ['title' => __('report.filters') , 'class' => 'box-primary'])
         <div class="col-md-3">
             <div class="form-group">
                 {!! Form::label('status',  __('lang_v1.type') . ':') !!}
@@ -27,7 +27,7 @@
         </div> --}}
     @endcomponent
 
-    @component("components.widget",["title"=>__("home.bill_active")])
+    @component("components.widget",["title"=>__("home.bill_active") , 'class' => 'box-primary'])
         <div class="row">
             <div class="col-xs-12">
                 <div class="table">

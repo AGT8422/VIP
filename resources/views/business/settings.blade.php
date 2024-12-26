@@ -33,13 +33,32 @@
                     <a href="#" class="list-group-item text-center">@lang('lang_v1.email_settings')</a>
                     <a href="#" class="list-group-item text-center">@lang('lang_v1.sms_settings')</a>
                     <a href="#" class="list-group-item text-center">@lang('lang_v1.reward_point_settings')</a>
+                    @if(auth()->user()->can('superadmin'))
                     <a href="#" class="list-group-item text-center">@lang('lang_v1.modules')</a>
+                    @endif
                     <a href="#" class="list-group-item text-center">@lang('lang_v1.custom_labels')</a>
-                    <a href="#" class="list-group-item text-center">@lang('lang_v1.MFG')</a>
-                    <a href="#" class="list-group-item text-center">@lang('lang_v1.mobile_app')</a>
+                    @if (auth()->user()->can('superadmin'))  
+                    @php $is_mfg_enabled = true; @endphp
+                    @else 
+                    @php  
+                        $business_id = session()->get('user.business_id');
+                        $module_util = new App\Utils\ModuleUtil();
+                        $is_mfg_enabled = (boolean)$module_util->hasThePermissionInSubscription($business_id, 'manufacturing_module', 'superadmin_package');
+                        
+                        @endphp
+                    @endif
+                    
+                    @if ($is_mfg_enabled && (auth()->user()->can('manufacturing.access_recipe') || auth()->user()->can('manufacturing.access_production'))) {
+                        <a href="#" class="list-group-item text-center">@lang('lang_v1.MFG')</a>
+                    @endif
+                        
+                    @if(auth()->user()->can('superadmin'))
+                        <a href="#" class="list-group-item text-center">@lang('lang_v1.mobile_app')</a>
+                    @endif
                     <a href="#" class="list-group-item text-center">@lang('business.currency')</a>
                 </div>
             </div>
+            
             <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 pos-tab">
                 <!-- tab 1 start -->
                 @include('business.partials.settings_business')
@@ -78,16 +97,23 @@
                 @include('business.partials.settings_reward_point')
                 <!-- tab 11 end -->
                 <!-- tab 12 start -->
-                @include('business.partials.settings_modules')
+                @if(auth()->user()->can('superadmin'))
+                    @include('business.partials.settings_modules')
+                @endif
                 <!-- tab 12 end -->
                 <!-- tab 13 start -->
                 @include('business.partials.settings_custom_labels')
                 <!-- tab 13 end -->
-                <!-- tab 14 start -->
-                @include('business.partials.settings_mfg_account')
-                <!-- tab 14 end -->
-                <!-- tab 15 start -->
-                @include('business.partials.settings_mobile_app')
+                <!-- tab 14 start -->             
+                
+                @if ($is_mfg_enabled && (auth()->user()->can('manufacturing.access_recipe') || auth()->user()->can('manufacturing.access_production'))) {
+                    @include('business.partials.settings_mfg_account')
+                    @endif
+                    <!-- tab 14 end -->
+                    <!-- tab 15 start -->
+                @if(auth()->user()->can('superadmin'))
+                    @include('business.partials.settings_mobile_app')
+                @endif
                 <!-- tab 15 end -->
                 <!-- tab 16 start -->
                 @include('business.partials.settings_currencies')

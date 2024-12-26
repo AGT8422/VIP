@@ -192,10 +192,10 @@ class SellReturnController extends Controller
                             }else{
                                 $html .= '<li><a href="'. action("Report\SellController@index",[$row->id ,"return"=>"1" , "ref_no" => $row->invoice_no ]  ) .'"  target="_blank" ><i class="fas fa-print" aria-hidden="true"></i> '. __("messages.print").'</a></li>';  
                             }
-
                             
-                            $html .= '<li><a href="#" class="btn-modal" data-container=".view_modal"  data-href="'. action("General\AccountController@transaction", [$row->parent_sale_id]). '"><i class="fa fa-align-justify" aria-hidden="true"></i> '. __("home.Entry") .'</a></li>';
-                            
+                            if($row->account_transactions->count() > 0){
+                                $html .= '<li><a href="#" class="btn-modal" data-container=".view_modal"  data-href="'. action("General\AccountController@transaction", [$row->parent_sale_id]). '"><i class="fa fa-align-justify" aria-hidden="true"></i> '. __("home.Entry") .'</a></li>';
+                            }
                             
                             
                             

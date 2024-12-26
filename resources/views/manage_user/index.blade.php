@@ -27,8 +27,10 @@
 <!-- Main content -->
 <section class="content">
     @component('components.widget', ['class' => 'box-primary', 'title' => __( 'user.all_users' )])
-     
-        @if($user_id == 1)
+        @php
+            $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        @endphp
+        @if($is_admin)
                 @slot('tool')
                     <div class="box-tools">
                         <a class="btn btn-block btn-primary" 

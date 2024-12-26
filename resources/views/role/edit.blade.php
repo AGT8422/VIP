@@ -3103,7 +3103,7 @@
             {{--Status live--}}
             <div class="row check_group">
                 <div class="col-md-3">
-                    <h4>@lang( 'role.dashboard' )</h4>
+                    <h4>@lang( 'izo.status_view' )</h4>
                 </div>
                 <div class="col-md-9">
                     <div class="col-md-4">

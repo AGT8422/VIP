@@ -654,13 +654,31 @@ class HomeController extends Controller
                     #................
                     if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
                         if ($file->getSize() <= config('constants.document_size_limit')){ 
-                            $file_name_m    =  time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
-                            $destinationPath = public_path('uploads/companies/'.$company_name.'/documents'.$dir_back_right);
-                            if (!file_exists($destinationPath)) {
-                                mkdir($destinationPath, 0755, true);
+                            if($file->getClientOriginalExtension() != "pdf"){
+                                $file_name_m    =  time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
+                                $destinationPath = public_path('uploads/companies/'.$company_name.'/documents'.$dir_back_right);
+                                if (!file_exists($destinationPath)) {
+                                    mkdir($destinationPath, 0755, true);
+                                }
+                                $file->move('uploads/companies/'.$company_name.'/documents'.$dir_back_right,$file_name_m);
+                                $file_name      =  'uploads/companies/'.$company_name.'/documents/'.$dir. $file_name_m;
+                            }else{
+                                $inputFile  = $file->getClientOriginalName();
+                                $outputFile = 'compressed_output.pdf';
+                                
+                                // Ghostscript command to compress PDF
+                                $command = "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile={$outputFile} {$inputFile}";
+                                
+                                // Execute the command
+                                exec($command, $output, $return_var);
+                                
+                                if ($return_var === 0) {
+                                    echo "PDF successfully compressed.";
+                                } else {
+                                    echo "Error compressing PDF.";
+                                }
                             }
-                            $file->move('uploads/companies/'.$company_name.'/documents'.$dir_back_right,$file_name_m);
-                            $file_name      =  'uploads/companies/'.$company_name.'/documents/'.$dir. $file_name_m;
+
                         }
                     }else{
                         if ($file->getSize() <= config('constants.document_size_limit')) {

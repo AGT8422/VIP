@@ -13,7 +13,7 @@ class PatternController extends Controller
     //.....................
     public function index()
     {
-        if(!auth()->user()->can("business.create")){
+        if(!auth()->user()->can("pattern.index")){
             abort(403, 'Unauthorized action.');
         }
         
@@ -120,7 +120,7 @@ class PatternController extends Controller
     public function create()
     {
 
-        if(!auth()->user()->can("business.create")){
+        if(!auth()->user()->can("pattern.create")){
             abort(403, 'Unauthorized action.');
         }
 
@@ -150,7 +150,7 @@ class PatternController extends Controller
     //...................
     public function edit($id)
     {
-        if(!auth()->user()->can("business.create")){
+        if(!auth()->user()->can("pattern.edit")){
             abort(403, 'Unauthorized action.');
         }
         $business_id   = request()->session()->get("user.business_id");
@@ -173,7 +173,7 @@ class PatternController extends Controller
     //.....................
     public function store(Request $request)
     {    
-        if(!auth()->user()->can("business.create")){
+        if(!auth()->user()->can("pattern.save")){
             abort(403, 'Unauthorized action.');
         }
         
@@ -210,7 +210,7 @@ class PatternController extends Controller
     //.....................
     public function show($id)
     {   
-        if(!auth()->user()->can("business.create")){
+        if(!auth()->user()->can("pattern.show")){
             abort(403, 'Unauthorized action.');
         }
         $business_id   = request()->session()->get("user.business_id");
@@ -227,7 +227,7 @@ class PatternController extends Controller
     //.....................
     public function update(Request $request,$id)
     {
-        if(!auth()->user()->can("business.create")){
+        if(!auth()->user()->can("pattern.update")){
             abort(403, 'Unauthorized action.');
         }
         $business_id   = request()->session()->get("user.business_id");
@@ -261,7 +261,7 @@ class PatternController extends Controller
     public function destroy($id)
     {
          
-        if(!auth()->user()->can("business.create")){
+        if(!auth()->user()->can("pattern.destroy")){
             abort(403, 'Unauthorized action.');
         }
         try{
@@ -293,13 +293,13 @@ class PatternController extends Controller
             \App\Models\Pattern::DefaultPattern($id);
             $output = [
                           "success" => 1,
-                          "msg" => __("messages.updated_successfull"),
+                          "msg"     => __("messages.updated_successfull"),
             ];
             return redirect()->back()->with("status",$output);
         }catch(Exception $e){
             $output = [
                 "success" => 0,
-                "msg" => __("messages.something_wrong"),
+                "msg"     => __("messages.something_wrong"),
             ];
             return redirect()->back()->with("status",$output);
         }   

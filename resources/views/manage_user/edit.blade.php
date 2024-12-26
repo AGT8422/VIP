@@ -416,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     },
                     password: {
-                      required: true,
+                       
                       minlength: 6,
                       remote: {
                           url: "/business/register/check-password",

@@ -5,17 +5,20 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header no-print">
-    <h1>{{ $title }}
+    <h1 class="font_text">{{ $title }}
         <small></small>
     </h1>
     <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
         <li class="active">Here</li>
     </ol> -->
+    @php $mainUrl = '/payment-voucher';  @endphp  
+    <h5 class="font_text"><i><b class="font_text"><a  class="font_text"href="{{\URL::to($mainUrl)}}">{{ __("home.Vouchers List") }} {{ __("izo.>") . " " }}</b>    </a> {{ __("home.Vouchers List") }}  </i></h5>
+	
 </section>
 
 <!-- Main content -->
-<section class="content no-print">
+<section class="content no-print font_text">
     @if(session('yes'))
     <div class="alert success alert-success" >
         {{ session('yes')  }}

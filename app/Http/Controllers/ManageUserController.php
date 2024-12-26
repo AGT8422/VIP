@@ -40,7 +40,7 @@ class ManageUserController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1 && $user_id != 7) {
+        if ($user_id != 1) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -52,7 +52,7 @@ class ManageUserController extends Controller
             $users = User::where('business_id', $business_id)->where('username',"!=","IZO")
                         ->user()
                         ->where('is_cmmsn_agnt', 0)
-                        ->select(['id', 'username',
+                        ->select(['id', 'username','without_delete',
                             DB::raw("CONCAT(COALESCE(surname, ''), ' ', COALESCE(first_name, ''), ' ', COALESCE(last_name, '')) as full_name"), 'email', 'allow_login']);
 
             if($user_id != 1){
@@ -75,8 +75,15 @@ class ManageUserController extends Controller
 
                         $html .=' <a href="'.action('ManageUserController@show', [$row->id]).'" class="btn btn-xs btn-info"><i class="fa fa-eye"></i>&nbsp;&nbsp;'. __("messages.view").'</a>&nbsp; ';
                         
-                        if($user_id == 1 && $row->id != 1){
+                        if($user_id == 1 && $row->id != 2){
                           $html.=  '<button data-href="'.action('ManageUserController@destroy', [$row->id]).'" class="btn btn-xs btn-danger delete_user_button"><i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;'.__("messages.delete").'</button>';
+
+                        }
+
+                        if($user_id == 1 ){
+                            $class = ($row->without_delete == 1)?'btn-danger':'btn-second'; 
+                            $delete_msg = ($row->without_delete == 1)?__("izo.cant_delete"):__("izo.can_delete"); 
+                            $html.=  '<button  data-id="'.$row->id.'" data-href="'.action('ManageUserController@withoutDestroy').'" class="btn btn-xs '.$class.' without_delete_user_button">&nbsp;&nbsp;'.$delete_msg.'</button>';
 
                         }
                         return $html;
@@ -688,6 +695,63 @@ class ManageUserController extends Controller
                             // 'msg' => __("messages.something_went_wrong")
                             'msg' => "File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage()
                         ];
+            }
+
+            return $output;
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function withoutDestroy(Request $request)
+    {
+        $user_id     = request()->session()->get('user.id');
+        if ($user_id != 1) {
+            abort(403, 'Unauthorized action.');
+        }
+        if (request()->ajax()) {
+            try {
+                $id = request()->input('id');
+               
+                // $izoUserId   = $user->izo_user_id;
+                // \Config::set('database.connections.mysql.database', "izocloud");
+                // \DB::purge('mysql');
+                // \DB::reconnect('mysql');
+                // $izoChildCustomer   = IzoUser::find($izoUserId);  
+                // if($izoChildCustomer->admin_user == 1){
+                //     $output = [
+                //         'success' => 0,
+                //          'msg'    => __("izo.sorry_cant_delete_admin_user")
+                //     ];
+                //     return redirect('users')->with('status', $output) ;
+                // } 
+                // $izoChildCustomer->delete(); 
+                // $databaseName  = request()->session()->get('user_main.database') ;  
+                // \Config::set('database.connections.mysql.database', $databaseName);
+                // \DB::purge('mysql');
+                // \DB::reconnect('mysql');
+                \DB::beginTransaction();
+                $business_id = request()->session()->get('user.business_id');
+                $user        = User::where('business_id', $business_id)->where('id', $id)->first();
+                $user->without_delete = ($user->without_delete == 0)?1:0;
+                $user->update();
+                \DB::commit();
+                $output = [     
+                        'success' => true,
+                        'msg'     => __("messages.updated_successfull")
+                    ];
+            } catch (\Exception $e) {
+                \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
+            
+                $output = [
+                        'success' => false,
+                        'msg'     => __("messages.something_went_wrong")
+                        // 'msg' => "File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage()
+                    ];
             }
 
             return $output;

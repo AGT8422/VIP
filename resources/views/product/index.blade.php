@@ -7,11 +7,12 @@
     {{-- section title of page --}}
     {{-- ************************************************ --}}
         <section class="content-header">
-            <h1>
+            <h1 class="font_text">
             <b>@lang('sale.products')</b>
             <b><small>@lang('lang_v1.manage_products')</small><b>
-                <h5><i><b>{{ "   Products  >  " }} </b>{{ "List Product"   }} <b> {{"   "}} </b></i></h5>
-                <br>    
+            @php $mainUrl = '/products';  @endphp  
+            <h5 class="font_text"><i><b class="font_text"><a  class="font_text"href="{{\URL::to($mainUrl)}}">{{ __("sale.products") }} {{ __("izo.>") . " " }}</a></b>{{ __("izo.list_of")  ." ".__("sale.products")   }} <b> {{"   "}} </b></i></h5>
+         
             </h1>
         </section>
     {{-- ************************************************ --}}
@@ -19,7 +20,7 @@
     <!-- Main content -->
     {{-- section body of page --}}
     {{-- ************************************************ --}}
-        <section class="content">
+        <section class="content font_text">
             
             {{-- *1* section currency --}}
             {{-- ********************************************** --}}

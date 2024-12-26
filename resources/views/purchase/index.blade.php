@@ -18,7 +18,7 @@
 <!-- Main content -->
 <section class="content no-print" >
     @component('components.filters', ['class' => 'box-primary','title' => __('report.filters')])
-        <div class="col-md-4">
+        <div class="col-md-4 hide">
             <div class="form-group">
                 {!! Form::label('purchase_list_filter_location_id',  __('purchase.business_location') . ':') !!}
                 {!! Form::select('purchase_list_filter_location_id', $business_locations, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}

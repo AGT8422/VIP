@@ -9,10 +9,10 @@
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <h4 class="modal-title">@lang( 'purchase.add_payment' )</h4>
     </div>
-
     <div class="modal-body">
       <div class="row">
-        @if($due_payment_type == 'purchase')
+      @if($due_payment_type == 'purchase')
+        @php $cheque_type = 1;  @endphp
         <div class="col-md-6">
           <div class="well">
             <strong>@lang('purchase.supplier'): </strong>{{ $contact_details->name }}<br>
@@ -24,17 +24,18 @@
             <strong>@lang('report.total_purchase'): </strong><span class="display_currency" data-currency_symbol="true">{{ $contact_details->total_purchase }}</span><br>
             <strong>@lang('contact.total_paid'): </strong><span class="display_currency" data-currency_symbol="true">{{ $contact_details->total_paid }}</span><br>
             <strong>@lang('contact.total_purchase_due'): </strong><span class="display_currency" data-currency_symbol="true">{{ $contact_details->total_purchase - $contact_details->total_paid }}</span><br>
-             @if(!empty($contact_details->opening_balance) || $contact_details->opening_balance != '0.00')
-                  <strong>@lang('lang_v1.opening_balance'): </strong>
-                  <span class="display_currency" data-currency_symbol="true">
-                  {{ $contact_details->opening_balance }}</span><br>
-                  <strong>@lang('lang_v1.opening_balance_due'): </strong>
-                  <span class="display_currency" data-currency_symbol="true">
-                  {{ $ob_due }}</span>
-              @endif
-          </div>
-        </div>
-        @elseif($due_payment_type == 'purchase_return')
+            @if(!empty($contact_details->opening_balance) || $contact_details->opening_balance != '0.00')
+            <strong>@lang('lang_v1.opening_balance'): </strong>
+            <span class="display_currency" data-currency_symbol="true">
+              {{ $contact_details->opening_balance }}</span><br>
+              <strong>@lang('lang_v1.opening_balance_due'): </strong>
+              <span class="display_currency" data-currency_symbol="true">
+                {{ $ob_due }}</span>
+                @endif
+              </div>
+            </div>
+      @elseif($due_payment_type == 'purchase_return')
+        @php $cheque_type = 1;  @endphp
         <div class="col-md-6">
           <div class="well">
             <strong>@lang('purchase.supplier'): </strong>{{ $contact_details->name }}<br>
@@ -48,29 +49,31 @@
             <strong>@lang('lang_v1.total_purchase_return_due'): </strong><span class="display_currency" data-currency_symbol="true">{{ $contact_details->total_purchase_return - $contact_details->total_return_paid }}</span>
           </div>
         </div>
-        @elseif(in_array($due_payment_type, ['sell']))
-          <div class="col-md-6">
-            <div class="well">
-              <strong>@lang('sale.customer_name'): </strong>{{ $contact_details->name }}<br>
-              <br><br>
-            </div>
+      @elseif(in_array($due_payment_type, ['sell']))
+        @php $cheque_type = 0;  @endphp
+        <div class="col-md-6">
+          <div class="well">
+            <strong>@lang('sale.customer_name'): </strong>{{ $contact_details->name }}<br>
+            <br><br>
           </div>
-          <div class="col-md-6">
-            <div class="well">
-              <strong>@lang('report.total_sell'): </strong><span class="display_currency" data-currency_symbol="true">{{ $contact_details->total_invoice }}</span><br>
-              <strong>@lang('contact.total_paid'): </strong><span class="display_currency" data-currency_symbol="true">{{ $contact_details->total_paid }}</span><br>
-              <strong>@lang('contact.total_sale_due'): </strong><span class="display_currency" data-currency_symbol="true">{{ $contact_details->total_invoice - $contact_details->total_paid }}</span><br>
-              @if(!empty($contact_details->opening_balance) || $contact_details->opening_balance != '0.00')
-                  <strong>@lang('lang_v1.opening_balance'): </strong>
-                  <span class="display_currency" data-currency_symbol="true">
-                  {{ $contact_details->opening_balance }}</span><br>
-                  <strong>@lang('lang_v1.opening_balance_due'): </strong>
-                  <span class="display_currency" data-currency_symbol="true">
-                  {{ $ob_due }}</span>
-              @endif
+        </div>
+        <div class="col-md-6">
+          <div class="well">
+            <strong>@lang('report.total_sell'): </strong><span class="display_currency" data-currency_symbol="true">{{ $contact_details->total_invoice }}</span><br>
+            <strong>@lang('contact.total_paid'): </strong><span class="display_currency" data-currency_symbol="true">{{ $contact_details->total_paid }}</span><br>
+            <strong>@lang('contact.total_sale_due'): </strong><span class="display_currency" data-currency_symbol="true">{{ $contact_details->total_invoice - $contact_details->total_paid }}</span><br>
+            @if(!empty($contact_details->opening_balance) || $contact_details->opening_balance != '0.00')
+            <strong>@lang('lang_v1.opening_balance'): </strong>
+            <span class="display_currency" data-currency_symbol="true">
+              {{ $contact_details->opening_balance }}</span><br>
+              <strong>@lang('lang_v1.opening_balance_due'): </strong>
+              <span class="display_currency" data-currency_symbol="true">
+                {{ $ob_due }}</span>
+                @endif
+              </div>
             </div>
-          </div>
-         @elseif(in_array($due_payment_type, ['sell_return']))
+        @elseif(in_array($due_payment_type, ['sell_return']))
+            @php $cheque_type = 0;  @endphp
          <div class="col-md-6">
           <div class="well">
             <strong>@lang('sale.customer_name'): </strong>{{ $contact_details->name }}<br>
@@ -148,7 +151,7 @@
         @endif
         <div class="clearfix"></div>
 
-          @include('transaction_payment.payment_type_details')
+          @include('transaction_payment.payment_type_details',['cheque_type'=>($cheque_type)??1])
         <div class="col-md-12">
           <div class="form-group">
             {!! Form::label("note", __('lang_v1.payment_note') . ':') !!}

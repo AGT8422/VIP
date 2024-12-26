@@ -526,6 +526,7 @@ include_once('install_r.php');
         
         // 3 ***
             Route::resource('roles', 'RoleController');
+            Route::get('/users/without_delete','ManageUserController@withoutDestroy');
             Route::resource('users', 'ManageUserController');
             Route::resource('group-taxes', 'GroupTaxController');
         // 3 ***

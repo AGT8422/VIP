@@ -31,7 +31,7 @@ class ContactBankController extends Controller
     public function add()
     {
         $business_id = request()->session()->get('user.business_id');
-        $business_locations = BusinessLocation::forDropdown($business_id, true);
+        $business_locations = BusinessLocation::forDropdown($business_id, false);
         $contacts = Contact::contactDropdown($business_id, false, false);
         return view('contact_banks.add')
                 ->with(compact('business_locations','contacts'))

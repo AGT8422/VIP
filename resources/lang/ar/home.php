@@ -321,5 +321,10 @@
 'attention'=>'رسالة تأكيد',
 'attention_msg1'=>' هل تريد حفظ  :  ',
 'attention_msg2'=>' , أنت تستخدم النمط التالي :  ',
+'All Cheque'=>'كامل الشيكات',
+'Due Date From'=>'تاريخ الاستحقاق من',
+'Due Date To'=>'تاريخ الاستحقاق إلى',
+'Add Contact Bank' => 'إضافة بنك للزبون',
+'Edit Contact Bank' => 'تعديل بنك للزبون',
 
 ];

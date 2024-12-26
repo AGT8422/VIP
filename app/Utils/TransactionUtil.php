@@ -5183,30 +5183,26 @@ class TransactionUtil extends Util
                             ->select('transaction_payments.*', 'bl.name as location_name', 't.type as transaction_type')
                                     ->get();
                  
-        $prev_total_invoice_paid = $prev_payments->where('transaction_type', 'sale')->where('is_return', 0)->sum('amount');
-        $prev_total_sell_change_return = $prev_payments->where('transaction_type', 'sale')->where('is_return', 1)->sum('amount');
-        $prev_total_sell_change_return = !empty($prev_total_sell_change_return) ? $prev_total_sell_change_return : 0;
-        $prev_total_invoice_paid -= $prev_total_sell_change_return;
-        $prev_total_purchase_paid = $prev_payments->where('transaction_type', 'purchase')->where('is_return', 0)->sum('amount');
-        $prev_total_sell_return_paid = $prev_payments->where('transaction_type', 'sell_return')->sum('amount');
-        $prev_total_purchase_return_paid = $prev_payments->where('transaction_type', 'purchase_return')->sum('amount');
+        $prev_total_invoice_paid          = $prev_payments->where('transaction_type', 'sale')->where('is_return', 0)->sum('amount');
+        $prev_total_sell_change_return    = $prev_payments->where('transaction_type', 'sale')->where('is_return', 1)->sum('amount');
+        $prev_total_sell_change_return    = !empty($prev_total_sell_change_return) ? $prev_total_sell_change_return : 0;
+        $prev_total_invoice_paid         -= $prev_total_sell_change_return;
+        $prev_total_purchase_paid         = $prev_payments->where('transaction_type', 'purchase')->where('is_return', 0)->sum('amount');
+        $prev_total_sell_return_paid      = $prev_payments->where('transaction_type', 'sell_return')->sum('amount');
+        $prev_total_purchase_return_paid  = $prev_payments->where('transaction_type', 'purchase_return')->sum('amount');
 
 
-        $total_prev_paid = $prev_total_invoice_paid + $prev_total_purchase_paid - $prev_total_sell_return_paid - $prev_total_purchase_return_paid;
-
-        $total_prev_invoice = $previous_transaction_sums->total_purchase + $previous_transaction_sums->total_invoice -  $previous_transaction_sums->total_sell_return -  $previous_transaction_sums->total_purchase_return;
+        $total_prev_paid       = $prev_total_invoice_paid + $prev_total_purchase_paid - $prev_total_sell_return_paid - $prev_total_purchase_return_paid;
+        $total_prev_invoice    = $previous_transaction_sums->total_purchase + $previous_transaction_sums->total_invoice -  $previous_transaction_sums->total_sell_return -  $previous_transaction_sums->total_purchase_return;
+        
         //$total_prev_paid = $prev_payments_sum->total_paid;
-        $beginning_balance = $total_prev_invoice - $total_prev_paid;
-
+        $beginning_balance     = $total_prev_invoice - $total_prev_paid;
         //Get transaction totals between dates
-        $transactions = $this->__transactionQuery($contact_id, $start, $end)
-                            ->with(['location'])->get();
-                            
-        $transaction_types = Transaction::transactionTypes();
-        $ledger = [];
-
-        $opening_balance = 0;
-        $opening_balance_paid = 0;
+        $transactions          = $this->__transactionQuery($contact_id, $start, $end)->with(['location'])->get(); 
+        $transaction_types     = Transaction::transactionTypes();
+        $ledger                = [];
+        $opening_balance       = 0;
+        $opening_balance_paid  = 0;
         
          
         foreach ($transactions as $transaction) {
@@ -5233,9 +5229,9 @@ class TransactionUtil extends Util
         }
        
 
-        $invoice_sum = $transactions->where('type', 'sale')->sum('final_total');
-        $purchase_sum = $transactions->where('type', 'purchase')->sum('final_total');
-        $sell_return_sum = $transactions->where('type', 'sell_return')->sum('final_total');
+        $invoice_sum         = $transactions->where('type', 'sale')->sum('final_total');
+        $purchase_sum        = $transactions->where('type', 'purchase')->sum('final_total');
+        $sell_return_sum     = $transactions->where('type', 'sell_return')->sum('final_total');
         $purchase_return_sum = $transactions->where('type', 'purchase_return')->sum('final_total');
 
         //Get payment totals between dates

@@ -5,23 +5,26 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header no-print">
-    <h1>{{ $title }}
+    <h1 class="font_text">{{ $title }}
         <small></small>
     </h1>
     <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
         <li class="active">Here</li>
     </ol> -->
+    @php $mainUrl = '/gournal-voucher';  @endphp  
+    <h5 class="font_text"><i><b class="font_text"><a  class="font_text"href="{{\URL::to($mainUrl)}}">{{ $title }} {{ __("izo.>") . " " }}</b>    </a> {{ __("izo.list_of") . " " }} {{ $title }}  </i></h5>
+	
 </section>
 
 <!-- Main content -->
-<section class="content no-print">
+<section class="content no-print font_text">
     @if(session('yes'))
     <div class="alert success alert-success" >
         {{ session('yes')  }}
     </div>
     @endif
-    @component('components.filters', ['title' => $title])
+    @component('components.filters', ['title' => __('report.filters')])
         <form action="{{ URL::to('gournal-voucher') }}" method="GET">
             <div class="col-md-3">
                 <div class="form-group">
@@ -46,7 +49,7 @@
            
             <div class="col-md-1">
                 <label for="purchase_list_filter_location_id" class="label-control" style="width: 100%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-               <button type="submit" class="btn btn-md btn-primary">  Filter</button>
+               <button type="submit" class="btn btn-md btn-primary"> {{  __('report.filters')}}</button>
             </div>
             
         </form>
@@ -76,7 +79,7 @@
                    $amount = 0;
                 @endphp
                <tr style="border:1px solid #f1f1f1;">
-                <td>{{ $item->ref_no}}</td>
+                <td class="font_number">{{ $item->ref_no}}</td>
                     @foreach($items as $it)
                      @if($it->gournal_voucher_id == $item->id)
                             @php
@@ -86,7 +89,7 @@
                     @endforeach
                
                 
-                <td>{{ number_format($amount,config('constants.currency_precision')) }}</td>
+                <td class="font_number">{{ number_format($amount,config('constants.currency_precision')) }}</td>
                 @php
                     $dt = $item->date;
                     $formats = [
@@ -111,7 +114,7 @@
                         }
                     } 
                 @endphp
-                <td>{{\Carbon::createFromFormat($D_format,$item->date)->format(session()->get('business.date_format'))}}</td>
+                <td class="font_number">{{\Carbon::createFromFormat($D_format,$item->date)->format(session()->get('business.date_format'))}}</td>
                 {{-- <td>{{ $item->date }}</td> --}}
                 <td>
                     <div class="btn-group">
@@ -120,37 +123,37 @@
                            
                              <li> 
                                 <a href="#"  data-href="{{ URL::to('gournal-voucher/view/'.$item->id) }}" class="views-modal" data-container=".view_model"><i class="fa fa-eye"></i>
-                                            @lang("messages.view")</a> 
+                                    &nbsp;&nbsp;@lang("messages.view")</a> 
                              </li> 
                              <li> 
                                 <a href="#"  data-href="{{ URL::to('gournal-voucher/entry/'.$item->id) }}" class="views-modal" data-container=".view_model"><i class="fa fa-align-justify"></i>
-                                            @lang("home.Entry")</a> 
+                                    &nbsp;&nbsp;@lang("home.Entry")</a> 
                              </li> 
                              @if($item->document && $item->document != [])
                                 <li>
                                 {{-- @php dd($item->image); @endphp --}}
                                     <a class="btn-modal" data-href="{{URL::to('gournal-voucher/attachment/'.$item->id)}}" data-container=".view_modal">
                                         <i class="fas fa-file"></i>
-                                        @lang("home.attachment")
+                                        &nbsp;&nbsp;@lang("home.attachment")
                                         {{-- <iframe src="{{ URL::to($data->image) }}" height="150" width="150" frameborder="0"></iframe> --}}  
                                     </a>
                                 
                                 </li>
                             @endif
                             <li>
-                                <a href="{{ URL::to('reports/ex-vh/'.$item->id) }}" target="_blank"><i class="fas fa-print"></i>@lang('messages.print')</a>
+                                <a href="{{ URL::to('reports/ex-vh/'.$item->id) }}" target="_blank"><i class="fas fa-print"></i>&nbsp;&nbsp;@lang('messages.print')</a>
                             </li>
                             <li>
-                                <a href="{{ URL::to('gournal-voucher/edit/'.$item->id) }}"><i class="fas fa-edit"></i>@lang('home.Edit')</a>
+                                <a href="{{ URL::to('gournal-voucher/edit/'.$item->id) }}"><i class="fas fa-edit"></i>&nbsp;&nbsp;@lang('home.Edit')</a>
                             </li>
                             <li>
-                                <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "expense_voucher","id" => $item->id]) }}" target="_blank" class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>@lang('Add Attachment')</a>
+                                <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "expense_voucher","id" => $item->id]) }}" target="_blank" class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;@lang('Add Attachment')</a>
                             </li>
                             @if(request()->session()->get("user.id") == 1 || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8 )
                             @if($item->status == 0)
                             <li>
                                 <a   data-toggle="modal" 
-                                data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>@lang('home.Delete')</a>
+                                data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>&nbsp;&nbsp;@lang('izo.Delete')</a>
                             </li>
                             @endif
                             @endif
@@ -173,19 +176,19 @@
                         <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">@lang('home.Alert')</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">@lang('izo.Alert')</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             </div>
                             <div class="modal-body">
-                              @lang('home.are you sure deleting this')
+                              @lang('izo.are you sure deleting this')
                             </div>
                             <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                               @lang('home.close')
+                               @lang('izo.close')
                             </button>
-                            <a  href="{{ URL::to('gournal-voucher/delete/'.$item->id) }}" class="btn btn-danger">@lang('home.Delete')</a>
+                            <a  href="{{ URL::to('gournal-voucher/delete/'.$item->id) }}" class="btn btn-danger">@lang('izo.Delete')</a>
                             </div>
                         </div>
                         </div>

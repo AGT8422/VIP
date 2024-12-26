@@ -3100,6 +3100,22 @@
                     </div>
                 </div>
             </div>
+            {{--Status live--}}
+            <div class="row check_group">
+                <div class="col-md-3">
+                    <h4>@lang( 'role.dashboard' )</h4>
+                </div>
+                <div class="col-md-9">
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('permissions[]', 'status_view.index', in_array('status_view.index', $role_permissions),
+                                [ 'class' => 'input-icheck']); !!} {{ __( 'izo.status_view' ) }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {{--account.account--}}
             <div class="row check_group">
                 <div class="col-md-4">

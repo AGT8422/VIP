@@ -125,6 +125,37 @@
                 }
              });
         });
+        $(document).on('click', 'button.without_delete_user_button', function(){
+            // swal({
+            //   title: LANG.sure,
+            //   text: LANG.confirm_delete_user,
+            //   icon: "warning",
+            //   buttons: true,
+            //   dangerMode: true,
+            // }).then((willDelete) => {
+            //     if (willDelete) {
+                    var id = $(this).data('id');
+                    var href = $(this).data('href');
+                    // var data = $(this).serialize();
+                    $.ajax({
+                        method: "GET",
+                        url: href,
+                        dataType: "json",
+                        data: {
+                            id:id
+                        },
+                        success: function(result){
+                            if(result.success == true){
+                                toastr.success(result.msg);
+                                users_table.ajax.reload();
+                            } else {
+                                toastr.error(result.msg);
+                            }
+                        }
+                    });
+                // }
+        //      });
+        });
         
     });
     

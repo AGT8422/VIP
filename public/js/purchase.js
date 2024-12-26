@@ -469,7 +469,7 @@ $(document).ready(function() {
             { data: 'transaction_date', name: 'transaction_date' },
             { data: 'sup_refe', name: 'sup_refe' },
             { data: 'ref_no', name: 'ref_no' },
-            { data: 'location_name', name: 'BS.name' },
+            { data: 'location_name', name: 'BS.name' , class:"hide" },
             { data: 'name', name: 'contacts.name' },
             { data: 'status', name: 'status' },
             { data: 'payment_status', name: 'payment_status' },

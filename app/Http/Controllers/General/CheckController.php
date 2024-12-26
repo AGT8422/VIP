@@ -116,7 +116,7 @@ class CheckController extends Controller
         $id      =  (count($contacts))?array_keys($contacts)[0]:NULL;
         $banks   =  ContactBank::items();
         $title   =  (app('request')->input('type') == 1)?'cheque out':' cheque in';
-        $accountss      = Account::where("business_id",$business_id)->get();
+        $accountss      = Account::where("business_id",$business_id)->where("is_closed",0)->get();
         $account_list = [];
         foreach($accountss as $act){
             $account_list[$act->id] = $act->name . " || " . $act->account_number;
@@ -259,7 +259,7 @@ class CheckController extends Controller
         if ($this->moduleUtil->isModuleEnabled('account')) {
             $accounts   = Account::forDropdown($business_id, true, false, true);
         }
-        $accountss      = Account::where("business_id",$business_id)->get();
+        $accountss      = Account::where("business_id",$business_id)->where("is_closed",0)->get();
         $account_list = [];
         foreach($accountss as $act){
             $account_list[$act->id] = $act->name . " || " . $act->account_number;
@@ -274,6 +274,7 @@ class CheckController extends Controller
         
         DB::beginTransaction();
         $business_id              = request()->session()->get('user.business_id');
+        $entry                    = \App\Models\Entry::where("check_id",$id)->first();
         $data                     = Check::find($id);
         $old_contact_id           = $data->contact_id;
         $data->contact_id         = $request->contact_id;
@@ -335,13 +336,14 @@ class CheckController extends Controller
         if($old_contact_id != $request->contact_id ){
             $data->account_type    =  1;
         }
-        $data->save();
+        $data->update();
         $allChecks          = \App\AccountTransaction::where('check_id',$id)->get();
         foreach($allChecks as $iCk){
             $account_transaction = $iCk->account_id; 
             $action_date         = $iCk->operation_date; 
             $iCk->amount         = $data->amount;
             $iCk->operation_date = $request->write_date;
+            // $iCk->entry_id       = ($entry)?$entry->id:null;
             $iCk->update();
             $accountCheck = \App\Account::find($account_transaction);
             if($accountCheck->cost_center!=1){ \App\AccountTransaction::nextRecords($accountCheck->id,$accountCheck->business_id,$action_date); }
@@ -350,25 +352,34 @@ class CheckController extends Controller
         if($old_contact_id != $request->contact_id ){
             $account     =  \App\Account::where('id',$data->contact_id)->first();
             $old_account =  \App\Account::where('id',$old_contact_id)->first();
-
-            $allChecks   = \App\AccountTransaction::where('check_id',$id)->where('account_id',$old_account->id)->get();
+            $allChecks   =  \App\AccountTransaction::where('check_id',$id)->where('account_id',$old_account->id)->get();
             foreach($allChecks as $iCk){
                 $account_transaction = $iCk->account_id; 
                 $action_date         = $iCk->operation_date; 
                 $iCk->account_id     = $account->id;
                 $iCk->operation_date = $request->write_date;
+                // $iCk->entry_id       = ($entry)?$entry->id:null;
                 $iCk->update();
                 $accountCheck        = \App\Account::find($account_transaction);
                 $accountCheckNew     = \App\Account::find($account->id);
                 if($accountCheck->cost_center!=1){ \App\AccountTransaction::nextRecords($accountCheck->id,$accountCheck->business_id,$action_date); }
                 if($accountCheckNew->cost_center!=1){  \App\AccountTransaction::nextRecords($accountCheckNew->id,$accountCheckNew->business_id,$request->write_date); }
             }
-             
         }
-        $transactionPay  = \App\TransactionPayment::where('check_id', $id)->first();
+        if($data->status == 0){
+            $entry_id         = ($entry)?$entry->id:null;
+            $allChecksDebit   =  \App\AccountTransaction::where('check_id',$id)->where("type","debit")->where('entry_id',$entry_id)->get();
+            $setting          =  \App\Models\SystemAccount::first();
+            foreach($allChecksDebit as $onChk){
+                $onChk->account_id  = $setting->cheque_collection;
+                $onChk->update();
+            }
+        }
+
+        $transactionPay    = \App\TransactionPayment::where('check_id', $id)->first();
         if($transactionPay){
-            $old_payment = $transactionPay->replicate();
-            $parent      = \App\Models\ParentArchive::save_payment_parent($transactionPay->id,"Edit",$old_payment);
+            $old_payment   = $transactionPay->replicate();
+            $parent        = \App\Models\ParentArchive::save_payment_parent($transactionPay->id,"Edit",$old_payment);
         }
         if($transactionPay){
             $sum           =  \App\TransactionPayment::where('transaction_id',$transactionPay->transaction_id)->sum("amount");
@@ -534,24 +545,28 @@ class CheckController extends Controller
        
         DB::commit();
 
-        return redirect('cheque')
+        return redirect('/cheque')
                 ->with('yes',trans('home.Done Successfully'));
     }
     public function delete_collect($id)
     {
         if(request()->ajax()){
+            DB::beginTransaction();
             # ...........................................
             $data         =  Check::find($id);
             $entry        = \App\AccountTransaction::orderBy("id","desc")->where("note","collecting cheque")->where('check_id',$id)->first();
+           
             $data->status = 3;
             $data->update();
             $accountCheck = \App\Account::find($entry->account_id);
             if($accountCheck->cost_center!=1){ \App\AccountTransaction::nextRecords($accountCheck->id,$accountCheck->business_id,$entry->operation_date); }
             # delete collecting account
+            $type        = ($data->type == 1) ?'credit':'debit';
+            $re_type     = ($data->type == 1) ?'debit' :'credit';
             $x1   =  \App\AccountTransaction::where('account_id',$data->collect_account_id)
                                             ->where('check_id',$id)
                                             ->where("entry_id",$entry->entry_id)
-                                            ->where('type','credit')
+                                            ->where('type',$type)
                                             ->first();
             $action_date  = $x1->operation_date;
             $accountCheck = \App\Account::find($x1->account_id);
@@ -560,7 +575,7 @@ class CheckController extends Controller
             $x2   =  \App\AccountTransaction::where('account_id',$data->account_id)
                                             ->where('check_id',$id)
                                             ->where("entry_id",$entry->entry_id)
-                                            ->where('type','debit')
+                                            ->where('type',$re_type)
                                             ->first();
             $action_date  = $x2->operation_date;
             $accountCheck = \App\Account::find($x2->account_id);
@@ -569,84 +584,97 @@ class CheckController extends Controller
             # ...........................................
             $entry_id = \App\Models\Entry::find($entry->entry_id);
             $entry_id->delete();
+            DB::commit();
             # ...........................................
-            return redirect('cheque')
-                ->with('yes',trans('home.Done Successfully'));
+            return  $output = [
+                'success' => true,
+                'msg'    => "Delete Collect Successfully"
+            ];
         }
 
     }
     public function un_collect($id)
     {
-        DB::beginTransaction();
-        $data =  Check::find($id);
-        $data->status = 4;
-        $data->save();
-        # reference collecting account
-        Check::un_collect($id);
-        $type ="UNCollect Cheque";
-        
-        \App\Models\Entry::create_entries($data,$type);
-        DB::commit();
-        return redirect('cheque')
-                ->with('yes',trans('home.Done Successfully'));
+        if(request()->ajax()){
+            DB::beginTransaction();
+            $data =  Check::find($id);
+            $data->status = 4;
+            $data->save();
+            # reference collecting account
+            Check::un_collect($id);
+            $type ="UNCollect Cheque";
+            
+            \App\Models\Entry::create_entries($data,$type);
+            DB::commit();
+            return  $output = [
+                'success' => true,
+                'msg'    => "Un Collect Cheque Successfully"
+            ];
+        } 
     }
     ///................................ 
     public function refund($id)
     {
-        Check::add_action($id,'refund');
-        $data         =  Check::find($id);
-        $payment      = \App\TransactionPayment::where("check_id",$id)->first();
-        $old_state    =  $data->status;
-        $data->status =  2;
-        $data->save();
-        //Check::update_status($data->status,$old_state);
-      
-        if(app("request")->input("old")){
-            Check::refund($id);
-        }else{
-            Check::refund($id,1);
-        }
-        $pay  = \App\TransactionPayment::where("check_id",$id)->first();
-        if(!empty($pay)){
-            $account_transaction = \App\AccountTransaction::where("note","refund Collect")
-                            ->where("check_id",$id)->get();
-            foreach($account_transaction as $itemOne){
-                $acct_id                 = $itemOne->account_id;
-                $action_date             = $itemOne->operation_date;
-                $itemOne->transaction_id = $pay->transaction_id;
-                $itemOne->update();
-                $acc                     = \App\Account::find($acct_id);
-                if($acc->cost_center != 1){
-                    \App\AccountTransaction::nextRecords($acc->id,$acc->business_id,$action_date);
+        if(request()->ajax()){
+            DB::beginTransaction();
+            Check::add_action($id,'refund');
+            $data         =  Check::find($id);
+            $payment      = \App\TransactionPayment::where("check_id",$id)->first();
+            $old_state    =  $data->status;
+            $data->status =  2;
+            $data->save();
+            //Check::update_status($data->status,$old_state);
+        
+            if(app("request")->input("old")){
+                Check::refund($id);
+            }else{
+                Check::refund($id,1);
+            }
+            $pay  = \App\TransactionPayment::where("check_id",$id)->first();
+            if(!empty($pay)){
+                $account_transaction = \App\AccountTransaction::where("note","refund Collect")
+                                ->where("check_id",$id)->get();
+                foreach($account_transaction as $itemOne){
+                    $acct_id                 = $itemOne->account_id;
+                    $action_date             = $itemOne->operation_date;
+                    $itemOne->transaction_id = $pay->transaction_id;
+                    $itemOne->update();
+                    $acc                     = \App\Account::find($acct_id);
+                    if($acc->cost_center != 1){
+                        \App\AccountTransaction::nextRecords($acc->id,$acc->business_id,$action_date);
+                    }
                 }
+                
+                $pay->amount   = 0;
+                $pay->update();
+                $tr = \App\Transaction::find($pay->transaction_id);
+                // \App\Services\Cheque\Bill::update_status($tr);
+                
+                $allPayment = \App\TransactionPayment::where("transaction_id",$pay->transaction_id)->sum("amount");
+                $bill       = \App\Transaction::find($pay->transaction_id);
+                // dd( $payment->amount  . ' ' . round($bill->final_total,2) . ' ' . $data->amount . ' ' . $allPayment);
+                $totalPaid = $this->transactionUtil->getTotalPaid($pay->transaction_id);
+                // dd( $totalPaid );
+                if($totalPaid == 0){ //**  when there is no old payment   {due}  */ 
+                    $status = 'due';
+                }elseif($totalPaid <  round($bill->final_total,2)){  //**  when there is old payment   {partial}  */
+                    $status = 'partial';
+                }elseif($totalPaid >=  round($bill->final_total,2)){ //**  when there is old payment   {paid}  */
+                    $status = 'paid';
+                }
+                \App\Transaction::where('id',$bill->id)->update([
+                    'payment_status'=>$status
+                ]); 
+                
             }
-            
-            $pay->amount   = 0;
-            $pay->update();
-            $tr = \App\Transaction::find($pay->transaction_id);
-            // \App\Services\Cheque\Bill::update_status($tr);
-            
-            $allPayment = \App\TransactionPayment::where("transaction_id",$pay->transaction_id)->sum("amount");
-            $bill       = \App\Transaction::find($pay->transaction_id);
-            // dd( $payment->amount  . ' ' . round($bill->final_total,2) . ' ' . $data->amount . ' ' . $allPayment);
-            $totalPaid = $this->transactionUtil->getTotalPaid($pay->transaction_id);
-            // dd( $totalPaid );
-            if($totalPaid == 0){ //**  when there is no old payment   {due}  */ 
-                $status = 'due';
-            }elseif($totalPaid <  round($bill->final_total,2)){  //**  when there is old payment   {partial}  */
-                $status = 'partial';
-            }elseif($totalPaid >=  round($bill->final_total,2)){ //**  when there is old payment   {paid}  */
-                $status = 'paid';
-            }
-            \App\Transaction::where('id',$bill->id)->update([
-                'payment_status'=>$status
-            ]); 
-            
-        }
-        $type = "Refund Cheque";
-        \App\Models\Entry::create_entries($data,$type);
-        return redirect('cheque')
-                ->with('yes',trans('home.Done Successfully'));
+            $type = "Refund Cheque";
+            \App\Models\Entry::create_entries($data,$type);
+            DB::commit();
+            return  $output = [
+                'success' => true,
+                'msg'    => "Refund Cheque Successfully"
+            ];
+        } 
     }
     public function show($id)
     {   

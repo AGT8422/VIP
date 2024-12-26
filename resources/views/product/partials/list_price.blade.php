@@ -18,7 +18,7 @@
     </thead>
     <tbody>
         <tr>
-            <td ><input  type="hidden" name="name_add[]"   class="form-control name_price" value="{{__("lang_v1.Whole Price")}}" placeholder="{{__('messages.please_enter_name')}}"><input  type="text" name="" ReadOnly  class="form-control name_price" value="{{__("lang_v1.Whole Price")}}" placeholder="{{__('messages.please_enter_name')}}"></td>
+            <td ><input  type="hidden" name="name_add[]"   class="form-control name_price" value="{{__("izo.Whole Price")}}" placeholder="{{__('messages.please_enter_name')}}"><input  type="text" name="" ReadOnly  class="form-control name_price" value="{{__("lang_v1.Whole Price")}}" placeholder="{{__('messages.please_enter_name')}}"></td>
             <td ><input  type="text" name="price[]" class="form-control amount_price" value="" placeholder="{{__('messages.please_enter_price')}}"></td>
             {{-- <td class=" multi-input ceil_1 column_1  currency[1] "  >
                 <input  class="ceil" hidden value="1"> 
@@ -28,7 +28,7 @@
             <td class="last_column"></td> 
         </tr>
         <tr>
-            <td ><input  type="hidden" name="name_add[]"   class="form-control name_price" value="{{__("lang_v1.Retail Price")}}" placeholder="{{__('messages.please_enter_name')}}"><input  type="text" name="" ReadOnly  class="form-control name_price" value="{{__("lang_v1.Retail Price")}}" placeholder="{{__('messages.please_enter_name')}}"></td>
+            <td ><input  type="hidden" name="name_add[]"   class="form-control name_price" value="{{__("izo.Retail Price")}}" placeholder="{{__('messages.please_enter_name')}}"><input  type="text" name="" ReadOnly  class="form-control name_price" value="{{__("lang_v1.Retail Price")}}" placeholder="{{__('messages.please_enter_name')}}"></td>
             <td ><input  type="text" name="price[]" class="form-control amount_price" value="" placeholder="{{__('messages.please_enter_price')}}"></td>
             {{-- <td class=" multi-input  ceil_1 column_1  currency[1] "  > 
                 <input  class="ceil" hidden value="1">
@@ -38,7 +38,7 @@
             <td class="last_column"></td> 
         </tr>
         <tr>
-            <td ><input  type="hidden" name="name_add[]"   class="form-control name_price" value="{{__("lang_v1.Minimum Price")}}" placeholder="{{__('messages.please_enter_name')}}"><input  type="text" name=""  ReadOnly class="form-control name_price" value="{{__("lang_v1.Minimum Price")}}" placeholder="{{__('messages.please_enter_name')}}"></td>
+            <td ><input  type="hidden" name="name_add[]"   class="form-control name_price" value="{{__("izo.Minimum Price")}}" placeholder="{{__('messages.please_enter_name')}}"><input  type="text" name=""  ReadOnly class="form-control name_price" value="{{__("lang_v1.Minimum Price")}}" placeholder="{{__('messages.please_enter_name')}}"></td>
             <td ><input  type="text" name="price[]" class="form-control amount_price" value="" placeholder="{{__('messages.please_enter_price')}}"></td>
             {{-- <td class=" multi-input ceil_1 column_1  currency[1] "  > 
                 <input  class="ceil" hidden value="1">
@@ -48,7 +48,7 @@
             <td class="last_column"></td> 
         </tr>
         <tr>
-            <td ><input  type="hidden" name="name_add[]"   class="form-control name_price" value="{{__("lang_v1.Last Price")}}" placeholder="{{__('messages.please_enter_name')}}"><input  type="text" name="" ReadOnly  class="form-control name_price" value="{{__("lang_v1.Last Price")}}" placeholder="{{__('messages.please_enter_name')}}"></td>
+            <td ><input  type="hidden" name="name_add[]"   class="form-control name_price" value="{{__("izo.Last Price")}}" placeholder="{{__('messages.please_enter_name')}}"><input  type="text" name="" ReadOnly  class="form-control name_price" value="{{__("lang_v1.Last Price")}}" placeholder="{{__('messages.please_enter_name')}}"></td>
             <td ><input  type="text" name="price[]" class="form-control amount_price" value="" placeholder="{{__('messages.please_enter_price')}}"></td>
             {{-- <td class=" multi-input ceil_1 column_1  currency[1] "  > 
              <input  class="ceil" hidden value="1"> 
@@ -58,7 +58,7 @@
             <td class="last_column"></td> 
         </tr>
         <tr>
-            <td ><input  type="hidden" name="name_add[]"   class="form-control name_price" value="{{__("lang_v1.Last Price")}}" placeholder="{{__('messages.please_enter_name')}}"><input  type="text" name="" ReadOnly  class="form-control name_price" value="{{__("lang_v1.Last Price")}}" placeholder="{{__('messages.please_enter_name')}}"></td>
+            <td ><input  type="hidden" name="name_add[]"   class="form-control name_price" value="{{__("izo.Last Price")}}" placeholder="{{__('messages.please_enter_name')}}"><input  type="text" name="" ReadOnly  class="form-control name_price" value="{{__("lang_v1.Last Price")}}" placeholder="{{__('messages.please_enter_name')}}"></td>
             <td ><input  type="text" name="price[]" class="form-control amount_price" value="" placeholder="{{__('messages.please_enter_price')}}"></td>
             {{-- <td class=" multi-input ceil_1 column_1  currency[1] "  > 
              <input  class="ceil" hidden value="1"> 

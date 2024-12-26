@@ -11,8 +11,8 @@
 
 <!-- Main content -->
 <section class="content no-print">
-        @component('components.filters', ['title' => __('report.filters')])
-        <div class="col-md-3">
+        @component('components.filters', ['title' => __('report.filters'),'class' => 'box-primary'])
+        <div class="col-md-3 hide">
             <div class="form-group">
                 {!! Form::label('sell_list_filter_location_id',  __('purchase.business_location') . ':') !!}
 
@@ -39,14 +39,14 @@
             </div>
         </div>
            {{-- agent --}}
-     <div class="col-md-4">
+     <div class="col-md-3">
          <div class="form-group">
              {!! Form::label('agents_id', __('home.Agents') . ':') !!}
              {{  Form::select('agents_id',$users,null,['class'=>'form-control select2 ','placeholder'=>trans('lang_v1.all')]) }}
          </div>
      </div>
        	{{-- cost center --}}
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="form-group">
                 {!! Form::label('cost_center_id', __('home.Cost Center') . ':') !!}
                 {{  Form::select('cost_center_id',$cost_centers,null,['class'=>'form-control select2 ','placeholder'=>trans('lang_v1.all')]) }}

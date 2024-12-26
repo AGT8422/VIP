@@ -18,7 +18,7 @@
 <!-- Main content -->
 <section class="content no-print">
     @component('components.filters', ['title' => __('report.filters')])
-        <div class="col-md-3">
+        <div class="col-md-3 hide">
             <div class="form-group">
                 {!! Form::label('purchase_list_filter_location_id',  __('purchase.business_location') . ':') !!}
                 {!! Form::select('purchase_list_filter_location_id', $business_locations, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
@@ -124,7 +124,7 @@
                 { data: 'transaction_date', name: 'transaction_date'  },
                 { data: 'ref_no', name: 'ref_no'},
                 { data: 'parent_purchase', name: 'T.ref_no'},
-                { data: 'location_name', name: 'BS.name'},
+                { data: 'location_name', name: 'BS.name' , class:"hide"},
                 { data: 'status', name: 'status'},
                 { data: 'name', name: 'contacts.name'},
                 { data: 'payment_status', name: 'payment_status'},

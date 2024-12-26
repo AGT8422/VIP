@@ -10,8 +10,8 @@
 
 <!-- Main content -->
 <section class="content no-print">
-    @component('components.filters', ['title' => __('report.filters')])
-        <div class="col-md-3">
+    @component('components.filters', ['title' => __('report.filters') ,'class' => 'box-primary'])
+        <div class="col-md-3 hide">
             <div class="form-group">
                 {!! Form::label('sell_list_filter_location_id',  __('purchase.business_location') . ':') !!}
 

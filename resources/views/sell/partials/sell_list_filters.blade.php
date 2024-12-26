@@ -8,7 +8,7 @@
     }
 ?>
 @if(empty($only) || in_array('sell_list_filter_location_id', $only))
-<div class="col-md-3">
+<div class="col-md-3 hide">
     <div class="form-group">
         {!! Form::label('sell_list_filter_location_id',  __('purchase.business_location') . ':') !!}
 

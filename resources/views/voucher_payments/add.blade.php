@@ -5,11 +5,15 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>{{ $title }} </h1>
+	@php $c_type = (app('request')->input('type') == 1)?1:0;  $title_rec = __('home.Receipt voucher') ; $title_pay = __('home.Payment Voucher') @endphp
+    <h1 class="font_text">{{ ($c_type == 1)?$title_rec:$title_pay }} </h1>
+	@php $mainUrl = '/payment-voucher'; $subUrl = "/payment-voucher/add?type=".$c_type;  @endphp  
+    <h5 class="font_text"><i><b class="font_text"><a  class="font_text"href="{{\URL::to($mainUrl)}}">{{ __("home.Vouchers List") }} {{ __("izo.>") . " " }}</b>    </a> {{ ($c_type == 1)?$title_rec:$title_pay}}  </i></h5>
+	
 </section>
 
 <!-- Main content -->
-<section class="content">
+<section class="content font_text">
 	{!! Form::open(['url' => 'payment-voucher/add', 'method' => 'post', 'id' => 'add_expense_form', 'files' => true ]) !!}
 	<div class="box box-solid">
 		<div class="box-body">
@@ -25,7 +29,7 @@
 				<div class="col-sm-3">
 					<div class="form-group">
 						{!! Form::label('location_id', __('home.Amount').':*') !!}
-						{!! Form::text('amount',1, ['class' => 'form-control amount ','id'=>'amount_current','step'=>'any' ,'required','min'=>1]); !!}
+						{!! Form::text('amount',1, ['class' => 'form-control amount font_number','id'=>'amount_current','step'=>'any' ,'required','min'=>1]); !!}
 					</div>
 				</div>
 				<div class="col-md-3">
@@ -41,7 +45,7 @@
 				<div class="col-sm-3">
 					<div class="form-group">
 						{!! Form::label('location_id', __('home.Amount Currency').':*') !!}
-						{!! Form::text('amount_currency',1, ['class' => 'form-control amount_currency ','step'=>'any'  ,'min'=>1]); !!}
+						{!! Form::text('amount_currency',1, ['class' => 'form-control amount_currency font_number','step'=>'any'  ,'min'=>1]); !!}
 					</div>
 				</div>
 				<input hidden name="type" type="text" value="{{ (app('request')->input('type') == 1)?1:0 }} ">

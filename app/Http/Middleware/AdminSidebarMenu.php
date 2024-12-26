@@ -249,10 +249,10 @@ class AdminSidebarMenu
                                 __('report.stock_report'),
                                 ['icon' => 'fa fas fa-list', 'active' => request()->segment(1)=='gallery' && request()->segment(2)=='stock_report' ,'style'=>'font-weight:bold']
                             );
-                             $sub->url( action('StocktackingController@index'),
-                                __('lang_v1.Inventory_of_stores'),
-                                 ['icon' => 'fa fas fa-plus-circle', 'active' => request()->segment(1) == 'stocktacking' && request()->segment(2) == null ,'style'=>'font-weight:bold']
-                            );
+                            //  $sub->url( action('StocktackingController@index'),
+                            //     __('lang_v1.Inventory_of_stores'),
+                            //      ['icon' => 'fa fas fa-plus-circle', 'active' => request()->segment(1) == 'stocktacking' && request()->segment(2) == null ,'style'=>'font-weight:bold']
+                            // );
                          },
                     ['icon' => 'fa fas fa-book']
                 )->order(21);
@@ -280,14 +280,14 @@ class AdminSidebarMenu
                         }
 
                         if (auth()->user()->can('purchase_return.create') ||  auth()->user()->can('manufuctoring.views') ||  auth()->user()->can('SalesMan.views') ||  auth()->user()->can('admin_supervisor.views') ) {
-                            $sub->url(
-                                action('ReportController@getproductPurchaseReport'),
-                                __('lang_v1.purchase_return'),
-                                ['icon' => 'fa fas fa-undo', 'active' => request()->segment(2) == 'product-purchase-report' ,'style'=>'font-weight:bold']
-                            );
+                            // $sub->url(
+                            //     action('ReportController@getproductPurchaseReport'),
+                            //     __('lang_v1.purchase_return'),
+                            //     ['icon' => 'fa fas fa-undo', 'active' => request()->segment(2) == 'product-purchase-report' ,'style'=>'font-weight:bold']
+                            // );
                         }
 
-                        if (auth()->user()->can('purchase.view') || auth()->user()->can('view_own_purchase')|| auth()->user()->can('admin_without.views') ||     auth()->user()->can('SalesMan.views') ||  auth()->user()->can('admin_supervisor.views') ) {
+                        if (auth()->user()->can('status_view.index') || auth()->user()->can('purchase.view') || auth()->user()->can('view_own_purchase')|| auth()->user()->can('admin_without.views') ||     auth()->user()->can('SalesMan.views') ||  auth()->user()->can('admin_supervisor.views') ) {
                             $sub->url(
                                 action('StatusLiveController@index'),
                                 __('home.Status Live'),
@@ -345,13 +345,13 @@ class AdminSidebarMenu
                         }
 
                         
-                        // if ($is_admin ||       auth()->user()->hasAnyPermission(['access_shipping', 'access_own_shipping', 'access_commission_agent_shipping']) ) {
+                        if ($is_admin ||       auth()->user()->hasAnyPermission(['access_shipping', 'access_own_shipping', 'access_commission_agent_shipping']) ) {
                             $sub->url(
                                 action('SellController@shipments'),
                                 __('lang_v1.shipments'),
                                 ['icon' => 'fa fas fa-truck', 'active' => request()->segment(1) == 'shipments','style'=>'font-weight:bold']
                             );
-                        // }
+                        }
                         if (auth()->user()->can('user.create')  ) {
                             $sub->url(
                                 action('SalesCommissionAgentController@index'),
@@ -360,13 +360,13 @@ class AdminSidebarMenu
                             );
                         }
                    
-                        // if (auth()->user()->can('discount.access')) {
+                        if (auth()->user()->can('discount.access')) {
                             $sub->url(
                                 action('DiscountController@index'),
                                 __('lang_v1.discounts'),
                                 ['icon' => 'fa fas fa-percent', 'active' => request()->segment(1) == 'discount','style'=>'font-weight:bold']
                             );
-                        // }
+                        }
 
                         if (in_array('subscription', $enabled_modules) && auth()->user()->can('direct_sell.access')) {
                             $sub->url(

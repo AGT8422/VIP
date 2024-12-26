@@ -5,7 +5,7 @@
                 <th>@lang('messages.date')</th>
                 <th>@lang('purchase.ref_no')</th>
                 <th>@lang('lang_v1.parent_purchase')</th>
-                <th>@lang('purchase.location')</th>
+                <th class="hide">@lang('purchase.location')</th>
                 <th>@lang('purchase.purchase_status')</th>
                 <th>@lang('purchase.supplier')</th>
                 <th>@lang('purchase.payment_status')</th>
@@ -17,11 +17,15 @@
         </thead>
         <tfoot>
             <tr class="bg-gray font-17 text-center footer-total">
-                <td colspan="5"><strong>@lang('sale.total'):</strong></td>
+                <td></td>
+                <td></td>
+                <td><strong>@lang('sale.total'):</strong></td>
+                <td  class="hide"></td>
+                <td></td>
                 <td></td>
                 <td id="footer_payment_status_count"></td>
-                <td><span class="display_currency" id="footer_purchase_return_total" data-currency_symbol ="true"></span></td>
-                <td><span class="display_currency" id="footer_total_due" data-currency_symbol ="true"></span></td>
+                <td><span class="display_currency font_number" id="footer_purchase_return_total" data-currency_symbol ="true"></span></td>
+                <td><span class="display_currency font_number" id="footer_total_due" data-currency_symbol ="true"></span></td>
                 <td></td>
                 <td></td>
             </tr>

@@ -5,17 +5,20 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header no-print">
-    <h1>{{ $title }}
+    <h1 class="font_text">{{ $title }}
         <small></small>
     </h1>
     <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
         <li class="active">Here</li>
     </ol> -->
+    @php $mainUrl = '/daily-payment';  @endphp  
+    <h5 class="font_text"><i><b class="font_text"><a  class="font_text"href="{{\URL::to($mainUrl)}}">{{ $title }} {{ __("izo.>") . " " }}</b>    </a> {{ __("izo.list_of") . " " }} {{ $title }}  </i></h5>
+	
 </section>
 
 <!-- Main content -->
-<section class="content no-print">
+<section class="content no-print font_text">
     @if(session('yes'))
     <div class="alert success alert-success" >
         {{ session('yes')  }}
@@ -72,11 +75,11 @@
                </tr>
                @foreach ($allData as $item)
                <tr style="border:1px solid #f1f1f1;">
-                <td> 
-                    <a href="#" data-href="{{ action('General\DailyPaymentController@show', [$item->id]) }}" class="btn-modal"
+                <td class="font_number"> 
+                    <a href="#" data-href="{{ action('General\DailyPaymentController@show', [$item->id]) }}" class="btn-modal font_number" 
                         data-container=".view_modal">{{ $item->ref_no}} </a>
                  </td>
-                <td>{{ $item->amount }}</td> 
+                <td class="font_number">{{ $item->amount }}</td> 
                 @php
                     $dt = $item->date;
                     $formats = [
@@ -101,19 +104,19 @@
                         }
                     } 
                 @endphp
-                <td>{{\Carbon::createFromFormat($D_format,$item->date)->format(session()->get('business.date_format'))}}</td>
+                <td class="font_number">{{\Carbon::createFromFormat($D_format,$item->date)->format(session()->get('business.date_format'))}}</td>
                 <td>
                     <div class="btn-group">
                         <button type="button" class="btn btn-info dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">@lang('home.Action')<span class="caret"></span><span class="sr-only">Toggle Dropdown </span></button>
                         <ul class="dropdown-menu dropdown-menu-left" role="menu">
                            
                             <li>
-                                <a href="{{ URL::to('daily-payment/edit/'.$item->id) }}"><i class="fas fa-edit"></i>@lang('home.Edit')</a>
+                                <a href="{{ URL::to('daily-payment/edit/'.$item->id) }}"><i class="fas fa-edit"></i>&nbsp;&nbsp;@lang('home.Edit')</a>
                             </li>
                             <li>
                                 <a class="btn-modal" data-href="{{ URL::to('daily-payment/entry/'.$item->id) }}" data-container=".view_modal" >
                                     <i class="fa fa-align-justify"></i>
-                                    @lang('home.Entry')
+                                    &nbsp;&nbsp;@lang('home.Entry')
                                 </a>
                             </li>
                             @php  @endphp
@@ -121,22 +124,22 @@
                             <li>
                                 <a class="btn-modal" data-href="{{URL::to('daily-payment/attachment/'.$item->id)}}" data-container=".view_modal">
                                     <i class="fas fa-file"></i>
-                                    @lang("home.attachment")
+                                    &nbsp;&nbsp;@lang("home.attachment")
                                     {{-- <iframe src="{{ URL::to($data->image) }}" height="150" width="150" frameborder="0"></iframe> --}}  
                                 </a>
                             </li>
                             @endif
                             <li>
-                                 <a href="{{ URL::to('reports/jv-vh/'.$item->id) }}" target="_blank" ><i class="fas fa-print"></i>@lang('messages.print')</a>
+                                 <a href="{{ URL::to('reports/jv-vh/'.$item->id) }}" target="_blank" ><i class="fas fa-print"></i>&nbsp;&nbsp;@lang('messages.print')</a>
                             </li>
                             <li>
-                                <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "daily_payment","id" => $item->id]) }}" target="_blank"  class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>@lang('Add Attachment')</a>
+                                <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "daily_payment","id" => $item->id]) }}" target="_blank"  class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;@lang('Add Attachment')</a>
                             </li>
                             @if( request()->session()->get("user.id") ==  1 || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8 )
                             @if($item->status == 0)
                             <li>
                                 <a   data-toggle="modal" 
-                                data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>@lang('home.Delete')</a>
+                                data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>&nbsp;&nbsp;@lang('izo.Delete')</a>
                             </li>
                             @endif
                             @endif                            
@@ -158,19 +161,19 @@
                         <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">@lang('home.Alert')</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">@lang('izo.Alert')</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             </div>
                             <div class="modal-body">
-                              @lang('home.are you sure deleting this')
+                              @lang('izo.are you sure deleting this')
                             </div>
                             <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                               @lang('home.close')
+                               @lang('izo.close')
                             </button>
-                            <a  href="{{ URL::to('daily-payment/delete/'.$item->id) }}" class="btn btn-danger">@lang('home.Delete')</a>
+                            <a  href="{{ URL::to('daily-payment/delete/'.$item->id) }}" class="btn btn-danger">@lang('izo.Delete')</a>
                             </div>
                         </div>
                         </div>

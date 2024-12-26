@@ -365,5 +365,9 @@ return [
     'attention_msg1'=>'Are You Sure To Save This',
     'attention_msg2'=>', You Use This Pattern : ',
     'attention'=>'Attention',
-
+    'All Cheque'=>'All Cheques',
+    'Due Date From'=>'Due Date From',
+    'Due Date To'=>'Due Date To',
+    'Add Contact Bank' => 'Add Contact Bank',
+    'Edit Contact Bank' => 'Edit Contact Bank',
     ];

@@ -5,17 +5,20 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header no-print">
-    <h1>@lang('home.cheques')
+    <h1 class="font_text">@lang('home.cheques')
         <small></small>
     </h1>
     <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
         <li class="active">Here</li>
     </ol> -->
+    @php $mainUrl = '/cheque';  @endphp  
+    <h5 class="font_text"><i><b class="font_text"><a  class="font_text"href="{{\URL::to($mainUrl)}}">{{ __("home.cheques") }} {{ __("izo.>") . " " }}</a></b>{{ __("izo.list_of")  ." ".__("home.cheques")   }} <b> {{"   "}} </b></i></h5>
+ 
 </section>
 
 <!-- Main content -->
-<section class="content no-print">
+<section class="content no-print font_text">
     @if(session('yes'))
     <div class="alert success alert-success" >
         {{ session('yes')  }}
@@ -29,7 +32,7 @@
                     {!! Form::text('name', app('request')->input('name'), ['class' => 'form-control', 'style' => 'width:100%']); !!}
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 hide">
                 <div class="form-group">
                     {!! Form::label('purchase_list_filter_location_id',  __('purchase.business_location') . ':') !!}
                     {!! Form::select('location_id', $business_locations, app('request')->input('location_id'), ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
@@ -79,13 +82,13 @@
             </div>
             <div class="col-md-1">
                 <label for="purchase_list_filter_location_id" class="label-control" style="width: 100%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-               <button type="submit" class="btn btn-md btn-primary">  Filter</button>
+               <button type="submit" class="btn btn-md btn-primary">  {{__('report.filters')}}</button>
             </div>
             
         </form>
         
         @endcomponent
-    @component("components.widget",["title"=>"All Cheque"])
+    @component("components.widget",["title"=>__('home.All Cheque')])
         <div class="col-md-12">
             <table class="table table-bordered ">
                 <tbody>
@@ -107,8 +110,8 @@
                    </tr>
                    @foreach ($allData as $item)
                    <tr style="border:1px solid #f1f1f1;">
-                    <td>{{ $item->ref_no}}</td>
-                    <td>{{ $item->cheque_no}}</td>
+                    <td class="font_number">{{ $item->ref_no}}</td>
+                    <td class="font_number">{{ $item->cheque_no}}</td>
                     @php 
                         if($item->account_type == 0){
                             $account = \App\Account::where("contact_id",$item->contact_id)->first();
@@ -127,21 +130,21 @@
                         }
                     @endphp
                     <td>{{  $name }} </td>
-                    <td>{{ $item->amount }}</td>
+                    <td class="font_number">{{ $item->amount }}</td>
                     @php $payment_id = \App\Transaction::where("id",$item->transaction_id)->first(); (!empty($payment_id))?$amount_p = $payment_id->final_total : $amount_p =  0;  ; @endphp
                     <td>{{ $amount_p }}</td>
                     <td>{{ $item->account?$item->account->name:'--' }}</td>
                     {{-- <td>{{ $item->type_name }}</td> --}}
                     <td>{{ $item->collecting_account?$item->collecting_account->name:' ' }}</td>
                     <td>{{ $item->status_name }}</td>
-                    <td>{{ $item->write_date }}</td>
-                    <td>{{ $item->due_date }}</td>
+                    <td class="font_number">{{ $item->write_date }}</td>
+                    <td class="font_number">{{ $item->due_date }}</td>
                         @php $accountTrans = \App\AccountTransaction::orderBy("id","desc")->where("check_id",$item->id)->first();  @endphp 
                         @if($item->collecting_date)
                             @if($accountTrans)
-                                <td>{{ $accountTrans->operation_date->format('Y-m-d') }}</td>
+                                <td class="font_number">{{ $accountTrans->operation_date->format('Y-m-d') }}</td>
                             @else
-                                <td>{{ $item->collecting_date }}</td>
+                                <td class="font_number">{{ $item->collecting_date }}</td>
                             @endif
                         @else
                         <td></td>
@@ -356,7 +359,6 @@
 
 @section('javascript')
 <script type="text/javascript">
-        
         $(document).on('click', '.collect_submit', function() {
             $('.modal').hide();
         });
@@ -395,7 +397,7 @@
                         success: function(result){
                             if(result.success == true){
                                 toastr.success(result.msg);
-                                window.history.back();
+                                location.reload();
                             } else {
                                 toastr.error(result.msg);
                             }
@@ -421,7 +423,7 @@
                         success: function(result){
                             if(result.success == true){
                                 toastr.success(result.msg);
-                                window.history.back();
+                                location.reload();
                             } else {
                                 toastr.error(result.msg);
                             }
@@ -447,7 +449,7 @@
                         success: function(result){
                             if(result.success == true){
                                 toastr.success(result.msg);
-                                window.history.back();
+                                location.reload();
                             } else {
                                 toastr.error(result.msg);
                             }
@@ -456,11 +458,6 @@
                 }
             });
         });
-     
-      
-
-
-
 </script>
 @stop
 <!-- /.content -->

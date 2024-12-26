@@ -17,8 +17,8 @@
    <input type="hidden" id="p_thousand" value="{{$currency_details->thousand_separator}}">
    <input type="hidden" id="p_decimal" value="{{$currency_details->decimal_separator}}">
 
-    @component('components.filters', ['title' => __('report.filters')])
-        <div class="col-md-3">
+    @component('components.filters', ['title' => __('report.filters') ,'class' => 'box-primary'])
+        <div class="col-md-3 hide">
             <div class="form-group">
                 {!! Form::label('sell_list_filter_location_id',  __('purchase.business_location') . ':') !!}
                 {!! Form::select('sell_list_filter_location_id', $business_locations, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all') ]); !!}

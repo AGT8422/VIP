@@ -120,18 +120,18 @@ class PurchaseReturnController extends Controller
                     if (!empty($row->return_parent_id)) {
                         if($row->return_parent_id == $row->id){
                             if (request()->session()->get("user.id") == 1 ) {
-                            $html .= '<li><a href="' . action('CombinedPurchaseReturnController@edit', $row->id) . '" ><i class="glyphicon glyphicon-edit"></i>' .
+                            $html .= '<li><a href="' . action('CombinedPurchaseReturnController@edit', $row->id) . '" ><i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;' .
                             __("messages.edit") .
                             '</a></li>';
                             }
                         }else{
-                            $html .= '<li><a href="' . action('PurchaseReturnController@add', $row->return_parent_id) . '" ><i class="glyphicon glyphicon-edit"></i>' .
+                            $html .= '<li><a href="' . action('PurchaseReturnController@add', $row->return_parent_id) . '" ><i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;' .
                                             __("messages.edit") .
                                             '</a></li>';
                         }
                     } else {
                         if (request()->session()->get("user.id") == 1 ) {
-                        $html .= '<li><a href="' . action('CombinedPurchaseReturnController@edit', $row->id) . '" ><i class="glyphicon glyphicon-edit"></i>' .
+                        $html .= '<li><a href="' . action('CombinedPurchaseReturnController@edit', $row->id) . '" ><i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;' .
                                 __("messages.edit") .
                                 '</a></li>';
                         }
@@ -153,7 +153,7 @@ class PurchaseReturnController extends Controller
                         }
 
                         if($id_module != null){
-                            $html .= '<li> <a href="'.\URL::to('reports/purchase/'.$row->id.'?return=1&ref_no='.$row->ref_no.'').'"  target="_blank" ><i class="fas fa-print" aria-hidden="true"></i>'. __("messages.print") .'</a>';
+                            $html .= '<li> <a href="'.\URL::to('reports/purchase/'.$row->id.'?return=1&ref_no='.$row->ref_no.'').'"  target="_blank" ><i class="fas fa-print" aria-hidden="true"></i>&nbsp;&nbsp;'. __("messages.print") .'</a>';
                             $html .= '<div style="border:3px solid #ee680e;background-color:#ee680e">';
                             foreach($all_pattern as $one_pattern){
                                 $pat   = \App\Models\PrinterTemplate::find($one_pattern); 
@@ -166,32 +166,32 @@ class PurchaseReturnController extends Controller
                             
                             $html .= '</li>';
                         }else{
-                            $html .= '<li><a href="'.\URL::to('reports/purchase/'.$row->id.'?return=1&ref_no='.$row->ref_no.'').'"  target="_blank" ><i class="fas fa-print" aria-hidden="true"></i>'. __("messages.print") .'</a></li>';
+                            $html .= '<li><a href="'.\URL::to('reports/purchase/'.$row->id.'?return=1&ref_no='.$row->ref_no.'').'"  target="_blank" ><i class="fas fa-print" aria-hidden="true"></i>&nbsp;&nbsp;'. __("messages.print") .'</a></li>';
                         }
                         
                         
                     
                     }
                     if ($row->payment_status != "paid") {
-                        $html .= '<li><a href="' . action('TransactionPaymentController@addPayment', [$row->id]) . '" class="add_payment_modal"><i class="fas fa-money-bill-alt"></i>' . __("purchase.add_payment") . '</a></li>';
+                        $html .= '<li><a href="' . action('TransactionPaymentController@addPayment', [$row->id]) . '" class="add_payment_modal"><i class="fas fa-money-bill-alt"></i>&nbsp;&nbsp;' . __("purchase.add_payment") . '</a></li>';
                     }
-                     $html .= '<li><a href="#" data-href="' .\URL::to('entry/transaction/'.$row->return_parent_id) . '" class="btn-modal" data-container=".view_modal"><i class="fa fa-align-justify" aria-hidden="true"></i>' . __("home.Entry") . '</a></li>';
+                     $html .= '<li><a href="#" data-href="' .\URL::to('entry/transaction/'.$row->return_parent_id) . '" class="btn-modal" data-container=".view_modal"><i class="fa fa-align-justify" aria-hidden="true"></i>&nbsp;&nbsp;' . __("home.Entry") . '</a></li>';
                     
-                    $html .= '<li><a href="' . action('TransactionPaymentController@show', [$row->id]) . '" class="view_payment_modal"><i class="fas fa-money-bill-alt"></i>' . __("purchase.view_payments") . '</a></li>';
+                    $html .= '<li><a href="' . action('TransactionPaymentController@show', [$row->id]) . '" class="view_payment_modal"><i class="fas fa-money-bill-alt"></i>&nbsp;&nbsp;' . __("purchase.view_payments") . '</a></li>';
                     if(request()->session()->get("user.id") == 1){
                         if($row->id == $row->return_parent_id){
-                            $html .= '<li><a href="' . action('PurchaseReturnController@destroy', [$row->id,"basic"=>"basic"]) . '" class="delete_purchase_return" ><i class="fa fa-trash"></i>' .
+                            $html .= '<li><a href="' . action('PurchaseReturnController@destroy', [$row->id,"basic"=>"basic"]) . '" class="delete_purchase_return" ><i class="fa fa-trash"></i>&nbsp;&nbsp;' .
                                                 __("messages.delete") .
                                                 '</a></li>';
                                                 
                         }else{
-                            $html .= '<li><a href="' . action('PurchaseReturnController@destroy', $row->id) . '" class="delete_purchase_return" ><i class="fa fa-trash"></i>' .
+                            $html .= '<li><a href="' . action('PurchaseReturnController@destroy', $row->id) . '" class="delete_purchase_return" ><i class="fa fa-trash"></i>&nbsp;&nbsp;' .
                                                 __("messages.delete") .
                                                 '</a></li>';
                         
                         }
                     }
-                    $html .= '<li><a href="#" data-href="' . action('HomeController@formAttach', ["type" => "purchase_return","id" => $row->id]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-paperclip" aria-hidden="true"></i> ' . __("Add Attachment") . '</a></li>';
+                    $html .= '<li><a href="#" data-href="' . action('HomeController@formAttach', ["type" => "purchase_return","id" => $row->id]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-paperclip" aria-hidden="true"></i>&nbsp;&nbsp;' . __("Add Attachment") . '</a></li>';
                     
                     $html .= '</ul></div>';
                     
@@ -213,7 +213,7 @@ class PurchaseReturnController extends Controller
                 ->editColumn('parent_purchase', function ($row) {
                     $html = '';
                     if (!empty($row->parent_purchase)) {
-                        $html = '<a href="#" data-href="' . action('PurchaseController@show', [$row->return_parent_id]) . '" class="btn-modal" data-container=".view_modal">' . $row->parent_purchase . '</a>';
+                        $html = '<a href="#" data-href="' . action('PurchaseController@show', [$row->return_parent_id]) . '" class="btn-modal font_number" data-container=".view_modal">' . $row->parent_purchase . '</a>';
                     }
                     return $html;
                 })

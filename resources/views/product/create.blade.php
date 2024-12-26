@@ -9,17 +9,18 @@
   <!-- Content Header (Page header) -->
   {{-- */1/*section title of page --}}
   {{-- *********************************************** --}}
-  <section class="content-header" >
+  <section class="content-header font_text" >
     <h1 style="padding:10px; "><b>@lang('product.add_new_product')</b></h1>
-    <h5><i><b>{{ "   Products  >  " }} </b>{{ "Add Product"   }} <b> {{"   "}} </b></i></h5>   
-    <br>  
+     @php $mainUrl = '/products';  @endphp  
+    <h5 class="font_text"><i><b class="font_text"><a  class="font_text"href="{{\URL::to($mainUrl)}}">{{ __("sale.products") }} {{ __("izo.>") . " " }}</a></b>{{  __("product.add_new_product")   }} <b> {{"   "}} </b></i></h5>
+ 
   </section>
   {{-- *********************************************** --}}
 
   <!-- Main content -->
   {{-- */2/*section body of page --}}
   {{-- *********************************************** --}}
-    <section class="content">
+    <section class="content font_text">
       
       {{-- *1* section currency --}}
       {{-- *********************************************** --}}
@@ -40,7 +41,7 @@
                 {{-- *1* section product information --}}
                 {{-- ******************************************************* --}}
               
-                    @component('components.widget', ['class' => 'box-primary'  , "title" =>__('Product Information')  ])
+                    @component('components.widget', ['class' => 'box-primary'  , "title" =>__('izo.Product Information')  ])
                       <div class="row">
                           
                           <div class="col-sm-6">
@@ -192,7 +193,7 @@
                           </div>
                           <div class="col-sm-12">
                             <div class="form-group">
-                              {!! Form::label('full_description', __('Full_description') . ':') !!}
+                              {!! Form::label('full_description', __('izo.Full_description') . ':') !!}
                                 {!! Form::textarea('full_description', !empty($duplicate_product->full_description) ? $duplicate_product->full_description : null, ['class' => 'form-control']); !!}
                             </div>
                           </div>
@@ -216,7 +217,7 @@
                 {{-- *2* section media --}}
                 {{-- ****************************************************** --}}
                    
-                    @component('components.widget', ['class' => 'box-primary' , "title" =>__('Product Media')  ])
+                    @component('components.widget', ['class' => 'box-primary' , "title" =>__('izo.Product Media')  ])
                           <div class="row">
                             <div class="col-sm-6">
                               <div class="form-group">
@@ -247,7 +248,7 @@
                             </div>
                               <div class="col-sm-6">
                                 <div class="form-group">
-                                  {!! Form::label('vedio', __('vedio') . ':') !!}
+                                  {!! Form::label('vedio', __('izo.video') . ':') !!}
                                   {!! Form::file('vedio', ['id' => 'upload_video', 'accept' => 'video/*']); !!}
                                   <small><p class="help-block">@lang('purchase.max_file_size', ['size' => (config('constants.vedio_size_limit') / 1000000)]) <br> @lang('lang_v1.aspect_ratio_should_be_1_1')</p></small>
                                 </div>
@@ -262,7 +263,7 @@
                 {{-- *3* section product additional info --}}
                 {{-- ****************************************************** --}}
                    
-                    @component('components.widget', ['class' => 'box-primary',"title"=>__('Product Additional Info') ])
+                    @component('components.widget', ['class' => 'box-primary',"title"=>__('izo.Product Additional Info') ])
                         <div class="row">
                         @if(session('business.enable_product_expiry'))
                             @if(session('business.expiry_type') == 'add_expiry')
@@ -395,7 +396,7 @@
                 {{-- *5* section product price  --}}
                 {{-- ****************************************************** --}}
                    
-                    @component('components.widget', ['class' => 'box-primary' ,"title"=>__('Product Prices')])
+                    @component('components.widget', ['class' => 'box-primary' ,"title"=>__('izo.Product Prices')])
                         <div class="row">
                         @php
                             $id =  $taxes->toArray() ;

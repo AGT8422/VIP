@@ -179,7 +179,7 @@
                   
                     <tr @if($i->name  == "ECM After Price" && $i->name == "ECM Before Price") class= "hide " @endif >
                       <td style="vertical-align: bottom">
-                        {{$i->name}}
+                        {{__('izo.'.$i->name)}}
                       </td>
                       <td>
                         <div class="col-sm-6">

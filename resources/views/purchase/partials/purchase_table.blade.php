@@ -5,7 +5,7 @@
             <th>@lang('messages.date')</th>
             <th>@lang('purchase.sup_refe')</th>
             <th>@lang('purchase.ref_no')</th>
-            <th>@lang('purchase.location')</th>
+            <th class="hide">@lang('purchase.location')</th>
             <th>@lang('purchase.supplier')</th>
             <th>@lang('purchase.purchase_status')</th>
             <th>@lang('purchase.payment_status')</th>
@@ -20,17 +20,21 @@
         </tr>
     </thead>
     <tfoot> 
-        <tr class="bg-gray font-17 text-center footer-total"  >
-            <td colspan="4"><strong>@lang('sale.total'):</strong></td>
-            <td class="footer_status_count"></td>
+        <tr class="bg-gray font-17 text-center footer-total font_number"  >
+            {{-- <td colspan="4"><strong>@lang('sale.total'):</strong></td> --}}
+            <td></td>
+            <td></td>
+            <td><strong>@lang('sale.total'):</strong></td>
+            <td class="footer_status_count font_number" style="font-family:arial !important"></td>
+            <td></td>
             {{-- <td class="footer_payment_status_count"></td>
             <td class="footer_purchase_total"></td>
             <td class="footer_purchase_tax"></td> --}}
-            <td class="footer_tax"></td>
-            <td class="footer_payment_status_count"></td>
-            <td class="footer_purchase_total"></td>
-            <td class="text-left"><small>@lang('report.purchase_due') - <span class="footer_total_due"></span><br>
-            @lang('lang_v1.purchase_return') - <span class="footer_total_purchase_return_due"></span>
+            <td class="footer_tax font_number" style="font-family:arial !important"></td>
+            <td class="footer_payment_status_count font_number" style="font-family:arial !important"></td>
+            <td class="footer_purchase_total font_number" style="font-family:arial !important"></td>
+            <td class="text-left"><small>@lang('report.purchase_due') - <span class="footer_total_due font_number"></span><br>
+            @lang('lang_v1.purchase_return') - <span class="footer_total_purchase_return_due font_number"></span>
             </small></td>
             <td></td>
         </tr>

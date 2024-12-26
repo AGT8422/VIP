@@ -65,7 +65,7 @@ class PaymentVoucherController extends Controller
         # Accounts 
         $type               =  $request->type;
         $banks              =  ContactBank::items();
-        $title              =  (app('request')->input('type') == 1)?'Receipt voucher':'Payment Voucher'; 
+        $title              =  (app('request')->input('type') == 1)?__('home.Receipt voucher'):__('home.Payment Voucher'); 
         $accounts           =  Account::accounts($business_id);
         $currency           =  \App\Models\ExchangeRate::where("source","!=",1)->get();
         $currencies         = [];
@@ -326,7 +326,7 @@ class PaymentVoucherController extends Controller
                 'entry_id'           => ($entry)?$entry->id:null
             ];
             
-            $credit  = \App\AccountTransaction::createAccountTransaction($credit_data);
+            $credit   = \App\AccountTransaction::createAccountTransaction($credit_data);
             $_account = \App\Account::find($data->account_id);
             if($_account->cost_center!= 1){
                 \App\AccountTransaction::nextRecords($_account->id,$data->business_id,$data->date);

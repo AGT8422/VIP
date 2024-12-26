@@ -235,7 +235,7 @@
 							
 						@endif
 					@elseif($data["type"] == "Cheque")
-						@php   $cheque = \App\Models\Check::where("id",$data["check_id"])->first();  @endphp
+						@php   $cheque = \App\Models\Check::where("id",$data["id"])->first();    @endphp
 						@if($cheque->status != 2)
 							<tr @if(!empty($for_pdf) && $loop->iteration % 2 == 0) class="odd" @endif>
 								<td class="row-border" style="text-align:center !important;">{{$data['date']}}  </td>

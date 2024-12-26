@@ -47,6 +47,7 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('include')->default(0);
             
             $table->tinyInteger('is_admin_izo')->default(0);
+            $table->tinyInteger('without_delete')->default(0);
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

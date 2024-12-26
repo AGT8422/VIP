@@ -207,6 +207,13 @@
 		font-family:Georgia, 'Times New Roman', Times, serif !important;
 		
 	}
+	.add-product-price-table,.variation_value_table{
+		background-color: #f7f7f7 !important;
+	}
+	.add-product-price-table th{
+		background-color: black !important;
+		color:#fff;
+	}
 </style>
 @if(!empty($__system_settings['additional_css']))
     {!! $__system_settings['additional_css'] !!}

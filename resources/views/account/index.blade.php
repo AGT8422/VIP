@@ -113,7 +113,7 @@
                                                 {!! Form::text('transaction_date_range', null, ['class' => 'form-control', 'readonly', 'placeholder' => __('report.date_range')]) !!}
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>  
 
 
 

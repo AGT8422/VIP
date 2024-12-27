@@ -299,7 +299,7 @@ class AccountTransaction extends Model
 
         }
         // .F......................................................
-        public static function update_purchase($data,$total=null,$old_cost=null,$old_account=null,$old_discount=null,$old_tax=null)
+        public static function update_purchase($data,$total=null,$old_cost=null,$old_account=null,$old_discount=null,$old_tax=null,$old_date=null)
         {
             $setting =  \App\Models\SystemAccount::where('business_id',$data->business_id)->first();
             $entry   =  \App\Models\Entry::where('account_transaction',$data->id)->first();
@@ -350,7 +350,7 @@ class AccountTransaction extends Model
             // }
             // ...,....................................................................... update  purchase  action  * 1 
             $purchase_id    = ($setting)?$setting->purchase:Account::add_main('Purchases');
-            AccountTransaction::update_main_id($purchase_id,round($data->total_before_tax,2),'debit',$data,'Add Purchase',$data->cost_center_id);
+            AccountTransaction::update_main_id($purchase_id,round($data->total_before_tax,2),'debit',$data,'Add Purchase',$data->cost_center_id,null,$old_date);
             //.................................................................................................... end * 1
         
 
@@ -465,13 +465,16 @@ class AccountTransaction extends Model
                             'cs_related_id'  =>  $data->cost_center_id
                         ]);
                         if($dis->account->cost_center!=1){
+                            if($old_date!=null){
+                                self::nextRecords($dis->account_id,$data->business_id,$old_date);
+                            }
                             // self::oldBalance($dis->id,$dis->account_id,$data->business_id,$data->transaction_date);
                             self::nextRecords($dis->account_id,$data->business_id,$data->transaction_date);
                         }                                         
                     }
                 }else{    
                     $purchase_discount_id   =  ($setting)?$setting->purchase_discount:Account::add_main('Purchases Discount');
-                    AccountTransaction::add_main_id($purchase_discount_id,round($discount_amount,2),'credit',$data,'Add Purchase',null,$data->cost_center_id);
+                    AccountTransaction::add_main_id($purchase_discount_id,round($discount_amount,2),'credit',$data,'Add Purchase',null,$data->cost_center_id,null,$old_date);
                     
                 }
             }else {
@@ -482,6 +485,9 @@ class AccountTransaction extends Model
                                                                 ->where("note","Add Purchase")
                                                                 ->where("account_id",$purchase_discount_id)
                                                                 ->delete();
+                    if($old_date!=null){  
+                        self::nextRecords($purchase_discount_id,$data->business_id,$old_date);
+                    }
                     self::nextRecords($purchase_discount_id,$data->business_id,$data->transaction_date);
                     $discount_account = AccountTransaction::where('transaction_id',$data->id)
                                                                 ->where("type","credit")
@@ -508,12 +514,15 @@ class AccountTransaction extends Model
 
                         ]);
                         if($tax_account->account->cost_center!=1){
+                            if($old_date!=null){ 
+                                self::nextRecords($tax_account->account_id,$data->business_id,$old_date);
+                            }
                             self::nextRecords($tax_account->account_id,$data->business_id,$data->transaction_date);
                         }                                        
                     }
                 }else{    
                     $purchase_tax_id   =  ($setting)?$setting->purchase_tax:Account::add_main('Fedreal Tax Paid Vat');
-                    AccountTransaction::add_main_id($purchase_tax_id,round($data->tax_amount,2),'debit',$data,'Add Purchase');
+                    AccountTransaction::add_main_id($purchase_tax_id,round($data->tax_amount,2),'debit',$data,'Add Purchase',null,null,null,$old_date);
                 }
             }else {
                 if($old_tax != 0){
@@ -523,6 +532,9 @@ class AccountTransaction extends Model
                                                                 ->where("note","Add Purchase")
                                                                 ->where("account_id",$purchase_tax_id)
                                                                 ->delete();
+                    if($old_date!=null){  
+                        self::nextRecords($purchase_tax_id,$data->business_id,$old_date);
+                    }
                     self::nextRecords($purchase_tax_id,$data->business_id,$data->transaction_date);
                 } 
             }
@@ -562,6 +574,9 @@ class AccountTransaction extends Model
                         ];
                         $credit = \App\AccountTransaction::createAccountTransaction($credit_data);
                         if($account->cost_center!=1){ 
+                            if($old_date!=null){   
+                                self::nextRecords($account->id,$data->business_id,$old_date);
+                            }
                             self::nextRecords($account->id,$data->business_id,$data->transaction_date);
                         }  
                     }else{
@@ -573,6 +588,9 @@ class AccountTransaction extends Model
 
                         ]);
                         if($account->cost_center!=1){ 
+                            if($old_date!=null){   
+                                self::nextRecords($account->id,$data->business_id,$old_date);
+                            }
                             self::nextRecords($account->id,$data->business_id,$data->transaction_date);
                         }  
                     }       
@@ -588,6 +606,9 @@ class AccountTransaction extends Model
                                                                 ->where('transaction_id',$data->id)
                                                                 ->where('account_id',$old_account_id)
                                                                 ->delete();
+                        if($old_date!=null){    
+                            self::nextRecords($old_account_id,$data->business_id,$old_date);
+                        }
                         self::nextRecords($old_account_id,$data->business_id,$data->transaction_date);
                     }
                     $credit_data = [
@@ -605,6 +626,9 @@ class AccountTransaction extends Model
                         ];
                         $credit = \App\AccountTransaction::createAccountTransaction($credit_data);
                         if($account->cost_center!=1){ 
+                            if($old_date!=null){    
+                                self::nextRecords($account->id,$data->business_id,$old_date);
+                            }
                             self::nextRecords($account->id,$data->business_id,$data->transaction_date);
                         }    
                 }  
@@ -894,7 +918,7 @@ class AccountTransaction extends Model
 
         }
         // ...F.....................................................
-        public static  function update_return_purchase($data=null,$discount_final=null,$final_total=null,$sub_total=null,$tax=null,$old=null,$user=null)
+        public static  function update_return_purchase($data=null,$discount_final=null,$final_total=null,$sub_total=null,$tax=null,$old=null,$user=null,$old_date=null)
         {
 
             // dd($old);
@@ -960,6 +984,9 @@ class AccountTransaction extends Model
                 ]);
                 $account = \App\Account::find($return_account->account_id);
                 if($account->cost_center!=1){
+                    if($old_date != null){
+                        self::nextRecords($account->id,$return_transaction->business_id,$old_date);
+                    }
                     self::nextRecords($account->id,$return_transaction->business_id,$return_transaction->transaction_date);
                 }
             }else {
@@ -978,6 +1005,9 @@ class AccountTransaction extends Model
                 $return_account = \App\AccountTransaction::createAccountTransaction($credit_data);
                 $account = \App\Account::find($setting->purchase_return); 
                 if($account->cost_center!=1){
+                    if($old_date != null){
+                        self::nextRecords($account->id,$return_transaction->business_id,$old_date);
+                     }
                     self::nextRecords($account->id,$return_transaction->business_id,$return_transaction->transaction_date);
                 } 
             }
@@ -1000,6 +1030,9 @@ class AccountTransaction extends Model
                     ]);
                     $account = \App\Account::find($dis_tr->account_id); 
                     if($account->cost_center!=1){
+                        if($old_date != null){
+                            self::nextRecords($account->id,$return_transaction->business_id,$old_date);
+                         }
                         self::nextRecords($account->id,$return_transaction->business_id,$return_transaction->transaction_date);
                     }
                 }else{
@@ -1018,6 +1051,9 @@ class AccountTransaction extends Model
                     $dis_tr  = \App\AccountTransaction::createAccountTransaction($credit_data);
                     $account = \App\Account::find($setting->purchase_discount); 
                     if($account->cost_center!=1){
+                        if($old_date != null){
+                            self::nextRecords($account->id,$return_transaction->business_id,$old_date);
+                         }
                         self::nextRecords($account->id,$return_transaction->business_id,$return_transaction->transaction_date);
                     }
                 }
@@ -1038,6 +1074,9 @@ class AccountTransaction extends Model
                 ]);
                 $account = \App\Account::find($tax_tr->account_id); 
                 if($account->cost_center!=1){
+                    if($old_date != null){
+                        self::nextRecords($account->id,$return_transaction->business_id,$old_date);
+                     }
                     self::nextRecords($account->id,$return_transaction->business_id,$return_transaction->transaction_date);
                 }
             }else{
@@ -1055,6 +1094,9 @@ class AccountTransaction extends Model
                 $tax_tr  = \App\AccountTransaction::createAccountTransaction($credit_data); 
                 $account = \App\Account::find($setting->purchase_tax); 
                 if($account->cost_center!=1){
+                    if($old_date != null){
+                        self::nextRecords($account->id,$return_transaction->business_id,$old_date);
+                     }
                     self::nextRecords($account->id,$return_transaction->business_id,$return_transaction->transaction_date);
                 }
             }
@@ -1076,9 +1118,15 @@ class AccountTransaction extends Model
 
                     ]);
                     if($account->cost_center!=1){
+                        if($old_date != null){
+                            self::nextRecords($account->id,$return_transaction->business_id,$old_date);
+                         }
                         self::nextRecords($account->id,$return_transaction->business_id,$return_transaction->transaction_date);
                     }
                     if($account_new->cost_center!=1){
+                        if($old_date != null){
+                            self::nextRecords($account_new->id,$return_transaction->business_id,$old_date);
+                         }
                         self::nextRecords($account_new->id,$return_transaction->business_id,$return_transaction->transaction_date);
                     }
                 }else{
@@ -1095,6 +1143,9 @@ class AccountTransaction extends Model
                     ];
                     $credit = \App\AccountTransaction::createAccountTransaction($credit_data);
                     if($account->cost_center!=1){
+                        if($old_date != null){
+                            self::nextRecords($account->id,$return_transaction->business_id,$old_date);
+                         }
                         self::nextRecords($account->id,$return_transaction->business_id,$return_transaction->transaction_date);
                     } 
                 }
@@ -1321,7 +1372,7 @@ class AccountTransaction extends Model
 
         }
         // .......................................................................
-        public static function update_sell_pos_($data,$total=null,$old_cost=null,$old_account=null,$old_discount=null,$old_tax=null,$pattern=null,$old_pattern=null)
+        public static function update_sell_pos_($data,$total=null,$old_cost=null,$old_account=null,$old_discount=null,$old_tax=null,$pattern=null,$old_pattern=null,$old_date=null)
         {
             if($pattern!=null){
                 $setting =  \App\Models\SystemAccount::where('business_id',$data->business_id)->where("pattern_id",$pattern)->first();
@@ -1446,9 +1497,9 @@ class AccountTransaction extends Model
                 if($pattern != $old_pattern){
                     $newSetting        =  \App\Models\SystemAccount::where('business_id',$data->business_id)->where("pattern_id",$old_pattern)->first();
                     $sale_id           = ($newSetting)?$newSetting->sale:null;
-                    AccountTransaction::update_main_id($setting->sale,$data->total_before_tax,'credit',$data,null,$data->cost_center_id,$sale_id);
+                    AccountTransaction::update_main_id($setting->sale,$data->total_before_tax,'credit',$data,null,$data->cost_center_id,$sale_id,$old_date);
                 }else{
-                    AccountTransaction::update_main_id($setting->sale,$data->total_before_tax,'credit',$data,null,$data->cost_center_id);
+                    AccountTransaction::update_main_id($setting->sale,$data->total_before_tax,'credit',$data,null,$data->cost_center_id,null,$old_date);
                 }
 
             // ... tax ....
@@ -1499,19 +1550,25 @@ class AccountTransaction extends Model
                                 ]);
                                 $newAccount = \App\Account::find($setting->sale_tax); 
                                 $oldAccount = \App\Account::find($sale_id); 
-                                if($newAccount->cost_center!=1){ 
+                                if($newAccount->cost_center!=1){
+                                    if($old_date != null){
+                                        self::nextRecords($newAccount->id,$data->business_id,$old_date);
+                                    } 
                                     self::nextRecords($newAccount->id,$data->business_id,$data->transaction_date);
                                 }                                      
                                 if($oldAccount->cost_center!=1){ 
+                                    if($old_date != null){
+                                        self::nextRecords($oldAccount->id,$data->business_id,$old_date);
+                                    } 
                                     self::nextRecords($oldAccount->id,$data->business_id,$data->transaction_date);
                                 }                                         
                             }
                         }else{
                             $sale_tax_id  = $setting->sale_tax;
                             $tax_account  = AccountTransaction::where('transaction_id',$data->id)
-                                                                        ->where("type","credit")
-                                                                        ->where("account_id",$sale_tax_id)
-                                                                        ->first();
+                            ->where("type","credit")
+                            ->where("account_id",$sale_tax_id)
+                            ->first();
                             if(!empty($tax_account)){
                                 $tax_account->update([
                                     'amount'         =>  round($data->tax_amount,2),
@@ -1519,6 +1576,9 @@ class AccountTransaction extends Model
                                 ]);
                                 $newAccount = \App\Account::find($setting->sale_tax); 
                                 if($newAccount->cost_center!=1){ 
+                                    if($old_date != null){
+                                        self::nextRecords($newAccount->id,$data->business_id,$old_date);
+                                    }                                         
                                     self::nextRecords($newAccount->id,$data->business_id,$data->transaction_date);
                                 }                                         
                             }
@@ -1526,7 +1586,7 @@ class AccountTransaction extends Model
                         
                     }else{    
                         $sale_tax_id   =  $setting->sale_tax;
-                        AccountTransaction::add_main_id($sale_tax_id,round($data->tax_amount,2),'credit',$data,null);
+                        AccountTransaction::add_main_id($sale_tax_id,round($data->tax_amount,2),'credit',$data,null,null,null,null,$old_date);
                     }
                 }else {
                     if($old_tax != 0){
@@ -1544,6 +1604,9 @@ class AccountTransaction extends Model
                                 $ac                   = \App\Account::find($account_transaction);
                                 $o->delete();
                                 if($ac->cost_center!=1){
+                                    if($old_date != null){
+                                        self::nextRecords($ac->id,$data->business_id, $old_date );
+                                    }
                                     self::nextRecords($ac->id,$data->business_id,$action_date);
                                 }
                             }
@@ -1558,7 +1621,10 @@ class AccountTransaction extends Model
                                 $action_date          = $o->operation_date;
                                 $ac                   = \App\Account::find($account_transaction);
                                 $o->delete();
-                                if($ac->cost_center!=1){
+                                if($ac->cost_center!=1){ 
+                                    if($old_date != null){ 
+                                        self::nextRecords($ac->id,$data->business_id,$old_date  );
+                                    }
                                     self::nextRecords($ac->id,$data->business_id,$action_date);
                                 }
                             }
@@ -1589,9 +1655,15 @@ class AccountTransaction extends Model
                                 $newAccount = \App\Account::find($sale_discount_id_new); 
                                 $oldAccount = \App\Account::find($sale_discount_id); 
                                 if($newAccount->cost_center!=1){ 
+                                    if($old_date != null){
+                                        self::nextRecords($newAccount->id,$data->business_id,$old_date);
+                                    }
                                     self::nextRecords($newAccount->id,$data->business_id,$data->transaction_date);
                                 }                                      
                                 if($oldAccount->cost_center!=1){ 
+                                    if($old_date != null){
+                                        self::nextRecords($oldAccount->id,$data->business_id,$old_date);
+                                    }
                                     self::nextRecords($oldAccount->id,$data->business_id,$data->transaction_date);
                                 }   
                             }                                     
@@ -1610,6 +1682,9 @@ class AccountTransaction extends Model
                                 ]);
                                 $newAccount = \App\Account::find($sale_discount_id); 
                                 if($newAccount->cost_center!=1){ 
+                                    if($old_date != null){
+                                        self::nextRecords($newAccount->id,$data->business_id,$old_date);
+                                    }
                                     self::nextRecords($newAccount->id,$data->business_id,$data->transaction_date);
                                 }    
                             }                                     
@@ -1619,11 +1694,11 @@ class AccountTransaction extends Model
                             $newSetting        =  \App\Models\SystemAccount::where('business_id',$data->business_id)->where("pattern_id",$old_pattern)->first();
                             $sale_discount_id  = ($newSetting)?$newSetting->sale_discount:Account::add_main('Sales Discount');
                              $sale_discount_id_new  = ($setting)?$setting->sale_discount:Account::add_main('Sales Discount');
-                            AccountTransaction::add_main_id($sale_discount_id_new,round($discount_amount,2),'debit',$data,'Sales Discount',null,$data->cost_center_id,$sale_discount_id);
+                            AccountTransaction::add_main_id($sale_discount_id_new,round($discount_amount,2),'debit',$data,'Sales Discount',null,$data->cost_center_id,$sale_discount_id,$old_date);
                                                                    
                         }else{
                             $sale_discount_id   =  ($setting)?$setting->sale_discount:Account::add_main('Sales Discount');
-                            AccountTransaction::add_main_id($sale_discount_id,round($discount_amount,2),'debit',$data,'Sales Discount',null,$data->cost_center_id);
+                            AccountTransaction::add_main_id($sale_discount_id,round($discount_amount,2),'debit',$data,'Sales Discount',null,$data->cost_center_id,null,$old_date);
                         }
                     }
                 }else {
@@ -1647,6 +1722,9 @@ class AccountTransaction extends Model
                                 $ac                   = \App\Account::find($account_transaction);
                                 $o->delete();
                                 if($ac->cost_center!=1){
+                                    if($old_date != null){
+                                        self::nextRecords($ac->id,$data->business_id,$old_date);
+                                    }
                                     self::nextRecords($ac->id,$data->business_id,$action_date);
                                 }
                             }
@@ -1667,6 +1745,9 @@ class AccountTransaction extends Model
                                 $ac                   = \App\Account::find($account_transaction);
                                 $o->delete();
                                 if($ac->cost_center!=1){
+                                    if($old_date != null){
+                                        self::nextRecords($ac->id,$data->business_id,$old_date );
+                                    }
                                     self::nextRecords($ac->id,$data->business_id,$action_date);
                                 }
                             }
@@ -1709,6 +1790,9 @@ class AccountTransaction extends Model
                             ];
                             $credit = \App\AccountTransaction::createAccountTransaction($credit_data);
                             if($account->cost_center!=1){ 
+                                if($old_date != null){
+                                    self::nextRecords($account->id,$data->business_id,$old_date );
+                                }
                                 self::nextRecords($account->id,$data->business_id,$data->transaction_date);
                             }    
                         }else{
@@ -1718,11 +1802,17 @@ class AccountTransaction extends Model
                                 'operation_date'  => $data->transaction_date,
                             ]);
                             if($account->cost_center!=1){ 
+                                if($old_date != null){
+                                    self::nextRecords($account->id,$data->business_id,$old_date );
+                                }                                            
                                 self::nextRecords($account->id,$data->business_id,$data->transaction_date);
                             }                                      
                             if($old->cost_center!=1){ 
+                                if($old_date != null){
+                                    self::nextRecords($old->id,$data->business_id,$old_date );
+                                }   
                                 self::nextRecords($old->id,$data->business_id,$data->transaction_date);
-                            } 
+                            }   
                         }   
                     }else if($account_id != $old_account_id) {
                         if($old_account_id != null){
@@ -1739,6 +1829,9 @@ class AccountTransaction extends Model
                                 $ac                   = \App\Account::find($account_transaction);
                                 $o->delete();
                                 if($ac->cost_center!=1){
+                                    if($old_date != null){
+                                        self::nextRecords($ac->id,$data->business_id,$old_date );
+                                    }
                                     self::nextRecords($ac->id,$data->business_id,$action_date);
                                 }
                             }
@@ -1756,6 +1849,9 @@ class AccountTransaction extends Model
                     ];
                     $credit = \App\AccountTransaction::createAccountTransaction($credit_data);
                     if($account->cost_center!=1){
+                        if($old_date != null){
+                            self::nextRecords($account->id,$data->business_id,$old_date );
+                        }
                         self::nextRecords($account->id,$data->business_id,$data->transaction_date);
                     }
                 }
@@ -2003,7 +2099,7 @@ class AccountTransaction extends Model
             
         }
         // ..F.....................................................................
-        public static function update_return_sales($data=null,$discount_final=null,$final_total=null,$sub_total=null,$tax_=null,$old=null)
+        public static function update_return_sales($data=null,$discount_final=null,$final_total=null,$sub_total=null,$tax_=null,$old=null,$old_date=null)
         {
             $parent             =  \App\Transaction::find($data->id);
             $account            =   Account::where('contact_id',$old->contact_id)->first();
@@ -2032,6 +2128,9 @@ class AccountTransaction extends Model
                 ]);
                 $saleAccount            =  \App\Account::find($setting->sale_return);
                 if($saleAccount->cost_center!=1){
+                    if($old_date != null){
+                        self::nextRecords($saleAccount->id,$data->business_id,$old_date);
+                     }
                     self::nextRecords($saleAccount->id,$data->business_id,$data->transaction_date);
                 }
             }else {
@@ -2051,6 +2150,9 @@ class AccountTransaction extends Model
                 $credit = \App\AccountTransaction::createAccountTransaction($credit_data);
                 $saleAccount            =  \App\Account::find($setting->sale_return);
                 if($saleAccount->cost_center!=1){
+                    if($old_date != null){
+                        self::nextRecords($saleAccount->id,$data->business_id,$old_date);
+                     }
                     self::nextRecords($saleAccount->id,$data->business_id,$data->transaction_date);
                 }
             }
@@ -2067,9 +2169,15 @@ class AccountTransaction extends Model
                         'account_id'            => $account_new->id,
                     ]);
                     if($account_new->cost_center!=1){
+                        if($old_date != null){
+                            self::nextRecords($account_new->id,$data->business_id,$old_date);
+                         }
                         self::nextRecords($account_new->id,$data->business_id,$data->transaction_date);
                     }
                     if($account->cost_center!=1){
+                        if($old_date != null){
+                            self::nextRecords($account->id,$data->business_id,$old_date);
+                         }
                         self::nextRecords($account->id,$data->business_id,$data->transaction_date);
                     }
                 }else{ 
@@ -2086,6 +2194,9 @@ class AccountTransaction extends Model
                     ];
                     $credit = \App\AccountTransaction::createAccountTransaction($credit_data);
                     if($account->cost_center!=1){
+                        if($old_date != null){
+                            self::nextRecords($account->id,$data->business_id,$old_date);
+                         }
                         self::nextRecords($account->id,$data->business_id,$data->transaction_date);
                     }
                 }
@@ -2104,6 +2215,9 @@ class AccountTransaction extends Model
                 ]);
                 $TAXAccount            =  \App\Account::find($tax_account_id);
                 if($TAXAccount->cost_center!=1){
+                    if($old_date != null){
+                        self::nextRecords($TAXAccount->id,$data->business_id,$old_date);
+                     }
                     self::nextRecords($TAXAccount->id,$data->business_id,$data->transaction_date);
                 }
             }else{
@@ -2122,6 +2236,9 @@ class AccountTransaction extends Model
                 $tax_tr = \App\AccountTransaction::createAccountTransaction($credit_data);
                 $TAXAccount         = \App\Account::find($tax_account_id);
                 if($TAXAccount->cost_center!=1){
+                    if($old_date != null){
+                        self::nextRecords($TAXAccount->id,$data->business_id,$old_date);
+                     }
                     self::nextRecords($TAXAccount->id,$data->business_id,$data->transaction_date);
                 }
             }
@@ -2143,6 +2260,9 @@ class AccountTransaction extends Model
                 ]);
                 $disAccount      =  \App\Account::find($setting->sale_discount);
                 if($disAccount->cost_center!=1){
+                    if($old_date != null){
+                        self::nextRecords($disAccount->id,$data->business_id,$old_date);
+                     }
                     self::nextRecords($disAccount->id,$data->business_id,$data->transaction_date);
                 }
             }else{
@@ -2161,6 +2281,9 @@ class AccountTransaction extends Model
                 $dis_transaction = \App\AccountTransaction::createAccountTransaction($credit_data);
                 $disAccount      = \App\Account::find($setting->sale_discount);
                 if($disAccount->cost_center!=1){
+                    if($old_date != null){
+                        self::nextRecords($disAccount->id,$data->business_id,$old_date);
+                     }
                     self::nextRecords($disAccount->id,$data->business_id,$data->transaction_date);
                 } 
             }
@@ -2298,7 +2421,7 @@ class AccountTransaction extends Model
 
     //  **5**** COST CENTER -  TRANSACTION  *********5** \\
         // purchase add .. cost center main
-        public static function add_main_id($id,$amount,$state,$data,$text=NULL,$id_delete=null,$cost_center=null ,$old_account = null)
+        public static function add_main_id($id,$amount,$state,$data,$text=NULL,$id_delete=null,$cost_center=null ,$old_account = null,$old_date = null)
         {
                 
                 
@@ -2330,12 +2453,15 @@ class AccountTransaction extends Model
                 
                 $credit = \App\AccountTransaction::createAccountTransaction($credit_data);
                 if($account->cost_center!=1){ 
+                    if($old_date!=null){ 
+                        self::nextRecords($id,$business_id,$old_date);
+                    }
                     self::nextRecords($id,$business_id,$data->transaction_date);
                 }
             
         }
         // ..................................................................
-        public static function add_main($type,$amount,$state,$data,$text=null)
+        public static function add_main($type,$amount,$state,$data,$text=null,$old_date=null)
         {
             //purchase account 
             $business_id                  = request()->session()->get('user.business_id');
@@ -2360,12 +2486,15 @@ class AccountTransaction extends Model
             ];
             $credit = \App\AccountTransaction::createAccountTransaction($credit_data);
             if($account->cost_center!=1){ 
+                if($old_date!=null){  
+                    self::nextRecords($account->id,$account->business_id,$old_date);
+                }
                 self::nextRecords($account->id,$account->business_id,date('Y-m-d h:i:s'));
             }
         }
         // ...................................................................
         // updates
-        public static function update_main_id($id,$amount,$state,$data,$text=NULL,$cost_center=NULL,$old_account=null)
+        public static function update_main_id($id,$amount,$state,$data,$text=NULL,$cost_center=NULL,$old_account=null,$old_date=null)
         {
             //purchase account 
             $business_id = request()->session()->get('user.business_id');
@@ -2385,10 +2514,16 @@ class AccountTransaction extends Model
                         'cs_related_id'   => $cost_center
                     ]);
                     if($action->account->cost_center!=1){ 
+                        if($old_date!=null){  
+                            self::nextRecords($id,$business_id,$old_date);
+                        }
                         self::nextRecords($id,$business_id,$data->transaction_date);
                     }
                     $oldAccount = \App\Account::find($old_account);
                     if($oldAccount->cost_center!=1){ 
+                        if($old_date!=null){   
+                            self::nextRecords($oldAccount->id,$business_id,$old_date);
+                        }
                         self::nextRecords($oldAccount->id,$business_id,$data->transaction_date);
                     }
                 }
@@ -2406,6 +2541,9 @@ class AccountTransaction extends Model
                         'cs_related_id'   => $cost_center
                     ]);
                     if($action->account->cost_center!=1){ 
+                        if($old_date!=null){   
+                            self::nextRecords($id,$business_id,$old_date);
+                        }
                         self::nextRecords($id,$business_id,$data->transaction_date);
                     }
                 }
@@ -2413,7 +2551,7 @@ class AccountTransaction extends Model
         }
         // ....................................................................
         // SHIPPING
-        public static function add_shipp_id($id,$amount,$state,$data,$text=NULL,$date=null,$id_delete=null,$return=null)
+        public static function add_shipp_id($id,$amount,$state,$data,$text=NULL,$date=null,$id_delete=null,$return=null,$old_date=null)
         {
             
             //shipping account 
@@ -2436,13 +2574,16 @@ class AccountTransaction extends Model
             ];
             $credit = \App\AccountTransaction::createAccountTransaction($credit_data);
             if($account->cost_center!=1){ 
+                if($old_date!=null){   
+                    self::nextRecords($id,$business_id,$old_date); 
+                }
                 self::nextRecords($id,$business_id,$data->transaction_date);
             }
             
         }
         // .....................................................................
         // SHIPPING
-        public static function update_shipp_id($id,$amount,$state,$data,$text=NULL,$date=null,$id_delete=null)
+        public static function update_shipp_id($id,$amount,$state,$data,$text=NULL,$date=null,$id_delete=null,$old_date =null)
         {
             
             //shipping account 
@@ -2473,6 +2614,9 @@ class AccountTransaction extends Model
             ];
             $credit = \App\AccountTransaction::createAccountTransaction($credit_data);
             if($account->cost_center!=1){ 
+                if($old_date!=null){   
+                    self::nextRecords($id,$business_id,$old_date); 
+                }
                 self::nextRecords($id,$business_id,$data->transaction_date);
             }
             

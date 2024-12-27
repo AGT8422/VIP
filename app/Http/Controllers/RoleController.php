@@ -34,28 +34,25 @@ class RoleController extends Controller
      */
     public function index()
     {
-        if (!auth()->user()->can('roles.view')) {
-            abort(403, 'Unauthorized action.');
-        }
-        $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1) {
+         
+        #....... check if admin    
+        $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        if (!$is_admin && !auth()->user()->can('roles.view')) {
             abort(403, 'Unauthorized action.');
         }
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
             $user_id     = request()->session()->get('user.id');
-
-            $roles = Role::Orderby("id","asc")->where('business_id', $business_id)
-                        ->select(['name', 'id', 'is_default', 'business_id']);
+            $roles       = Role::Orderby("id","asc")->where('business_id', $business_id)->select(['name', 'id', 'is_default', 'business_id']);
 
             return DataTables::of($roles)
-                ->addColumn('action', function ($row) use($user_id) {
+                ->addColumn('action', function ($row) use($user_id,$is_admin) {
                     if (!$row->is_default || $row->name == "Cashier#" . $row->business_id) {
                         $action = '';
                         if (auth()->user()->can('roles.update')) {
                             $action .= '<a href="' . action('RoleController@edit', [$row->id]) . '" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;' . __("messages.edit") . '</a>';
                         }
-                        if ($user_id == 1 ) {
+                        if ($is_admin || auth()->user()->can('roles.delete')) {
                             $action .= '&nbsp
                                 <button data-href="' . action('RoleController@destroy', [$row->id]) . '" class="btn btn-xs btn-danger delete_role_button"><i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;' . __("messages.delete") . '</button>';
                         }
@@ -88,23 +85,22 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        if (!auth()->user()->can('roles.create')) {
-            abort(403, 'Unauthorized action.');
-        }
-        $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1) {
+    { 
+        #....... check if admin    
+        $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        if (!$is_admin && !auth()->user()->can('roles.create')) {
             abort(403, 'Unauthorized action.');
         }
         $business_id = request()->session()->get('user.business_id');
+        $user_id     = request()->session()->get('user.id');
 
         $selling_price_groups = SellingPriceGroup::where('business_id', $business_id)
                                     ->active()
                                     ->get();
 
         $module_permissions = $this->moduleUtil->getModuleData('user_permissions');
-        $role =new Role();
-        $role_permissions = [];
+        $role               = new Role();
+        $role_permissions   = [];
 
         return view('role.edit')
             ->with(compact('role','selling_price_groups', 'module_permissions','role_permissions'));
@@ -120,11 +116,9 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         // (1) Permission check
-        if (!auth()->user()->can('roles.create')) {
-            abort(403, 'Unauthorized action.');
-        }
-         $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1) {
+        #....... check if admin    
+        $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        if (!$is_admin  && !auth()->user()->can('roles.create')) {
             abort(403, 'Unauthorized action.');
         }
         // (2) Function check
@@ -133,12 +127,10 @@ class RoleController extends Controller
             $role_name   = $request->input('name');
             $permissions = $request->input('permissions');
             $business_id = $request->session()->get('user.business_id');
+            $user_id     = $request->session()->get('user.id');
             
             // ** collect the count of role with this name
-            $count       = Role::where('name', $role_name . '#' . $business_id)
-                                ->where('business_id', $business_id)
-                                ->count();
-
+            $count       = Role::where('name', $role_name . '#' . $business_id)->where('business_id', $business_id)->count();
 
             if ($count == 0) {
                 // *1* services staff ( exam : hairdressers salon )
@@ -156,8 +148,8 @@ class RoleController extends Controller
                 }
                 // *3* create the role
                 $role = Role::create([
-                            'name' => $role_name . '#' . $business_id ,
-                            'business_id' => $business_id,
+                            'name'             => $role_name . '#' . $business_id ,
+                            'business_id'      => $business_id,
                             'is_service_staff' => $is_service_staff
                         ]);
 
@@ -207,28 +199,23 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        if (!auth()->user()->can('roles.update')) {
-            abort(403, 'Unauthorized action.');
-        }
-        $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1) {
+    { 
+        #....... check if admin    
+        $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        if (!$is_admin && !auth()->user()->can('roles.update')) {
             abort(403, 'Unauthorized action.');
         }
         $business_id = request()->session()->get('user.business_id');
-        $role = Role::where('business_id', $business_id)
-                    ->with(['permissions'])
-                    ->find($id);
+        $user_id     = request()->session()->get('user.id');
+        $role        = Role::where('business_id', $business_id)->with(['permissions'])->find($id);
+        
         $role_permissions = [];
         foreach ($role->permissions as $role_perm) {
             $role_permissions[] = $role_perm->name;
         }
 
-        $selling_price_groups = SellingPriceGroup::where('business_id', $business_id)
-                                    ->active()
-                                    ->get();
-
-        $module_permissions = $this->moduleUtil->getModuleData('user_permissions');
+        $selling_price_groups = SellingPriceGroup::where('business_id', $business_id)->active()->get();
+        $module_permissions   = $this->moduleUtil->getModuleData('user_permissions');
 
         return view('role.edit')
             ->with(compact('role', 'role_permissions', 'selling_price_groups', 'module_permissions'));
@@ -242,23 +229,22 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        if (!auth()->user()->can('roles.update')) {
-            abort(403, 'Unauthorized action.');
-        }
-        $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1) {
+    { 
+        #....... check if admin    
+        $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        if (!$is_admin && !auth()->user()->can('roles.update')) {
             abort(403, 'Unauthorized action.');
         }
         try {
-            $role_name = $request->input('name');
+            $role_name   = $request->input('name');
             $permissions = $request->input('permissions');
             $business_id = $request->session()->get('user.business_id');
-
-            $count = Role::where('name', $role_name . '#' . $business_id)
-                        ->where('id', '!=', $id)
-                        ->where('business_id', $business_id)
-                        ->count();
+            $user_id     = $request->session()->get('user.id');
+            $count       = Role::where('name', $role_name . '#' . $business_id)
+                            ->where('id', '!=', $id)
+                            ->where('business_id', $business_id)
+                            ->count();
+            dd($role_name,$permissions,$business_id);
             if ($count == 0) {
                 $role = Role::findOrFail($id);
 
@@ -321,17 +307,16 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        if (!auth()->user()->can('roles.delete')) {
-            abort(403, 'Unauthorized action.');
-        }
-        $user_id     = request()->session()->get('user.id');
-        if ($user_id != 1) {
+    { 
+        #....... check if admin    
+        $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        if (!$is_admin && !auth()->user()->can('roles.delete')) {
             abort(403, 'Unauthorized action.');
         }
         if (request()->ajax()) {
             try {
                 $business_id = request()->user()->business_id;
+                $user_id     = request()->session()->get('user.id');
 
                 $role = Role::where('business_id', $business_id)->find($id);
 
@@ -365,17 +350,14 @@ class RoleController extends Controller
      */
     private function __createPermissionIfNotExists($permissions)
     {
-        $exising_permissions = Permission::whereIn('name', $permissions)
-                                    ->pluck('name')
-                                    ->toArray();
-
-        $non_existing_permissions = array_diff($permissions, $exising_permissions);
+        $existing_permissions      = Permission::whereIn('name', $permissions)->pluck('name')->toArray();
+        $non_existing_permissions  = array_diff($permissions, $existing_permissions);
 
         if (!empty($non_existing_permissions)) {
             foreach ($non_existing_permissions as $new_permission) {
                 $time_stamp = \Carbon::now()->toDateTimeString();
                 Permission::create([
-                    'name' => $new_permission,
+                    'name'       => $new_permission,
                     'guard_name' => 'web'
                 ]);
             }

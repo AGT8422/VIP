@@ -83,9 +83,10 @@ class ContactController extends Controller
      */
     private function indexSupplier()
     {
-        if (!auth()->user()->can('supplier.view') &&   !auth()->user()->can('SalesMan.views') &&!auth()->user()->can('admin_supervisor.views')&&!auth()->user()->can('supplier.view_own') && !auth()->user()->can('ReadOnly.views')  && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('supplier.view')) {
             abort(403, 'Unauthorized action.');
         }
+        $is_admin    = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
         $business_id = request()->session()->get('user.business_id');
         $contact     = $this->contactUtil->getContactQuery($business_id,'supplier');
 
@@ -101,7 +102,7 @@ class ContactController extends Controller
             )
             ->addColumn(
                 'action',
-                function ($row) {
+                function ($row) use($is_admin) {
                     $html = '<div class="btn-group">
                     <button type="button" class="btn btn-info dropdown-toggle btn-xs" 
                         data-toggle="dropdown" aria-expanded="false">' .
@@ -120,32 +121,30 @@ class ContactController extends Controller
                         $html .= '<li><a href="' . action('TransactionPaymentController@getPayContactDue', [$row->id]) . '?type=purchase_return" class="pay_purchase_due"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>&nbsp;&nbsp;' . __("lang_v1.receive_purchase_return_due") . '</a></li>';
                     }
 
-                    if (auth()->user()->can('supplier.view') || auth()->user()->can('ReadOnly.views')  || auth()->user()->can('warehouse.views')) {
+                    if (auth()->user()->can('supplier.view')) {
                         $html .= '<li><a href="' . action('ContactController@show', [$row->id]) . '"><i class="fas fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;' . __("messages.view") . '</a></li>';
                     }
                     
-                    if (auth()->user()->can('supplier.update') || auth()->user()->can('warehouse.views')) {
+                    if (auth()->user()->can('supplier.update')) {
                         $html .= '<li><a href="' . action('ContactController@edit', [$row->id]) . '" class="edit_contact_button"><i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;' .  __("messages.edit") . '</a></li>';
                     }
                     
-                    if (request()->session()->get("user.id") == 1  ) {
+                    if ($is_admin || auth()->user()->can('supplier.delete') ) {
                         $html .= '<li><a href="' . action('ContactController@destroy', [$row->id]) . '" class="delete_contact_button"><i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;' . __("messages.delete") . '</a></li>';
                     }
 
-                    if (auth()->user()->can('customer.update')|| auth()->user()->can('warehouse.views')) {
+                    if (auth()->user()->can('supplier.update')) {
                         $html .= '<li><a href="' . action('ContactController@updateStatus', [$row->id]) . '"class="update_contact_status"><i class="fas fa-power-off"></i>&nbsp;&nbsp;';
-
                         if ($row->contact_status == "active") {
                             $html .= __("messages.deactivate");
                         } else {
                             $html .= __("messages.activate");
                         }
-
                         $html .= "</a></li>";
                     }
 
                     $html .= '<li class="divider"></li>';
-                    if (auth()->user()->can('supplier.view')|| auth()->user()->can('warehouse.views')   ) {
+                    if (auth()->user()->can('supplier.view')) {
                         $html .= '
                                 <li>
                                     <a href="' . action('ContactController@show', [$row->id]). '?view=ledger">
@@ -154,20 +153,20 @@ class ContactController extends Controller
                                     </a>
                                 </li>';
 
-                        // if (in_array($row->type, ["both", "supplier"])) {
-                        //     $html .= '<li>
-                        //         <a href="' . action('ContactController@show', [$row->id]) . '?view=purchase">
-                        //             <i class="fas fa-arrow-circle-down" aria-hidden="true"></i>
-                        //             ' . __("purchase.purchases") . '
-                        //         </a>
-                        //     </li>
-                        //     <li>
-                        //         <a href="' . action('ContactController@show', [$row->id]) . '?view=stock_report">
-                        //             <i class="fas fa-hourglass-half" aria-hidden="true"></i>
-                        //             ' . __("report.stock_report") . '
-                        //         </a>
-                        //     </li>';
-                        // }
+                        if (in_array($row->type, ["both", "supplier"])) {
+                            $html .= '<li>
+                                <a href="' . action('ContactController@show', [$row->id]) . '?view=purchase">
+                                    <i class="fas fa-arrow-circle-down" aria-hidden="true"></i>
+                                    ' . __("purchase.purchases") . '
+                                </a>
+                            </li>
+                            <li>
+                                <a href="' . action('ContactController@show', [$row->id]) . '?view=stock_report">
+                                    <i class="fas fa-hourglass-half" aria-hidden="true"></i>
+                                    ' . __("report.stock_report") . '
+                                </a>
+                            </li>';
+                        }
 
                         if (in_array($row->type, ["both", "customer"])) {
                             $html .=  '<li>
@@ -192,7 +191,6 @@ class ContactController extends Controller
             )
             ->editColumn('opening_balance', function ($row) {
                 $html = '<span data-orig-value="' . $row->opening_balance . '">' . $this->transactionUtil->num_f($row->opening_balance, true) . '</span>';
-
                 return $html;
             })
             ->editColumn('balance', function ($row) {
@@ -243,15 +241,13 @@ class ContactController extends Controller
      */
     private function indexCustomer()
     {
-        if (!auth()->user()->can('customer.view') && !auth()->user()->can('SalesMan.views') &&!auth()->user()->can('admin_supervisor.views') &&!auth()->user()->can('customer.view_own') && !auth()->user()->can('ReadOnly.views')  && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('customer.view')) {
             abort(403, 'Unauthorized action.');
         }
-
+        $is_admin    = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
         $business_id = request()->session()->get('user.business_id');
-
-        $query = $this->contactUtil->getContactQuery($business_id, 'customer');
-
-        $contacts = Datatables::of($query)
+        $query       = $this->contactUtil->getContactQuery($business_id, 'customer');
+        $contacts    = Datatables::of($query)
             ->addColumn('address', '{{implode(", ", array_filter([$address_line_1, $address_line_2, $city, $state, $country, $zip_code]))}}')
             ->addColumn(
                 'due',
@@ -263,48 +259,45 @@ class ContactController extends Controller
             )
             ->addColumn(
                 'action',
-                function ($row) {
+                function ($row) use($is_admin) {
                     $html = '<div class="btn-group">
-                    <button type="button" class="btn btn-info dropdown-toggle btn-xs" 
-                        data-toggle="dropdown" aria-expanded="false">' .
-                        __("messages.actions") .
-                        '<span class="caret"></span><span class="sr-only">Toggle Dropdown
-                        </span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-left" role="menu">';
+                            <button type="button" class="btn btn-info dropdown-toggle btn-xs" 
+                                data-toggle="dropdown" aria-expanded="false">' .
+                                __("messages.actions") .
+                                '<span class="caret"></span><span class="sr-only">Toggle Dropdown
+                                </span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-left" role="menu">';
 
                     if (auth()->user()->can('customer.view')) {
-                    $html .= '<li><a href="' . action('TransactionPaymentController@getPayContactDue', [$row->id]) . '?type=sell" class="pay_sale_due"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>&nbsp;&nbsp;' . __("lang_v1.pay") . '</a></li>';
+                        $html .= '<li><a href="' . action('TransactionPaymentController@getPayContactDue', [$row->id]) . '?type=sell" class="pay_sale_due"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>&nbsp;&nbsp;' . __("lang_v1.pay") . '</a></li>';
                     }
+
                     $return_due = $row->total_sell_return - $row->sell_return_paid;
                     if ($return_due > 0) {
                         $html .= '<li><a href="' . action('TransactionPaymentController@getPayContactDue', [$row->id]) . '?type=sell_return" class="pay_purchase_due"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>&nbsp;&nbsp;' . __("lang_v1.pay_sell_return_due") . '</a></li>';
                     }
 
-                    if (auth()->user()->can('customer.view') || auth()->user()->can('ReadOnly.views')  || auth()->user()->can('warehouse.views')   ) {
+                    if (auth()->user()->can('customer.view')) {
                         $html .= '<li><a href="' . action('ContactController@show', [$row->id]) . '">&nbsp;<i class="fas fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;' . __("messages.view") . '</a></li>';
                     }
-                    if (auth()->user()->can('customer.update')|| auth()->user()->can('warehouse.views')) {
+                    if (auth()->user()->can('customer.update')) {
                         $html .= '<li><a href="' . action('ContactController@edit', [$row->id]) . '" class="edit_contact_button"><i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;' .  __("messages.edit") . '</a></li>';
                     }
-                    if (request()->session()->get("user.id") == 1   ) {
+                    if ($is_admin || auth()->user()->can('customer.delete')  ) {
                         $html .= '<li><a href="' . action('ContactController@destroy', [$row->id]) . '" class="delete_contact_button"><i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;' . __("messages.delete") . '</a></li>';
                     }
-
-                    if (auth()->user()->can('customer.update')|| auth()->user()->can('warehouse.views')) {
+                    if (auth()->user()->can('customer.update')) {
                         $html .= '<li><a href="' . action('ContactController@updateStatus', [$row->id]) . '"class="update_contact_status"><i class="fas fa-power-off"></i>&nbsp;&nbsp;';
-
                         if ($row->contact_status == "active") {
                             $html .= __("messages.deactivate");
                         } else {
                             $html .= __("messages.activate");
                         }
-
                         $html .= "</a></li>";
                     }
-
                     $html .= '<li class="divider"></li>';
-                    if (auth()->user()->can('customer.view')|| auth()->user()->can('warehouse.views')   ) {
+                    if (auth()->user()->can('customer.view') ) {
                         $html .= '
                                 <li>
                                     <a href="' . action('ContactController@show', [$row->id]). '?view=ledger">
@@ -313,20 +306,20 @@ class ContactController extends Controller
                                     </a>
                                 </li>';
 
-                        // if (in_array($row->type, ["both", "supplier"])) {
-                        //     $html .= '<li>
-                        //         <a href="' . action('ContactController@show', [$row->id]) . '?view=purchase">
-                        //             <i class="fas fa-arrow-circle-down" aria-hidden="true"></i>
-                        //             ' . __("purchase.purchases") . '
-                        //         </a>
-                        //     </li>
-                        //     <li>
-                        //         <a href="' . action('ContactController@show', [$row->id]) . '?view=stock_report">
-                        //             <i class="fas fa-hourglass-half" aria-hidden="true"></i>
-                        //             ' . __("report.stock_report") . '
-                        //         </a>
-                        //     </li>';
-                        // }
+                        if (in_array($row->type, ["both", "supplier"])) {
+                            $html .= '<li>
+                                <a href="' . action('ContactController@show', [$row->id]) . '?view=purchase">
+                                    <i class="fas fa-arrow-circle-down" aria-hidden="true"></i>
+                                    ' . __("purchase.purchases") . '
+                                </a>
+                            </li>
+                            <li>
+                                <a href="' . action('ContactController@show', [$row->id]) . '?view=stock_report">
+                                    <i class="fas fa-hourglass-half" aria-hidden="true"></i>
+                                    ' . __("report.stock_report") . '
+                                </a>
+                            </li>';
+                        }
 
                         if (in_array($row->type, ["both", "customer"])) {
                             $html .=  '<li>
@@ -351,12 +344,10 @@ class ContactController extends Controller
             )
             ->editColumn('opening_balance', function ($row) {
                 $html = '<span data-orig-value="' . $row->opening_balance . '">' . $this->transactionUtil->num_f($row->opening_balance, true) . '</span>';
-
                 return $html;
             })
             ->editColumn('balance', function ($row) {
                 $html = '<span data-orig-value="' . $row->balance . '">' . $this->transactionUtil->num_f($row->balance, true) . '</span>';
-
                 return $html;
             })
             ->editColumn('credit_limit', function ($row) {
@@ -364,7 +355,6 @@ class ContactController extends Controller
                 if (!is_null($row->credit_limit)) {
                     $html = '<span data-orig-value="' . $row->credit_limit . '">' . $this->transactionUtil->num_f($row->credit_limit, true) . '</span>';
                 }
-
                 return $html;
             })
             ->editColumn('pay_term', '
@@ -527,7 +517,7 @@ class ContactController extends Controller
      */
     public function show($id)
     {
-        if (!auth()->user()->can('supplier.view' )&& !auth()->user()->can('customer.view')&& !auth()->user()->can('warehouse.views')&& !auth()->user()->can('ReadOnly.views') && !auth()->user()->can('customer.view_own') && !auth()->user()->can('supplier.view_own')) {
+        if (!auth()->user()->can('supplier.view' )&& !auth()->user()->can('customer.view')&& !auth()->user()->can('customer.view_own') && !auth()->user()->can('supplier.view_own')) {
             abort(403, 'Unauthorized action.');
         }
         $business_id        = request()->session()->get('user.business_id');
@@ -648,7 +638,8 @@ class ContactController extends Controller
      */
     public function destroy($id)
     {
-        if (!auth()->user()->can('supplier.delete') && !auth()->user()->can('customer.delete') && !auth()->user()->can('customer.view_own') && !auth()->user()->can('supplier.view_own')) {
+        $is_admin    = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        if (!$is_admin && !auth()->user()->can('supplier.delete') && !auth()->user()->can('customer.delete') ) {
             abort(403, 'Unauthorized action.');
         }
         if (request()->ajax()) {
@@ -1014,7 +1005,7 @@ class ContactController extends Controller
      */
     public function getLedger()
     {
-        if (!auth()->user()->can('supplier.view') && !auth()->user()->can('customer.view') && !auth()->user()->can('ReadOnly.views')&& !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('supplier.view') && !auth()->user()->can('customer.view')) {
             abort(403, 'Unauthorized action.');
         }
 

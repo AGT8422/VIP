@@ -47,7 +47,7 @@ class CombinedPurchaseReturnController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->can('purchase.update')) {
+        if (!auth()->user()->can('purchase_return.create')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -98,7 +98,7 @@ class CombinedPurchaseReturnController extends Controller
     public function save(Request $request)
     {
         
-        if (!auth()->user()->can('purchase.update')) {
+        if (!auth()->user()->can('purchase_return.create')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -413,7 +413,7 @@ class CombinedPurchaseReturnController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->can('purchase.update')) {
+        if (!auth()->user()->can('purchase_return.create')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -538,7 +538,7 @@ class CombinedPurchaseReturnController extends Controller
     public function update(Request $request)
     {
         
-        if (!auth()->user()->can('purchase.update')) {
+        if (!auth()->user()->can('purchase_return.create')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -583,6 +583,7 @@ class CombinedPurchaseReturnController extends Controller
             $products           = $request->input('products');
             $purchase_return_id = $request->input('purchase_return_id');
             $purchase_return    = Transaction::where('business_id', $business_id)->where('type', 'purchase_return')->find($purchase_return_id);
+            $old_date           = $purchase_return->transaction_date;
             # upload document
             $document_purchase                  = [];
             if ($request->hasFile('document_purchase')) {
@@ -803,10 +804,11 @@ class CombinedPurchaseReturnController extends Controller
                     array_push($document_expense,$file_name);
                 }
             } 
+            
             if(($request->status == "received" || $request->status == "final")){
                 \App\Models\AdditionalShipping::update_purchase($purchase_return->id,$additional_inputs,$document_expense);
                 \App\Models\AdditionalShipping::add_purchase_payment($purchase_return->id,null,null,1);
-                \App\AccountTransaction::update_return_purchase($purchase_return,$input_data['discount_amount2'],$request->total_finals_,$sub_total_rt_purchase,$input_data['tax_amount2'],$old_return);
+                \App\AccountTransaction::update_return_purchase($purchase_return,$input_data['discount_amount2'],$request->total_finals_,$sub_total_rt_purchase,$input_data['tax_amount2'],$old_return,null,$old_date);
             }
             if( ($request->status == "received" || $request->status == "final") && ($old_return->status != "received" && $old_return->status != "final" )){
                 $type="PReturn";

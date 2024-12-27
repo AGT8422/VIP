@@ -41,10 +41,11 @@ class PurchaseReturnController extends Controller
      */
     public function index()
     {
-        if (!auth()->user()->can('purchase_return.view') && !auth()->user()->can('purchase_return.create') && !auth()->user()->can('SalesMan.views') && !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('manufuctoring.views')  && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('purchase_return.view') && !auth()->user()->can('purchase_return.create') ) {
             abort(403, 'Unauthorized action.');
         }
 
+        $is_admin    = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
         $business_id = request()->session()->get('user.business_id');
         $currency_details = $this->transactionUtil->purchaseCurrencyDetails($business_id);
         $orderStatuses = $this->productUtil->orderStatuses();
@@ -102,13 +103,12 @@ class PurchaseReturnController extends Controller
             }
             if (!empty(request()->start_date) && !empty(request()->end_date)) {
                 $start = request()->start_date;
-                $end =  request()->end_date;
+                $end   =  request()->end_date;
                 $purchases_returns->whereDate('transactions.transaction_date', '>=', $start)
                             ->whereDate('transactions.transaction_date', '<=', $end);
             }
             return Datatables::of($purchases_returns)
-                ->addColumn('action', function ($row) {
-                    
+                ->addColumn('action', function ($row) use($is_admin){
                     $html = '<div class="btn-group">
                                     <button type="button" class="btn btn-info dropdown-toggle btn-xs" 
                                         data-toggle="dropdown" aria-expanded="false">' .
@@ -119,7 +119,7 @@ class PurchaseReturnController extends Controller
                                     <ul class="dropdown-menu dropdown-menu-right" role="menu">';
                     if (!empty($row->return_parent_id)) {
                         if($row->return_parent_id == $row->id){
-                            if (request()->session()->get("user.id") == 1 ) {
+                            if ($is_admin || auth()->user()->can('purchase_return.create') ) {
                             $html .= '<li><a href="' . action('CombinedPurchaseReturnController@edit', $row->id) . '" ><i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;' .
                             __("messages.edit") .
                             '</a></li>';
@@ -130,18 +130,15 @@ class PurchaseReturnController extends Controller
                                             '</a></li>';
                         }
                     } else {
-                        if (request()->session()->get("user.id") == 1 ) {
+                        if ($is_admin || auth()->user()->can('purchase_return.create') ) {
                         $html .= '<li><a href="' . action('CombinedPurchaseReturnController@edit', $row->id) . '" ><i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;' .
                                 __("messages.edit") .
                                 '</a></li>';
                         }
                     }
-
-                    if (auth()->user()->can("purchase.view")|| auth()->user()->can("warehouse.views")|| auth()->user()->can('SalesMan.views')||auth()->user()->can('admin_supervisor.views') || auth()->user()->can("manufuctoring.views") || auth()->user()->can("admin_supervisor.views") || auth()->user()->can("admin_without.views") ) {
+                    if (auth()->user()->can("purchase_return.view") ) {
                         $business_module = \App\Business::find($row->business_id);
-
                         $id_module       = (!empty($business_module))?(($business_module->return_purchase_print_module != null )? $business_module->return_purchase_print_module:null):null;
-
                         if(!empty($business_module)){
                             if($business_module->return_purchase_print_module != null && $business_module->return_purchase_print_module != "[]" ){
                                 $all_pattern = json_decode($business_module->return_purchase_print_module);
@@ -151,7 +148,6 @@ class PurchaseReturnController extends Controller
                         }else{
                             $id_module = null ;
                         }
-
                         if($id_module != null){
                             $html .= '<li> <a href="'.\URL::to('reports/purchase/'.$row->id.'?return=1&ref_no='.$row->ref_no.'').'"  target="_blank" ><i class="fas fa-print" aria-hidden="true"></i>&nbsp;&nbsp;'. __("messages.print") .'</a>';
                             $html .= '<div style="border:3px solid #ee680e;background-color:#ee680e">';
@@ -162,15 +158,10 @@ class PurchaseReturnController extends Controller
                                 }
                             }
                             $html .= '</div>';
-                            
-                            
                             $html .= '</li>';
                         }else{
                             $html .= '<li><a href="'.\URL::to('reports/purchase/'.$row->id.'?return=1&ref_no='.$row->ref_no.'').'"  target="_blank" ><i class="fas fa-print" aria-hidden="true"></i>&nbsp;&nbsp;'. __("messages.print") .'</a></li>';
                         }
-                        
-                        
-                    
                     }
                     if ($row->payment_status != "paid") {
                         $html .= '<li><a href="' . action('TransactionPaymentController@addPayment', [$row->id]) . '" class="add_payment_modal"><i class="fas fa-money-bill-alt"></i>&nbsp;&nbsp;' . __("purchase.add_payment") . '</a></li>';
@@ -178,18 +169,16 @@ class PurchaseReturnController extends Controller
                     if($row->account_transactions->count() > 0){
                      $html .= '<li><a href="#" data-href="' .\URL::to('entry/transaction/'.$row->return_parent_id) . '" class="btn-modal" data-container=".view_modal"><i class="fa fa-align-justify" aria-hidden="true"></i>&nbsp;&nbsp;' . __("home.Entry") . '</a></li>';
                     }
-                    $html .= '<li><a href="' . action('TransactionPaymentController@show', [$row->id]) . '" class="view_payment_modal"><i class="fas fa-money-bill-alt"></i>&nbsp;&nbsp;' . __("purchase.view_payments") . '</a></li>';
-                    if(request()->session()->get("user.id") == 1){
+                    $html  .= '<li><a href="' . action('TransactionPaymentController@show', [$row->id]) . '" class="view_payment_modal"><i class="fas fa-money-bill-alt"></i>&nbsp;&nbsp;' . __("purchase.view_payments") . '</a></li>';
+                    if($is_admin || auth()->user()->can('purchase.delete')){
                         if($row->id == $row->return_parent_id){
                             $html .= '<li><a href="' . action('PurchaseReturnController@destroy', [$row->id,"basic"=>"basic"]) . '" class="delete_purchase_return" ><i class="fa fa-trash"></i>&nbsp;&nbsp;' .
                                                 __("messages.delete") .
                                                 '</a></li>';
-                                                
                         }else{
                             $html .= '<li><a href="' . action('PurchaseReturnController@destroy', $row->id) . '" class="delete_purchase_return" ><i class="fa fa-trash"></i>&nbsp;&nbsp;' .
                                                 __("messages.delete") .
                                                 '</a></li>';
-                        
                         }
                     }
                     $html .= '<li><a href="#" data-href="' . action('HomeController@formAttach', ["type" => "purchase_return","id" => $row->id]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-paperclip" aria-hidden="true"></i>&nbsp;&nbsp;' . __("Add Attachment") . '</a></li>';
@@ -324,12 +313,11 @@ class PurchaseReturnController extends Controller
      */
     public function add($id)
     {
-        if (!auth()->user()->can('purchase.update')  && !auth()->user()->can('SalesMan.views') && !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('purchase_return.create') ) {
             abort(403, 'Unauthorized action.');
         }
         $business_id = request()->session()->get('user.business_id');
-
-        $purchase = Transaction::where('business_id', $business_id)
+        $purchase    = Transaction::where('business_id', $business_id)
                         ->where('type', 'purchase')
                         ->with(['purchase_lines', 'contact', 'tax', 'return_parent', 'purchase_lines.sub_unit', 'purchase_lines.product', 'purchase_lines.product.unit'])
                         ->find($id);
@@ -370,7 +358,7 @@ class PurchaseReturnController extends Controller
      */
     public function store(Request $request)
     {
-        if (!auth()->user()->can('purchase.update')  && !auth()->user()->can('SalesMan.views') && !auth()->user()->can('admin_supervisor.views')  ) {
+        if (!auth()->user()->can('purchase_return.create')) {
             abort(403, 'Unauthorized action.');
         }
         
@@ -558,7 +546,7 @@ class PurchaseReturnController extends Controller
      */
     public function show($id)
     {
-        if (!auth()->user()->can('purchase.view')  && !auth()->user()->can('SalesMan.views') && !auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('purchase_return.view')  ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -600,7 +588,7 @@ class PurchaseReturnController extends Controller
      */
     public function destroy($id)
     {
-        if (!auth()->user()->can('purchase.delete')  && !auth()->user()->can('SalesMan.views') && !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('purchase.delete')) {
             abort(403, 'Unauthorized action.');
         }
   
@@ -698,7 +686,10 @@ class PurchaseReturnController extends Controller
 
     public function store_return(Request $request)
     {
-
+        if (!auth()->user()->can('purchase_return.create')) {
+            abort(403, 'Unauthorized action.');
+        }
+        try{
            $business_id       = request()->session()->get('user.business_id');
            $transaction       = Transaction::find($request->input('transaction_id'));
            //.... Array Of Lines_id and Returned Item
@@ -767,6 +758,12 @@ class PurchaseReturnController extends Controller
                     "success" => true,
                     "msg" => __("messages.added_successfull")
            ];
-           return  redirect("/purchase-return")->with("status",$output) ;
+        }catch(\Exception $e){
+           $output = [
+                    "success" => false,
+                    "msg" => __("messages.something_went_wrong")
+           ];
+        }
+        return  redirect("/purchase-return")->with("status",$output) ;
     }
 }

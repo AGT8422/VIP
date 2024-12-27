@@ -279,8 +279,8 @@ class PaymentVoucherController extends Controller
             # .......................................
             $accountONE             = \App\Account::find($account_old);
             $accountTWO             = \App\Account::find($account_new);
-            if($accountTWO->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountTWO->id,$data->business_id,$account_date_new); }
             if($accountONE->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountONE->id,$data->business_id,$account_date_old); }
+            if($accountTWO->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountTWO->id,$data->business_id,$account_date_new); }
         } 
 
         if($old_type == 0){
@@ -377,6 +377,7 @@ class PaymentVoucherController extends Controller
                 $transaction->tax_amount        =  round(($request->amount * (($value))/(100+$value)),config("constants.currency_precision"));
                 $transaction->total_before_tax  = $request->amount - round((($request->amount) * (($value))/(100 + $value)),config("constants.currency_precision")) ;
                 $transaction->update();
+                $old_date                       = $transaction->transaction_date;
                 $old_trans                      = $transaction->cost_center_id;
                 $old_account                    = $transaction->contact_id;
                 $old_discount                   = $transaction->discount_amount;
@@ -400,7 +401,7 @@ class PaymentVoucherController extends Controller
                     $parent->payment_status = $status;
                     $parent->update();
                 }
-                \App\AccountTransaction::update_sell_pos_($transaction,null,$old_trans,$old_account,$old_discount,$old_tax,$old_pattern_id,$old_pattern_id);
+                \App\AccountTransaction::update_sell_pos_($transaction,null,$old_trans,$old_account,$old_discount,$old_tax,$old_pattern_id,$old_pattern_id,$old_date);
             }
 
         }

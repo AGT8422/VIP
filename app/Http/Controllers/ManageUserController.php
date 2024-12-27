@@ -36,16 +36,13 @@ class ManageUserController extends Controller
      */
     public function index()
     {
-        if (!auth()->user()->can('user.view') && !auth()->user()->can('user.create') && !auth()->user()->can("ReadOnly.views")) {
-            abort(403, 'Unauthorized action.');
-        }
-        $user_id     = request()->session()->get('user.id');
+         
         #....... check if admin    
         $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
-        if (!$is_admin) {
+        if (!$is_admin && !auth()->user()->can('user.view') && !auth()->user()->can('user.create')) {
             abort(403, 'Unauthorized action.');
         }
-
+        
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
             $user_id     = request()->session()->get('user.id');
@@ -58,7 +55,7 @@ class ManageUserController extends Controller
                             DB::raw("CONCAT(COALESCE(surname, ''), ' ', COALESCE(first_name, ''), ' ', COALESCE(last_name, '')) as full_name"), 'email', 'allow_login']);
 
             if($user_id != 1){
-                    $users->where("id","!=",1);
+                $users->where("id","!=",1);
             }             
 
             return Datatables::of($users)
@@ -71,23 +68,18 @@ class ManageUserController extends Controller
                     }
                 )
                 ->addColumn(
-                    'action',function ($row) use($user_id) {
-                        $html = '<a href="'. action('ManageUserController@edit', [$row->id]) .'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;'. __("messages.edit").'</a>
-                                &nbsp;';
-
-                        $html .=' <a href="'.action('ManageUserController@show', [$row->id]).'" class="btn btn-xs btn-info"><i class="fa fa-eye"></i>&nbsp;&nbsp;'. __("messages.view").'</a>&nbsp; ';
-                        
-                        if($user_id == 1 && $row->id != 2){
-                          $html.=  '<button data-href="'.action('ManageUserController@destroy', [$row->id]).'" class="btn btn-xs btn-danger delete_user_button"><i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;'.__("messages.delete").'</button>';
-
+                    'action',function ($row) use($user_id,$is_admin) {
+                        $html   = '<a href="'. action('ManageUserController@edit', [$row->id]) .'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;'. __("messages.edit").'</a>&nbsp;';
+                        $html  .= ' <a href="'.action('ManageUserController@show', [$row->id]).'" class="btn btn-xs btn-info"><i class="fa fa-eye"></i>&nbsp;&nbsp;'. __("messages.view").'</a>&nbsp; ';
+                        if($is_admin || auth()->user()->can('user.delete')){
+                          $html .=  '<button data-href="'.action('ManageUserController@destroy', [$row->id]).'" class="btn btn-xs btn-danger delete_user_button"><i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;'.__("messages.delete").'</button>';
                         }
+                        // if($user_id == 1 ){
+                        //     $class = ($row->without_delete == 1)?'btn-danger':'btn-second'; 
+                        //     $delete_msg = ($row->without_delete == 1)?__("izo.cant_delete"):__("izo.can_delete"); 
+                        //     $html.=  '<button  data-id="'.$row->id.'" data-href="'.action('ManageUserController@withoutDestroy').'" class="btn btn-xs '.$class.' without_delete_user_button">&nbsp;&nbsp;'.$delete_msg.'</button>';
 
-                        if($user_id == 1 ){
-                            $class = ($row->without_delete == 1)?'btn-danger':'btn-second'; 
-                            $delete_msg = ($row->without_delete == 1)?__("izo.cant_delete"):__("izo.can_delete"); 
-                            $html.=  '<button  data-id="'.$row->id.'" data-href="'.action('ManageUserController@withoutDestroy').'" class="btn btn-xs '.$class.' without_delete_user_button">&nbsp;&nbsp;'.$delete_msg.'</button>';
-
-                        }
+                        // }
                         return $html;
                     } )
                 ->filterColumn('full_name', function ($query, $keyword) {
@@ -110,16 +102,14 @@ class ManageUserController extends Controller
     public function create()
     {
          
-        if (!auth()->user()->can('user.create')     ) {
+        
+        #....... check if admin    
+        $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        if (!$is_admin && !auth()->user()->can('user.create')) {
             abort(403, 'Unauthorized action.');
         }
-        $user_id     = request()->session()->get('user.id');
-         #....... check if admin    
-         $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
-         if (!$is_admin) {
-             abort(403, 'Unauthorized action.');
-         }
         $business_id = request()->session()->get('user.business_id');
+        $user_id     = request()->session()->get('user.id');
 
         //Check if subscribed or not, then check for users quota
         if (!$this->moduleUtil->isSubscribed($business_id)) {
@@ -193,20 +183,15 @@ class ManageUserController extends Controller
      */
     public function store(Request $request)
     {
-        
-            if (!auth()->user()->can('user.create')) {
-                abort(403, 'Unauthorized action.');
-            }
-            $user_id     = request()->session()->get('user.id');
-             #....... check if admin    
+         
+            #....... check if admin    
             $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
-            if (!$is_admin) {
+            if (!$is_admin && !auth()->user()->can('user.create')) {
                 abort(403, 'Unauthorized action.');
             }
             try {
-
+                $user_id     = request()->session()->get('user.id');
                 \DB::beginTransaction();
-
                 \Config::set('database.connections.mysql.database', "izocloud");
                 \DB::purge('mysql');
                 \DB::reconnect('mysql');
@@ -376,16 +361,14 @@ class ManageUserController extends Controller
      */
     public function show($id)
     {
-        if (!auth()->user()->can('user.view')) {
+       
+        #....... check if admin    
+        $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        if (!$is_admin && !auth()->user()->can('user.view')) {
             abort(403, 'Unauthorized action.');
         }
-        $user_id     = request()->session()->get('user.id');
-         #....... check if admin    
-         $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
-         if (!$is_admin) {
-             abort(403, 'Unauthorized action.');
-         }
         $business_id = request()->session()->get('user.business_id');
+        $user_id     = request()->session()->get('user.id');
 
         $user = User::where('business_id', $business_id)
                     ->with(['contactAccess'])
@@ -412,16 +395,14 @@ class ManageUserController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->can('user.update')) {
+         
+        #....... check if admin    
+        $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        if (!$is_admin && !auth()->user()->can('user.update')) {
             abort(403, 'Unauthorized action.');
         }
-        $user_id     = request()->session()->get('user.id');
-         #....... check if admin    
-         $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
-         if (!$is_admin) {
-             abort(403, 'Unauthorized action.');
-         }
         $business_id = request()->session()->get('user.business_id');
+        $user_id     = request()->session()->get('user.id');
         $user        = User::where('business_id', $business_id)
                              ->with(['contactAccess'])
                              ->findOrFail($id);
@@ -434,20 +415,20 @@ class ManageUserController extends Controller
         }
         $contact_access   = $user->contactAccess->pluck('id')->toArray();
         $contacts         = Contact::contactDropdown($business_id, true, false);
-    //  agents
+        //  agents
         $agents           = [] ;
         $us               = \App\User::where('business_id', $business_id)
                                         ->where('is_cmmsn_agnt', 1)->get();
         foreach($us as $it){
             $agents[$it->id] = $it->first_name;
         }
-    //   cost center
+        //   cost center
         $account_cost = \App\Account::where("cost_center",1)->get();
         $cost_center  = [];
         foreach($account_cost as $i){
             $cost_center[$i->id]= $i->name . " || " . $i->account_number;
         }
-    // stores
+        // stores
         $stores    = [];
         $mainstore =\App\Models\Warehouse::where('business_id', $business_id)->select(['name','status','id'])->get();
         if (!empty($mainstore)) {
@@ -498,18 +479,16 @@ class ManageUserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!auth()->user()->can('user.update')) {
-            abort(403, 'Unauthorized action.');
-        }
-        $user_id     = request()->session()->get('user.id');
-        $business_id     = request()->session()->get('user.business_id');
+        
         #....... check if admin    
         $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
-        if (!$is_admin) {
+        if (!$is_admin &&!auth()->user()->can('user.update')) {
             abort(403, 'Unauthorized action.');
         }
         try {
-             
+            
+            $user_id       = request()->session()->get('user.id');
+            $business_id   = request()->session()->get('user.business_id');
             $user      = User::where('business_id', $business_id)->findOrFail($id);
             $izoUserId = $user->izo_user_id;
             #.......................................
@@ -663,18 +642,16 @@ class ManageUserController extends Controller
      */
     public function destroy($id)
     {
-        if (!auth()->user()->can('user.delete')) {
+        
+        #....... check if admin    
+        $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
+        if (!$is_admin && !auth()->user()->can('user.delete')) {
             abort(403, 'Unauthorized action.');
         }
-        $user_id     = request()->session()->get('user.id');
-         #....... check if admin    
-         $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
-         if (!$is_admin) {
-             abort(403, 'Unauthorized action.');
-         }
         if (request()->ajax()) {
             try {
                 \DB::beginTransaction();
+                $user_id     = request()->session()->get('user.id');
                 $business_id = request()->session()->get('user.business_id');
                 $user        = User::where('business_id', $business_id)->where('id', $id)->first();
                 $izoUserId   = $user->izo_user_id;

@@ -92,7 +92,7 @@ class SellController extends Controller
 
         $is_admin = $this->businessUtil->is_admin(auth()->user());
 
-        if (!$is_admin && !auth()->user()->hasAnyPermission(['sell.view', 'sell.create', 'direct_sell.access', 'direct_sell.view','warehouse.views', 'view_own_sell_only', 'ReadOnly.views' , 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping', 'so.view_all', 'manufuctoring.views', 'so.view_own'])) {
+        if (!$is_admin && !auth()->user()->hasAnyPermission(['sell.view', 'sell.create', 'direct_sell.access', 'direct_sell.view' , 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping', 'so.view_all', 'so.view_own'])) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -357,11 +357,11 @@ class SellController extends Controller
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-left" role="menu">';
 
-                        if (auth()->user()->can("sell.view")|| auth()->user()->can("warehouse.views") || auth()->user()->can("direct_sell.view") || auth()->user()->can("view_own_sell_only")|| auth()->user()->can("warehuse.views")) {
+                        if (auth()->user()->can("sell.view")) {
                             $html .= '<li><a href="#" data-href="' . action("SellController@show", [$row->id]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i> ' . __("messages.view") . '</a></li>';
                         }
                         if (!$only_shipments) {
-                            if (auth()->user()->can("sell.can_edit") || auth()->user()->hasRole("Admin#" . $business_id)) {
+                            if ($is_admin || auth()->user()->can("sell.can_edit")) {
                                 if($row->separate_parent == null || $row->separate_parent == 0){
                                     $html .= '<li><a target="_blank" href="' . action('SellController@edit', [$row->id]) . '"><i class="fas fa-edit"></i> ' . __("messages.edit") . '</a></li>';
                                 }else{
@@ -376,16 +376,16 @@ class SellController extends Controller
                                         $html .= '<li><a target="_blank" href="' . action('SellPosController@edit', [$row->id]) . '"><i class="fas fa-edit"></i> ' . __("messages.edit") . '</a></li>';
                                     }
                                 } elseif ($row->type == 'sales_order') {
-                                    if (auth()->user()->can("so.update")) {
+                                    if ( $is_admin || auth()->user()->can("so.update")) {
                                         $html .= '<li><a target="_blank" href="' . action('SellController@edit', [$row->id]) . '"><i class="fas fa-edit"></i> ' . __("messages.edit") . '</a></li>';
                                     }
                                 } else {
-                                    if (auth()->user()->can("direct_sell.update")) {
+                                    if ($is_admin || auth()->user()->can("direct_sell.update")) {
                                         $html .= '<li><a target="_blank" href="' . action('SellController@edit', [$row->id]) . '"><i class="fas fa-edit"></i> ' . __("messages.edit") . '</a></li>';
                                     }
                                 }
                             }
-                            if ( request()->session()->get("user.id") == 1 ){
+                            if ( $is_admin ||  auth()->user()->can("sell.delete")){
                                 $delete_link = '<li><a href="' . \URL::to('/sells/destroy/'.$row->id) . '" class="delete-sale"><i class="fas fa-trash"></i> ' . __("messages.delete") . '</a></li>';
                                 if($row->separate_parent == null || $row->separate_parent == 0){
                                     if ($row->is_direct_sale == 0) {
@@ -404,13 +404,13 @@ class SellController extends Controller
                                 } 
                             }
                         }
-                        if (config('constants.enable_download_pdf') && auth()->user()->can("warehouse.views") && auth()->user()->can("print_invoice") && $sale_type != 'sales_order') {
+                        if (config('constants.enable_download_pdf') && auth()->user()->can("print_invoice") && $sale_type != 'sales_order') {
                             $html .= '<li><a href="' . route('sell.downloadPdf', [$row->id]) . '" target="_blank"><i class="fas fa-print" aria-hidden="true"></i> ' . __("lang_v1.download_pdf") . '</a></li>';
                             if (!empty($row->shipping_status)) {
                                 $html .= '<li><a href="' . route('packing.downloadPdf', [$row->id]) . '" target="_blank"><i class="fas fa-print" aria-hidden="true"></i> ' . __("lang_v1.download_paking_pdf") . '</a></li>';
                             }
                         }
-                        if (auth()->user()->can("sell.update")) {
+                        if (auth()->user()->can("sell.view")) {
                             $html .= '<li><a class="btn-modal" data-container=".view_modal" href="" data-href="' . action('StatusLiveController@show', [$row->id]) . '"><i class="fas fa-eye"></i>' . __("home.Status Live") . '</a></li>';
                         }
                         // if (auth()->user()->can("sell.view") || auth()->user()->can("direct_sell.access")) {
@@ -427,13 +427,12 @@ class SellController extends Controller
                         //     $html .= '<li><a href="#" data-href="' . action('SellController@editShipping', [$row->id]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-truck" aria-hidden="true"></i>' . __("lang_v1.edit_shipping") . '</a></li>';
                         // }
                         
-                        if ($is_admin || auth()->user()->can("warehouse.views") ||  auth()->user()->hasAnyPermission(['access_shipping', 'access_own_shipping', 'access_commission_agent_shipping'])) {
-                            if($row->account_transactions->count() > 0){
-                                $html .= '<li><a href="#" data-href="' .\URL::to('entry/transaction/'.$row->id) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-align-justify" aria-hidden="true"></i>' . __("home.Entry") . '</a></li>';
-                            }
+                        if($row->account_transactions->count() > 0){
+                            $html .= '<li><a href="#" data-href="' .\URL::to('entry/transaction/'.$row->id) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-align-justify" aria-hidden="true"></i>' . __("home.Entry") . '</a></li>';
                         }
-                        if ($row->type == 'sell' || $row->type == 'sale' || auth()->user()->can("warehouse.views")   ) { 
-                            if (auth()->user()->can("print_invoice") || auth()->user()->can("SalesMan.views")) {
+                        
+                        if ($row->type == 'sell' || $row->type == 'sale' ) { 
+                            if (auth()->user()->can("print_invoice")) {
                                 
                                $business_module = \App\Business::find($row->business_id);
 
@@ -861,7 +860,7 @@ class SellController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->can('direct_sell.access') ) {
+        if (!auth()->user()->can('direct_sell.access') || !auth()->user()->can('sell.create')) {
             abort(403, 'Unauthorized action.');
         }
         
@@ -1043,9 +1042,9 @@ class SellController extends Controller
          
          
         
-            if (!auth()->user()->can('sell.delivered')  && !auth()->user()->can('warehouse.views')) {
-                abort(403, 'Unauthorized action.');
-            }
+        if (!auth()->user()->can('sell.delivered')) {
+            abort(403, 'Unauthorized action.');
+        }
     
         if(request()->ajax()){
     
@@ -1203,7 +1202,9 @@ class SellController extends Controller
      */
     public function show($id)
     {
-        
+        if (!auth()->user()->can('sell.view')) {
+            abort(403, 'Unauthorized action.');
+        }
         $business_id = request()->session()->get('user.business_id');
         $taxes = TaxRate::where('business_id', $business_id)
                             ->pluck('name', 'id');
@@ -1424,7 +1425,7 @@ class SellController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->can('direct_sell.access') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('sell.update') || !auth()->user()->can('sell.can_edit')) {
             abort(403, 'Unauthorized action.');
         }
       
@@ -1723,7 +1724,7 @@ class SellController extends Controller
      */
     public function getDrafts()
     {
-        if (!auth()->user()->can('list_drafts')  && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('list_drafts')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -1755,7 +1756,7 @@ class SellController extends Controller
      */
     public function getApproved()
     {
-        if (!auth()->user()->can('list_drafts') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('list_quotations')) {
             abort(403, 'Unauthorized action.');
         }
         
@@ -1812,7 +1813,7 @@ class SellController extends Controller
      */
     public function getQuotations()
     {
-        if (!auth()->user()->can('list_quotations') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('list_quotations')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -1858,7 +1859,7 @@ class SellController extends Controller
      */
     public function getApprovedQuotations()
     {
-        if (!auth()->user()->can('list_quotations')  && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('list_quotations')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -1902,6 +1903,7 @@ class SellController extends Controller
     {
         
         if (request()->ajax()) {
+            $is_admin = $this->businessUtil->is_admin(auth()->user());
             $business_id = request()->session()->get('user.business_id');
             $is_quotation = request()->input('is_quotation', 0);
             
@@ -2016,7 +2018,7 @@ class SellController extends Controller
             // dd($sells);
             return Datatables::of($sells)
                 ->addColumn(
-                    'action',function($row){
+                    'action',function($row) use($is_admin){
                         
                         $text ='<div class="btn-group">
                                         <button type="button" class="btn btn-info dropdown-toggle btn-xs" 
@@ -2031,18 +2033,18 @@ class SellController extends Controller
                                             class="btn-modal" data-container=".view_modal"><i class="fas fa-eye"
                                              aria-hidden="true"></i>'.trans("messages.view").'</a>
                                             </li>';
-                        if (request()->session()->get("user.id") == 1 || auth()->user()->can('product.avarage_cost')) {    
-                        if($row->is_direct_sale == 1){
-                            $text .='<li>
-                                    <a target="_blank" href="'.action('SellController@edit', [$row->id,'status' => 'draft']).'">
-                                    <i class="fas fa-edit"></i>'.trans("messages.edit").'</a>
-                                    </li>';
-                        }else{
-                            $text .='<li>
-                                        <a target="_blank" href="'.action("SellPosController@edit", [$row->id]).'">
+                        if ($is_admin || auth()->user()->can('sell.can_edit')) {    
+                            if($row->is_direct_sale == 1){
+                                $text .='<li>
+                                        <a target="_blank" href="'.action('SellController@edit', [$row->id,'status' => 'draft']).'">
                                         <i class="fas fa-edit"></i>'.trans("messages.edit").'</a>
                                         </li>';
-                        }
+                            }else{
+                                $text .='<li>
+                                            <a target="_blank" href="'.action("SellPosController@edit", [$row->id]).'">
+                                            <i class="fas fa-edit"></i>'.trans("messages.edit").'</a>
+                                            </li>';
+                            }
                         }
                         $business_module = \App\Business::find($row->business_id);
 
@@ -2090,12 +2092,12 @@ class SellController extends Controller
                                     <i class="fas fa-sync-alt"></i>'.trans("lang_v1.convert_to_quotation").'</a>
                                     </li> ';
                         }
-                        //  if (request()->session()->get("user.id") == 1 || auth()->user()->can('product.avarage_cost')) {
+                         if ($is_admin || auth()->user()->can('sell.delete')) {
                             $text  .='<li>
                                         <a href="'.\URL::to('/sells/destroy/'.$row->id).'" class="delete-draft">
                                         <i class="fas fa-trash"></i>'.trans("messages.delete").'</a>
                                         </li>';
-                        //  }
+                         }
                         if($row->sub_status == "quotation") {
                             $text .= '<li><a href="'.action("SellPosController@showInvoiceUrl", [$row->id]).'" 
                                   class="view_invoice_url"><i class="fas fa-eye"></i>'.trans("lang_v1.view_quote_url").'</a></li>
@@ -2212,8 +2214,9 @@ class SellController extends Controller
     
     public function getQuatationApproved()
     {
-         
+        
         if (request()->ajax()) {
+            $is_admin = $this->businessUtil->is_admin(auth()->user());
             $business_id = request()->session()->get('user.business_id');
             $is_quotation = request()->input('is_quotation', 0);
             
@@ -2367,7 +2370,7 @@ class SellController extends Controller
             return Datatables::of($sells)
                 ->addColumn(
                     'action',
-                    function($row){
+                    function($row) use($is_admin){
                         $text =  '<div class="btn-group">
                         <button type="button" class="btn btn-info dropdown-toggle btn-xs" 
                             data-toggle="dropdown" aria-expanded="false">' .
@@ -2381,7 +2384,7 @@ class SellController extends Controller
                             <a href="#" data-href="/sells/'.$row->id.'" class="btn-modal" data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i>'.trans("messages.view").'</a>
                             </li>';
 
-                        if (request()->session()->get("user.id") == 1 || !auth()->user()->can("SalesMan.views") || auth()->user()->hasRole('Admin#' . session('business.id')) || auth()->user()->can("sell.can_edit")){
+                        if ($is_admin|| auth()->user()->can("sell.can_edit")  ){
                             if ($row->is_direct_sale == 1) {
                                 $text .= '<li>
                                 <a target="_blank" href="/sells/'.$row->id.'/edit"><i class="fas fa-edit"></i> '.trans("messages.edit").'</a>
@@ -2479,7 +2482,7 @@ class SellController extends Controller
                             </li> ';
                         }
                     }
-                    if (request()->session()->get("user.id") == 1){
+                    if ($is_admin || auth()->user()->can('sell.delete')) {
                         $text .= '<li>
                                 <a  data-href="'.\URL::to("/sells/destroy/".$row->id).'" class="delete-sale-Q"><i class="fas fa-trash"></i>'.trans("messages.delete").'</a>
                                 </li>';
@@ -2750,6 +2753,7 @@ class SellController extends Controller
     {
 
         if (request()->ajax()) {
+            $is_admin = $this->businessUtil->is_admin(auth()->user());
             $business_id = request()->session()->get('user.business_id');
             $is_quotation = request()->input('is_quotation', 1);
             
@@ -2872,7 +2876,7 @@ class SellController extends Controller
 
             return Datatables::of($sells)
                 ->addColumn(
-                    'action',function($row){
+                    'action',function($row) use($is_admin){
                         $text = '<div class="btn-group">
                                         <button type="button" class="btn btn-info dropdown-toggle btn-xs" 
                                             data-toggle="dropdown" aria-expanded="false">' .
@@ -2884,14 +2888,17 @@ class SellController extends Controller
                                             <li>
                                             <a href="#" data-href="'.action('SellController@show', [$row->id]).'" class="btn-modal" data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i> '.trans("messages.view").'</a>
                                             </li>';
-                                    if($row->is_direct_sale == 1){
-                                        $text .= '<li>
-                                                    <a target="_blank" href="'.action('SellController@edit', [$row->id, "status"=>"quotation"]).'"><i class="fas fa-edit"></i>'.trans("messages.edit").'</a>
-                                                    </li>';
-                                    }else{
-                                       $text .='<li>
+                                    if($is_admin || auth()->user()->can('sell.can_edit')){
+
+                                        if($row->is_direct_sale == 1){
+                                            $text .= '<li>
+                                            <a target="_blank" href="'.action('SellController@edit', [$row->id, "status"=>"quotation"]).'"><i class="fas fa-edit"></i>'.trans("messages.edit").'</a>
+                                            </li>';
+                                        }else{
+                                            $text .='<li>
                                             <a target="_blank" href="'.action('SellPosController@edit', [$row->id , "status"=>"quotation"]).'"><i class="fas fa-edit"></i> '.trans("messages.edit").'</a>
                                             </li>' ;
+                                        }
                                     }
 
                                     $business_module = \App\Business::find($row->business_id);

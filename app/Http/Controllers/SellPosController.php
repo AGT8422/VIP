@@ -135,13 +135,10 @@ class SellPosController extends Controller
      */
     public function create()
     {
-        
-        
-        $business_id = request()->session()->get('user.business_id');
-
         if (!(auth()->user()->can('superadmin') || auth()->user()->can('sell.create') || ($this->moduleUtil->hasThePermissionInSubscription($business_id, 'repair_module') && auth()->user()->can('repair.create')))) {
             abort(403, 'Unauthorized action.');
         }
+        $business_id = request()->session()->get('user.business_id');
 
         //Check if subscribed or not, then check for users quota
         if (!$this->moduleUtil->isSubscribed($business_id)) {
@@ -290,8 +287,6 @@ class SellPosController extends Controller
      */
     public function store(Request $request)
     {
-        
-        
         if (!auth()->user()->can('sell.create') && !auth()->user()->can('direct_sell.access')) {
             abort(403, 'Unauthorized action.');
         }
@@ -1134,7 +1129,7 @@ class SellPosController extends Controller
      */
     public function update(Request $request, $id)
     {
-         if (!auth()->user()->can('sell.update') && !auth()->user()->can('direct_sell.access') && !auth()->user()->can('warehouse.views')  ) {
+         if (!auth()->user()->can('sell.update') && !auth()->user()->can('direct_sell.access')  ) {
             abort(403, 'Unauthorized action.');
         }
         
@@ -1201,6 +1196,7 @@ class SellPosController extends Controller
                 foreach($sell_lines as $it){
                     \App\Models\ArchiveTransactionSellLine::save_sells_line( $archive , $it);
                 }
+                $old_date      = $transaction_before->transaction_date;
                 $old_status    = $transaction_before->status;
                 $old_trans     = $transaction_before->cost_center_id;
                 $old_pattern_id= $transaction_before->pattern_id;
@@ -1457,7 +1453,7 @@ class SellPosController extends Controller
                 //  
                 if ($request->status == 'final' || $request->status == 'delivered') { 
                     if($transaction->sub_status != "proforma" && $transaction->sub_status != "ApprovedQuotation"){
-                        \App\AccountTransaction::update_sell_pos_($transaction,null,$old_trans,$old_account,$old_discount,$old_tax,$request->pattern_id,$old_pattern_id);
+                        \App\AccountTransaction::update_sell_pos_($transaction,null,$old_trans,$old_account,$old_discount,$old_tax,$request->pattern_id,$old_pattern_id,$old_date);
                         \App\Models\StatusLive::update_data_s($business_id,$transaction,"Sales Invoice");
                     }
                 }

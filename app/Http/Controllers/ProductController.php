@@ -92,9 +92,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-         if ((!auth()->user()->can('product.view') && !auth()->user()->can('product.create') ) && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('admin_without.views')   ) {
+        if ((!auth()->user()->can('product.view') && !auth()->user()->can('product.create') )) {
             abort(403, 'Unauthorized action.');
         }
+        $is_admin    = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
         $business_id = request()->session()->get('user.business_id');
         $selling_price_group_count = SellingPriceGroup::countSellingPriceGroups($business_id);
 
@@ -306,7 +307,7 @@ class ProductController extends Controller
                 ->editColumn('category', '{{$category}} @if(!empty($sub_category))<br/> -- {{$sub_category}}@endif')
                 ->addColumn(
                     'action',
-                    function ($row) use ($selling_price_group_count) {
+                    function ($row) use ($selling_price_group_count,$is_admin) {
                         $id = $row->id;
                         $html =
                         '<div class="btn-group"><button type="button" class="btn btn-info dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">'. __("messages.actions") . '<span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button><ul class="dropdown-menu dropdown-menu-left" role="menu">';
@@ -315,21 +316,21 @@ class ProductController extends Controller
                         //     $html .=
                         //     '<li><a href="' . action('LabelsController@show') . '?product_id=' . $row->id . '" data-toggle="tooltip" title="' . __('lang_v1.label_help') . '"><i class="fa fa-barcode"></i> ' . __('barcode.labels') . '</a></li>';
                         // }
-                        if (auth()->user()->can('product.view') || auth()->user()->can('warehouse.views') || auth()->user()->can('manufuctoring.views')|| auth()->user()->can('admin_supervisor.views') || auth()->user()->can('admin_without.views') ) {
+                        if (auth()->user()->can('product.view')) {
                             $html .=
                             '<li><a href="' . action('ProductController@view', [$row->id]) . '" class="view-product"><i class="fa fa-eye"></i> ' . __("messages.view") . '</a></li>';
                         }
 
-                        if (auth()->user()->can('product.update') || auth()->user()->can('warehouse.Edit') || auth()->user()->can('manufactoring.Edit') || auth()->user()->can('admin_supervisor.Edit') || auth()->user()->can('admin_without.Edit')) {
+                        if (auth()->user()->can('product.update')) {
                             $html .=
                             '<li><a href="' . action('ProductController@edit', [$row->id]) . '"><i class="glyphicon glyphicon-edit"></i> ' . __("messages.edit") . '</a></li>';
                         }
                         
-                        if ( request()->session()->get("user.id") == 1) {
+                        if ( $is_admin || auth()->user()->can('product.delete')) {
                             $html .=
                             '<li><a href="' . action('ProductController@destroy', [$row->id]) . '" class="delete-product"><i class="fa fa-trash"></i> ' . __("messages.delete") . '</a></li>';
                         }
-                        if (auth()->user()->can('delete_product_image') || auth()->user()->hasRole('Admin#' . session('business.id')) ) {
+                        if ( $is_admin || auth()->user()->can('delete_product_image')  ) {
                             $html .=
                             '<li><a data-id="'. $row->id .'"  class="delete_product_image" ><i class="fa fas fa-trash" style="color: red;cursor:pointer"></i> Delete Image </a></li>';
                         }
@@ -353,15 +354,14 @@ class ProductController extends Controller
                             $html .=
                             '<li><a href="#" data-href="' . action('OpeningStockController@add', ['product_id' => $row->id]) . '" class="add-opening-stock"><i class="fa fa-database"></i> ' . __("lang_v1.add_edit_opening_stock") . '</a></li>';
                         }
-                        if (auth()->user()->can('product.view') || auth()->user()->can('warehouse.views') || auth()->user()->can('manufactoring.views')|| auth()->user()->can('admin_without.views') || auth()->user()->can('admin_supervisor.views') ) {
+                        if (auth()->user()->can('product.avarage_cost')  ) {
                             // $html .=
                             // '<li><a href="' . action('ProductController@productStockHistory', [$row->id]) . '"><i class="fas fa-history"></i> ' . __("lang_v1.product_stock_history") . '</a></li>';
                             $html .=
                             '<li><a href="' . action('ItemMoveController@index', [$row->id]) . '"><i class="fas fa-history"></i> ' . __("lang_v1.product_stock_history") . '</a></li>';
                         }
                         
-                        if (auth()->user()->hasRole('Admin#' . session('business.id')) && request()->session()->get("user.id") == 2 && request()->session()->get("user.id") == 1) {
-
+                        if ($is_admin) {
                             if ($selling_price_group_count > 0) {
                                 $html .=
                                 '<li><a href="' . action('ProductController@addSellingPrices', [$row->id]) . '"><i class="fas fa-money-bill-alt"></i> ' . __("lang_v1.add_selling_price_group_prices") . '</a></li>';
@@ -541,7 +541,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->can('product.create') && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('admin_without.views') ) {
+        if (!auth()->user()->can('product.create') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -655,7 +655,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        if (!auth()->user()->can('product.create') && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('admin_without.views') ) {
+        if (!auth()->user()->can('product.create')  ) {
             abort(403, 'Unauthorized action.');
         }
         try {
@@ -1026,7 +1026,7 @@ class ProductController extends Controller
     public function show($id)
     {
          
-        if (!auth()->user()->can('product.view') || !auth()->user()->can('ReadOnly.views') || !auth()->user()->can('warehouse.views') || !auth()->user()->can('manufuctoring.views') || !auth()->user()->can('admin_supervisor.views') ) {
+        if (!auth()->user()->can('product.view') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -1043,7 +1043,7 @@ class ProductController extends Controller
      */
     public function show_Global($id)
     {
-        if (!auth()->user()->can('product.view') &&  !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('product.view') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -1061,16 +1061,16 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->can('product.update') &&  !auth()->user()->can('warehouse.Edit')&&  !auth()->user()->can('manufuctoring.Edit')&&  !auth()->user()->can('admin_supervisor.Edit')&&  !auth()->user()->can('admin_without.Edit')) {
+        if (!auth()->user()->can('product.update')) {
             abort(403, 'Unauthorized action.');
         }
 
-        $business_id = request()->session()->get('user.business_id');
-        $categories = Category::forDropdown($business_id, 'product');
-        $brands = Brands::forDropdown($business_id);
-        $currency = \App\Currency::select("*")->get(); 
+        $business_id   = request()->session()->get('user.business_id');
+        $categories    = Category::forDropdown($business_id, 'product');
+        $brands        = Brands::forDropdown($business_id);
+        $currency      = \App\Currency::select("*")->get(); 
         $exchange_rate = \App\Models\ExchangeRate::select("*")->where("source",0)->get(); 
-        $currencies   = [];
+        $currencies    = [];
         foreach($currency as $it){
             foreach($exchange_rate as $i){
                 if($i->currency_id == $it->id){
@@ -1140,7 +1140,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!auth()->user()->can('product.update') && !auth()->user()->can('warehouse.views') &&  !auth()->user()->can('warehouse.Edit')&&  !auth()->user()->can('manufuctoring.Edit') &&  !auth()->user()->can('admin_supervisor.Edit')&&  !auth()->user()->can('admin_without.Edit')) {
+        if (!auth()->user()->can('product.update')) {
             abort(403, 'Unauthorized action.');
         }
      
@@ -1759,7 +1759,7 @@ class ProductController extends Controller
     public function viewStock($id)
     {
          
-        if (!auth()->user()->can('product.view_sStock') && !auth()->user()->can('ReadOnly.views') && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('manufuctoring.views')) {
+        if (!auth()->user()->can('product.view_sStock')  ) {
             abort(403, 'Unauthorized action.');
         }
         if (request()->ajax()) {
@@ -1874,7 +1874,7 @@ class ProductController extends Controller
     public function viewStatusReport($id)
     {
 
-        if (!auth()->user()->can('product.view-modal_status') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('product.view-modal_status')  ) {
             abort(403, 'Unauthorized action.');
         }
         if (request()->ajax()) {
@@ -2824,7 +2824,7 @@ class ProductController extends Controller
      */
     public function view($id)
     {
-        if (!auth()->user()->can('product.view') && !auth()->user()->can('ReadOnly.views') && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('product.view')  ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -3310,7 +3310,7 @@ class ProductController extends Controller
      */
     public function deleteMedia($media_id)
     {
-        if (!auth()->user()->can('product.update')) {
+        if (!auth()->user()->can('product.delete')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -3574,7 +3574,7 @@ class ProductController extends Controller
      */
     public function getProductToEdit($product_id)
     {
-        if (!auth()->user()->can('product.update') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('product.update') ) {
             abort(403, 'Unauthorized action.');
         }
         $business_id = request()->session()->get('user.business_id');
@@ -3645,7 +3645,7 @@ class ProductController extends Controller
 
     public function updateProductLocation(Request $request)
     {
-        if (!auth()->user()->can('product.update') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('product.update')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -3696,7 +3696,7 @@ class ProductController extends Controller
 
     public function productStockHistory($id)
     {
-        if (!auth()->user()->can('product.view') &&  !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('product.view')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -4259,7 +4259,7 @@ class ProductController extends Controller
      */
     public function AddOpeningProduct(Request $request)
     {
-        if (!auth()->user()->can('purchase.create') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views') ) {
+        if (!auth()->user()->can('purchase.create') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -4351,7 +4351,7 @@ class ProductController extends Controller
     public function  OpeningProduct(Request $request)
     { 
          
-        if (!auth()->user()->can('purchase.view') && !auth()->user()->can('purchase.create') && !auth()->user()->can('view_own_purchase')&& !auth()->user()->can('warehouse.views')&& !auth()->user()->can('manufuctoring.views')) {
+        if (!auth()->user()->can('purchase.view') && !auth()->user()->can('purchase.create') && !auth()->user()->can('view_own_purchase') ) {
             abort(403, 'Unauthorized action.');
         }
         $business_id = request()->session()->get('user.business_id');
@@ -4384,7 +4384,7 @@ class ProductController extends Controller
 
     public function movement($id)
     {
-        if (!auth()->user()->can('product.productMovment') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoing.views') ) {
+        if (!auth()->user()->can('product.view')   ) {
             abort(403, 'Unauthorized action.');
         }
         $business_id = request()->session()->get('user.business_id');

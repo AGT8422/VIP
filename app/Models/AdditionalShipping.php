@@ -105,7 +105,7 @@ class AdditionalShipping extends Model
         }
     }
     //.. 1  ..........  update expenses 
-    public static function update_purchase($id,$inputs,$document_expense,$type=null,$id_tr=null,$user=null)
+    public static function update_purchase($id,$inputs,$document_expense,$type=null,$id_tr=null,$user=null,$old_date=null)
     {
         $data_id = $id;
         $check   = ($type == null)?0:1;
@@ -146,6 +146,9 @@ class AdditionalShipping extends Model
         foreach($re_items as $re_item){
             $lLine = \App\AccountTransaction::where('additional_shipping_item_id',$re_item->id)->get();
             foreach($lLine as $i){
+                if($old_date!=null){
+                    \App\AccountTransaction::nextRecords($i->account_id,$tr->business_id,$old_date);
+                }
                 \App\AccountTransaction::nextRecords($i->account_id,$tr->business_id,$tr->transaction_date);
                 $i->delete();
             }
@@ -167,7 +170,6 @@ class AdditionalShipping extends Model
                 $cost = (isset($inputs['old_shipping_cost_center_id'][$key]))?$inputs['old_shipping_cost_center_id'][$key]:$co;
                 
                 if ( $cost == null ) {
-
                     if(isset($inputs['cost_center_id'])){
                         AccountTransaction::where('transaction_id',$data_id)
                                             ->whereHas('account',function($query){
@@ -260,6 +262,9 @@ class AdditionalShipping extends Model
                                                        ->first();
                     $date_i           = Carbon::parse($account->operation_date);
                     $account->delete();
+                    if($old_date!=null){
+                        \App\AccountTransaction::nextRecords($old_account_id,$data_id,$old_date);
+                    }
                     \App\AccountTransaction::nextRecords($old_account_id,$data_id,$date_i->format("Y-m-d"));
                 }
             }else if ( $old_account_id == $inputs['old_shipping_account_id'][$key]) {   
@@ -280,6 +285,9 @@ class AdditionalShipping extends Model
                         'operation_date' => $date_i->format("Y-m-d")
                     ]);
                     if($account->account->cost_center!=1){
+                        if($old_date!=null){
+                            \App\AccountTransaction::nextRecords($account->account_id,$data_id,$old_date);
+                        }
                         // \App\AccountTransaction::oldBalance($account->id,$account->account_id,$data_id,$date_i->format("Y-m-d"));
                         \App\AccountTransaction::nextRecords($account->account_id,$data_id,$date_i->format("Y-m-d"));
                     }
@@ -297,6 +305,9 @@ class AdditionalShipping extends Model
                                                     ->first();
                     $date_i           = Carbon::parse($account->operation_date);
                     $account->delete();
+                    if($old_date!=null){
+                        \App\AccountTransaction::nextRecords($account->account_id,$data_id,$old_date);
+                    }
                     \App\AccountTransaction::nextRecords($account->account_id,$data_id,$date_i->format("Y-m-d"));
                 } 
             }
@@ -322,6 +333,9 @@ class AdditionalShipping extends Model
                                 'operation_date' => $date_i->format("Y-m-d")
                             ]);
                             if($account->account->cost_center!=1){
+                                if($old_date!=null){
+                                    \App\AccountTransaction::nextRecords($account->account_id,$data_id,$old_date);
+                                }
                                 // \App\AccountTransaction::oldBalance($account->id,$account->account->id,$data_id,$date_i->format("Y-m-d"));
                                 \App\AccountTransaction::nextRecords($account->account_id,$data_id,$date_i->format("Y-m-d"));
                             }        
@@ -337,6 +351,9 @@ class AdditionalShipping extends Model
                                                                 ->first();
                                 $date_i  = Carbon::parse($account->operation_date);
                                 $account->delete();
+                                if($old_date!=null){
+                                    \App\AccountTransaction::nextRecords($account->account_id,$data_id,$old_date);
+                                }
                                 \App\AccountTransaction::nextRecords($account->account_id,$data_id,$date_i->format("Y-m-d"));
                     }
                 } 
@@ -352,6 +369,9 @@ class AdditionalShipping extends Model
                                                         ->first();
                     $date_i  = Carbon::parse($account->operation_date);
                     $account->delete();
+                    if($old_date!=null){
+                        \App\AccountTransaction::nextRecords($account->account_id,$data_id,$old_date);
+                    }
                     \App\AccountTransaction::nextRecords($account->account_id,$data_id,$date_i->format("Y-m-d"));
                 }
             }

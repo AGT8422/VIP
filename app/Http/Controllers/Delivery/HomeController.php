@@ -618,6 +618,7 @@ class HomeController extends Controller
             
             $transaction_new = \App\Transaction::find($td->transaction_id);
             $lines_sells     = \App\TransactionSellLine::where("transaction_id",$td->is_invoice)->get();
+            $old_date        =  $transaction_new->transaction_date;
             foreach($lines_sells as $li){
                 $for_sub_total      += $sel_line->quantity * ($sel_line->unit_price_inc_tax - $sel_line->item_tax);
                 $sub_total_line     += $before_percentage  * ($sel_line->quantity * ($sel_line->unit_price_inc_tax - $sel_line->item_tax));
@@ -649,7 +650,7 @@ class HomeController extends Controller
             $old_discount        = $transaction_new->discount_amount;
             $old_tax             = $transaction_new->tax_amount;
             $pattern_id          = $transaction_new->pattern_id;
-            \App\AccountTransaction::update_sell_pos_($transaction_new,null,$old_trans,$old_account,$old_discount,$old_tax,$pattern_id,$pattern_id);
+            \App\AccountTransaction::update_sell_pos_($transaction_new,null,$old_trans,$old_account,$old_discount,$old_tax,$pattern_id,$pattern_id,$old_date);
             //........ end eb
             Transaction::update_status($id,'deliver');
 

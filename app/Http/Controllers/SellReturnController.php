@@ -57,10 +57,11 @@ class SellReturnController extends Controller
      */
     public function index()
     {
-        if (!auth()->user()->can('access_sell_return') && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('manufuctoring.views') ) {
+        if (!auth()->user()->can('access_sell_return')) {
             abort(403, 'Unauthorized action.');
         }
-        $business_id = request()->session()->get('user.business_id');
+        $is_admin         = $this->businessUtil->is_admin(auth()->user());
+        $business_id      = request()->session()->get('user.business_id');
         $currency_details = $this->transactionUtil->purchaseCurrencyDetails($business_id);
         if (request()->ajax()) {
             $sells = Transaction::leftJoin('contacts', 'transactions.contact_id', '=', 'contacts.id')
@@ -141,25 +142,25 @@ class SellReturnController extends Controller
             return Datatables::of($sells)
                 ->addColumn(
                     'action',
-                    function($row){
-                        $html = '<div class="btn-group">
-                        <button type="button" class="btn btn-info dropdown-toggle btn-xs" 
-                            data-toggle="dropdown" aria-expanded="false">' .
-                            __("messages.actions") .
-                            '<span class="caret"></span><span class="sr-only">Toggle Dropdown
-                            </span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu">';
-                        $html .= '<li><a href="#" class="btn-modal" data-container=".view_modal" data-href="{{action(\'SellReturnController@show\', [$row->parent_sale_id])}}"><i class="fas fa-eye" aria-hidden="true"></i> '. __("messages.view") .'</a></li>';
-                        
-                        if( $row->return_parent_id == $row->id){
-                            $html .=  '<li><a href="'. action("SellReturnController@edit", [$row->id]) .'" ><i class="fa fa-edit" aria-hidden="true"></i>'. __("messages.edit") .'</a></li>';
-                        }else{
-                            $html .= '<li><a href="'. action("SellReturnController@add", [$row->parent_sale_id]).'" ><i class="fa fa-edit" aria-hidden="true"></i>'. __("messages.edit") .'</a></li>';
-                        }
-                        if(request()->session()->get("user.id") == 1){
-                            $html .= '<li><a href="'. action("SellReturnController@destroy", [$row->id]).'" class="delete_sell_return" ><i class="fa fa-trash" aria-hidden="true"></i>'. __("messages.delete") .'</a></li>';
-                        }
+                    function($row) use($is_admin){
+                            $html   = '<div class="btn-group">
+                                        <button type="button" class="btn btn-info dropdown-toggle btn-xs" 
+                                            data-toggle="dropdown" aria-expanded="false">' .
+                                            __("messages.actions") .
+                                            '<span class="caret"></span><span class="sr-only">Toggle Dropdown
+                                            </span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu">';
+                            $html .= '<li><a href="#" class="btn-modal" data-container=".view_modal" data-href="{{action(\'SellReturnController@show\', [$row->parent_sale_id])}}"><i class="fas fa-eye" aria-hidden="true"></i> '. __("messages.view") .'</a></li>';
+                            
+                            if( $row->return_parent_id == $row->id ){
+                                $html .= '<li><a href="'. action("SellReturnController@edit", [$row->id]) .'" ><i class="fa fa-edit" aria-hidden="true"></i>'. __("messages.edit") .'</a></li>';
+                            }else{
+                                $html .= '<li><a href="'. action("SellReturnController@add",  [$row->parent_sale_id]).'" ><i class="fa fa-edit" aria-hidden="true"></i>'. __("messages.edit") .'</a></li>';
+                            }
+                            if( $is_admin || auth()->user()->can('sell.delete') ){
+                                $html .= '<li><a href="'. action("SellReturnController@destroy", [$row->id]).'" class="delete_sell_return" ><i class="fa fa-trash" aria-hidden="true"></i>'. __("messages.delete") .'</a></li>';
+                            }
                         
                           
                             $business_module = \App\Business::find($row->business_id);
@@ -170,7 +171,6 @@ class SellReturnController extends Controller
                                     $all_pattern = json_decode($business_module->return_sale_print_module); 
                                 }else{
                                     $id_module   = null ; $all_pattern = []; 
-                                    
                                 }
                             }else{
                                 $id_module = null ; $all_pattern = []; 
@@ -178,29 +178,28 @@ class SellReturnController extends Controller
 
                             if($id_module != null){
                                 $html .= '<li><a href="#" class="print-invoice" data-href="{{action(\'SellReturnController@printInvoice\', [$row->id])}}"><i class="fa fa-print" aria-hidden="true"></i>'. __("messages.print") .'</a></li>';
-                             
                                 $html .= '<li><div style="border:3px solid #ee680e;background-color:#ee680e">';
                                     foreach($all_pattern as $one_pattern){ 
                                         $pat   = \App\Models\PrinterTemplate::find($one_pattern); 
                                         if(!empty($pat)){
                                             $html .= ' <a target="_blank" class="btn btn-info" style="width:100%;border-radius:0px;text-align:left;background-color:#474747 !important;color:#f7f7f7 !important;border:2px solid #ee680e !important" href="'.action("Report\PrinterSettingController@generatePdf",["id" => $one_pattern,"sell_id" => $row->id]).'"> <i class="fas fa-print" style="color:#ee680e"  aria-hidden="true"></i> Print By '; 
-                                            $html .= '<b style="color:#ee680e"> ' . $pat->name_template . '</b> </a>';
+                                            $html .= ' <b style="color:#ee680e"> ' . $pat->name_template . '</b> </a>';
                                         } 
                                     }  
                                 $html .= '</div></li>';
-                                
                             }else{
                                 $html .= '<li><a href="'. action("Report\SellController@index",[$row->id ,"return"=>"1" , "ref_no" => $row->invoice_no ]  ) .'"  target="_blank" ><i class="fas fa-print" aria-hidden="true"></i> '. __("messages.print").'</a></li>';  
                             }
-                            
+
                             if($row->account_transactions->count() > 0){
                                 $html .= '<li><a href="#" class="btn-modal" data-container=".view_modal"  data-href="'. action("General\AccountController@transaction", [$row->parent_sale_id]). '"><i class="fa fa-align-justify" aria-hidden="true"></i> '. __("home.Entry") .'</a></li>';
                             }
                             
                             
-                            
-                        if( $row->payment_status != "paid"){
-                            $html .= '<li><a href="'. action("TransactionPaymentController@addPayment", [$row->id]).'" class="add_payment_modal"><i class="fas fa-money-bill-alt"></i>  '. __("purchase.add_payment").'</a></li>';
+                        if( $is_admin || auth()->user()->can('sell.payments') ){
+                            if( $row->payment_status != "paid"){
+                                $html .= '<li><a href="'. action("TransactionPaymentController@addPayment", [$row->id]).'" class="add_payment_modal"><i class="fas fa-money-bill-alt"></i>  '. __("purchase.add_payment").'</a></li>';
+                            }
                         }
                         $html .= '<li><a href="#" data-href="' . action('HomeController@formAttach', ["type" => "sell_return","id" => $row->id]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-paperclip" aria-hidden="true"></i> ' . __("Add Attachment") . '</a></li>';
                     
@@ -353,7 +352,7 @@ class SellReturnController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->can('sell.create')) {
+        if (!auth()->user()->can('sell.create') && !auth()->user()->can('access_sell_return')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -414,7 +413,7 @@ class SellReturnController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->can('sell.update')) {
+        if (!auth()->user()->can('sell.update') && !auth()->user()->can('access_sell_return')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -689,7 +688,7 @@ class SellReturnController extends Controller
      */
     public function show($id)
     {
-        if (!auth()->user()->can('access_sell_return') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('access_sell_return')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -758,7 +757,9 @@ class SellReturnController extends Controller
      */
     public function save_return(Request $request)
     {
-       
+        if (!auth()->user()->can('access_sell_return')) {
+            abort(403, 'Unauthorized action.');
+        }
         try {
             DB::beginTransaction();
         
@@ -1008,7 +1009,9 @@ class SellReturnController extends Controller
      */
     public function update_return(Request $request)
     {
-        
+        if (!auth()->user()->can('access_sell_return')) {
+            abort(403, 'Unauthorized action.');
+        }
         try {
             $business_id = $request->session()->get('user.business_id');
             $user_id     = $request->session()->get('user.id');
@@ -1079,6 +1082,7 @@ class SellReturnController extends Controller
             # get info 
             $trans                        = \App\Transaction::where("id",$request->transaction_id)->first();
             $old_return                   = $trans->replicate();
+            $old_date                     = $trans->transaction_date;
             $company_name      = request()->session()->get("user_main.domain");
             $document_sell =  \App\Transaction::find($request->transaction_id)->document;
                 if ($request->hasFile('document_sell')) { $ids=1;
@@ -1191,7 +1195,7 @@ class SellReturnController extends Controller
                 }
             }
             # entries
-            \App\AccountTransaction::update_return_sales($trans,$request->discount_amount2,$request->total_final_input,$sub_total_rt_purchase,$request->tax_amount2,$old_return);
+            \App\AccountTransaction::update_return_sales($trans,$request->discount_amount2,$request->total_final_input,$sub_total_rt_purchase,$request->tax_amount2,$old_return,$old_date);
            
             #  compare status 
             if($old_return->status == "final" && $trans->status == "delivered"){
@@ -1339,7 +1343,8 @@ class SellReturnController extends Controller
      */
     public function destroy($id)
     {
-        if (!auth()->user()->can('access_sell_return')) {
+        $is_admin         = $this->businessUtil->is_admin(auth()->user());
+        if (!auth()->user()->can('access_sell_return') && !$is_admin) {
             abort(403, 'Unauthorized action.');
         }
 

@@ -65,10 +65,10 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        if (!auth()->user()->can('purchase.view') && !auth()->user()->can('ReadOnly.views')&& !auth()->user()->can('SalesMan.views')&& !auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('manufuctoring.views') && !auth()->user()->can('purchase.create') && !auth()->user()->can('view_own_purchase')) {
+        if (!auth()->user()->can('purchase.view') && !auth()->user()->can('view_own_purchase')) {
             abort(403, 'Unauthorized action.');
         }
-        
+        $is_admin         = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
         $business_id      = request()->session()->get('user.business_id');
         $currency_details = $this->transactionUtil->purchaseCurrencyDetails($business_id);
        
@@ -113,65 +113,59 @@ class PurchaseController extends Controller
             
             // dd($purchases->whereIn('transactions.location_id', $permitted_locations));
             return Datatables::of($purchases)
-                ->addColumn('action', function ($row) {
+                ->addColumn('action', function ($row) use($is_admin) {
                     $html = '<div class="btn-group">
-                    <button type="button" class="btn btn-info dropdown-toggle btn-xs" 
-                    data-toggle="dropdown" aria-expanded="false">' .
-                    __("messages.actions") .
-                    '<span class="caret"></span><span class="sr-only">Toggle Dropdown
-                    </span>
-                    </button> 
-                            <ul class="dropdown-menu dropdown-menu-left" role="menu">';
-                    if (auth()->user()->can("purchase.view") || auth()->user()->can("warehouse.views")|| auth()->user()->can('SalesMan.views')||auth()->user()->can('admin_supervisor.views') || auth()->user()->can("manufuctoring.views") || auth()->user()->can("admin_without.views") || auth()->user()->can("admin_supervisor.views")) {
+                                <button type="button" class="btn btn-info dropdown-toggle btn-xs" 
+                                data-toggle="dropdown" aria-expanded="false">' .
+                                __("messages.actions") .
+                                '<span class="caret"></span><span class="sr-only">Toggle Dropdown
+                                </span>
+                                </button> 
+                                <ul class="dropdown-menu dropdown-menu-left" role="menu">';
+                    if (auth()->user()->can("purchase.view")) {
                         $html .= '<li><a href="#" data-href="' . action('PurchaseController@show', [$row->id]) . '" class="btn-modal" data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i>' . __("messages.view") . '</a></li>';
                     }
-                    if (auth()->user()->can("purchase.view")|| auth()->user()->can("warehouse.views")|| auth()->user()->can('SalesMan.views')||auth()->user()->can('admin_supervisor.views') || auth()->user()->can("manufuctoring.views") || auth()->user()->can("admin_supervisor.views") || auth()->user()->can("admin_without.views") ) {
-                        if ( auth()->user()->can("product.avarage_cost") || auth()->user()->hasRole("Admin#" . session("business.id") ) ){
-                            $business_module = \App\Business::find($row->business_id);
-
-                            $id_module       = (!empty($business_module))?(($business_module->purchase_print_module != null )? $business_module->purchase_print_module:null):null;
-
-                            if(!empty($business_module)){
-                                if($business_module->purchase_print_module != null && $business_module->purchase_print_module != "[]" ){
-                                    $all_pattern = json_decode($business_module->purchase_print_module);
-                                }else{
-                                    $id_module = null;
-                                }
+                    if ($is_admin  ||  auth()->user()->can("purchase.view") ) {
+                        
+                        $business_module = \App\Business::find($row->business_id);
+                        $id_module       = (!empty($business_module))?(($business_module->purchase_print_module != null )? $business_module->purchase_print_module:null):null;
+                        if(!empty($business_module)){
+                            if($business_module->purchase_print_module != null && $business_module->purchase_print_module != "[]" ){
+                                $all_pattern = json_decode($business_module->purchase_print_module);
                             }else{
-                                $id_module = null ;
+                                $id_module = null;
                             }
-
-                            if($id_module != null){
-                                $html .= '<li> <a href="'.\URL::to('reports/purchase/'.$row->id.'?ref_no='.$row->ref_no).'"  target="_blank" ><i class="fas fa-print" aria-hidden="true"></i>'. __("messages.print") .'</a>';
-                                $html .= '<div style="border:3px solid #ee680e;background-color:#ee680e">';
-                                foreach($all_pattern as $one_pattern){
-                                    $pat   = \App\Models\PrinterTemplate::find($one_pattern); 
-                                    if(!empty($pat)){
-                                        $html .= '<a target="_blank" class="btn btn-info" style="width:100%;border-radius:0px;text-align:left;background-color:#474747 !important;color:#f7f7f7 !important;border:2px solid #ee680e !important" href="'. action("Report\PrinterSettingController@generatePdf",["id"=>$one_pattern,"sell_id"=>$row->id]) .'"> <i class="fas fa-print" style="color:#ee680e"  aria-hidden="true"></i> Print By <b style="color:#ee680e">'.$pat->name_template.'</b> </a>';
-                                    }
-                                }
-                                $html .= '</div>';
-                                
-                                
-                                $html .= '</li>';
-                            }else{
-                                $html .= '<li><a href="'.\URL::to('reports/purchase/'.$row->id.'?ref_no='.$row->ref_no).'"  target="_blank" ><i class="fas fa-print" aria-hidden="true"></i>'. __("messages.print") .'</a></li>';
-                            }
-                            
+                        }else{
+                            $id_module = null ;
                         }
+                        if($id_module != null){
+                            $html .= '<li> <a href="'.\URL::to('reports/purchase/'.$row->id.'?ref_no='.$row->ref_no).'"  target="_blank" ><i class="fas fa-print" aria-hidden="true"></i>'. __("messages.print") .'</a>';
+                            $html .= '<div style="border:3px solid #ee680e;background-color:#ee680e">';
+                            foreach($all_pattern as $one_pattern){
+                                $pat   = \App\Models\PrinterTemplate::find($one_pattern); 
+                                if(!empty($pat)){
+                                    $html .= '<a target="_blank" class="btn btn-info" style="width:100%;border-radius:0px;text-align:left;background-color:#474747 !important;color:#f7f7f7 !important;border:2px solid #ee680e !important" href="'. action("Report\PrinterSettingController@generatePdf",["id"=>$one_pattern,"sell_id"=>$row->id]) .'"> <i class="fas fa-print" style="color:#ee680e"  aria-hidden="true"></i> Print By <b style="color:#ee680e">'.$pat->name_template.'</b> </a>';
+                                }
+                            }
+                            $html .= '</div>';
+                            
+                            
+                            $html .= '</li>';
+                        }else{
+                            $html .= '<li><a href="'.\URL::to('reports/purchase/'.$row->id.'?ref_no='.$row->ref_no).'"  target="_blank" ><i class="fas fa-print" aria-hidden="true"></i>'. __("messages.print") .'</a></li>';
+                        }
+                         
                     }
                     if( $row->status == "final" || $row->status == "received"){
                         $html .= '<li><a href="#" data-href="' .\URL::to('entry/transaction/'.$row->id) . '" class="btn-modal" data-container=".view_modal"><i class="fa fa-align-justify" aria-hidden="true"></i>' . __("home.Entry") . '</a></li>';
                     }
-                    if (auth()->user()->can("purchase.update") || auth()->user()->can('SalesMan.views')||auth()->user()->can('admin_supervisor.views') ) {
-                        if (request()->session()->get("user.id") == 1 || auth()->user()->can('product.avarage_cost')) {
+                    if ($is_admin || auth()->user()->can("purchase.update") ) { 
                         $html .= '<li><a href="' . action('PurchaseController@edit', [$row->id]) . '"><i class="fas fa-edit"></i>' . __("messages.edit") . '</a></li>';
-                        }
                     }
-                    if (auth()->user()->can("purchase.update") || auth()->user()->can('SalesMan.views')||auth()->user()->can('admin_supervisor.views') ) {
+                    if (auth()->user()->can("purchase.update")  ) {
                         $html .= '<li><a class="btn-modal" data-container=".view_modal" href="" data-href="' . action('StatusLiveController@show', [$row->id]) . '"><i class="fas fa-eye"></i>' . __("home.Status Live") . '</a></li>';
                     }
-                    if ( request()->session()->get("user.id") == 1) {
+                    if ( $is_admin || auth()->user()->can("purchase.delete") ) {
                         $html .= '<li><a href="' . action('PurchaseController@destroy', [$row->id]) . '" class="delete-purchase"><i class="fas fa-trash"></i>' . __("messages.delete") . '</a></li>';
                     }
 
@@ -185,7 +179,7 @@ class PurchaseController extends Controller
                     //     }
                     // }
                                         
-                    if (auth()->user()->can("purchase.create") || auth()->user()->can('SalesMan.views')||auth()->user()->can('admin_supervisor.views') ) {
+                    if (auth()->user()->can("purchase.payments") ) {
                         $html .= '<li class="divider"></li>';
                         if ($row->payment_status != 'paid') {
                             $html .= '<li><a href="' . action('TransactionPaymentController@addPayment', [$row->id]) . '" class="add_payment_modal"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>' . __("purchase.add_payment") . '</a></li>';
@@ -194,12 +188,12 @@ class PurchaseController extends Controller
                         '" class="view_payment_modal"><i class="fas fa-money-bill-alt" aria-hidden="true" ></i>' . __("purchase.view_payments") . '</a></li>';
                     }
 
-                    if (auth()->user()->can("purchase.update")) {
+                    if (auth()->user()->can("purchase_return.create")) {
                         $html .= '<li><a href="' . action('PurchaseReturnController@add', [$row->id]) .
                         '"><i class="fas fa-undo" aria-hidden="true" ></i>' . __("lang_v1.purchase_return") . '</a></li>';
                     }
 
-                    if (auth()->user()->can("purchase.update") || auth()->user()->can("purchase.update_status") || auth()->user()->can('SalesMan.views')||auth()->user()->can('admin_supervisor.views') ) {
+                    if (auth()->user()->can("purchase.update_status") ) {
                         $RecievedPrevious = RecievedPrevious::where("transaction_id",$row->id)->select(DB::raw("SUM(current_qty) as total"))->first()->total;
                                 
                         if($RecievedPrevious == null){ $class = "update_status" ;}else{$class = "";}
@@ -398,7 +392,7 @@ class PurchaseController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->can('purchase.create')&&!auth()->user()->can('SalesMan.views')&&!auth()->user()->can('admin_supervisor.views') ) {
+        if (!auth()->user()->can('purchase.create')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -474,7 +468,7 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
-         if (!auth()->user()->can('purchase.create') &&!auth()->user()->can('SalesMan.views')&&!auth()->user()->can('admin_supervisor.views')) {
+         if (!auth()->user()->can('purchase.create') ) {
             abort(403, 'Unauthorized action.');
         }
         try {
@@ -812,7 +806,7 @@ class PurchaseController extends Controller
      */
     public function show($id)
     {
-        if (!auth()->user()->can('purchase.view') &&!auth()->user()->can('SalesMan.views')&&!auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('manufuctoring.views')) {
+        if (!auth()->user()->can('purchase.view')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -930,7 +924,7 @@ class PurchaseController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->can('purchase.update')  &&!auth()->user()->can('SalesMan.views')&&!auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('purchase.update')  ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -1098,7 +1092,7 @@ class PurchaseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!auth()->user()->can('purchase.update') &&!auth()->user()->can('SalesMan.views')&&!auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('purchase.update')) {
             abort(403, 'Unauthorized action.');
         }
         try {
@@ -1116,6 +1110,7 @@ class PurchaseController extends Controller
             foreach($purchase_lines as $it){
                 \App\Models\ArchivePurchaseLine::save_purchases( $archive , $it);
             }
+            $old_date               = $transaction->transaction_date;
             $old_status             = $transaction->status;
             $old_trans              = $transaction->cost_center_id;
             $old_account            = $transaction->contact_id;
@@ -1495,7 +1490,7 @@ class PurchaseController extends Controller
               
                 if (!(($old_status !=  'final' && $old_status != 'received' ) && ($transaction->status == 'final' ||  $transaction->status == 'received' )) ) {
                     //.. 3 ..........  update expenses 
-                    \App\AccountTransaction::update_purchase($transaction,$total_ship,$old_trans,$old_account,$old_discount,$old_tax);
+                    \App\AccountTransaction::update_purchase($transaction,$total_ship,$old_trans,$old_account,$old_discount,$old_tax,$old_date);
                 }
                 \App\Models\StatusLive::update_data_p($business_id,$transaction,$request->status);
 
@@ -1969,7 +1964,7 @@ class PurchaseController extends Controller
         //  *F
         public function recieved_page(Request $request){
             
-            if (!auth()->user()->can('purchase.recieved') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('SalesMan.views')&& !auth()->user()->can('admin_supervisor.views')  ) {
+            if (!auth()->user()->can('purchase.received') ) {
                 abort(403, 'Unauthorized action.');    
             }
 
@@ -2064,7 +2059,7 @@ class PurchaseController extends Controller
         // *F
         public function update_recieved(Request $request){
     
-            if (!auth()->user()->can('purchase.recieved')  && !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('SalesMan.views') && !auth()->user()->can('admin_without.views') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')  ) {
+            if (!auth()->user()->can('purchase.received')    ) {
                 abort(403, 'Unauthorized action.');    
             }
             $currency           =  \App\Models\ExchangeRate::where("source","!=",1)->get();
@@ -2170,7 +2165,7 @@ class PurchaseController extends Controller
         public function delivered_page(Request $request)
         {
     
-            if (!auth()->user()->can('sell.delivered')  && !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('SalesMan.views') && !auth()->user()->can('admin_without.views') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')   ) {
+            if (!auth()->user()->can('sell.delivered')   ) {
                 abort(403, 'Unauthorized action.');
                 
             }
@@ -2271,7 +2266,7 @@ class PurchaseController extends Controller
         public function updateStatus(Request $request)
         {
             
-            if (!auth()->user()->can('purchase.update') && !auth()->user()->can('purchase.update_status')) {
+            if (  !auth()->user()->can('purchase.update_status')) {
                 abort(403, 'Unauthorized action.');
             }
             

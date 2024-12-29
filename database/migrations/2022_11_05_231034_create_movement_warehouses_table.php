@@ -16,7 +16,7 @@ class CreateMovementWarehousesTable extends Migration
         Schema::create('movement_warehouses', function (Blueprint $table) {
             $table->id();
             $table->integer('business_id')->unsigned();
-            $table->integer('transaction_id')->unsigned();
+            $table->integer('transaction_id')->unsigned()->nullable();
             $table->string('product_name')->nullable();
             $table->integer('unit_id')->unsigned();
             $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');

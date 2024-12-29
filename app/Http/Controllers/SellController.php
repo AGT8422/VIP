@@ -365,10 +365,10 @@ class SellController extends Controller
                                 if($row->separate_parent == null || $row->separate_parent == 0){
                                     $html .= '<li><a target="_blank" href="' . action('SellController@edit', [$row->id]) . '"><i class="fas fa-edit"></i> ' . __("messages.edit") . '</a></li>';
                                 }else{
-                                        if($row->separate_type == "partial"){
-                                            // $html .= '<li><a target="_blank" href="' . action('SellController@edit', [$row->id]) . '"><i class="fas fa-edit"></i> ' . __("messages.edit") . '</a></li>';
-                                            $html .= '<li><a target="_blank" class="btn-modal" data-container=".change_warehouse" href="" data-href="' . action('SellController@changeStore', [$row->id]) . '"><i class="fas fa-edit"></i> ' . __("Change Warehouse") . '</a></li>';
-                                        }
+                                    if($row->separate_type == "partial"){
+                                        // $html .= '<li><a target="_blank" href="' . action('SellController@edit', [$row->id]) . '"><i class="fas fa-edit"></i> ' . __("messages.edit") . '</a></li>';
+                                        $html .= '<li><a target="_blank" class="btn-modal" data-container=".change_warehouse" href="" data-href="' . action('SellController@changeStore', [$row->id]) . '"><i class="fas fa-edit"></i> ' . __("Change Warehouse") . '</a></li>';
+                                    }
                                 } 
                             }else{
                                 if ($row->is_direct_sale == 0) {

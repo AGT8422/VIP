@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <meta name="keywords" content="صيدليات ,
 		مخازن , مخزون , مستودعات , حسابات , مشتريات , مبيعات , عملاء , موردين , عملاء وموردين , محلات ، إدارة محلات ،
 		برنامج مخازن , برنامج حسابات , برنامج مستودعات , برنامج مشتريات , برنامج عملاء , برنامج موردين , برنامج عملاء وموردين , برنامج محلات , برنامج مخزون , إدارة مستودعات ،برنامج محلات ،برنامج مخازن مجانى ,
@@ -33,7 +34,8 @@
 		" />
     <title>@yield('title',"login-first-time") - {{ config('app.name', 'POS') }}</title>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
+    
+    
     @include('layouts.partials.css')
     @yield('app_css')
     
@@ -75,9 +77,10 @@
   </div>
 @endif
 @yield('content')
-{{-- <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script> --}}
+{{-- <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script> --}} 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @yield('javascript')
 <script type="text/javascript">
   $(document).ready(function(){

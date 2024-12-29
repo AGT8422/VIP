@@ -59,49 +59,41 @@
                     <div class="tab-pane active" id="other_accounts">
                         <div class="row">
                             <div class="col-md-12">
-                                @component('components.filters', ['title' => __('report.filters')])
-                                    <div class="col-md-3" > 
-                                        
+                                @component('components.filters', ['title' => __('report.filters') , 'class' => 'box-primary'])
+                                    <div class="col-md-3"> 
                                         <div class="form-group">
                                             {!! Form::label('account_name', __('lang_v1.name') . ':') !!}
                                             {!! Form::select('account_name', $account_ , null, ['id' => "account_name",'class' => 'form-control account_name-select2 select2', 'style' => 'width:100%',   'placeholder' => __('lang_v1.all')]); !!}
                                         </div>
                                     </div>
-                                  
-                                   
-                                    
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             {!! Form::label('account_number', __('lang_v1.account_number') . ':') !!}
                                             {!! Form::select('account_number',$account_number, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'account_number', 'placeholder' => __('lang_v1.all')]); !!}
                                         </div>
                                     </div>
-                        
-                                   <div class="col-md-3">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             {!! Form::label('main_account', __('lang_v1.account_main') . ':') !!}
                                             {!! Form::select('main_account', $array_of_main_, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'main_account', 'placeholder' => __('lang_v1.all')]); !!}
                                         </div>
                                     </div>
-                                   <div class="col-md-3">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             {!! Form::label('account_type', __('lang_v1.account_type') . ':') !!}
                                             {!! Form::select('account_type', $array_of_type_, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'account_type', 'placeholder' => __('lang_v1.all')]); !!}
                                         </div>
                                     </div>
-                                    <div class="col-md-3"  >
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             {!! Form::label('account_sub_type', __('lang_v1.account_sub_type') . ':') !!}
                                             {!! Form::select('account_sub_type',$array_of_type_sub, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'account_sub_type', 'placeholder' => __('lang_v1.all')]); !!}
                                         </div>
                                     </div>
-                                    
-                                     
-                        
-                               
                                 @endcomponent
-                                @component('components.widget')
-                                   <div class="col-md-4">
+
+                                @component('components.widget' ,[ 'class' => 'box-primary'])
+                                    <div class="col-md-4">
                                         {!! Form::label('transaction_date_range', __('Active') . ':') !!}
                                         {!! Form::select('account_status', ['active' => __('business.is_active'), 'closed' => __('account.closed')], null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'account_status']); !!}
                                     </div>
@@ -114,9 +106,6 @@
                                             </div>
                                         </div>
                                     </div>  
-
-
-
                                     <div class="col-md-4">
                                         <button type="button" class="btn btn-primary btn-modal pull-right" 
                                             data-container=".account_model"
@@ -213,7 +202,6 @@
                                                     <td>{{ $s . "   " . $i->name}}</td>
                                                 @endif
                                                 <td>
-                                                    
                                                     {!! Form::open(['url' => action('AccountTypeController@destroy', $i->id), 'method' => 'delete' ]) !!}
                                                     <button type="button" class="btn btn-primary btn-modal btn-xs" 
                                                     data-href="{{action('AccountTypeController@edit', $i->id)}}"

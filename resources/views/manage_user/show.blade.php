@@ -4,10 +4,10 @@
 
 @section('content')
     <!-- Main content -->
-    <section class="content">
+    <section class="content font_text">
         <div class="row">
             <div class="col-md-4">
-                <h3>@lang( 'lang_v1.view_user' )</h3>
+                <h3 class="font_text">@lang( 'lang_v1.view_user' )</h3>
             </div>
             <div class="col-md-4 col-xs-12 mt-15 pull-right">
                 {!! Form::select('user_id', $users, $user->id , ['class' => 'form-control select2', 'id' => 'user_id']); !!}
@@ -29,11 +29,11 @@
 
                         <img class="profile-user-img img-responsive img-circle" src="{{$img_src}}" alt="User profile picture">
 
-                        <h3 class="profile-username text-center">
+                        <h3 class="profile-username text-center font_text">
                             {{$user->user_full_name}}
                         </h3>
 
-                        <p class="text-muted text-center" title="@lang('user.role')">
+                        <p class="text-muted text-center font_text" title="@lang('user.role')">
                             {{$user->role_name}}
                         </p>
 
@@ -131,7 +131,7 @@
                         <!--    <div class="document_note_body">-->
                         <!--    </div>-->
                         <!--</div>-->
-                        <div class="tab-pane" id="activities_tab">
+                        <div class="tab-pane font_text" id="activities_tab">
                             <div class="row">
                                 <div class="col-md-12">
                                     @include('activity_log.activities')

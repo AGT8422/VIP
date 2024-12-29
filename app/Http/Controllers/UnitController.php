@@ -37,7 +37,7 @@ class UnitController extends Controller
     public function index()
     {
         // *1* section permissions
-        if (!auth()->user()->can('unit.view') && !auth()->user()->can('unit.create') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('unit.view') && !auth()->user()->can('unit.create')) {
             abort(403, 'Unauthorized action.');
         }
         // *2* request by ajax 
@@ -58,7 +58,7 @@ class UnitController extends Controller
                         </button>
                         &nbsp;
                     @endcan
-                    @if(request()->session()->get("user.id") == 1)
+                    @if("unit.delete")
                         <button data-href="{{action(\'UnitController@destroy\', [$id])}}" class="btn btn-xs btn-danger delete_unit_button"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</button>
                     @endif 
                     &nbsp;
@@ -109,7 +109,7 @@ class UnitController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->can('unit.create') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('unit.create') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -132,7 +132,7 @@ class UnitController extends Controller
      */
     public function Add()
     {
-        if (!auth()->user()->can('unit.create') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('unit.create') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -156,7 +156,7 @@ class UnitController extends Controller
      */
     public function store(Request $request)
     {
-        if (!auth()->user()->can('unit.create') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('unit.create') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -208,7 +208,7 @@ class UnitController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->can('unit.update') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('unit.update') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -232,7 +232,7 @@ class UnitController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!auth()->user()->can('unit.update') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('unit.update') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -283,7 +283,7 @@ class UnitController extends Controller
      */
     public function destroy($id)
     {
-        if (!auth()->user()->can('unit.delete') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('unit.delete') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -321,7 +321,7 @@ class UnitController extends Controller
     //  update all units if was multiple but not used now !?
     public function updateUnit($id)
     {
-        if (!auth()->user()->can('unit.create') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('unit.create') ) {
             abort(403, 'Unauthorized action.');
         }
 

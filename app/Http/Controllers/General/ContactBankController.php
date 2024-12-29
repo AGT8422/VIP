@@ -12,6 +12,9 @@ class ContactBankController extends Controller
 {
     public function index(Request $request)
     {
+        if (!auth()->user()->can('contact_bank.view') && !auth()->user()->can('contact_bank.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $business_id = request()->session()->get('user.business_id');
         $allData =  ContactBank::OrderBy('id','desc')->where('business_id',$business_id)
                             ->where(function($query) use($request){
@@ -30,6 +33,9 @@ class ContactBankController extends Controller
     }
     public function add()
     {
+        if (!auth()->user()->can('contact_bank.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $business_id = request()->session()->get('user.business_id');
         $business_locations = BusinessLocation::forDropdown($business_id, false);
         $contacts = Contact::contactDropdown($business_id, false, false);
@@ -39,8 +45,10 @@ class ContactBankController extends Controller
     }
     public function post_add(Request $request)
     {
+        if (!auth()->user()->can('contact_bank.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $business_id = request()->session()->get('user.business_id');
-
         $data = new ContactBank;
         $data->location_id = $request->location_id;
         $data->name = $request->name;
@@ -53,6 +61,9 @@ class ContactBankController extends Controller
     }
     public function edit($id)
     {
+        if (!auth()->user()->can('contact_bank.update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $business_id = request()->session()->get('user.business_id');
         $business_locations = BusinessLocation::forDropdown($business_id, true);
         $contacts = Contact::contactDropdown($business_id, false, false);
@@ -63,6 +74,9 @@ class ContactBankController extends Controller
     }
     public function post_edit(Request $request,$id)
     {
+        if (!auth()->user()->can('contact_bank.update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $business_id = request()->session()->get('user.business_id');
         $data =  ContactBank::find($id);
         $data->location_id = $request->location_id;
@@ -75,6 +89,9 @@ class ContactBankController extends Controller
     }
     public function delete($id)
     {
+        if (!auth()->user()->can('contact_bank.delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $sdata =  ContactBank::find($id);
         if ($data) {
             $data->delete();

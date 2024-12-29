@@ -48,7 +48,7 @@
                         @endphp
                     @endif
                     
-                    @if ($is_mfg_enabled && (auth()->user()->can('manufacturing.access_recipe') || auth()->user()->can('manufacturing.access_production'))) {
+                    @if ($is_mfg_enabled && (auth()->user()->can('manufacturing.access_recipe') || auth()->user()->can('manufacturing.access_production')))  
                         <a href="#" class="list-group-item text-center">@lang('lang_v1.MFG')</a>
                     @endif
                         
@@ -106,9 +106,9 @@
                 <!-- tab 13 end -->
                 <!-- tab 14 start -->             
                 
-                @if ($is_mfg_enabled && (auth()->user()->can('manufacturing.access_recipe') || auth()->user()->can('manufacturing.access_production'))) {
+                @if ($is_mfg_enabled && (auth()->user()->can('manufacturing.access_recipe') || auth()->user()->can('manufacturing.access_production'))) 
                     @include('business.partials.settings_mfg_account')
-                    @endif
+                @endif
                     <!-- tab 14 end -->
                     <!-- tab 15 start -->
                 @if(auth()->user()->can('superadmin'))

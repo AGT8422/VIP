@@ -35,6 +35,7 @@ class RoleController extends Controller
     public function index()
     {
          
+        $user_id     = request()->session()->get('user.id');
         #....... check if admin    
         $is_admin = auth()->user()->hasRole('Admin#' . session('business.id')) ? true : false;
         if (!$is_admin && !auth()->user()->can('roles.view')) {
@@ -42,7 +43,6 @@ class RoleController extends Controller
         }
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
-            $user_id     = request()->session()->get('user.id');
             $roles       = Role::Orderby("id","asc")->where('business_id', $business_id)->select(['name', 'id', 'is_default', 'business_id']);
 
             return DataTables::of($roles)
@@ -213,7 +213,7 @@ class RoleController extends Controller
         foreach ($role->permissions as $role_perm) {
             $role_permissions[] = $role_perm->name;
         }
-
+        // dd($role_permissions);
         $selling_price_groups = SellingPriceGroup::where('business_id', $business_id)->active()->get();
         $module_permissions   = $this->moduleUtil->getModuleData('user_permissions');
 
@@ -244,7 +244,7 @@ class RoleController extends Controller
                             ->where('id', '!=', $id)
                             ->where('business_id', $business_id)
                             ->count();
-            dd($role_name,$permissions,$business_id);
+            
             if ($count == 0) {
                 $role = Role::findOrFail($id);
 

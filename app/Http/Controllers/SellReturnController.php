@@ -153,10 +153,12 @@ class SellReturnController extends Controller
                                         <ul class="dropdown-menu dropdown-menu-right" role="menu">';
                             $html .= '<li><a href="#" class="btn-modal" data-container=".view_modal" data-href="{{action(\'SellReturnController@show\', [$row->parent_sale_id])}}"><i class="fas fa-eye" aria-hidden="true"></i> '. __("messages.view") .'</a></li>';
                             
-                            if( $row->return_parent_id == $row->id ){
-                                $html .= '<li><a href="'. action("SellReturnController@edit", [$row->id]) .'" ><i class="fa fa-edit" aria-hidden="true"></i>'. __("messages.edit") .'</a></li>';
-                            }else{
-                                $html .= '<li><a href="'. action("SellReturnController@add",  [$row->parent_sale_id]).'" ><i class="fa fa-edit" aria-hidden="true"></i>'. __("messages.edit") .'</a></li>';
+                            if( $is_admin || auth()->user()->can('sell.update') ){
+                                if( $row->return_parent_id == $row->id ){
+                                    $html .= '<li><a href="'. action("SellReturnController@edit", [$row->id]) .'" ><i class="fa fa-edit" aria-hidden="true"></i>'. __("messages.edit") .'</a></li>';
+                                }else{
+                                    $html .= '<li><a href="'. action("SellReturnController@add",  [$row->parent_sale_id]).'" ><i class="fa fa-edit" aria-hidden="true"></i>'. __("messages.edit") .'</a></li>';
+                                }
                             }
                             if( $is_admin || auth()->user()->can('sell.delete') ){
                                 $html .= '<li><a href="'. action("SellReturnController@destroy", [$row->id]).'" class="delete_sell_return" ><i class="fa fa-trash" aria-hidden="true"></i>'. __("messages.delete") .'</a></li>';

@@ -542,7 +542,7 @@ class TransactionPaymentController extends Controller
      */
     public function show($id)
     {
-        if (!auth()->user()->can('purchase.create') && !auth()->user()->can('sell.create') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('product.avarage_cost')) {
+        if (!auth()->user()->can('purchase.create') && !auth()->user()->can('sell.create') && !auth()->user()->can('product.avarage_cost')) {
             abort(403, 'Unauthorized action.');
         }
         if (request()->ajax()) {
@@ -581,16 +581,16 @@ class TransactionPaymentController extends Controller
     public function showw(Request $request)
     {
          
+        if (!auth()->user()->can('purchase.create') && !auth()->user()->can('sell.create')  ) {
+            abort(403, 'Unauthorized action.');
+        }
+
         foreach($request->request as $key => $value){
             if($key != "status"){
                 $id = $key;
             }else{
                 $state = $value; 
-                
             }
-        }
-        if (!auth()->user()->can('purchase.create') && !auth()->user()->can('sell.create') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('admin_without.views') ) {
-            abort(403, 'Unauthorized action.');
         }
         
         if (request()->ajax()) {
@@ -676,7 +676,7 @@ class TransactionPaymentController extends Controller
     //......... purchase  ... sells 
     public function showww(Request $request)
     {
-        if (!auth()->user()->can('purchase.create') && !auth()->user()->can('sell.create') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('admin_without.views')) {
+        if (!auth()->user()->can('purchase.create') && !auth()->user()->can('sell.create') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -810,7 +810,7 @@ class TransactionPaymentController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->can('purchase.create') && !auth()->user()->can('sell.create') && !auth()->user()->can('warehouse.Edit')) {
+        if (!auth()->user()->can('purchase.create') && !auth()->user()->can('sell.create') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -1013,7 +1013,7 @@ class TransactionPaymentController extends Controller
      */
     public function update_recieve(Request $request, $id)
     {
-        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('admin_without.views')) {
+        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('warehouse.views')  ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -1098,10 +1098,10 @@ class TransactionPaymentController extends Controller
         if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('sell.payments')) {
             abort(403, 'Unauthorized action.');
         }
+
         if (request()->ajax()) {
             try {
-             
-                 
+                             
                 // check the payment
                 $payment = TransactionPayment::findOrFail($id);
                 DB::beginTransaction();
@@ -1389,7 +1389,7 @@ class TransactionPaymentController extends Controller
      */
     public function destroy_recieve($id)
     {
-        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('sell.payments') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('warehouse.Delete')&& !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_without.Delete')&& !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('sell.payments')  ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -1588,11 +1588,10 @@ class TransactionPaymentController extends Controller
      */
     public function destroy_delivery($id)
     {
-        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('sell.payments') && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('sell.payments') ) {
             abort(403, 'Unauthorized action.');
         }
 
-        
         if (request()->ajax()) {
             try {
                 $business_id =  request()->session()->get("user.business_id");
@@ -1897,7 +1896,7 @@ class TransactionPaymentController extends Controller
      */
     public function addRecieve($transaction_id)
     {
-        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('sell.payments') && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('sell.payments')) {
             abort(403, 'Unauthorized action.');
         }
         
@@ -1906,25 +1905,15 @@ class TransactionPaymentController extends Controller
             $business_id = request()->session()->get('user.business_id');
             
             $transaction = Transaction::where('business_id', $business_id)
-            ->with(['contact', 'location'])
-            ->findOrFail($transaction_id);
+                                    ->with(['contact', 'location'])
+                                    ->findOrFail($transaction_id);
 
-            $purchcaseline = PurchaseLine::where('transaction_id', $transaction_id)
-            ->get();
-
-            $RecievedPrevious = RecievedPrevious::where('transaction_id', $transaction_id)
-            ->get();
-
-            $product = Product::where('business_id', $business_id)
-            ->get();
-
-            $unit = Unit::where('business_id', $business_id)
-            ->get();
-
+            $purchcaseline = PurchaseLine::where('transaction_id', $transaction_id)->get();
+            $RecievedPrevious = RecievedPrevious::where('transaction_id', $transaction_id)->get();
+            $product = Product::where('business_id', $business_id)->get();
+            $unit = Unit::where('business_id', $business_id)->get();
             $business_locations = BusinessLocation::forDropdown($business_id);
-            
-            $Warehouse = Warehouse::where('business_id', $business_id)
-            ->get();
+            $Warehouse = Warehouse::where('business_id', $business_id)->get();
 
             
             $product_list = [];
@@ -1949,12 +1938,9 @@ class TransactionPaymentController extends Controller
             }
             // dd($purchcaseline);
             if ($transaction->payment_status != 'paid') {
-                $show_advance = in_array($transaction->type, ['sell', 'purchase']) ? true : false;
+                $show_advance  = in_array($transaction->type, ['sell', 'purchase']) ? true : false;
                 $payment_types = $this->transactionUtil->payment_types($transaction->location, $show_advance);
-                
-                
-                
-                $paid_amount = $this->transactionUtil->getTotalPaid($transaction_id);
+                $paid_amount   = $this->transactionUtil->getTotalPaid($transaction_id);
 
                 $amount = $transaction->final_total - $paid_amount;
                 if ($amount < 0) {
@@ -1963,9 +1949,9 @@ class TransactionPaymentController extends Controller
                 
                 $amount_formated = $this->transactionUtil->num_f($amount);
                 
-                $payment_line = new TransactionPayment();
-                $payment_line->amount = $amount;
-                $payment_line->method = 'cash';
+                $payment_line          = new TransactionPayment();
+                $payment_line->amount  = $amount;
+                $payment_line->method  = 'cash';
                 $payment_line->paid_on = \Carbon::now()->toDateTimeString();
                 
                 //Accounts
@@ -1994,7 +1980,7 @@ class TransactionPaymentController extends Controller
      */
     public function getPayContactDue($contact_id)
     {
-        if (!auth()->user()->can('purchase.create')) {
+        if (!auth()->user()->can('purchase.create') && !auth()->user()->can('sell.create')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -2129,7 +2115,7 @@ class TransactionPaymentController extends Controller
      */
     public function viewPayment($payment_id)
     {
-        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('sell.payments') && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('sell.payments')  ) {
             abort(403, 'Unauthorized action.');
         }
         if (request()->ajax()) {
@@ -2163,7 +2149,7 @@ class TransactionPaymentController extends Controller
      */ //.... correct \//
     public function viewRecieve($payment_id)
     {
-        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('sell.payments') && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('sell.payments')  ) {
             abort(403, 'Unauthorized action.');
             }
  
@@ -2205,7 +2191,7 @@ class TransactionPaymentController extends Controller
      */
     public function viewDelivered(Request $request ,$payment_id)
     {
-        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('sell.payments') && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('purchase.payments') && !auth()->user()->can('sell.payments') ) {
             abort(403, 'Unauthorized action.');
         }
          if (request()->ajax()) {
@@ -2542,4 +2528,4 @@ class TransactionPaymentController extends Controller
             return $output;
         }
     }
-    }
+}

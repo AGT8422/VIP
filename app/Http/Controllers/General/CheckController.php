@@ -29,6 +29,9 @@ class CheckController extends Controller
    
     public function index(Request $request)
     {
+        if (!auth()->user()->can('cheque.view') && !auth()->user()->can('cheque.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $business_id = request()->session()->get('user.business_id');
         $allData =  Check::OrderBy('id','desc')->where('business_id',$business_id)
                             ->where(function($query) use($request){
@@ -94,6 +97,9 @@ class CheckController extends Controller
     }
     public function add(Request $request)
     {
+        if (!auth()->user()->can('cheque.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $business_id = request()->session()->get('user.business_id');
         $business_locations = BusinessLocation::forDropdown($business_id, true);
 
@@ -128,7 +134,9 @@ class CheckController extends Controller
     }
     public function post_add(Request $request)
     {
-        
+        if (!auth()->user()->can('cheque.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $bills_      =  $request->only(['bill_id','bill_amount']);
         $id_trans    = null;
         $transaction = null;
@@ -241,6 +249,9 @@ class CheckController extends Controller
     }
     public function edit($id)
     {
+        if (!auth()->user()->can('cheque.update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $business_id        = request()->session()->get('user.business_id');
         $business_locations = BusinessLocation::forDropdown($business_id, true);
         $data               = Check::find($id);
@@ -271,7 +282,9 @@ class CheckController extends Controller
     }
     public function post_edit(Request $request,$id)
     {
-        
+        if (!auth()->user()->can('cheque.update')) {
+            abort(403, 'Unauthorized action.');
+        }
         DB::beginTransaction();
         $business_id              = request()->session()->get('user.business_id');
         $entry                    = \App\Models\Entry::where("check_id",$id)->first();
@@ -419,6 +432,9 @@ class CheckController extends Controller
     }
     public function delete($id)
     {
+        if (!auth()->user()->can('cheque.delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data =  Check::find($id);
         DB::beginTransaction();
         if ($data) {
@@ -468,7 +484,9 @@ class CheckController extends Controller
     }
     public function collect($id,Request $request)
     {
-        
+        if (!auth()->user()->can('cheque.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         DB::beginTransaction();
         $payment                  = \App\TransactionPayment::where("check_id",$id)->first();
         Check::add_action($id,'collect');
@@ -550,6 +568,9 @@ class CheckController extends Controller
     }
     public function delete_collect($id)
     {
+        if (!auth()->user()->can('cheque.delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         if(request()->ajax()){
             DB::beginTransaction();
             # ...........................................
@@ -595,6 +616,9 @@ class CheckController extends Controller
     }
     public function un_collect($id)
     {
+        if (!auth()->user()->can('cheque.update')) {
+            abort(403, 'Unauthorized action.');
+        }
         if(request()->ajax()){
             DB::beginTransaction();
             $data =  Check::find($id);
@@ -615,6 +639,9 @@ class CheckController extends Controller
     ///................................ 
     public function refund($id)
     {
+        if (!auth()->user()->can('cheque.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if(request()->ajax()){
             DB::beginTransaction();
             Check::add_action($id,'refund');
@@ -678,6 +705,9 @@ class CheckController extends Controller
     }
     public function show($id)
     {   
+        if (!auth()->user()->can('cheque.view')) {
+            abort(403, 'Unauthorized action.');
+        }
         $payment = TransactionPayment::where("check_id",$id)->get();
         $data    = Check::find($id) ;
         return view('cheques.partials.view_cheque')

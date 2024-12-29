@@ -85,8 +85,8 @@ class RecipeController extends Controller
             return Datatables::of($recipes)
                 ->addColumn('action', '<button data-href="{{action(\'\Modules\Manufacturing\Http\Controllers\RecipeController@show\', [$id])}}" class="btn btn-xs btn-info btn-modal" data-container=".view_modal"><i class="fa fa-eye"></i> @lang("messages.view")</button> &nbsp; @can("manufacturing.edit_recipe") <a href="{{action(\'\Modules\Manufacturing\Http\Controllers\RecipeController@addIngredients\')}}?variation_id={{$variation_id}}" class="btn btn-xs btn-primary" ><i class="fa fa-edit"></i> @lang("messages.edit")</a>
                     &nbsp; 
-                    @if(request()->session()->get("user.id") == 1  || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8 )
-                    <button data-href="{{action(\'\Modules\Manufacturing\Http\Controllers\RecipeController@destroy\',[$id])}}" class="btn btn-xs btn-danger delete_recipe"><i class="fa fa-trash"></i> @lang("messages.delete")</button>@endif @endcan')
+                    @can("manufacturing.delete_recipe")
+                    <button data-href="{{action(\'\Modules\Manufacturing\Http\Controllers\RecipeController@destroy\',[$id])}}" class="btn btn-xs btn-danger delete_recipe"><i class="fa fa-trash"></i> @lang("messages.delete")</button>@endcan @endcan')
                 ->addColumn('recipe_total', function ($row) {
                     //Recipe price is dynamically calculated from each ingredients
                     $price = $this->mfgUtil->getRecipeTotal($row);
@@ -152,8 +152,7 @@ class RecipeController extends Controller
      * @return Response
      */
     public function store(Request $request)
-    {
-        // return dd($request->all());
+    { 
         $business_id = request()->session()->get('user.business_id');
         if (!(auth()->user()->can('superadmin') || $this->moduleUtil->hasThePermissionInSubscription($business_id, 'manufacturing_module')) || !auth()->user()->can('manufacturing.add_recipe')) {
             abort(403, 'Unauthorized action.');

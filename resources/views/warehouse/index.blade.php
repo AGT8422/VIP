@@ -20,7 +20,7 @@
     <div class="col-md-12">
         <!-- Main content -->
         <section class="content no-print">
-            @component('components.filters', ['title' => __('report.filters')])
+            @component('components.filters', ['title' => __('report.filters') , 'class' => 'box-primary'])
               {{-- <div class="col-md-3" > 
                 <div class="form-group"> 
                    <button data-href="{{action('WarehouseController@zero_qty')}}" class="delete-all-i btn btn-xs btn-danger"><i class="fa fa-trash"></i> @lang("messages.delete")</button>  
@@ -42,12 +42,12 @@
               @endcomponent
             @component('components.widget', ['class' => 'box-primary', 'title' => __('lang_v1.all_warehouse')])
                @if(auth()->user()->can("warehouse.views"))
-                @slot('tool')
-                <div class="box-tools">
-                    <a class="btn btn-block btn-primary" href="{{action('WarehouseController@create')}}">
-                    <i class="fa fa-plus"></i> @lang('messages.add')</a>
-                </div>
-                @endslot
+                    @slot('tool')
+                        <div class="box-tools">
+                            <a class="btn btn-block btn-primary" href="{{action('WarehouseController@create')}}">
+                            <i class="fa fa-plus"></i> @lang('messages.add')</a>
+                        </div>
+                    @endslot
 
                 @endif
               

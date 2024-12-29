@@ -24,7 +24,7 @@
         {{ session('yes')  }}
     </div>
     @endif
-    @component('components.filters', ['title' => __('report.filters')])
+    @component('components.filters', ['title' => __('report.filters') , 'class' => 'box-primary'])
         <form action="{{ URL::to('gournal-voucher') }}" method="GET">
             <div class="col-md-3">
                 <div class="form-group">
@@ -120,11 +120,12 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-info dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">@lang('home.Action')<span class="caret"></span><span class="sr-only">Toggle Dropdown </span></button>
                         <ul class="dropdown-menu dropdown-menu-left" role="menu">
-                           
-                             <li> 
-                                <a href="#"  data-href="{{ URL::to('gournal-voucher/view/'.$item->id) }}" class="views-modal" data-container=".view_model"><i class="fa fa-eye"></i>
-                                    &nbsp;&nbsp;@lang("messages.view")</a> 
-                             </li> 
+                            @can('gournal_voucher.view')
+                                <li> 
+                                    <a href="#"  data-href="{{ URL::to('gournal-voucher/view/'.$item->id) }}" class="views-modal" data-container=".view_model"><i class="fa fa-eye"></i>
+                                        &nbsp;&nbsp;@lang("messages.view")</a> 
+                                </li> 
+                            @endcan
                              <li> 
                                 <a href="#"  data-href="{{ URL::to('gournal-voucher/entry/'.$item->id) }}" class="views-modal" data-container=".view_model"><i class="fa fa-align-justify"></i>
                                     &nbsp;&nbsp;@lang("home.Entry")</a> 
@@ -143,20 +144,22 @@
                             <li>
                                 <a href="{{ URL::to('reports/ex-vh/'.$item->id) }}" target="_blank"><i class="fas fa-print"></i>&nbsp;&nbsp;@lang('messages.print')</a>
                             </li>
-                            <li>
-                                <a href="{{ URL::to('gournal-voucher/edit/'.$item->id) }}"><i class="fas fa-edit"></i>&nbsp;&nbsp;@lang('home.Edit')</a>
-                            </li>
+                            @can('gournal_voucher.update')
+                                <li>
+                                    <a href="{{ URL::to('gournal-voucher/edit/'.$item->id) }}"><i class="fas fa-edit"></i>&nbsp;&nbsp;@lang('home.Edit')</a>
+                                </li>
+                            @endcan
                             <li>
                                 <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "expense_voucher","id" => $item->id]) }}" target="_blank" class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;@lang('Add Attachment')</a>
                             </li>
-                            @if(request()->session()->get("user.id") == 1 || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8 )
-                            @if($item->status == 0)
-                            <li>
-                                <a   data-toggle="modal" 
-                                data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>&nbsp;&nbsp;@lang('izo.Delete')</a>
-                            </li>
-                            @endif
-                            @endif
+                            @can('gournal_voucher.delete')
+                                @if($item->status == 0)
+                                    <li>
+                                        <a   data-toggle="modal" 
+                                        data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>&nbsp;&nbsp;@lang('izo.Delete')</a>
+                                    </li>
+                                @endif
+                            @endcan
                             
                         </ul>
                     </div>

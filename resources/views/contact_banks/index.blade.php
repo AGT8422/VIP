@@ -25,7 +25,7 @@
 
 <!-- Main content -->
 <section class="content no-print font_text">
-    @component('components.filters', ['title' => __('report.filters')])
+    @component('components.filters', ['title' => __('report.filters') , 'class' => 'box-primary'])
         <form action="{{ URL::to('contact-banks') }}" method="GET">
             <div class="col-md-3 hide">
                 <div class="form-group">
@@ -41,7 +41,7 @@
             </div> --}}
             <div class="col-md-3 hide">
                 <label for="purchase_list_filter_location_id" class="label-control" style="width: 100%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-               <button type="submit" class="btn btn-md btn-primary">  Filter</button>
+               <button type="submit" class="btn btn-md btn-primary">  {{__('report.filters')}}</button>
             </div>
             <div class="col-md-4">
                 <div class="form-group ">
@@ -59,7 +59,9 @@
                 </div>
             </div>
         </form>
+    @endcomponent
         
+    @component('components.widget', ['class' => 'box-primary', 'title' => __('home.Contact Banks')])
         <div class="col-md-12">
             <table class="table table-bordered ">
                 <tbody>
@@ -75,17 +77,19 @@
                     <td>{{  $item->location?$item->location->name:'-------' }}</td>
                     
                     <td>
-                        <a href="{{ URL::to('contact-banks/edit/'.$item->id) }}"
-                            class="btn  btn-md btn-primary">
-                            {{ trans('home.Edit') }}
-                        </a>
-                        @if( request()->session()->get("user.id") == 1)
+                        @can("contact_bank.update")
+                            <a href="{{ URL::to('contact-banks/edit/'.$item->id) }}"
+                                class="btn  btn-md btn-primary">
+                                {{ trans('home.Edit') }}
+                            </a>
+                        @endcan
+                        @can("contact_bank.delete")
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-danger" data-toggle="modal" 
                                 data-target="#exampleModal{{ $item->id }}">
                             {{ trans('izo.Delete') }}
                             </button>
-                        @endif
+                        @endcan
                         
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModal{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -126,10 +130,7 @@
                 </tfoot>
              </table>
         </div>
-        
     @endcomponent
-
-   
 
 </section>
 

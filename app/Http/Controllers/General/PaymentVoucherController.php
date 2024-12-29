@@ -26,6 +26,9 @@ class PaymentVoucherController extends Controller
     }
     public function index(Request $request)
     {
+        if (!auth()->user()->can('payment_voucher.view') && !auth()->user()->can('payment_voucher.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $business_id        = request()->session()->get('user.business_id');
         $allData            =  PaymentVoucher::OrderBy('id','desc')->where('business_id',$business_id)
                                         ->where(function($query) use($request){
@@ -56,6 +59,9 @@ class PaymentVoucherController extends Controller
     }
     public function add(Request $request)
     {
+        if (!auth()->user()->can('payment_voucher.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $business_id        = request()->session()->get('user.business_id');
         $business_locations = BusinessLocation::forDropdown($business_id, true);
         $contacts           = Contact::suppliers();
@@ -83,7 +89,9 @@ class PaymentVoucherController extends Controller
     }
     public function post_add(Request  $request)
     {
-
+        if (!auth()->user()->can('payment_voucher.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         # note 0=> supplier , 1 =>customer
         DB::beginTransaction();
         $business_id      = request()->session()->get('user.business_id');
@@ -162,6 +170,9 @@ class PaymentVoucherController extends Controller
     }
     public function edit($id)
     {
+        if (!auth()->user()->can('payment_voucher.update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $business_id        = request()->session()->get('user.business_id');
         $data               = PaymentVoucher::find($id);
         $business_locations = BusinessLocation::forDropdown($business_id, true);
@@ -193,6 +204,9 @@ class PaymentVoucherController extends Controller
     }
     public function post_edit(Request $request,$id)
     {
+        if (!auth()->user()->can('payment_voucher.update')) {
+            abort(403, 'Unauthorized action.');
+        }
         DB::beginTransaction();
         $entry                 =  \App\Models\Entry::where("voucher_id",$id)->first();
         $data                  =  PaymentVoucher::find($id);
@@ -441,7 +455,9 @@ class PaymentVoucherController extends Controller
     public function delete($id)
     {
         
-
+        if (!auth()->user()->can('payment_voucher.delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data    =  PaymentVoucher::find($id);
         DB::beginTransaction();
         
@@ -589,6 +605,9 @@ class PaymentVoucherController extends Controller
     } 
     public function show($id)
     {   
+        if (!auth()->user()->can('payment_voucher.view')) {
+            abort(403, 'Unauthorized action.');
+        }
         $payment =  TransactionPayment::where("payment_voucher_id",$id)->get();
         $data    =  PaymentVoucher::find($id) ;
         return view('voucher_payments.show')
@@ -621,6 +640,9 @@ class PaymentVoucherController extends Controller
                ->with('data',$data); 
     }
     public function returnVoucher($id) {
+        if (!auth()->user()->can('payment_voucher.update')) {
+            abort(403, 'Unauthorized action.');
+        }
         try{
             \DB::beginTransaction();
             $data                = PaymentVoucher::find($id);
@@ -730,7 +752,7 @@ class PaymentVoucherController extends Controller
         return view("voucher_payments.PrintSelect")->with(compact(["item","contact","patterns"]));
     }
 
-public function post_message(Request $request,$id)
+    public function post_message(Request $request,$id)
     {
         if(request()->ajax()){
             if(request()->input("mobile") == null || request()->input("mobile") == ""){

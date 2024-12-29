@@ -34,7 +34,7 @@ class TaxonomyController extends Controller
     public function index()
     {
         $category_type = request()->get('type');
-        if ($category_type == 'product' && !auth()->user()->can('category.view') && !auth()->user()->can('category.create') && !auth()->user()->can('SalesMan.views') && !auth()->user()->can('admin_supervisor.views')) {
+        if ($category_type == 'product' && !auth()->user()->can('category.view') && !auth()->user()->can('category.create') ) {
             abort(403, 'Unauthorized action.');
         }
         $business_id = request()->session()->get('user.business_id');
@@ -49,11 +49,11 @@ class TaxonomyController extends Controller
                 ->addColumn(
                     'action',function($row) use($category_type){
                         $html = '';
-                        if(auth()->user()->can("manufuctoring.Edit") ||  auth()->user()->can("warehouse.Edit") ){
+                        if(auth()->user()->can("category.update") ){
                             $html = '<button data-href="'.action('TaxonomyController@edit', [$row->id]).'?type=' . $category_type . '" class="btn btn-xs btn-primary edit_category_button"><i class="glyphicon glyphicon-edit"></i>'.__("messages.edit").'</button>
                                 &nbsp;';
                         }
-                        if( request()->session()->get("user.id") == 1 ||request()->session()->get("user.id") == 7 ||request()->session()->get("user.id") == 8 ){
+                        if( auth()->user()->hasRole("Admin#".session('business.id')) == true || auth()->user()->can("category.delete") ){
                             $html .=  '<button data-href="'.action('TaxonomyController@destroy', [$row->id]).'" class="btn btn-xs btn-danger delete_category_button"><i class="glyphicon glyphicon-trash"></i>'. __("messages.delete").'</button>';
                         }
                         return $html;

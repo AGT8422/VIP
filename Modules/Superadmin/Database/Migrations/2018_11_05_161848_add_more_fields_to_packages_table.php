@@ -23,7 +23,7 @@ class AddMoreFieldsToPackagesTable extends Migration
         });
         $time   = \Carbon::now();
         $module = '{\"manufacturing_module\":\"1\",\"repair_module\":\"1\",\"Warehouse\":\"1\"}' ;
-        $query  = "INSERT INTO packages (id,name,description,location_count,user_count,product_count,bookings,kitchen,order_screen,tables,invoice_count,`interval`,interval_count,trial_days,price,custom_permissions,created_by,sort_order,is_active,is_private,is_one_time,enable_custom_link,custom_link,custom_link_text,deleted_at,created_at,updated_at,enabled_modules) VALUES ('1','TRIAL VERSION','Trial','0','1','0','0','0','0','0','0','days','15','0','0.0000',?,'1','1','1','0','1','0','','',?,?,?,'')" ;
+        $query  = "INSERT INTO packages (id,name,description,location_count,user_count,product_count,bookings,kitchen,order_screen,tables,invoice_count,`interval`,interval_count,trial_days,price,custom_permissions,created_by,sort_order,is_active,is_private,is_one_time,enable_custom_link,custom_link,custom_link_text,deleted_at,created_at,updated_at,enabled_modules) VALUES ('1','TRIAL VERSION','Trial','0','2','0','0','0','0','0','0','days','15','0','0.0000',?,'1','1','1','0','1','0','','',?,?,?,'')" ;
         DB::statement($query,[$module,null,$time,$time]);
     
     }

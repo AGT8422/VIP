@@ -255,6 +255,23 @@
             font-size: 20px !important;
             border: 1px solid #e86000 !important
         }
+        .select_panel {
+            width:100% !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow{
+            margin-top:5%;
+            transform:translateY(-50%);
+        }
+        .select2-container--default .select2-selection--single{
+            position:relative;    
+            border: 0px 1olid #d2d6de;
+                    margin-top:10px;
+                    width: 100% !important;
+                    outline: 0px solid #d2d6de;
+                    border-radius: 10px;
+                    padding: 10.5px 17px;
+                    height: 46px;
+        }
         .izo-group-form{  
             display: flex;
             justify-items: center; 
@@ -768,6 +785,23 @@
             margin: 10px auto  !important;
             font-size: 20px !important;
             border: 1px solid #e86000 !important
+        }
+        .select_panel {
+            width:100% !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow{
+            margin-top:5%;
+            transform:translateY(-50%);
+        }
+        .select2-container--default .select2-selection--single{
+            position:relative;    
+            border: 0px 1olid #d2d6de;
+                    margin-top:10px;
+                    width: 100% !important;
+                    outline: 0px solid #d2d6de;
+                    border-radius: 10px;
+                    padding: 10.5px 17px;
+                    height: 46px;
         }
         .izo-group-form{  
             display: flex;
@@ -1317,6 +1351,23 @@
                     font-size: 20px !important;
                     border: 1px solid #e86000 !important
                 }
+                .select_panel {
+                    width:100% !important;
+                }
+                .select2-container--default .select2-selection--single .select2-selection__arrow{
+                    margin-top:5%;
+                    transform:translateY(-50%);
+                }
+                .select2-container--default .select2-selection--single{
+                    position:relative;bord
+                    er: 1px solid #d2d6de;
+                    margin-top:10px;
+                    width: 100% !important;
+                    outline: 0px solid #d2d6de;
+                    border-radius: 10px;
+                    padding: 10.5px 17px;
+                    height: 46px;
+                }
                 .izo-group-form{  
                     display: flex;
                     justify-items: center; 
@@ -1850,6 +1901,23 @@
                     font-size: 20px !important;
                     border: 1px solid #e86000 !important
                 }
+                .select_panel {
+                    width:100% !important;
+                }
+                .select2-container--default .select2-selection--single .select2-selection__arrow{
+                    margin-top:5%;
+                    transform:translateY(-50%);
+                }
+                .select2-container--default .select2-selection--single{
+                    position:relative;bord
+                    er: 1px solid #d2d6de;
+                    margin-top:10px;
+                    width: 100% !important;
+                    outline: 0px solid #d2d6de;
+                    border-radius: 10px;
+                    padding: 10.5px 17px;
+                    height: 46px;
+                }
                 .izo-group-form{  
                     display: flex;
                     justify-items: center; 
@@ -2382,6 +2450,23 @@
                 margin: 10px auto  !important;
                 font-size: 20px !important;
                 border: 1px solid #e86000 !important
+            }
+            .select_panel {
+                width:100% !important;
+            }
+            .select2-container--default .select2-selection--single .select2-selection__arrow{
+                margin-top:5%;
+                transform:translateY(-50%);
+            }
+            .select2-container--default .select2-selection--single{
+                position:relative;    
+                border: 1px solid #d2d6de;
+                    margin-top:10px;
+                    width: 100% !important;
+                    outline: 0px solid #d2d6de;
+                    border-radius: 10px;
+                    padding: 10.5px 17px;
+                    height: 46px;
             }
             .izo-group-form{  
                 display: flex;
@@ -2925,6 +3010,23 @@
                 font-size: 20px !important;
                 border: 1px solid #e86000 !important
             }
+            .select_panel {
+                width:100% !important;
+            }
+            .select2-container--default .select2-selection--single .select2-selection__arrow{
+                margin-top:5%;
+                transform:translateY(-50%);
+            }
+            .select2-container--default .select2-selection--single{
+                position:relative;    
+                border: 1px solid #d2d6de;
+                    margin-top:10px;
+                    width: 100% !important;
+                    outline: 0px solid #d2d6de;
+                    border-radius: 10px;
+                    padding: 10.5px 17px;
+                    height: 46px;
+            }
             .izo-group-form{  
                 display: flex;
                 justify-items: center; 
@@ -3412,34 +3514,37 @@
                                             <div class="col-md-6">
                                                 {!! Form::label('second_name', __('Second Name *') ) !!}
                                                 {!! Form::text('second_name',null,['class' => 'izo-form-input', 'id'=>'second_name','required', 'placeholder' => __('Second Name') ]) !!}
-                                            </div>
-                                            <div class="clearfix"></div>
+                                            </div> 
+                                            <div class="clearfix"></div> 
                                             <div class="col-md-6">
                                                 {!! Form::label('job', __('Job Title *') ) !!}
-                                                {!! Form::select('job',$jobs,null,['class' => 'izo-form-input', 'id'=>'job','required', 'placeholder' => __('-- Choose job') ]) !!}
+                                                {!! Form::select('job',$jobs,null,['class' => ' select2 izo-form-input select_panel ', 'id'=>'job','required', 'placeholder' => __('-- Choose job') ]) !!}
                                             </div>
                                             <div class="col-md-6">
                                                 {!! Form::label('company_size', __('Size Of Company *') ) !!}
-                                                {!! Form::select('company_size',$company_size,null,['class' => 'izo-form-input','required', 'id'=>'company_size', 'placeholder' => __('-- Choose Size') ]) !!}
+                                                {!! Form::select('company_size',$company_size,null,['class' => ' select2 izo-form-input select_panel ','required', 'id'=>'company_size', 'placeholder' => __('-- Choose Size') ]) !!}
                                             </div>
                                             <div class="clearfix"></div>
+                                            <p style="line-height:2px">&nbsp;</p>
                                             <div class="col-md-6">
                                                 {!! Form::label('country', __('Country *') ) !!}
-                                                {!! Form::select('country',$country,null,['class' => 'izo-form-input', 'id'=>'country','required', 'placeholder' => __('-- Choose Country') ]) !!}
+                                                {!! Form::select('country',$country,null,['class' => ' select2 izo-form-input select_panel ', 'id'=>'country','required', 'placeholder' => __('-- Choose Country') ]) !!}
                                             </div>
                                             <div class="col-md-6">
                                                 {!! Form::label('time_zone', __('Time Zone *') ) !!}
-                                                {!! Form::select('time_zone',$timeZone,null,['class' => 'izo-form-input', 'id'=>'time_zone','required', 'placeholder' => __('-- Choose Time Zone') ]) !!}
+                                                {!! Form::select('time_zone',$timeZone,null,['class' => ' select2 izo-form-input select_panel ', 'id'=>'time_zone','required', 'placeholder' => __('-- Choose Time Zone') ]) !!}
                                             </div>
+                                            <p style="line-height:2px">&nbsp;</p>
                                             <div class="clearfix"></div>
                                             <div class="col-md-6">
                                                 {!! Form::label('currency', __('Currency *') ) !!}
-                                                {!! Form::select('currency',$currency,null,['class' => 'izo-form-input', 'id'=>'currency','required', 'placeholder' => __('-- Choose Currency') ]) !!}
+                                                {!! Form::select('currency',$currency,null,['class' => ' select2 izo-form-input select_panel ', 'id'=>'currency','required', 'placeholder' => __('-- Choose Currency') ]) !!}
                                             </div>
                                             <div class="col-md-6">
                                                 {!! Form::label('language', __('Language *') ) !!}
-                                                {!! Form::select('language',$language,null,['class' => 'izo-form-input', 'id'=>'language','required', 'placeholder' => __('-- Choose Language') ]) !!}
+                                                {!! Form::select('language',$language,null,['class' => ' select2 izo-form-input select_panel ', 'id'=>'language','required', 'placeholder' => __('-- Choose Language') ]) !!}
                                             </div>
+                                            <p style="line-height:2px">&nbsp;</p>
                                             <div class="clearfix"></div>
                                             <div class="col-md-6">
                                                 {!! Form::label('address', __('Address') ) !!}
@@ -3816,274 +3921,281 @@
                     <h6 class="text-center">Powered By AGT All Right Reserved &copy; izocloud 2024</h6>  
                 </div>
             </div>
-        
-            <script type="text/javascript">
-                   
-                    function next(){
-                        var id = $('#current_active').attr('value');
-                        
-                        var i  = 0 ;
-                        var first_name   = $('#first_name').val();
-                        var second_name  = $('#second_name').val();
-                        var job          = $('#job').val();
-                        var company_size = $('#company_size').val();
-                        var country      = $('#country').val();
-                        var time_zone    = $('#time_zone').val();
-                        var currency     = $('#currency').val();
-                        var language     = $('#language').val();
-                        var zip_code     = $('#zip_code').val();
-                        var tax_number   = $('#tax_number').val(); 
+            
 
-                        if(first_name == ""  || second_name == ""  || job == ""  || company_size == ""  || country == ""  || time_zone == ""  || currency == ""  || language == ""  || 
-                           first_name == null  || second_name == null  || job == null  || company_size == null  || country == null  || time_zone == null  || currency == null  || language == null    ){
-                            i = 1;
-                        }
-                        if( i == 1){
-                            if($('#first_name').val() == "" || $('#first_name').val()  == null){$('#first_name').addClass('active_input_focus');}else{$('#first_name').removeClass('active_input_focus')}
-                            if($('#second_name').val() == "" || $('#second_name').val()  == null){$('#second_name').addClass('active_input_focus');}else{$('#second_name').removeClass('active_input_focus')}
-                            if($('#job').val() == "" || $('#job').val()  == null){$('#job').addClass('active_input_focus');}else{$('#job').removeClass('active_input_focus')}
-                            if($('#company_size').val() == "" || $('#company_size').val()  == null){$('#company_size').addClass('active_input_focus');}else{$('#company_size').removeClass('active_input_focus')}
-                            if($('#country').val() == "" || $('#country').val()  == null){$('#country').addClass('active_input_focus');}else{$('#country').removeClass('active_input_focus')}
-                            if($('#time_zone').val() == "" || $('#time_zone').val()  == null){$('#time_zone').addClass('active_input_focus');}else{$('#time_zone').removeClass('active_input_focus')}
-                            if($('#currency').val() == "" || $('#currency').val()  == null){$('#currency').addClass('active_input_focus');}else{$('#currency').removeClass('active_input_focus')}
-                            if($('#language').val() == "" || $('#language').val()  == null){$('#language').addClass('active_input_focus');}else{$('#language').removeClass('active_input_focus')}
-                            if($('#section').val() == "" || $('#section').val()  == null){$('#section').addClass('active_input_focus');}else{$('#section').removeClass('active_input_focus')}
-                        }else{
-                            if($('#first_name').val() == "" || $('#first_name').val()  == null){$('#first_name').addClass('active_input_focus');}else{$('#first_name').removeClass('active_input_focus')}
-                            if($('#second_name').val() == "" || $('#second_name').val()  == null){$('#second_name').addClass('active_input_focus');}else{$('#second_name').removeClass('active_input_focus')}
-                            if($('#job').val() == "" || $('#job').val()  == null){$('#job').addClass('active_input_focus');}else{$('#job').removeClass('active_input_focus')}
-                            if($('#company_size').val() == "" || $('#company_size').val()  == null){$('#company_size').addClass('active_input_focus');}else{$('#company_size').removeClass('active_input_focus')}
-                            if($('#country').val() == "" || $('#country').val()  == null){$('#country').addClass('active_input_focus');}else{$('#country').removeClass('active_input_focus')}
-                            if($('#time_zone').val() == "" || $('#time_zone').val()  == null){$('#time_zone').addClass('active_input_focus');}else{$('#time_zone').removeClass('active_input_focus')}
-                            if($('#currency').val() == "" || $('#currency').val()  == null){$('#currency').addClass('active_input_focus');}else{$('#currency').removeClass('active_input_focus')}
-                            if($('#language').val() == "" || $('#language').val()  == null){$('#language').addClass('active_input_focus');}else{$('#language').removeClass('active_input_focus')}
-                            if($('#section').val() == "" || $('#section').val()  == null){$('#section').addClass('active_input_focus');}else{$('#section').removeClass('active_input_focus')}
-                            if(parseFloat(id)+1>2){
-                                id = 1;
-                            }else{
-                                id = parseFloat(id)+1
-                            }
-                            $('#current_active').attr('value',id);
-                            viewPlatform(id);
-                        }
-                    }
-                    function prev(){
-                        id = $('#current_active').attr('value');
-                        if(parseFloat(id)-1<=0){
-                            id = 1;
-                        }else{
-                            id = parseFloat(id)-1
-                        }
-                        $('#current_active').attr('value',id);
-                        viewPlatform(id);
-                    }
-                    function  viewPlatform(id){
-                        var i  = 0 ;
-                        var first_name   = $('#first_name').val();
-                        var second_name  = $('#second_name').val();
-                        var job          = $('#job').val();
-                        var company_size = $('#company_size').val();
-                        var country      = $('#country').val();
-                        var time_zone    = $('#time_zone').val();
-                        var currency     = $('#currency').val();
-                        var language     = $('#language').val();
-                        var zip_code     = $('#zip_code').val();
-                        var tax_number   = $('#tax_number').val(); 
+           
+        </body> 
+    {{-- @endif --}}
+@endsection
+@section('javascript')
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $(".select2").select2();
+            });
+     
+            function next(){
+                var id = $('#current_active').attr('value');
+                
+                var i  = 0 ;
+                var first_name   = $('#first_name').val();
+                var second_name  = $('#second_name').val();
+                var job          = $('#job').val();
+                var company_size = $('#company_size').val();
+                var country      = $('#country').val();
+                var time_zone    = $('#time_zone').val();
+                var currency     = $('#currency').val();
+                var language     = $('#language').val();
+                var zip_code     = $('#zip_code').val();
+                var tax_number   = $('#tax_number').val(); 
 
-                        if(first_name == ""  || second_name == ""  || job == ""  || company_size == ""  || country == ""  || time_zone == ""  || currency == ""  || language == ""  || 
-                           first_name == null  || second_name == null  || job == null  || company_size == null  || country == null  || time_zone == null  || currency == null  || language == null     ){
-                            i = 1;
+                if(first_name == ""  || second_name == ""  || job == ""  || company_size == ""  || country == ""  || time_zone == ""  || currency == ""  || language == ""  || 
+                   first_name == null  || second_name == null  || job == null  || company_size == null  || country == null  || time_zone == null  || currency == null  || language == null    ){
+                    i = 1;
+                }
+                if( i == 1){
+                    if($('#first_name').val() == "" || $('#first_name').val()  == null){$('#first_name').addClass('active_input_focus');}else{$('#first_name').removeClass('active_input_focus')}
+                    if($('#second_name').val() == "" || $('#second_name').val()  == null){$('#second_name').addClass('active_input_focus');}else{$('#second_name').removeClass('active_input_focus')}
+                    if($('#job').val() == "" || $('#job').val()  == null){$('#job').addClass('active_input_focus');}else{$('#job').removeClass('active_input_focus')}
+                    if($('#company_size').val() == "" || $('#company_size').val()  == null){$('#company_size').addClass('active_input_focus');}else{$('#company_size').removeClass('active_input_focus')}
+                    if($('#country').val() == "" || $('#country').val()  == null){$('#country').addClass('active_input_focus');}else{$('#country').removeClass('active_input_focus')}
+                    if($('#time_zone').val() == "" || $('#time_zone').val()  == null){$('#time_zone').addClass('active_input_focus');}else{$('#time_zone').removeClass('active_input_focus')}
+                    if($('#currency').val() == "" || $('#currency').val()  == null){$('#currency').addClass('active_input_focus');}else{$('#currency').removeClass('active_input_focus')}
+                    if($('#language').val() == "" || $('#language').val()  == null){$('#language').addClass('active_input_focus');}else{$('#language').removeClass('active_input_focus')}
+                    if($('#section').val() == "" || $('#section').val()  == null){$('#section').addClass('active_input_focus');}else{$('#section').removeClass('active_input_focus')}
+                }else{
+                    if($('#first_name').val() == "" || $('#first_name').val()  == null){$('#first_name').addClass('active_input_focus');}else{$('#first_name').removeClass('active_input_focus')}
+                    if($('#second_name').val() == "" || $('#second_name').val()  == null){$('#second_name').addClass('active_input_focus');}else{$('#second_name').removeClass('active_input_focus')}
+                    if($('#job').val() == "" || $('#job').val()  == null){$('#job').addClass('active_input_focus');}else{$('#job').removeClass('active_input_focus')}
+                    if($('#company_size').val() == "" || $('#company_size').val()  == null){$('#company_size').addClass('active_input_focus');}else{$('#company_size').removeClass('active_input_focus')}
+                    if($('#country').val() == "" || $('#country').val()  == null){$('#country').addClass('active_input_focus');}else{$('#country').removeClass('active_input_focus')}
+                    if($('#time_zone').val() == "" || $('#time_zone').val()  == null){$('#time_zone').addClass('active_input_focus');}else{$('#time_zone').removeClass('active_input_focus')}
+                    if($('#currency').val() == "" || $('#currency').val()  == null){$('#currency').addClass('active_input_focus');}else{$('#currency').removeClass('active_input_focus')}
+                    if($('#language').val() == "" || $('#language').val()  == null){$('#language').addClass('active_input_focus');}else{$('#language').removeClass('active_input_focus')}
+                    if($('#section').val() == "" || $('#section').val()  == null){$('#section').addClass('active_input_focus');}else{$('#section').removeClass('active_input_focus')}
+                    if(parseFloat(id)+1>2){
+                        id = 1;
+                    }else{
+                        id = parseFloat(id)+1
+                    }
+                    $('#current_active').attr('value',id);
+                    viewPlatform(id);
+                }
+            }
+            function prev(){
+                id = $('#current_active').attr('value');
+                if(parseFloat(id)-1<=0){
+                    id = 1;
+                }else{
+                    id = parseFloat(id)-1
+                }
+                $('#current_active').attr('value',id);
+                viewPlatform(id);
+            }
+            function  viewPlatform(id){
+                var i  = 0 ;
+                var first_name   = $('#first_name').val();
+                var second_name  = $('#second_name').val();
+                var job          = $('#job').val();
+                var company_size = $('#company_size').val();
+                var country      = $('#country').val();
+                var time_zone    = $('#time_zone').val();
+                var currency     = $('#currency').val();
+                var language     = $('#language').val();
+                var zip_code     = $('#zip_code').val();
+                var tax_number   = $('#tax_number').val(); 
+
+                if(first_name == ""  || second_name == ""  || job == ""  || company_size == ""  || country == ""  || time_zone == ""  || currency == ""  || language == ""  || 
+                   first_name == null  || second_name == null  || job == null  || company_size == null  || country == null  || time_zone == null  || currency == null  || language == null     ){
+                    i = 1;
+                }
+                if( i == 1){ 
+                    if($('#first_name').val() == "" || $('#first_name').val()  == null){$('#first_name').addClass('active_input_focus');}else{$('#first_name').removeClass('active_input_focus')}
+                    if($('#second_name').val() == "" || $('#second_name').val()  == null){$('#second_name').addClass('active_input_focus');}else{$('#second_name').removeClass('active_input_focus')}
+                    if($('#job').val() == "" || $('#job').val()  == null){$('#job').addClass('active_input_focus');}else{$('#job').removeClass('active_input_focus')}
+                    if($('#company_size').val() == "" || $('#company_size').val()  == null){$('#company_size').addClass('active_input_focus');}else{$('#company_size').removeClass('active_input_focus')}
+                    if($('#country').val() == "" || $('#country').val()  == null){$('#country').addClass('active_input_focus');}else{$('#country').removeClass('active_input_focus')}
+                    if($('#time_zone').val() == "" || $('#time_zone').val()  == null){$('#time_zone').addClass('active_input_focus');}else{$('#time_zone').removeClass('active_input_focus')}
+                    if($('#currency').val() == "" || $('#currency').val()  == null){$('#currency').addClass('active_input_focus');}else{$('#currency').removeClass('active_input_focus')}
+                    if($('#language').val() == "" || $('#language').val()  == null){$('#language').addClass('active_input_focus');}else{$('#language').removeClass('active_input_focus')}
+                    if($('#section').val() == "" || $('#section').val()  == null){$('#section').addClass('active_input_focus');}else{$('#section').removeClass('active_input_focus')}
+                  }else{
+                    if($('#first_name').val() == "" || $('#first_name').val()  == null){$('#first_name').addClass('active_input_focus');}else{$('#first_name').removeClass('active_input_focus')}
+                    if($('#second_name').val() == "" || $('#second_name').val()  == null){$('#second_name').addClass('active_input_focus');}else{$('#second_name').removeClass('active_input_focus')}
+                    if($('#job').val() == "" || $('#job').val()  == null){$('#job').addClass('active_input_focus');}else{$('#job').removeClass('active_input_focus')}
+                    if($('#company_size').val() == "" || $('#company_size').val()  == null){$('#company_size').addClass('active_input_focus');}else{$('#company_size').removeClass('active_input_focus')}
+                    if($('#country').val() == "" || $('#country').val()  == null){$('#country').addClass('active_input_focus');}else{$('#country').removeClass('active_input_focus')}
+                    if($('#time_zone').val() == "" || $('#time_zone').val()  == null){$('#time_zone').addClass('active_input_focus');}else{$('#time_zone').removeClass('active_input_focus')}
+                    if($('#currency').val() == "" || $('#currency').val()  == null){$('#currency').addClass('active_input_focus');}else{$('#currency').removeClass('active_input_focus')}
+                    if($('#language').val() == "" || $('#language').val()  == null){$('#language').addClass('active_input_focus');}else{$('#language').removeClass('active_input_focus')}
+                    if($('#section').val() == "" || $('#section').val()  == null){$('#section').addClass('active_input_focus');}else{$('#section').removeClass('active_input_focus')}
+                    var id_finish = ($(".type_of_job").hasClass("hide"))?1:2;
+                    if(id == id_finish){
+                        $('.finish').removeClass('hide');
+                        $('.next').addClass('hide');
+                    }else{
+                        $('.next').removeClass('hide');
+                        $('.finish').addClass('hide');
+                    }
+                    $('.current_active').attr('value',id);
+                    $('.btn_platform').each(function(){
+                        if($(this).attr("data-id") == id){
+                            $(this).addClass('active_div');
+                        }else{    
+                            $(this).removeClass('active_div');
                         }
-                        if( i == 1){ 
-                            if($('#first_name').val() == "" || $('#first_name').val()  == null){$('#first_name').addClass('active_input_focus');}else{$('#first_name').removeClass('active_input_focus')}
-                            if($('#second_name').val() == "" || $('#second_name').val()  == null){$('#second_name').addClass('active_input_focus');}else{$('#second_name').removeClass('active_input_focus')}
-                            if($('#job').val() == "" || $('#job').val()  == null){$('#job').addClass('active_input_focus');}else{$('#job').removeClass('active_input_focus')}
-                            if($('#company_size').val() == "" || $('#company_size').val()  == null){$('#company_size').addClass('active_input_focus');}else{$('#company_size').removeClass('active_input_focus')}
-                            if($('#country').val() == "" || $('#country').val()  == null){$('#country').addClass('active_input_focus');}else{$('#country').removeClass('active_input_focus')}
-                            if($('#time_zone').val() == "" || $('#time_zone').val()  == null){$('#time_zone').addClass('active_input_focus');}else{$('#time_zone').removeClass('active_input_focus')}
-                            if($('#currency').val() == "" || $('#currency').val()  == null){$('#currency').addClass('active_input_focus');}else{$('#currency').removeClass('active_input_focus')}
-                            if($('#language').val() == "" || $('#language').val()  == null){$('#language').addClass('active_input_focus');}else{$('#language').removeClass('active_input_focus')}
-                            if($('#section').val() == "" || $('#section').val()  == null){$('#section').addClass('active_input_focus');}else{$('#section').removeClass('active_input_focus')}
-                          }else{
-                            if($('#first_name').val() == "" || $('#first_name').val()  == null){$('#first_name').addClass('active_input_focus');}else{$('#first_name').removeClass('active_input_focus')}
-                            if($('#second_name').val() == "" || $('#second_name').val()  == null){$('#second_name').addClass('active_input_focus');}else{$('#second_name').removeClass('active_input_focus')}
-                            if($('#job').val() == "" || $('#job').val()  == null){$('#job').addClass('active_input_focus');}else{$('#job').removeClass('active_input_focus')}
-                            if($('#company_size').val() == "" || $('#company_size').val()  == null){$('#company_size').addClass('active_input_focus');}else{$('#company_size').removeClass('active_input_focus')}
-                            if($('#country').val() == "" || $('#country').val()  == null){$('#country').addClass('active_input_focus');}else{$('#country').removeClass('active_input_focus')}
-                            if($('#time_zone').val() == "" || $('#time_zone').val()  == null){$('#time_zone').addClass('active_input_focus');}else{$('#time_zone').removeClass('active_input_focus')}
-                            if($('#currency').val() == "" || $('#currency').val()  == null){$('#currency').addClass('active_input_focus');}else{$('#currency').removeClass('active_input_focus')}
-                            if($('#language').val() == "" || $('#language').val()  == null){$('#language').addClass('active_input_focus');}else{$('#language').removeClass('active_input_focus')}
-                            if($('#section').val() == "" || $('#section').val()  == null){$('#section').addClass('active_input_focus');}else{$('#section').removeClass('active_input_focus')}
-                            var id_finish = ($(".type_of_job").hasClass("hide"))?1:2;
-                            if(id == id_finish){
-                                $('.finish').removeClass('hide');
-                                $('.next').addClass('hide');
-                            }else{
-                                $('.next').removeClass('hide');
-                                $('.finish').addClass('hide');
-                            }
-                            $('.current_active').attr('value',id);
-                            $('.btn_platform').each(function(){
-                                if($(this).attr("data-id") == id){
-                                    $(this).addClass('active_div');
-                                }else{    
-                                    $(this).removeClass('active_div');
-                                }
-                            });
-                            $('.plartform').each(function(){
-                                if(id == 1){
-                                    type = $(".type_of_job").attr("data-type");
-                                    $(".sections").each(function(){
-                                        if($(this).attr("data-type") == type){
-                                            $(this).removeClass('hide');
-                                        }else{    
-                                            $(this).addClass('hide');
-                                        }
-                                    });
-                                }
-                                if($(this).attr("data-id") == id){
+                    });
+                    $('.plartform').each(function(){
+                        if(id == 1){
+                            type = $(".type_of_job").attr("data-type");
+                            $(".sections").each(function(){
+                                if($(this).attr("data-type") == type){
                                     $(this).removeClass('hide');
                                 }else{    
                                     $(this).addClass('hide');
                                 }
                             });
                         }
-                    }
-                setTimeout(() => {
-                    // .............................................. platform
-                    $(".type_business").on("change",function(){
-                        if($(this).is(":checked")){ 
-                            $(".type_of_job").removeClass("hide");
-                            $(".type_of_job").attr("data-type",$(this).val());
-                            $('.next').removeClass('hide');
-                            $('.finish').addClass('hide');
-                            $(".box_sections").each(function(){
-                                $(this).removeClass('active_div');
-                                $("#box_section_value").attr("value",-1);
-                            })
+                        if($(this).attr("data-id") == id){
+                            $(this).removeClass('hide');
+                        }else{    
+                            $(this).addClass('hide');
                         }
-                    })
-                    $("#select_lang").on("change",function(){ 
-                        var ln  = $(this).val(); 
-                        $.ajax({
-                            url: '/home/change-lang-app',
-                            dataType: 'json',
-                            data:{
-                                lang:ln
-                            },
-                            success: function(result) {
-                                 location.reload();
-                            },
-                        });
-                    })
-                    $("#type_business").on("change",function(){ 
-                        var type  = $(this).val(); 
-                        list      = JSON.parse($("#list_section").val());
-                        html      = '<option value=""> -- Choose Type Of Business</option>';
-                        for( i in list){
-                            if(type == i){
-                                for( ie in list[i]) {
-                                    html += '<option value="'+ie+'">'+list[i][ie]+'</option>'; 
-                                }
-                            }  
-                        }
-                        if(html == ''){
-                            html      = '<option value=""> -- Choose Type Of Business</option>';
-                        }     
-                        $("#section").html(html); 
-                         
-                        
-                    })
-                    $(document).on('click','.language_box',function(){
-                        $(".list_of_lang").toggleClass('hide');
                     });
+                }
+            }
+        setTimeout(() => {
+            // .............................................. platform
+            $(".type_business").on("change",function(){
+                if($(this).is(":checked")){ 
+                    $(".type_of_job").removeClass("hide");
+                    $(".type_of_job").attr("data-type",$(this).val());
+                    $('.next').removeClass('hide');
+                    $('.finish').addClass('hide');
                     $(".box_sections").each(function(){
-                        $(this).on("click",function(){
-                            id  = $(this).attr("data-type");
-                            sec = $(this).attr("data-section");
-                            $(".box_sections").each(function(){
-                                if(id == $(this).attr("data-type") && $(this).attr("data-section") != sec ){
-                                    console.log("id" + $(this).attr("data-type"));
-                                    console.log("sec"+ $(this).attr("data-section"));
-                                    $(this).removeClass('active_div');
-                                }else if(id != $(this).attr("data-type")){
-                                    $(this).removeClass('active_div');
-                                }else{
-                                    $(this).addClass('active_div');
-                                }
-                            })
-                            var type    = $(this).attr("data-type");
-                            var section = $(this).attr("data-section");
-                            var type_section = type+section;
-                            $("#box_section_value").attr("value",type_section);
-                        })
+                        $(this).removeClass('active_div');
+                        $("#box_section_value").attr("value",-1);
                     })
-                    // .............................................. media
-                    applyFunctionBasedOnWidth();
-                    function applyFunctionBasedOnWidth() {
-                        var width = $(window).width();
-                        if (width <= 1024 ) {  // Replace with your specific width range 
-                            $(".leftChild").hover(
-                                function() { 
-                                    // $(this).parent().css({"background-color":"red"})
-                                    $(this).css({"width":"100%","left":"0%"})
-                                }, 
-                                function() { 
-                                    $(this).css({"width":"100%","left":"-100%"})
-                                }
-                            );
-                        } else  {
-                            console.log("Width is outside the specified range.");
+                }
+            })
+            $("#select_lang").on("change",function(){ 
+                var ln  = $(this).val(); 
+                $.ajax({
+                    url: '/home/change-lang-app',
+                    dataType: 'json',
+                    data:{
+                        lang:ln
+                    },
+                    success: function(result) {
+                         location.reload();
+                    },
+                });
+            })
+            $("#type_business").on("change",function(){ 
+                var type  = $(this).val(); 
+                list      = JSON.parse($("#list_section").val());
+                html      = '<option value=""> -- Choose Type Of Business</option>';
+                for( i in list){
+                    if(type == i){
+                        for( ie in list[i]) {
+                            html += '<option value="'+ie+'">'+list[i][ie]+'</option>'; 
                         }
-                    }
-                    $(window).resize(function() {
-                        applyFunctionBasedOnWidth();
-                    });
-                }, 200);
-                // ..................
-                setInterval(() => { 
-                    id = $('#side').val();
-                    id = ((parseFloat(id)+1)>2)?1:(parseFloat(id) +1); 
-                    
-                    slide(id);
-                    $('#side').attr("value",id); 
-                    id1 = $('#side').val();
-                }, 3000);
-                function slide(id){
-                    $(".mySlides").each(function(){
-                        data_id    = $(this).attr('data-id'); 
-                            if(data_id == id){
-                                $(this).removeClass("hide");
-                            }else{
-                                $(this).addClass("hide");
-                            }
-                        });  
-                        if(id == 1){
-                            id = 2;
-                        }else  if(id == 2){
-                            id = 3;
-                        }else if(id == 3){
-                            id = 1;
+                    }  
+                }
+                if(html == ''){
+                    html      = '<option value=""> -- Choose Type Of Business</option>';
+                }     
+                $("#section").html(html); 
+                 
+                
+            })
+            $(document).on('click','.language_box',function(){
+                $(".list_of_lang").toggleClass('hide');
+            });
+            $(".box_sections").each(function(){
+                $(this).on("click",function(){
+                    id  = $(this).attr("data-type");
+                    sec = $(this).attr("data-section");
+                    $(".box_sections").each(function(){
+                        if(id == $(this).attr("data-type") && $(this).attr("data-section") != sec ){
+                            console.log("id" + $(this).attr("data-type"));
+                            console.log("sec"+ $(this).attr("data-section"));
+                            $(this).removeClass('active_div');
+                        }else if(id != $(this).attr("data-type")){
+                            $(this).removeClass('active_div');
+                        }else{
+                            $(this).addClass('active_div');
                         }
+                    })
+                    var type    = $(this).attr("data-type");
+                    var section = $(this).attr("data-section");
+                    var type_section = type+section;
+                    $("#box_section_value").attr("value",type_section);
+                })
+            })
+            // .............................................. media
+            applyFunctionBasedOnWidth();
+            function applyFunctionBasedOnWidth() {
+                var width = $(window).width();
+                if (width <= 1024 ) {  // Replace with your specific width range 
+                    $(".leftChild").hover(
+                        function() { 
+                            // $(this).parent().css({"background-color":"red"})
+                            $(this).css({"width":"100%","left":"0%"})
+                        }, 
+                        function() { 
+                            $(this).css({"width":"100%","left":"-100%"})
+                        }
+                    );
+                } else  {
+                    console.log("Width is outside the specified range.");
+                }
+            }
+            $(window).resize(function() {
+                applyFunctionBasedOnWidth();
+            });
+        }, 200);
+        // ..................
+        setInterval(() => { 
+            id = $('#side').val();
+            id = ((parseFloat(id)+1)>2)?1:(parseFloat(id) +1); 
+            
+            slide(id);
+            $('#side').attr("value",id); 
+            id1 = $('#side').val();
+        }, 3000);
+        function slide(id){
+            $(".mySlides").each(function(){
+                data_id    = $(this).attr('data-id'); 
+                    if(data_id == id){
+                        $(this).removeClass("hide");
+                    }else{
+                        $(this).addClass("hide");
                     }
-            </script>
-            <script src="{{ asset('/sw.js') }}"></script>
-            <script>
-               if ("serviceWorker" in navigator) {
-                  // Register a service worker hosted at the root of the
-                  // site using the default scope.
-                  navigator.serviceWorker.register("/sw.js").then(
-                  (registration) => {
-                     console.log("Service worker registration succeeded:", registration);
-                  },
-                  (error) => {
-                     console.error(`Service worker registration failed: ${error}`);
-                  },
-                );
-              } else {
-                 console.error("Service workers are not supported.");
-              }
-            </script>
-        </body> 
-    {{-- @endif --}}
+                });  
+                if(id == 1){
+                    id = 2;
+                }else  if(id == 2){
+                    id = 3;
+                }else if(id == 3){
+                    id = 1;
+                }
+            }
+        </script>
+        <script src="{{ asset('/sw.js') }}"></script>
+        <script>
+        if ("serviceWorker" in navigator) {
+            // Register a service worker hosted at the root of the
+            // site using the default scope.
+            navigator.serviceWorker.register("/sw.js").then(
+            (registration) => {
+                console.log("Service worker registration succeeded:", registration);
+            },
+            (error) => {
+                console.error(`Service worker registration failed: ${error}`);
+            },
+            );
+        } else {
+            console.error("Service workers are not supported.");
+        }
+        </script>
 @endsection

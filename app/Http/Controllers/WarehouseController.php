@@ -98,7 +98,7 @@ class WarehouseController extends Controller
      */
     public function index() 
     {
-        if (!auth()->user()->can('warehouse.view') && !auth()->user()->can('SalesMan.views') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_supervisor.views') ) {
+        if (!auth()->user()->can('warehouse.view') && !auth()->user()->can('warehouse.create')) {
             abort(403, 'Unauthorized action.');
         }
         $Warehouse_list       = []; 
@@ -136,7 +136,7 @@ class WarehouseController extends Controller
      */
     public function allStores()
     {
-        if (!auth()->user()->can('allStores')  && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('manufuctoring.views') && !auth()->user()->can('admin_supervisor.views') ) {
+        if (!auth()->user()->can('warehouse.views') ) {
             abort(403, 'Unauthorized action.');
         }
         $name          = request()->input("name");
@@ -147,10 +147,10 @@ class WarehouseController extends Controller
         if($type != null) { $value = $type  - 1; $warehouses->where("status",$value); } 
         $warehouses->get();
         return Datatables::of($warehouses)->addColumn(
-                    'action', '@can("warehouse.Edit")
+                    'action', '@can("warehouse.update")
                         <a href="{{URL::to(\'/warehouse/edit\',[$id])}}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</a>
-                        &nbsp; @endcan  @if(request()->session()->get("user.id") == 1)
-                        <button data-href="{{action(\'WarehouseController@delete\', [$id])}}" class="btn btn-xs btn-danger delete_user_button"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</button> @endif'
+                        &nbsp; @endcan  @can("warehouse.delete")
+                        <button data-href="{{action(\'WarehouseController@delete\', [$id])}}" class="btn btn-xs btn-danger delete_user_button"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</button> @endcan'
                 )->editColumn("name",function($row){
                     return "<a href='".\URL::to("warehouse/index?warehouse_id=".$row->id)."'>".$row->name."</a>";
                 })
@@ -165,7 +165,7 @@ class WarehouseController extends Controller
      */
     public function allMovement(Request $request)
     {
-        if (!auth()->user()->can('warehouse.create') && !auth()->user()->can('admin_without.views') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_supervisor.views') ) {
+        if (!auth()->user()->can('warehouse.movement') ) {
             abort(403, 'Unauthorized action.');
         }
         
@@ -262,7 +262,7 @@ class WarehouseController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->can('warehouse.create') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('warehouse.create') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -288,7 +288,7 @@ class WarehouseController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->can('warehouse.create')  && !auth()->user()->can('warehouse.Edit')) {
+        if (!auth()->user()->can('warehouse.update')) {
             abort(403, 'Unauthorized action.');
         }
         $data                    =  Warehouse::find($id);
@@ -323,7 +323,7 @@ class WarehouseController extends Controller
     public function store(Request $request)
     { 
 
-        if (!auth()->user()->can('warehouse.create') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_supervisor.views') ) {
+        if (!auth()->user()->can('warehouse.create')   ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -375,7 +375,7 @@ class WarehouseController extends Controller
     public function update_id(Request $request,$id)
     {
         
-        if (!auth()->user()->can('warehouse.create')   && !auth()->user()->can('warehouse.Edit')) {
+        if (!auth()->user()->can('warehouse.update') ) {
             abort(403, 'Unauthorized action.');
         }
         try{
@@ -413,7 +413,7 @@ class WarehouseController extends Controller
     public function update(Request $request,$id)
     {
         
-        if (!auth()->user()->can('warehouse.create')   && !auth()->user()->can('warehouse.Edit')) {
+        if (!auth()->user()->can('warehouse.update')  ) {
             abort(403, 'Unauthorized action.');
         }
         try{
@@ -452,7 +452,7 @@ class WarehouseController extends Controller
     public function delete($id)
     {
          
-        if (!auth()->user()->can('purchase.delete')  && !auth()->user()->can('warehouse.Delete')) {
+        if (!auth()->user()->can('warehouse.delete')) {
             abort(403, 'Unauthorized action.');
         }
         $business_id        = request()->session()->get('user.business_id');

@@ -25,7 +25,7 @@ class WarrantyController extends Controller
             return Datatables::of($warranties)
                 ->addColumn(
                     'action',
-                    '<button data-href="{{action(\'WarrantyController@edit\', [$id])}}" class="btn btn-xs btn-primary btn-modal" data-container=".view_modal"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>'
+                    '@can("warranties.update")<button data-href="{{action(\'WarrantyController@edit\', [$id])}}" class="btn btn-xs btn-primary btn-modal" data-container=".view_modal"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>@endcan'
                  )
                  ->removeColumn('id')
                  ->editColumn('duration', function ($row) {

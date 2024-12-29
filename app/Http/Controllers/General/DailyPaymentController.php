@@ -20,7 +20,9 @@ class DailyPaymentController extends Controller
     }
     public function index(Request $request)
     {
-        
+        if (!auth()->user()->can('daily_payment.view') && !auth()->user()->can('daily_payment.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $accounts    =  Account::items();
         $business_id = request()->session()->get('user.business_id');
         $allData     =  DailyPayment::OrderBy('id','desc')->where('business_id',$business_id)
@@ -42,6 +44,9 @@ class DailyPaymentController extends Controller
     }
     public function add()
     {
+        if (!auth()->user()->can('daily_payment.create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $accounts           =  Account::items();
         $costs              =  Account::cost_centers();
         $currency           =  \App\Models\ExchangeRate::where("source","!=",1)->get();
@@ -58,6 +63,9 @@ class DailyPaymentController extends Controller
     } 
     public function post_add(Request $request)
     {
+        if (!auth()->user()->can('daily_payment.create')) {
+            abort(403, 'Unauthorized action.');
+        }
        \DB::beginTransaction();
        $request->validate([ 'image.mimes'=>'png,jpeg,png,jpeg,pdf' ]);
        $business_id      = request()->session()->get('user.business_id');
@@ -70,7 +78,6 @@ class DailyPaymentController extends Controller
            $referencesNewStyle = str_replace('/', '-', $ref_no); 
            foreach ($request->file('document_expense') as $file) {
                 #................
-                
                 if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
                     if ($file->getSize() <= config('constants.document_size_limit')){ 
                         $file_name    =   time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
@@ -97,13 +104,10 @@ class DailyPaymentController extends Controller
                         if ($imgs->save($public_path ."/" . $new_file_name)) {
                             $uploaded_file_name = $new_file_name;
                         }
-                         
                     }
                 }
                 #................
                 array_push($document_expense,$source_file_name);
-
-              
            }
        }
        # .................................................
@@ -170,6 +174,9 @@ class DailyPaymentController extends Controller
     }
     public function edit($id)
     {
+        if (!auth()->user()->can('daily_payment.update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $accounts           =  Account::items();
         $data               =  DailyPayment::find($id);
         $amount             =  $data->items->sum('credit');
@@ -190,7 +197,9 @@ class DailyPaymentController extends Controller
     } 
     public function post_edit(Request $request,$id)
     {
-       
+        if (!auth()->user()->can('daily_payment.update')) {
+            abort(403, 'Unauthorized action.');
+        }
         \DB::beginTransaction();
         $business_id  =  request()->session()->get('user.business_id');
         $data         =  DailyPayment::find($id) ;
@@ -351,6 +360,9 @@ class DailyPaymentController extends Controller
     }
     public function delete($id)
     {
+        if (!auth()->user()->can('daily_payment.delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         foreach (DailyPaymentItem::where('daily_payment_id',$id)->get() as $item) {
             $accountTransactions = \App\AccountTransaction::where('daily_payment_item_id',$item->id)->get();
             foreach($accountTransactions as $o){
@@ -373,6 +385,9 @@ class DailyPaymentController extends Controller
 
     public function show($id)
     {           
+        if (!auth()->user()->can('daily_payment.view')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data =  DailyPayment::find($id) ;
         return view('daily_payments.show')
                 ->with('data',$data);
@@ -383,6 +398,7 @@ class DailyPaymentController extends Controller
         $data        = DailyPayment::find($id);
         return view("daily_payments.attach")->with(compact("data"));
     }
+    
     public function entry($id)
     {
         $ids     =  [];

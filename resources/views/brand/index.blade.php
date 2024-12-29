@@ -25,7 +25,7 @@
                     </div>
                 @endslot
             @endcan
-            @can('brand.view')
+        
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped dataTable" id="brands_table">
                         <thead>
@@ -38,46 +38,7 @@
                         </thead>
                     </table>
                 </div>
-            @elsecan('warehouse.views')
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped" id="brands_table">
-                        <thead>
-                            <tr>
-                                <th>@lang( 'brand.brands' )</th>
-                                <th>@lang( 'brand.note' )</th>
-                                <th>@lang( 'messages.action' )</th>
-
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            @elsecan('manufuctoring.views')
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped" id="brands_table">
-                        <thead>
-                            <tr>
-                                <th>@lang( 'brand.brands' )</th>
-                                <th>@lang( 'brand.note' )</th>
-                                <th>@lang( 'messages.action' )</th>
-
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            @elsecan('admin_supervisor.views')
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped" id="brands_table">
-                        <thead>
-                            <tr>
-                                <th>@lang( 'brand.brands' )</th>
-                                <th>@lang( 'brand.note' )</th>
-                                <th>@lang( 'messages.action' )</th>
-
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            @endcan
+             
         @endcomponent 
 
     <div class="modal fade brands_modal" tabindex="-1" role="dialog" 

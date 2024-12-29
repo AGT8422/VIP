@@ -5,4 +5,4 @@
 | Web Routes for website
 |--------------------------------------------------------------------------
 */
-Route::get('web/{slug}','WebsiteController@index');
+// Route::get('web/{slug}','WebsiteController@index');

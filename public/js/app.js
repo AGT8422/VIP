@@ -89,6 +89,11 @@ $(document).ready(function() {
                 searchable: false,
             },
         ],
+        columns: [ 
+            { data: 'name', name: 'name' },
+            { data: 'description', name: 'description' },
+            { data: 'action', name: 'action' },
+        ],
     });
 
     $(document).on('click', 'button.edit_brand_button', function() {

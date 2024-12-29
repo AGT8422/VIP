@@ -152,7 +152,14 @@ class ContactController extends Controller
                                         ' . __("lang_v1.ledger") . '
                                     </a>
                                 </li>';
-
+                        /**
+                         *  <li>
+                         *       <a href="' . action('ContactController@show', [$row->id]) . '?view=stock_report">
+                         *           <i class="fas fa-hourglass-half" aria-hidden="true"></i>
+                         *          ' . __("report.stock_report") . '
+                         *      </a>
+                         *   </li>
+                         */
                         if (in_array($row->type, ["both", "supplier"])) {
                             $html .= '<li>
                                 <a href="' . action('ContactController@show', [$row->id]) . '?view=purchase">
@@ -160,12 +167,7 @@ class ContactController extends Controller
                                     ' . __("purchase.purchases") . '
                                 </a>
                             </li>
-                            <li>
-                                <a href="' . action('ContactController@show', [$row->id]) . '?view=stock_report">
-                                    <i class="fas fa-hourglass-half" aria-hidden="true"></i>
-                                    ' . __("report.stock_report") . '
-                                </a>
-                            </li>';
+                            ';
                         }
 
                         if (in_array($row->type, ["both", "customer"])) {
@@ -305,7 +307,12 @@ class ContactController extends Controller
                                         ' . __("lang_v1.ledger") . '
                                     </a>
                                 </li>';
-
+                            // <li>
+                            //     <a href="' . action('ContactController@show', [$row->id]) . '?view=stock_report">
+                            //         <i class="fas fa-hourglass-half" aria-hidden="true"></i>
+                            //         ' . __("report.stock_report") . '
+                            //     </a>
+                            // </li>
                         if (in_array($row->type, ["both", "supplier"])) {
                             $html .= '<li>
                                 <a href="' . action('ContactController@show', [$row->id]) . '?view=purchase">
@@ -313,12 +320,7 @@ class ContactController extends Controller
                                     ' . __("purchase.purchases") . '
                                 </a>
                             </li>
-                            <li>
-                                <a href="' . action('ContactController@show', [$row->id]) . '?view=stock_report">
-                                    <i class="fas fa-hourglass-half" aria-hidden="true"></i>
-                                    ' . __("report.stock_report") . '
-                                </a>
-                            </li>';
+                            ';
                         }
 
                         if (in_array($row->type, ["both", "customer"])) {

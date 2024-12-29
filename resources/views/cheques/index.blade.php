@@ -24,7 +24,7 @@
         {{ session('yes')  }}
     </div>
     @endif
-    @component('components.filters', ['title' => __('report.filters')])
+    @component('components.filters', ['title' => __('report.filters') ,'class' => 'box-primary'])
         <form action="{{ URL::to('cheque') }}" method="GET">
             <div class="col-md-3">
                 <div class="form-group">
@@ -86,9 +86,8 @@
             </div>
             
         </form>
-        
-        @endcomponent
-    @component("components.widget",["title"=>__('home.All Cheque')])
+    @endcomponent
+    @component("components.widget",["title"=>__('home.All Cheque') , 'class' => 'box-primary'])
         <div class="col-md-12">
             <table class="table table-bordered ">
                 <tbody>
@@ -156,72 +155,92 @@
                             <ul class="dropdown-menu dropdown-menu-left" role="menu">
                                 {{-- if check created --}}
                                 @if($item->status == 0 || $item->status == 4 || $item->status == 3)
-                                    {{-- view --}}
-                                    <li>
-                                        <a href="#" data-href="{{ action('General\CheckController@show', [$item->id]) }}" class="btn-modal" data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i>@lang('home.View')</a>
-                                    </li>
+                                    @can('cheque.view')    
+                                        {{-- view --}}
+                                        <li>
+                                            <a href="#" data-href="{{ action('General\CheckController@show', [$item->id]) }}" class="btn-modal" data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i>@lang('home.View')</a>
+                                        </li>
+                                    @endcan
+
                                     {{-- entry --}}
                                     <li>
                                         <a href="#" data-href="{{ URL::to('cheque/entry/'.$item->id)}}" class="btn-modal" data-container=".view_modal"><i class="fa fa-align-justify" aria-hidden="true"></i>@lang('home.Entry')</a>
                                     </li>
-                                    {{-- edit --}}
-                                    <li>
-                                        <a href="{{ URL::to('cheque/edit/'.$item->id) }}"><i class="fas fa-edit"></i>@lang('home.Edit')</a>
-                                    </li>
-                                    {{-- collect --}}
+
+                                    @can('cheque.update')
+                                        {{-- edit --}}
+                                        <li>
+                                            <a href="{{ URL::to('cheque/edit/'.$item->id) }}"><i class="fas fa-edit"></i>@lang('home.Edit')</a>
+                                        </li>
+                                    @endcan
+                                    
                                     {{-- @if($item->status == 4) --}}
-                                    <li>
-                                        <a  data-toggle="modal" data-target="#exampleModal{{ $item->id }}" class="view_payment_modal"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>@lang('home.Collect')</a>
-                                    </li>
+                                    @can('cheque.update')
+                                        {{-- collect --}}
+                                        <li>
+                                            <a  data-toggle="modal" data-target="#exampleModal{{ $item->id }}" class="view_payment_modal"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>@lang('home.Collect')</a>
+                                        </li>
+                                    @endcan
                                     {{-- @endif --}}
                                     {{-- refund --}}
                                     {{-- @if($item->status != 2 && $item->status > 2) --}}
-                                    <li>
-                                        @if($item->account_type == 0)
-                                            <a href="{{ URL::to('cheque/refund/'.$item->id.'?old=1') }}" class="view_payment_modal refund-modal"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>@lang('home.Refund')</a>
-                                        @else
-                                            <a href="{{ URL::to('cheque/refund/'.$item->id) }}" class="view_payment_modal refund-modal"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>@lang('home.Refund')</a>
-                                        @endif
-
-                                    </li>
+                                    @can('cheque.update')
+                                        <li>
+                                            @if($item->account_type == 0)
+                                                <a href="{{ URL::to('cheque/refund/'.$item->id.'?old=1') }}" class="view_payment_modal refund-modal"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>@lang('home.Refund')</a>
+                                            @else
+                                                <a href="{{ URL::to('cheque/refund/'.$item->id) }}" class="view_payment_modal refund-modal"><i class="fas fa-money-bill-alt" aria-hidden="true"></i>@lang('home.Refund')</a>
+                                            @endif
+                                            
+                                        </li>
+                                    @endcan
                                     {{-- @endif --}}
                                     {{-- delete --}}
                                     {{-- @if($item->status == 0) --}}
-                                    @if(request()->session()->get("user.id") == 1 || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8)
-                                    <li>
-                                        <a   data-toggle="modal" 
-                                        data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>@lang('home.Delete')</a>
-                                    </li>
-                                    @endif
+                                    @can('cheque.delete')
+                                        <li>
+                                            <a data-toggle="modal" 
+                                            data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>@lang('home.Delete')</a>
+                                        </li>
+                                    @endcan
                                     {{-- @endif --}}
                                 @endif
                                 
                                {{-- if check collected  --}}
                                 @if($item->status == 1)
-                                    {{-- view --}}
-                                    <li>
-                                        <a href="#" data-href="{{ action('General\CheckController@show', [$item->id]) }}" class="btn-modal" data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i>@lang('home.View')</a>
-                                    </li>
+                                
+                                    @can('cheque.view')
+                                        {{-- view --}}
+                                        <li>
+                                            <a href="#" data-href="{{ action('General\CheckController@show', [$item->id]) }}" class="btn-modal" data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i>@lang('home.View')</a>
+                                        </li>
+                                    @endcan    
                                     {{-- entry --}}
                                     <li>
                                         <a href="#" data-href="{{ URL::to('cheque/entry/'.$item->id)}}" class="btn-modal" data-container=".view_modal"><i class="fa fa-align-justify" aria-hidden="true"></i>@lang('home.Entry')</a>
                                     </li>
-                                    {{-- delete collect --}}
-                                    <li>
-                                        <a data-href="{{ URL::to('cheque/delete-collect/'.$item->id) }}" class="delete_collect"><i class="fas fa-trash"></i>@lang('home.Delete Collect')</a>
-                                    </li>
-                                    {{-- un collect --}}
-                                    <li>
-                                        <a data-href="{{ URL::to('cheque/un-collect/'.$item->id) }}" class="un_collect"><i class="fas fa-undo"></i>@lang('home.Un Collect')</a>
-                                    </li>
+                                    @can('cheque.delete')
+                                        {{-- delete collect --}}
+                                        <li>
+                                            <a data-href="{{ URL::to('cheque/delete-collect/'.$item->id) }}" class="delete_collect"><i class="fas fa-trash"></i>@lang('home.Delete Collect')</a>
+                                        </li>
+                                    @endcan
+                                    @can('cheque.update')
+                                        {{-- un collect --}}
+                                        <li>
+                                            <a data-href="{{ URL::to('cheque/un-collect/'.$item->id) }}" class="un_collect"><i class="fas fa-undo"></i>@lang('home.Un Collect')</a>
+                                        </li>
+                                    @endcan
                                 @endif
 
                                 {{-- if check refunded --}}
                                 @if($item->status == 2)
-                                    {{-- view --}}
-                                    <li>
-                                        <a href="#" data-href="{{ action('General\CheckController@show', [$item->id]) }}" class="btn-modal" data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i>@lang('home.View')</a>
-                                    </li>
+                                    @can('cheque.view')
+                                        {{-- view --}}
+                                        <li>
+                                            <a href="#" data-href="{{ action('General\CheckController@show', [$item->id]) }}" class="btn-modal" data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i>@lang('home.View')</a>
+                                        </li>
+                                    @endcan
                                     {{-- entry --}}
                                     <li>
                                         <a href="#" data-href="{{ URL::to('cheque/entry/'.$item->id)}}" class="btn-modal" data-container=".view_modal"><i class="fa fa-align-justify" aria-hidden="true"></i>@lang('home.Entry')</a>
@@ -344,7 +363,6 @@
                 </tfoot>
              </table>
         </div>
-        
     @endcomponent
     <div class="modal fade view_model" tabindex="-1" role="dialog" 
     	aria-labelledby="gridSystemModalLabel">

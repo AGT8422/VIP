@@ -34,7 +34,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        if (!auth()->user()->can('brand.view') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('admin_supervisor.views') &&!auth()->user()->can('brand.create')  ) {
+        if (!auth()->user()->can('brand.view') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -48,12 +48,12 @@ class BrandController extends Controller
                 ->addColumn(
                     'action',
                     '@can("brand.update")
-                    <button data-href="{{action(\'BrandController@edit\', [$id])}}" class="btn btn-xs btn-primary edit_brand_button"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
+                        <button data-href="{{action(\'BrandController@edit\', [$id])}}" class="btn btn-xs btn-primary edit_brand_button"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
                         &nbsp;
                     @endcan
-                    @if(request()->session()->get("user.id") == 1 ||  request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8 )
+                    @can("brand.delete")
                         <button data-href="{{action(\'BrandController@destroy\', [$id])}}" class="btn btn-xs btn-danger delete_brand_button"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</button>
-                    @endif'
+                    @endcan'
                 )
                 ->removeColumn('id')
                 ->rawColumns([2])
@@ -87,9 +87,7 @@ class BrandController extends Controller
     public function create1()
     {
 
-        // dd("stop");
-        if (!auth()->user()->can('brand.category') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('admin_supervisor.views')) {
-
+        if (!auth()->user()->can('brand.create')) {
              abort(403, 'Unauthorized action.');
         }
 
@@ -131,8 +129,8 @@ class BrandController extends Controller
     public function createSub()
     {
 
-        // dd("stop");
-        if (!auth()->user()->can('brand.category') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('admin_supervisor.views')) {
+       
+        if (!auth()->user()->can('brand.create') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -180,7 +178,7 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        if (!auth()->user()->can('brand.create') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('brand.create') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -217,7 +215,7 @@ class BrandController extends Controller
      */
     public function store_category(Request $request)
     {
-        if (!auth()->user()->can('brand.category') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('brand.category') ) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -266,10 +264,9 @@ class BrandController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->can('brand.update') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('brand.update')) {
             abort(403, 'Unauthorized action.');
         }
-
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
             $brand = Brands::where('business_id', $business_id)->find($id);
@@ -290,7 +287,7 @@ class BrandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!auth()->user()->can('brand.update') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('manufuctoring.views')&& !auth()->user()->can('admin_without.views')&& !auth()->user()->can('admin_supervisor.views')) {
+        if (!auth()->user()->can('brand.update') ) {
             abort(403, 'Unauthorized action.');
         }
 

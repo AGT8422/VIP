@@ -43,9 +43,9 @@ class ManageUserController extends Controller
             abort(403, 'Unauthorized action.');
         }
         
+        $user_id     = request()->session()->get('user.id');
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
-            $user_id     = request()->session()->get('user.id');
             
        
             $users = User::where('business_id', $business_id)->where('username',"!=","IZO")
@@ -207,14 +207,14 @@ class ManageUserController extends Controller
                     ];
                     return redirect('users')->with('status', $output) ;
                 }
-                 
-                if($TotalizoCustomer>=($izoCustomer->seats-1)){
+                if($TotalizoCustomer>($izoCustomer->seats-1)){
                     $output = [
                         'success' => 0,
-                         'msg' => __("izo.sorry_more_user")
+                        'msg' => __("izo.sorry_more_user")
                     ];
                     return redirect('users')->with('status', $output) ;
                 }
+                
                 $newIzoCustomer                = $izoCustomer->replicate();
                 // $newIzoCustomer->surname       = $request->surname;
                 $newIzoCustomer->mobile        = $request->contact_number;

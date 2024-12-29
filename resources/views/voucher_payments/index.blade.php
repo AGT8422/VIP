@@ -24,7 +24,7 @@
         {{ session('yes')  }}
     </div>
     @endif
-    @component('components.filters', ['title' => __('report.filters') , ])
+    @component('components.filters', ['title' => __('report.filters') , 'class' => 'box-primary' ])
         <form action="{{ URL::to('payment-voucher') }}" method="GET">
             <div class="col-md-2">
                 <div class="form-group">
@@ -64,9 +64,6 @@
             </div>
             
         </form>
-        
-        
-        
     @endcomponent
     @component('components.widget', ['title' => __('home.Voucher')])
     <div class="col-md-12">
@@ -175,20 +172,24 @@
                         <div class="btn-group">
                             <button type="button" class="btn btn-info dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">@lang('home.Action')<span class="caret"></span><span class="sr-only">Toggle Dropdown </span></button>
                             <ul class="dropdown-menu dropdown-menu-left" role="menu"> 
-                                <li>
-                                    <a href="#" style="text-decoration:none" data-href="{{ action('General\PaymentVoucherController@show', [$item->id]) }}" class="btn-modal"
-                                         data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i>&nbsp;&nbsp; @lang('home.View')</a>
-                                </li>
-                                <li>
-                                </li>
-                                    {{-- TODO CHECK TYPE OF VOUCHER --}}
-                                 @if($item->return_voucher == 0 || $item->return_voucher == null)
+                                @can('payment_voucher.view')
                                     <li>
-                                         @php  $types_s = ($item->account_type == 0)?(($item->contact->type == "customer")?0:1):0;  @endphp
-                                        <a style="text-decoration:none" href="{{ URL::to('payment-voucher/edit/'.$item->id.'&type='.$types_s) }}"><i class="fas fa-edit"></i>&nbsp;&nbsp;@lang('home.Edit')</a>
-                                         
+                                        <a href="#" style="text-decoration:none" data-href="{{ action('General\PaymentVoucherController@show', [$item->id]) }}" class="btn-modal"
+                                            data-container=".view_modal"><i class="fas fa-eye" aria-hidden="true"></i>&nbsp;&nbsp; @lang('home.View')</a>
                                     </li>
-                                @endif
+                                @endcan
+                                <li>
+                                </li>
+                                @can('payment_voucher.update')
+                                    {{-- TODO CHECK TYPE OF VOUCHER --}}
+                                    @if($item->return_voucher == 0 || $item->return_voucher == null)
+                                        <li>
+                                            @php  $types_s = ($item->account_type == 0)?(($item->contact->type == "customer")?0:1):0;  @endphp
+                                            <a style="text-decoration:none" href="{{ URL::to('payment-voucher/edit/'.$item->id.'&type='.$types_s) }}"><i class="fas fa-edit"></i>&nbsp;&nbsp;@lang('home.Edit')</a>
+                                            
+                                        </li>
+                                    @endif
+                                @endcan
                                 <li>
                                     @php  $types_s = ($item->account_type == 0)?(($item->contact->type == "customer")?0:1):0;  @endphp
                                     @if($types_s == 0)
@@ -199,13 +200,12 @@
                                 </li>
                                 @if($item->document && $item->document != [])
                                     <li>
-                                    {{-- @php dd($item->image); @endphp --}}
+                                        {{-- @php dd($item->image); @endphp --}}
                                         <a style="text-decoration:none"  style="text-decoration:none" class="btn-modal" data-href="{{URL::to('payment-voucher/attachment/'.$item->id)}}" data-container=".view_modal">
                                             <i class="fas fa-file"></i>&nbsp;&nbsp;
                                             @lang("home.attachment")
                                             {{-- <iframe src="{{ URL::to($data->image) }}" height="150" width="150" frameborder="0"></iframe> --}}  
                                         </a>
-                                    
                                     </li>
                                 @endif
                                 <li>
@@ -214,20 +214,21 @@
                                 <li>
                                      <a style="text-decoration:none"  class="btn-modal " data-href="{{ URL::to('payment-voucher/entry/'.$item->id) }}" data-container=".view_modal"><i class="fa fa-align-justify"></i>&nbsp;&nbsp;@lang('home.Entry')</a>
                                 </li>
-                                @if($item->return_voucher == 0 || $item->return_voucher == null)
-                                    <li>
-                                        <a style="text-decoration:none"  class=" return_sure" data-href="{{ URL::to('payment-voucher/return/'.$item->id) }}"  ><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;&nbsp;@lang('izo.Return Voucher')</a>
-                                    </li>
-                                @endif
+                                @can('payment_voucher.update')
+                                    @if($item->return_voucher == 0 || $item->return_voucher == null)
+                                        <li>
+                                            <a style="text-decoration:none"  class=" return_sure" data-href="{{ URL::to('payment-voucher/return/'.$item->id) }}"  ><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;&nbsp;@lang('izo.Return Voucher')</a>
+                                        </li>
+                                    @endif
+                                @endcan
                                 <li>
                                     <a href="#"  style="text-decoration:none" data-href="{{  action('HomeController@formAttach', ["type" => "payment_voucher","id" => $item->id]) }}" target="_blank" class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;@lang('Add Attachment')</a>
                                 </li>
-                                @if(request()->session()->get("user.id") == 1 || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8)
+                                @if('payment_voucher.delete')
                                     @if($item->status == 0)
-                                    <li>
-                                        <a style="text-decoration:none"  data-toggle="modal" 
-                                        data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>&nbsp;&nbsp;@lang('izo.Delete')</a>
-                                    </li>
+                                        <li>
+                                            <a style="text-decoration:none" data-toggle="modal" data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>&nbsp;&nbsp;@lang('izo.Delete')</a>
+                                        </li>
                                     @endif
                                 @endif
                                 

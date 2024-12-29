@@ -24,7 +24,7 @@
         {{ session('yes')  }}
     </div>
     @endif
-    @component('components.filters', ['title' => __('report.filters')])
+    @component('components.filters', ['title' => __('report.filters') , 'class' => 'box-primary' ])
         <form action="{{ URL::to('daily-payment') }}" method="GET">
             <div class="col-md-3">
                 <div class="form-group">
@@ -49,7 +49,7 @@
            
             <div class="col-md-1">
                 <label for="purchase_list_filter_location_id" class="label-control" style="width: 100%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-               <button type="submit" class="btn btn-md btn-primary">  Filter</button>
+               <button type="submit" class="btn btn-md btn-primary">  {{ __('report.filters') }}</button>
             </div>
             
         </form>
@@ -109,40 +109,39 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-info dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">@lang('home.Action')<span class="caret"></span><span class="sr-only">Toggle Dropdown </span></button>
                         <ul class="dropdown-menu dropdown-menu-left" role="menu">
-                           
-                            <li>
-                                <a href="{{ URL::to('daily-payment/edit/'.$item->id) }}"><i class="fas fa-edit"></i>&nbsp;&nbsp;@lang('home.Edit')</a>
-                            </li>
+                            @can('daily_payment.update')
+                                <li>
+                                    <a href="{{ URL::to('daily-payment/edit/'.$item->id) }}"><i class="fas fa-edit"></i>&nbsp;&nbsp;@lang('home.Edit')</a>
+                                </li>
+                            @endcan
                             <li>
                                 <a class="btn-modal" data-href="{{ URL::to('daily-payment/entry/'.$item->id) }}" data-container=".view_modal" >
                                     <i class="fa fa-align-justify"></i>
                                     &nbsp;&nbsp;@lang('home.Entry')
                                 </a>
-                            </li>
-                            @php  @endphp
+                            </li> 
                             @if(isset($item->document) && $item->document != [] )
-                            <li>
-                                <a class="btn-modal" data-href="{{URL::to('daily-payment/attachment/'.$item->id)}}" data-container=".view_modal">
-                                    <i class="fas fa-file"></i>
-                                    &nbsp;&nbsp;@lang("home.attachment")
-                                    {{-- <iframe src="{{ URL::to($data->image) }}" height="150" width="150" frameborder="0"></iframe> --}}  
-                                </a>
-                            </li>
+                                <li>
+                                    <a class="btn-modal" data-href="{{URL::to('daily-payment/attachment/'.$item->id)}}" data-container=".view_modal">
+                                        <i class="fas fa-file"></i>
+                                        &nbsp;&nbsp;@lang("home.attachment")
+                                        {{-- <iframe src="{{ URL::to($data->image) }}" height="150" width="150" frameborder="0"></iframe> --}}  
+                                    </a>
+                                </li>
                             @endif
                             <li>
-                                 <a href="{{ URL::to('reports/jv-vh/'.$item->id) }}" target="_blank" ><i class="fas fa-print"></i>&nbsp;&nbsp;@lang('messages.print')</a>
+                                <a href="{{ URL::to('reports/jv-vh/'.$item->id) }}" target="_blank" ><i class="fas fa-print"></i>&nbsp;&nbsp;@lang('messages.print')</a>
                             </li>
                             <li>
                                 <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "daily_payment","id" => $item->id]) }}" target="_blank"  class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;@lang('Add Attachment')</a>
                             </li>
-                            @if( request()->session()->get("user.id") ==  1 || request()->session()->get("user.id") == 7 || request()->session()->get("user.id") == 8 )
-                            @if($item->status == 0)
-                            <li>
-                                <a   data-toggle="modal" 
-                                data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>&nbsp;&nbsp;@lang('izo.Delete')</a>
-                            </li>
-                            @endif
-                            @endif                            
+                            @can('daily_payment.delete')
+                                @if($item->status == 0)
+                                    <li>
+                                        <a data-toggle="modal" data-target="#exampleModalDelete{{ $item->id }}" class="delete-purchase"><i class="fas fa-trash"></i>&nbsp;&nbsp;@lang('izo.Delete')</a>
+                                    </li>
+                                @endif
+                            @endcan                            
                         </ul>
                     </div>
                     

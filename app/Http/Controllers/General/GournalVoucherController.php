@@ -20,7 +20,7 @@ class GournalVoucherController extends Controller
     }
     public function index(Request $request)
     {
-        if (!auth()->user()->can('gournal_voucher.view')) {
+        if (!auth()->user()->can('gournal_voucher.view') && !auth()->user()->can('gournal_voucher.create')) {
             abort(403, 'Unauthorized action.');
         }
         $accounts    =  Account::items();
@@ -203,10 +203,7 @@ class GournalVoucherController extends Controller
         if (!auth()->user()->can('gournal_voucher.update')) {
             abort(403, 'Unauthorized action.');
         }
-     
-        
         DB::beginTransaction();
-        
         $request->validate([  'image.mimes'=>'png,jpeg,png,jpeg,pdf'  ]);
         $access                = 0;
         $business_id           =  request()->session()->get('user.business_id');
@@ -408,7 +405,6 @@ class GournalVoucherController extends Controller
             // \App\AccountTransaction::where('gournal_voucher_item_id',$data->id)->delete();
         }
     }
-
     public function effect_account($id,$type=null)
     {
         $data  =  GournalVoucherItem::find($id);
@@ -468,7 +464,6 @@ class GournalVoucherController extends Controller
             }
         }
     }
-
     public function effect_account_total($total,$account_id,$id,$note)
     {
         $data  =  GournalVoucherItem::find($id);
@@ -490,7 +485,6 @@ class GournalVoucherController extends Controller
             \App\AccountTransaction::nextRecords($account->id,$data->gournal_voucher->business_id,$data->date);
         }
     }
-
     public function effect_debit_total($id)
     {
         $data  =  GournalVoucherItem::find($id);
@@ -530,7 +524,6 @@ class GournalVoucherController extends Controller
             \App\AccountTransaction::nextRecords($account->id,$data->gournal_voucher->business_id,$data->date);
         }
     }
-
     public function edit_effect($data,$old_credit,$old_debit,$old_tax,$old_account_main,$old_status) 
     {
 
@@ -651,7 +644,6 @@ class GournalVoucherController extends Controller
         } 
  
     }
-
     public function edit_effect_main($data,$total,$account_id,$note,$old_account_main,$old_status,$note_main) 
     {
       
@@ -822,6 +814,9 @@ class GournalVoucherController extends Controller
     }
     public function view($id)
     {
+        if (!auth()->user()->can('gournal_voucher.view')) {
+            abort(403, 'Unauthorized action.');
+        }
         $vcher  =  GournalVoucher::find($id);
         $items  =  GournalVoucherItem::where('gournal_voucher_id',$id)->get();
         $accts_ =  \App\Account::select("id","name")->get();
@@ -829,7 +824,6 @@ class GournalVoucherController extends Controller
         foreach($accts_ as $ac){
             $accts[$ac->id]= $ac->name;
         }
-      
         return view("gournal_voucher.viewVoucher")->with(compact("vcher","items","accts"));
     }
     public function attach($id)

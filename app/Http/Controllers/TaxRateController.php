@@ -55,9 +55,9 @@ class TaxRateController extends Controller
                     <button data-href="{{action(\'TaxRateController@edit\', [$id])}}" class="btn btn-xs btn-primary edit_tax_rate_button"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
                         &nbsp;
                     @endcan
-                    @if( request()->session()->get("user.id") == 1 )
+                    @can("tax_rate.delete")
                         <button data-href="{{action(\'TaxRateController@destroy\', [$id])}}" class="btn btn-xs btn-danger delete_tax_rate_button"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</button>
-                    @endif'
+                    @endcan'
                 )
                 ->editColumn('name', '@if($for_tax_group == 1) {{$name}} <small>(@lang("lang_v1.for_tax_group_only"))</small> @else {{$name}} @endif')
                 ->removeColumn('for_tax_group')

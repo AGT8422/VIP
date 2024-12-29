@@ -42,7 +42,7 @@ class AccountController extends Controller
         // <button data-href="{{action(\'AccountController@getFundTransfer\',[$id])}}" class="btn btn-xs btn-info btn-modal" data-container=".view_modal"><i class="fa fa-exchange"></i> @lang("account.fund_transfer")</button>
         // <button data-href="{{action(\'AccountController@getDeposit\',[$id])}}" class="btn btn-xs btn-success btn-modal" data-container=".view_modal"><i class="fas fa-money-bill-alt"></i> @lang("account.deposit")</button>
      
-        if ( !auth()->user()->can('account.access') && !auth()->user()->can('warehouse.views') && !auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('SalesMan.views')) {
+        if ( !auth()->user()->can('account.access') ) {
             abort(403, 'Unauthorized action.');
         }
         $business_id      = session()->get('user.business_id');
@@ -111,16 +111,26 @@ class AccountController extends Controller
                 return DataTables::of($accounts)
                         ->addColumn(
                             'action',
-                            '<button data-href="{{action(\'AccountController@edit\',[$id])}}" data-container=".account_model" class="btn btn-xs btn-primary btn-modal"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
-                            <a href="{{action(\'AccountController@show\',[$id])}}" class="  btn btn-warning btn-xs"><i class="fa fa-book"></i> @lang("account.account_book")</a>&nbsp;
-                            @if($is_closed == 0)
-                                <button data-url="{{action(\'AccountController@close\',[$id])}}" class="btn btn-xs btn-danger close_account"><i class="fa fa-power-off"></i> @lang("messages.close")</button>
-                                <button data-href="{{action(\'AccountController@getOneAccountBalance\',[$id])}}" data-id="{{$id}}"  data-container="#account_type_modal" class="hide btn btn-modal btn-xs btn-info one_account_balance"><i class="fa fa-money"></i> @lang("lang_v1.balance")</button>
-                            @elseif($is_closed == 1)
-                                <button data-url="{{action(\'AccountController@activate\',[$id])}}" class="btn btn-xs btn-success activate_account"><i class="fa fa-power-off"></i> @lang("messages.activate")</button>
-                            @endif'
+                            '@can("account.update")
+                                <button data-href="{{action(\'AccountController@edit\',[$id])}}" data-container=".account_model" class="btn btn-xs btn-primary btn-modal"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
+                            @endcan
+                            @can("account.create")
+                                
+                                <a href="{{action(\'AccountController@show\',[$id])}}" class="  btn btn-warning btn-xs"><i class="fa fa-book"></i> @lang("account.account_book")</a>
+                                &nbsp;
+                            @endcan
+                            @can("account.create")
+                              
+                                @if($is_closed == 0)
+                                    <button data-url="{{action(\'AccountController@close\',[$id])}}" class="btn btn-xs btn-danger close_account"><i class="fa fa-power-off"></i> @lang("messages.close")</button>
+                                    <button data-href="{{action(\'AccountController@getOneAccountBalance\',[$id])}}" data-id="{{$id}}"  data-container="#account_type_modal" class="hide btn btn-modal btn-xs btn-info one_account_balance"><i class="fa fa-money"></i> @lang("lang_v1.balance")</button>
+                                @elseif($is_closed == 1)
+                                    <button data-url="{{action(\'AccountController@activate\',[$id])}}" class="btn btn-xs btn-success activate_account"><i class="fa fa-power-off"></i> @lang("messages.activate")</button>
+                                @endif
+                            @endcan'
                         )
                         ->editColumn('name', function ($row) {
+                            
                             $name =  ($row->contact)?$row->contact:$row->name;
                             if ($row->is_closed == 1) {
                                 return $name . ' <small class="label pull-right bg-red no-print">' . __("account.closed") . '</small><span class="print_section">(' . __("account.closed") . ')</span>';
@@ -266,7 +276,7 @@ class AccountController extends Controller
                 ->with(compact('languages' ,"account_",'allType' ,'account_number' ,'array_of_sub_type_account', 'array_of_main_','array_of_type' ,'array_of_type_sub', 'array_of_type_' ,'currency_details'  ,'not_linked_payments', 'account_types','array_ids'));
     }
 
-   public function Parent($item,$array) {
+    public function Parent($item,$array) {
         $account              = \App\AccountType::find($item->sub_parent_id);
         $array[$account->id]  = $account;
         $check = $this->checkP($account);
@@ -309,7 +319,7 @@ class AccountController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->can('account.access') && !auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('SalesMan.views')) {
+        if (!auth()->user()->can('account.access') ) {
             abort(403, 'Unauthorized action.');
         }
         
@@ -401,7 +411,9 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-       
+        if (!auth()->user()->can('account.create') ) {
+            abort(403, 'Unauthorized action.');
+        }
         $user_id = request()->session()->get('user.id');
         $user = User::where('id', $user_id)->with(['media'])->first();
         $config_languages = config('constants.langs');
@@ -879,7 +891,7 @@ class AccountController extends Controller
     public function show($id)
     {
         
-        if (!auth()->user()->can('account.access') &&   !auth()->user()->can('SalesMan.views')&& !auth()->user()->can('ReadOnly.views')&& !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('manufuctoring.views') && !auth()->user()->can('warehouse.views')) {
+        if (!auth()->user()->can('account.access') &&   !auth()->user()->can('account.view') ) {
             abort(403, 'Unauthorized action.');
         }
         // ................................................................................
@@ -1148,7 +1160,9 @@ class AccountController extends Controller
 
     public function ledgerShow($id=null)
     {
-     
+        if (!auth()->user()->can('account.access') &&   !auth()->user()->can('account.view') ) {
+            abort(403, 'Unauthorized action.');
+        }
         $business_id      = request()->session()->get("user.business_id");
         $account          = Account::where("business_id",$business_id)->get();
         $currency_details = $this->transactionUtil->purchaseCurrencyDetails($business_id);
@@ -1177,7 +1191,7 @@ class AccountController extends Controller
     }
     public function getAccount()
     {
-        if(!auth()->user()->can("ReadOnly.views") && !auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('SalesMan.views')){
+        if(!auth()->user()->can("account.view") ){
             abort(403, 'Unauthorized action.');
         }
 
@@ -1277,7 +1291,10 @@ class AccountController extends Controller
      */
     public function edit($id)
     {
-         $user_id = request()->session()->get('user.id');
+        if(!auth()->user()->can("account.update") ){
+            abort(403, 'Unauthorized action.');
+        }
+        $user_id = request()->session()->get('user.id');
         $user = User::where('id', $user_id)->with(['media'])->first();
         $config_languages = config('constants.langs');
         $languages = [];
@@ -1339,6 +1356,9 @@ class AccountController extends Controller
      */
     public function showCash()
     {
+        if(!auth()->user()->can("sidBar.Cash_And_Bank") ){
+            abort(403, 'Unauthorized action.');
+        }
         $id        = request()->session()->get("user.business_id"); 
         $business  = \App\Business::find($id);
         $type      = $business->cash; 
@@ -1360,13 +1380,12 @@ class AccountController extends Controller
                 ->addColumn( 'action',
                         '<button  data-href="{{action(\'AccountController@edit\',[$id])}}" data-container=".account_model" class="btn btn-xs btn-primary btn-modal"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
                         <a  href="{{action(\'AccountController@show\',[$id])}}" class="btn btn-warning btn-xs  "><i class="fa fa-book"></i> @lang("account.account_book")</a>&nbsp;
+                        @can("account.create")
                         @if($is_closed == 0)
-
-
                         <button  data-url="{{action(\'AccountController@close\',[$id])}}" class="btn btn-xs btn-danger close_account  "><i class="fa fa-power-off"></i> @lang("messages.close")</button>
                         @elseif($is_closed == 1)
                             <button data-url="{{action(\'AccountController@activate\',[$id])}}" class="btn btn-xs btn-success activate_account  "><i class="fa fa-power-off"></i> @lang("messages.activate")</button>
-                        @endif'
+                        @endif@endcan'
                  )
                 ->addColumn("number",function($row) {
                     $html = '<a    href="' . \URL::to('account/account/'.$row->id)   . '"    >' . $row->account_number . '</a>';
@@ -1430,6 +1449,10 @@ class AccountController extends Controller
      */
     public function showBank()
     {
+        
+        if(!auth()->user()->can("sidBar.Cash_And_Bank") ){
+            abort(403, 'Unauthorized action.');
+        }
         $id               = request()->session()->get("user.business_id"); 
         $business         = \App\Business::find($id);
         $type             = $business->bank; 
@@ -1451,13 +1474,14 @@ class AccountController extends Controller
                         ->addColumn( 'action',
                                     '<button data-href="{{action(\'AccountController@edit\',[$id])}}" data-container=".account_model" class="btn btn-xs btn-primary btn-modal"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
                                     <a href="{{action(\'AccountController@show\',[$id])}}" class="btn btn-warning btn-xs"><i class="fa fa-book"></i> @lang("account.account_book")</a>&nbsp;
+                                    @can("account.create")
                                     @if($is_closed == 0)
 
 
                                     <button data-url="{{action(\'AccountController@close\',[$id])}}" class="btn btn-xs btn-danger close_account "><i class="fa fa-power-off"></i> @lang("messages.close")</button>
                                     @elseif($is_closed == 1)
                                         <button data-url="{{action(\'AccountController@activate\',[$id])}}" class="btn btn-xs btn-success activate_account "><i class="fa fa-power-off"></i> @lang("messages.activate")</button>
-                                    @endif'
+                                    @endif@endcan'
                             )
                         ->addColumn("number",function($row) {
                             $html = '<a    href="' . \URL::to('account/account/'.$row->id)   . '"    >' . $row->account_number . '</a>';
@@ -1589,17 +1613,17 @@ class AccountController extends Controller
      */
     public function update(Request $request, $id)
     {
-         $user_id = request()->session()->get('user.id');
+        if (!auth()->user()->can('account.access') && !auth()->user()->can('account.update')) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        $user_id = request()->session()->get('user.id');
         $user = User::where('id', $user_id)->with(['media'])->first();
         $config_languages = config('constants.langs');
         $languages = [];
         foreach ($config_languages as $key => $value) {
             $languages[$key] = $value['full_name'];
         }
-        if (!auth()->user()->can('account.access') && !auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('SalesMan.views')) {
-            abort(403, 'Unauthorized action.');
-        }
-
         if (request()->ajax()) {
             try {
                 $input = $request->only(['name', 'account_number', 'note', 'account_type_id']);
@@ -1659,8 +1683,8 @@ class AccountController extends Controller
      */
     public function destroyAccountTransaction($id)
     {
-         $user_id = request()->session()->get('user.id');
-        $user = User::where('id', $user_id)->with(['media'])->first();
+        $user_id = request()->session()->get('user.id');
+        $user    = User::where('id', $user_id)->with(['media'])->first();
         $config_languages = config('constants.langs');
         $languages = [];
         foreach ($config_languages as $key => $value) {
@@ -1707,7 +1731,7 @@ class AccountController extends Controller
     public function close($id)
     {
        
-        if (!auth()->user()->can('account.access') && !auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('SalesMan.views')) {
+        if (!auth()->user()->can('account.create') ) {
             abort(403, 'Unauthorized action.');
         }
         
@@ -1730,7 +1754,6 @@ class AccountController extends Controller
                             'msg' => __("messages.something_went_wrong")
                         ];
             }
-            
             return $output;
         }
     }
@@ -1742,7 +1765,7 @@ class AccountController extends Controller
      */
     public function getFundTransfer($id)
     {
-        if (!auth()->user()->can('account.access') && !auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('SalesMan.views')) {
+        if (!auth()->user()->can('account.access') ) {
             abort(403, 'Unauthorized action.');
         }
         $user_id = request()->session()->get('user.id');
@@ -1776,7 +1799,7 @@ class AccountController extends Controller
      */
     public function postFundTransfer(Request $request)
     {
-        if (!auth()->user()->can('account.access') && !auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('SalesMan.views')) {
+        if (!auth()->user()->can('account.access') ) {
             abort(403, 'Unauthorized action.');
         }
         $user_id = request()->session()->get('user.id');
@@ -1853,7 +1876,7 @@ class AccountController extends Controller
      */
     public function getDeposit($id)
     {
-        if (!auth()->user()->can('account.access') && !auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('SalesMan.views')) {
+        if (!auth()->user()->can('account.access') ) {
             abort(403, 'Unauthorized action.');
         }
         $user_id = request()->session()->get('user.id');
@@ -1889,7 +1912,7 @@ class AccountController extends Controller
      */
     public function postDeposit(Request $request)
     {
-        if (!auth()->user()->can('account.access') && !auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('SalesMan.views')) {
+        if (!auth()->user()->can('account.access')  ) {
             abort(403, 'Unauthorized action.');
         }
        
@@ -1953,9 +1976,9 @@ class AccountController extends Controller
     public function getAccountBalance($id)
     {
          
-        // if (!auth()->user()->can('account.access')) {
-        //     abort(403, 'Unauthorized action.');
-        // }
+        if (!auth()->user()->can('account.access')) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $business_id = session()->get('user.business_id');
         $account = Account::leftjoin(
@@ -1980,7 +2003,7 @@ class AccountController extends Controller
      */
     public function cashFlow()
     {
-        if (!auth()->user()->can('account.access') && !auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('SalesMan.views')) {
+        if (!auth()->user()->can('account.cash_flow') ) {
             abort(403, 'Unauthorized action.');
         }
         $user_id = request()->session()->get('user.id');
@@ -2161,7 +2184,7 @@ class AccountController extends Controller
     public function activate($id)
     {
         
-        if (!auth()->user()->can('account.access') && !auth()->user()->can('admin_supervisor.views') && !auth()->user()->can('SalesMan.views')) {
+        if (!auth()->user()->can('account.access')  ) {
             abort(403, 'Unauthorized action.');
         }
         

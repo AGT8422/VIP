@@ -18,6 +18,7 @@
 */
 
 include_once('install_r.php');
+
     Route::middleware(['setLanguage' ])->group(function () {
         Route::get('/forget-password','IzoUserController@forgetPassword')->name('izoForgetPassword');
         Route::get('/login-account','IzoUserController@loginPage')->name('izoLogin');
@@ -1243,13 +1244,17 @@ include_once('install_r.php');
 
     // 2 ***
         /* local inventory   */
-        Route::get('/{slug}','ProductGallery@inventory');
+        // Route::get('/{slug}','ProductGallery@inventory');
+        
+        Route::get('/{slug}',function(){
+           return view('404');
+        });
         /* get inventory products with slug  used by ajax*/
-        Route::get('/product/slug','ProductGallery@inventory');
+        // Route::get('/product/slug','ProductGallery@inventory');
     // 2 ***
 
     // 1 ***
-        Route::get('/singlproduct/{id}/{name?}','ProductGallery@singlproduct');
+        // Route::get('/singlproduct/{id}/{name?}','ProductGallery@singlproduct');
     // 1 ***
 
     // 1 ***
@@ -1291,7 +1296,9 @@ include_once('install_r.php');
 
     
     Route::get('/create-account','IzoUserController@register');
-
+    Route::fallback(function () {
+        return response()->view('404', [], 404);
+    });
 // 2 ***
     
 

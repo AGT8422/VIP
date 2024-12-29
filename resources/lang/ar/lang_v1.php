@@ -1507,4 +1507,15 @@ return [
 "create_invoice_delivery" => "إنشاء فواتير جزئية عند التسليم",
 "create_delivery_invoice" => "فواتير جزئية عند التسليم",
 "user_number_device"      => "عدد الأجهزة",
+'discount.access'         => 'إضافة /تعديل/ حذف/ الخصم',
+"compare_store"           => "مقارنة المخازن",
+'purchase_view'           => 'عرض المشتريات',
+'Adjusting_dead_stock'    => 'تعديل كمية المنتجات والمخزون الميت',
+'Modifying_purchase'      => 'تعديل قيم الخصم المركب أثناء الشراء',
+'AddPaymentPurchase'      => 'إضافة دفعة شراء',
+'EditPaymentPurchase'     => 'تحرير دفعة شراء',
+'DeletePaymentPurchase'   => 'حذف دفعة شراء',
+'AddReturnPurchase'       => 'إضافة مرتجع شراء',
+'viewReturnPurchase'      => 'عرض مرتجع شراء'
+
 ];

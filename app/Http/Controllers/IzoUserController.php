@@ -85,7 +85,7 @@ class IzoUserController extends Controller
         $list_domains                  = [];
         $list_dom                      = [];
         $list_database                  = [];
-        $list_domain  = IzoUser::select('domain_name',"database_name","domain_url" )->get(); 
+        $list_domain  = IzoUser::select('domain_name',"database_name","domain_url" )->where('parent_admin',"=",0)->get(); 
         foreach($list_domain as $li){
             if($li != null){
                 $list_dom[]      = $li->domain_name;

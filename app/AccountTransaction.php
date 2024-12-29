@@ -1605,7 +1605,7 @@ class AccountTransaction extends Model
                                 $o->delete();
                                 if($ac->cost_center!=1){
                                     if($old_date != null){
-                                        self::nextRecords($ac->id,$data->business_id, $old_date );
+                                        self::nextRecords($ac->id,$data->business_id,$old_date);
                                     }
                                     self::nextRecords($ac->id,$data->business_id,$action_date);
                                 }

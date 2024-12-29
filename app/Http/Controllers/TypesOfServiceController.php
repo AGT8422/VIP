@@ -62,10 +62,11 @@ class TypesOfServiceController extends Controller
             return Datatables::of($tax_rates)
                 ->addColumn(
                     'action',
-                    '<button data-href="{{action(\'TypesOfServiceController@edit\', [$id])}}" class="btn btn-xs btn-primary btn-modal" data-container=".type_of_service_modal"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
+                    '@can("top_of_service.update")<button data-href="{{action(\'TypesOfServiceController@edit\', [$id])}}" class="btn btn-xs btn-primary btn-modal" data-container=".type_of_service_modal"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
                         &nbsp;
-                        @if(request()->session()->get("user.id") == 1)
-                    <button data-href="{{action(\'TypesOfServiceController@destroy\', [$id])}}" class="btn btn-xs btn-danger delete_type_of_service"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</button>@endif'
+                    @endcan
+                    @can("top_of_service.delete")
+                    <button data-href="{{action(\'TypesOfServiceController@destroy\', [$id])}}" class="btn btn-xs btn-danger delete_type_of_service"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</button>@endcan'
                 )
                 ->editColumn('packing_charge', function ($row) {
                     $html = '<span class="display_currency" data-currency_symbol="false">' . $row->packing_charge . '</span>';
@@ -91,7 +92,7 @@ class TypesOfServiceController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->can('access_types_of_service')) {
+        if (!auth()->user()->can('access_types_of_service') && !auth()->user()->can('types_of_service.create')) {
              abort(403, 'Unauthorized action.');
         }
 
@@ -111,7 +112,7 @@ class TypesOfServiceController extends Controller
      */
     public function store(Request $request)
     {
-        if (!auth()->user()->can('access_types_of_service')) {
+        if (!auth()->user()->can('access_types_of_service') && !auth()->user()->can('types_of_service.create')) {
              abort(403, 'Unauthorized action.');
         }
 
@@ -159,7 +160,7 @@ class TypesOfServiceController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->can('access_types_of_service')) {
+        if (!auth()->user()->can('access_types_of_service') && !auth()->user()->can('types_of_service.update')) {
              abort(403, 'Unauthorized action.');
         }
 
@@ -183,7 +184,7 @@ class TypesOfServiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!auth()->user()->can('access_types_of_service')) {
+        if (!auth()->user()->can('access_types_of_service') && !auth()->user()->can('types_of_service.update')) {
              abort(403, 'Unauthorized action.');
         }
 
@@ -223,7 +224,7 @@ class TypesOfServiceController extends Controller
      */
     public function destroy($id)
     {
-        if (!auth()->user()->can('access_types_of_service')) {
+        if (!auth()->user()->can('access_types_of_service')  && !auth()->user()->can('types_of_service.delete')) {
              abort(403, 'Unauthorized action.');
         }
         

@@ -803,11 +803,17 @@ class Util
                     $imgs = \Image::make($request->$file_name)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
                     if($file_name=='business_logo'){
                         $public_path = public_path('uploads/companies/'.$company_name.'/business_logo');
+                        if (!file_exists($public_path)) {
+                            mkdir($public_path, 0755, true);
+                        }
                         if ($imgs->save($public_path ."/" . $new_file_name)) {
                             $uploaded_file_name = $new_file_name;
                         }
                     }else{
                         $public_path = public_path('uploads/companies/'.$company_name.'/img');
+                        if (!file_exists($public_path)) {
+                            mkdir($public_path, 0755, true);
+                        }
                         if ($imgs->save($public_path ."/" . $new_file_name)) {
                             $uploaded_file_name = $new_file_name;
                         }

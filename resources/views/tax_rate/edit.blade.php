@@ -1,11 +1,11 @@
-<div class="modal-dialog" role="document">
+<div class="modal-dialog font_text" role="document">
   <div class="modal-content">
 
     {!! Form::open(['url' => action('TaxRateController@update', [$tax_rate->id]), 'method' => 'PUT', 'id' => 'tax_rate_edit_form' ]) !!}
 
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <h4 class="modal-title">@lang( 'tax_rate.edit_taxt_rate' )</h4>
+      <h4 class="modal-title font_text">@lang( 'tax_rate.edit_taxt_rate' )</h4>
     </div>
 
     <div class="modal-body">
@@ -16,7 +16,7 @@
 
       <div class="form-group">
         {!! Form::label('amount', __( 'tax_rate.rate' ) . ':*') !!} @show_tooltip(__('lang_v1.tax_exempt_help'))
-          {!! Form::text('amount', $tax_rate->amount, ['class' => 'form-control input_number', 'required']); !!}
+          {!! Form::text('amount', $tax_rate->amount, ['class' => 'form-control input_number font_number', 'required']); !!}
       </div>
 
       <div class="form-group">

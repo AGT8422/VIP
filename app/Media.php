@@ -172,6 +172,9 @@ class Media extends Model
                     
                 //     $file_name = $new_file_name;
                 // }
+                if (!file_exists($public_path)) {
+                    mkdir($public_path, 0755, true);
+                }
                 if ($imgs->save($public_path ."/" . $new_file_name)) {
                     $file_name = $new_file_name;
                 }

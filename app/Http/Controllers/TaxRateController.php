@@ -52,7 +52,7 @@ class TaxRateController extends Controller
                 ->addColumn(
                     'action',
                     '@can("tax_rate.update")
-                    <button data-href="{{action(\'TaxRateController@edit\', [$id])}}" class="btn btn-xs btn-primary edit_tax_rate_button"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
+                        <button data-href="{{action(\'TaxRateController@edit\', [$id])}}" class="btn btn-xs btn-primary edit_tax_rate_button"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
                         &nbsp;
                     @endcan
                     @can("tax_rate.delete")

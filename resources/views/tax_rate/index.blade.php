@@ -4,19 +4,19 @@
 @section('content')
 
 <!-- Content Header (Page header) -->
-<section class="content-header">
-    <h1>@lang( 'tax_rate.tax_rates' )
+<section class="content-header font_text">
+    <h1 class="font_text">@lang( 'tax_rate.tax_rates' )
         <small>@lang( 'tax_rate.manage_your_tax_rates' )</small>
     </h1>
 </section>
 
 <!-- Main content -->
-<section class="content">
+<section class="content font_text">
     @component('components.widget', ['class' => 'box-primary', 'title' => __( 'tax_rate.all_your_tax_rates' )])
         @can('tax_rate.create')
             @slot('tool')
                 <div class="box-tools">
-                    <button type="button" class="btn btn-block btn-primary btn-modal" 
+                    <button type="button" class="btn btn-block btn-primary btn-modal font_text" 
                             data-href="{{action('TaxRateController@create')}}" 
                             data-container=".tax_rate_modal">
                             <i class="fa fa-plus"></i> @lang( 'messages.add' )</button>
@@ -45,7 +45,7 @@
         @can('tax_rate.create')
             @slot('tool')
                 <div class="box-tools">
-                    <button type="button" class="btn btn-block btn-primary btn-modal" 
+                    <button type="button" class="btn btn-block btn-primary btn-modal font_text" 
                     data-href="{{action('GroupTaxController@create')}}" 
                     data-container=".tax_group_modal">
                     <i class="fa fa-plus"></i> @lang( 'messages.add' )</button>

@@ -1,11 +1,11 @@
-<div class="modal-dialog" role="document">
+<div class="modal-dialog font_text" role="document">
   <div class="modal-content">
 
     {!! Form::open(['url' => action('GroupTaxController@update', [$tax_rate->id]), 'method' => 'PUT', 'id' => 'tax_group_edit_form' ]) !!}
 
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <h4 class="modal-title">@lang( 'tax_rate.edit_tax_group' )</h4>
+      <h4 class="modal-title font_text">@lang( 'tax_rate.edit_tax_group' )</h4>
     </div>
 
     <div class="modal-body">

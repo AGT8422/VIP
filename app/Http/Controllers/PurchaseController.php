@@ -1096,10 +1096,20 @@ class PurchaseController extends Controller
             abort(403, 'Unauthorized action.');
         }
         try {
+
+            //Check if the transaction can be edited or not.
+            $edit_days = request()->session()->get('business.transaction_edit_days');
+            if (!$this->transactionUtil->canBeEdited($request->input('purchase_id'), $edit_days)) {
+                $output =  [
+                            'success' => 0,
+                            'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_days])];
+                return redirect('purchases')->with('status', $output);
+            }
             //Validate document size
             $request->validate([
                 'document' => 'file|max:'. (config('constants.document_size_limit') / 1000)
             ]);
+
             $listOfAccountForUpdate = [];
             $should_update          = 0;
             // ...................................................
@@ -1110,6 +1120,7 @@ class PurchaseController extends Controller
             foreach($purchase_lines as $it){
                 \App\Models\ArchivePurchaseLine::save_purchases( $archive , $it);
             }
+
             $old_date               = $transaction->transaction_date;
             $old_status             = $transaction->status;
             $old_trans              = $transaction->cost_center_id;
@@ -1784,7 +1795,8 @@ class PurchaseController extends Controller
             DB::rollBack();
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             
-            $output = ['success' => 0,
+            $output = [
+                            'success' => 0,
                             'msg' => "File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage()
                             // 'msg' => __("messages.something_went_wrong")
                         ];
@@ -2271,11 +2283,11 @@ class PurchaseController extends Controller
             }
             
             //Check if the transaction can be edited or not.
-            // $edit_days = request()->session()->get('business.transaction_edit_days');
-            // if (!$this->transactionUtil->canBeEdited($request->input('purchase_id'), $edit_days)) {
-            //     return ['success' => 0,
-            //             'msg' => __('messages.transaction_edit_not_allowed', ['days' => $edit_days])];
-            // }
+            $edit_days = request()->session()->get('business.transaction_edit_days');
+            if (!$this->transactionUtil->canBeEdited($request->input('purchase_id'), $edit_days)) {
+                return ['success' => 0,
+                        'msg' => __('messages.transaction_edit_not_allowed', ['days' => $edit_days])];
+            }
         
             try {
                 $business_id              = request()->session()->get('user.business_id');

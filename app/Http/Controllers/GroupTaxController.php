@@ -27,10 +27,12 @@ class GroupTaxController extends Controller
             return Datatables::of($tax_rates)
                 ->addColumn(
                     'action',
-                    '<button data-href="{{action(\'GroupTaxController@edit\', [$id])}}" class="btn btn-xs btn-primary btn-modal" data-container=".tax_group_modal"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
+                   ' @can("tax_rate.update")
+                    <button data-href="{{action(\'GroupTaxController@edit\', [$id])}}" class="btn btn-xs btn-primary btn-modal" data-container=".tax_group_modal"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
                         &nbsp;
-                        @if(request()->session()->get("user.id") == 1)
-                        <button data-href="{{action(\'GroupTaxController@destroy\', [$id])}}" class="btn btn-xs btn-danger delete_tax_group_button"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</button>@endif'
+                    @endcan
+                    @can("tax_rate.delete")
+                        <button data-href="{{action(\'GroupTaxController@destroy\', [$id])}}" class="btn btn-xs btn-danger delete_tax_group_button"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</button>@endcan'
                 )
                 ->editColumn('sub_taxes', function ($row) {
                     $sub_taxes = [];

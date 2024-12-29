@@ -84,7 +84,7 @@
                                             {!! Form::select('account_type', $array_of_type_, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'account_type', 'placeholder' => __('lang_v1.all')]); !!}
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 hide">
                                         <div class="form-group">
                                             {!! Form::label('account_sub_type', __('lang_v1.account_sub_type') . ':') !!}
                                             {!! Form::select('account_sub_type',$array_of_type_sub, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'id' => 'account_sub_type', 'placeholder' => __('lang_v1.all')]); !!}
@@ -106,17 +106,18 @@
                                             </div>
                                         </div>
                                     </div>  
+                                    <div class="col-md-4">  &nbsp; </div>
                                     <div class="col-md-4">
                                         <button type="button" class="btn btn-primary btn-modal pull-right" 
                                             data-container=".account_model"
                                             data-href="{{action('AccountController@create')}}">
                                             <i class="fa fa-plus"></i> @lang( 'messages.add' )</button>
                                     </div>
-                                    <div class="col-md-4">
+                                    {{-- <div class="col-md-4">
                                         <button type="button" class="btn btn-primary pull-right repair_balance" 
                                             data-href="{{\URL::to('/account/repair-balances')}}">
                                             <i class="fa fa-gear"></i> @lang( 'Repair Balance' )</button>
-                                    </div>
+                                    </div> --}}
                                 @endcomponent
                             </div>
                             <div class="col-sm-12">

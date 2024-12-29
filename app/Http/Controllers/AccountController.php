@@ -11,6 +11,7 @@ use App\TransactionPayment;
 use App\Utils\Util;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Response;
 use Yajra\DataTables\Facades\DataTables;
 use App\Media;
@@ -45,6 +46,7 @@ class AccountController extends Controller
         if ( !auth()->user()->can('account.access') ) {
             abort(403, 'Unauthorized action.');
         }
+        $databaseName     =  request()->session()->get("user_main.database");
         $business_id      = session()->get('user.business_id');
         $user_id          = request()->session()->get('user.id');
         $account_         = Account::Where("business_id",$business_id)->where("cost_center",0)->pluck('name','id');
@@ -92,22 +94,50 @@ class AccountController extends Controller
                 // if (!empty($start_date) && !empty($end_date)) {
                 //     // $accounts->whereBetween(DB::raw('date(operation_date)'), [$start_date, $end_date]);
                 // } 
+                
                 if( request()->input('account_name') != null){
                     $accounts->where('accounts.id', request()->input('account_name'));
-                }else if( request()->input('account_number') != null ){
-                    $accounts->where('accounts.account_number', request()->input('account_number'));
-                }else{
-                    if( request()->input('account_sub_type') != null  ){
-                        $accounts->where('accounts.account_type_id', request()->input('account_sub_type'));
-                    }else{
-                        if( request()->input('main_account') != null ){
-                            $accounts->where('ats.parent_account_type_id', request()->input('main_account'));
-                        }
-                        if( request()->input('account_type') != null ){
-                            $accounts->where('ats.sub_parent_id', request()->input('account_type'))->orWhere('ats.id', request()->input('account_type'));
-                        }
-                    } 
                 }
+
+                if( request()->input('account_number') != null ){
+                    $accounts->where('accounts.account_number', request()->input('account_number'));
+                }
+                
+                 
+
+                
+                if( request()->input('main_account') != null ){
+                    // $databaseName     =  request()->session()->get("user_main.database"); if("izo26102024_esai" == Config::get('database.connections.mysql.database')){
+                        $idMain   = request()->input('main_account');
+                        $allChild = \App\AccountType::where('parent_account_type_id',$idMain)->pluck("id");
+                        $accounts->whereHas('account_type',function($query) use($idMain,$allChild){
+                            $query->where("id",$idMain);
+                            $query->orWhere("parent_account_type_id",$idMain);
+                            $query->orWhereIn("parent_account_type_id",$allChild);
+                        });
+                    // }   
+                }
+
+                if( request()->input('account_type') != null ){
+                    $idSubMain   = request()->input('account_type');
+                    $allChildSub = \App\AccountType::where('parent_account_type_id',$idSubMain)->pluck("id");
+                    $accounts->whereHas('account_type',function($query) use($idSubMain,$allChildSub){
+                        $query->where("id",$idSubMain);
+                        $query->orWhere("parent_account_type_id",$idSubMain);
+                        $query->orWhereIn("parent_account_type_id",$allChildSub);
+                    });
+                }
+                
+                // if( request()->input('account_sub_type') != null  ){
+                //     $idSubMain   = request()->input('account_sub_type');
+                //     $allChildSub = \App\AccountType::where('parent_account_type_id',$idSubMain)->pluck("id");
+                //     $accounts->whereHas('account_type',function($query) use($idSubMain,$allChildSub){
+                //         $query->where("id",$idSubMain);
+                //         $query->orWhere("parent_account_type_id",$idSubMain);
+                //         $query->orWhereIn("parent_account_type_id",$allChildSub);
+                //     });
+                // }
+                 
                 return DataTables::of($accounts)
                         ->addColumn(
                             'action',
@@ -1594,16 +1624,32 @@ class AccountController extends Controller
     {  
         if(request()->ajax()){
             $account = \App\AccountType::where("parent_account_type_id",$id)->get();
-            $array   = [] ;
+            $array   = [] ; 
             foreach($account as $it){
                 $array[$it->id] = $it->name  . " || " . $it->code;
+                $idd   =  $it->id ;
+                $acc   =  \App\AccountType::where("parent_account_type_id", $it->id)->get();
+                while(count($acc)>0){
+                    
+                     
+                }
             }
             $output = [
                         'success' => true,
                         'array' => $array,
-                    ];
+                    ]; 
             return  $output;
         }
+    }
+
+    public static function takeParent($list,$id){
+        $acc            =  \App\AccountType::where("parent_account_type_id", $id)->get();
+        foreach($acc as $it){
+            $list[$it->id]  =  $it->name  . " || " . $it->code;
+            $idd            =  $it->id ;
+            $acc            =  \App\AccountType::where("parent_account_type_id", $it->id)->get();
+        }
+        return $list;
     }
 
     /**

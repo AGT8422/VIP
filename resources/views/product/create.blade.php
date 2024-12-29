@@ -123,7 +123,7 @@
                               }
                             @endphp
                           </div>
-                          <div class="col-sm-6 ">
+                          <div class="col-sm-6 hide">
                             <div class="form-group">
                               {!! Form::label('product_locations', __('business.business_locations') . ':') !!} @show_tooltip(__('lang_v1.product_location_help'))
                                 {!! Form::select('product_locations[]', $business_locations ,$default_location, ['class' => 'form-control select2'  , 'id' => 'product_locations']); !!}

@@ -24,13 +24,13 @@
       }
 
       /* Handle */
-      ::-webkit-scrollbar-thumb {
-        background: #88888800;
+      .main-sidebar-new::-webkit-scrollbar-thumb {
+        background: #88888800 !important;
         border-radius: 20px; 
       }
 
       /* Handle on hover */
-      ::-webkit-scrollbar-thumb:hover {
+      .main-sidebar-new::-webkit-scrollbar-thumb:hover {
         background: #ec6608;
       }
 

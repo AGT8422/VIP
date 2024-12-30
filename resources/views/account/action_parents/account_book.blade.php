@@ -54,11 +54,11 @@
 
             <td ></td>
 
-            <td class="debit_footer"> </td>
+            <td class="debit_footer" style="font-family:arial !important"> </td>
 
-            <td class="credit_footer"> </td>
+            <td class="credit_footer" style="font-family:arial !important"> </td>
 
-            <td class="balance_footer" style="font-weight:bolder"> </td>
+            <td class="balance_footer"  style="font-weight:bolder;font-family:arial !important"> </td>
 
         </tfoot>
 

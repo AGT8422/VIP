@@ -178,7 +178,7 @@
  				  </div>
 
 			    <div class="col-sm-12">
-            		<button type="submit" id="sub_cheque" class="btn btn-primary pull-right">@lang('messages.save')</button>
+            		<button type="submit" id="sub_cheque" class="btn btn-primary pull-right">@lang('messages.update')</button>
             	</div>
 			</div>
 		</div>

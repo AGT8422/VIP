@@ -42,7 +42,7 @@
             @if($pattern_name == null) 
                 <b style="color: red"> {{ "Please Select Pattern !!"  }} </b>
             @elseif($complete != "undefined") 
-                <button type="button" style="background-color:#ee680e !important;border-color:#ee680e !important" onClick="click_function();" class="btn btn-primary no-print">
+                <button type="button" style="background-color:#ee680e !important;border-color:#ee680e !important" onClick="click_function();" class="save_submit_button btn btn-primary no-print">
                     @lang( 'messages.sure' )  
                 </button>   
             @else 
@@ -65,6 +65,7 @@
         url   = $("#add_sell_form").attr("action");
         form.attr("action",url);
 
+        $(".save_submit_button").attr('disabled', true);
         
         form.submit();
         

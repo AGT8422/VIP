@@ -25,6 +25,13 @@ use Illuminate\Notifications\DatabaseNotification;
 use App\Media; 
 use App\Charts\SampleChart;
 
+require '../vendor/autoload.php';
+
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\StreamReader;
+use setasign\Fpdi\PdfReader\PdfReader;
+use TCPDF;
+
 
 class HomeController extends Controller
 {
@@ -650,11 +657,11 @@ class HomeController extends Controller
             if ($request->hasFile('attach')) {
                 $count_doc1 = 1;
                 $referencesNewStyle = str_replace('/', '-', $ref_no);
-                foreach ($request->file('attach') as $file) {
+                foreach ($request->file('attach') as $k =>  $file) {
                     #................
                     if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
                         if ($file->getSize() <= config('constants.document_size_limit')){ 
-                            if($file->getClientOriginalExtension() != "pdf"){
+                            // if($file->getClientOriginalExtension() != "pdf"){
                                 $file_name_m    =  time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
                                 $destinationPath = public_path('uploads/companies/'.$company_name.'/documents'.$dir_back_right);
                                 if (!file_exists($destinationPath)) {
@@ -662,22 +669,65 @@ class HomeController extends Controller
                                 }
                                 $file->move('uploads/companies/'.$company_name.'/documents'.$dir_back_right,$file_name_m);
                                 $file_name      =  'uploads/companies/'.$company_name.'/documents/'.$dir. $file_name_m;
-                            }else{
-                                $inputFile  = $file->getClientOriginalName();
-                                $outputFile = 'compressed_output.pdf';
+                            // }else{
+
+                            //     // Usage example
+                            //     #............................................... Zero
+                            //     // $file_name_m    =  time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
+                            //     // $inputFile      =  $file->getClientOriginalName();
+                            //     // $outputFile     =  'uploads/companies/'.$company_name.'/documents/'.$dir. $file_name_m;
+                            //     // $file_name      =  'uploads/companies/'.$company_name.'/documents/'.$dir. $file_name_m;
                                 
-                                // Ghostscript command to compress PDF
-                                $command = "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile={$outputFile} {$inputFile}";
+                            //     // if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['attach'])) {
+                            //     //     // Save the uploaded file to a temporary location
+                            //     //     $uploadedFile    = $_FILES['attach']['tmp_name'][$k];
+                            //     //     $destinationFile = $outputFile; // Path where you want to save the compressed PDF
                                 
-                                // Execute the command
-                                exec($command, $output, $return_var);
+                            //     //     // Call the compress function
+                            //     //     $this->compressPdf($uploadedFile, $destinationFile);
                                 
-                                if ($return_var === 0) {
-                                    echo "PDF successfully compressed.";
-                                } else {
-                                    echo "Error compressing PDF.";
-                                }
-                            }
+                            //     //     // echo "PDF successfully compressed.";
+                            //     // }
+                            //     // $sourceFile      = $file;
+                            //     // $destinationFile = $outputFile;
+                            //     // $quality         = 75; // Compression quality (0-100)
+
+                            //     // $this->compressPdf($sourceFile, $destinationFile, $quality);
+
+
+                            //     #............................................... End Zero
+                                
+                                
+                                
+                            //     #............................................... First    
+                            //     // return phpinfo();
+                            //     // $sourceFile      = $file;
+                            //     // $destinationFile = $outputFile;
+                            //     // $quality         = 75; // Compression quality (0-100)
+                            //     // $resolution      = 150; // DPI resolution
+                            //     // $this->compressPdfWithImagick($sourceFile, $destinationFile, $quality, $resolution);
+                            //     #............................................... End First    
+                                
+                            //     #............................................... Second    
+                            //     // Ghostscript command to compress PDF
+                            //     // $command = "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/printer -dNOPAUSE -dQUIET -dBATCH -sOutputFile={$outputFile} {$inputFile}";
+                            //     // $command = "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile=" . escapeshellarg($outputFile) . " " . escapeshellarg($inputFile);
+                                
+                            //     // $command = "gs -sDEVICE=pdfwrite -dNOPAUSE -dBATCH -sOutputFile={$outputFile} {$inputFile}";
+                            //     // $command = "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH "
+                            //     //         . "-dColorImageDownsampleType=/Bicubic -dColorImageResolution=72 "
+                            //     //         . "-dGrayImageDownsampleType=/Bicubic -dGrayImageResolution=72 "
+                            //     //         . "-dMonoImageDownsampleType=/Subsample -dMonoImageResolution=72 "
+                            //     //         . "-sOutputFile={$outputFile} {$inputFile}";
+                            //     // Execute the command
+                            //     // exec($command, $output, $return_var);
+                            //     // if ($return_var === 0) {
+                            //     //     echo "PDF successfully compressed.";
+                            //     // } else {
+                            //         //     echo "Error compressing PDF.";
+                            //     // }
+                            //     #............................................... End Second    
+                            // }
 
                         }
                     }else{
@@ -735,6 +785,96 @@ class HomeController extends Controller
              
             return view('attachment_outside.attach_outside');
        
+    }
+    # pdf    1
+    public function compressPdfWithImagick($sourceFile, $destinationFile, $quality = 75, $resolution = 150) {
+        // Create Imagick object
+        $imagick = new \Imagick();
+        $imagick->setResolution($resolution, $resolution);
+        $imagick->readImage($sourceFile);
+    
+        // Compress each page
+        foreach ($imagick as $page) {
+            $page->setImageCompression(\Imagick::COMPRESSION_JPEG);
+            $page->setImageCompressionQuality($quality);
+            $page->stripImage();  // Remove metadata
+        }
+    
+        // Write the compressed PDF
+        $imagick->setImageFormat('pdf');
+        $imagick->writeImages($destinationFile, true);
+    
+        // Clean up
+        $imagick->clear();
+        $imagick->destroy();
+    }
+
+    # pdf    2
+    // public function compressPdf($sourceFile, $destinationFile, $quality = 75) {
+    //     $pdf = new FPDI();
+    
+    //     // Set compression to 1 (highest)
+    //     $pdf->SetCompression(true);
+    
+    //     // Add a page for each page in the source PDF
+    //     $pageCount = $pdf->setSourceFile($sourceFile);
+    //     for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+    //         $pdf->AddPage();
+    //         $templateId = $pdf->importPage($pageNo);
+    //         $pdf->useTemplate($templateId);
+    
+    //         // Reduce the quality of images
+    //         $pdf->SetJPEGQuality($quality);
+    //     }
+    
+    //     // Output the new PDF to the destination file
+    //     $pdf->Output($destinationFile, 'F');
+    // }
+    public function compressPdf($sourceFile, $destinationFile, $quality = 75) {
+        // $pdf = new FPDI();
+    
+        // // Set compression
+        // $pdf->SetCompression(true);
+    
+        // // Set JPEG quality
+        
+        // // Read the source file
+        // $pageCount = $pdf->setSourceFile($sourceFile);
+        
+        // // Import each page
+        // for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+        //     $pdf->AddPage();
+        //     $templateId = $pdf->importPage($pageNo);
+        //     $pdf->useTemplate($templateId);
+        //     $pdf->setJPEGQuality($quality);
+        // }
+    
+        // // Output the new PDF to the destination file
+        // $pdf->Output($destinationFile, 'F');
+            // $pdf = new TCPDF();
+        
+            // // Set document information
+            // $pdf->SetCreator(PDF_CREATOR);
+            // $pdf->SetAuthor('Author');
+            // $pdf->SetTitle('Compressed PDF');
+            // $pdf->SetSubject('PDF Compression');
+            // $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        
+            // // Set JPEG quality
+            // $pdf->setJPEGQuality($quality);
+        
+            // // Add a page
+            // $pdf->AddPage();
+        
+            // // Import the PDF document
+            // $pageCount = $pdf->setSourceFile($sourceFile);
+            // for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+            //     $tplIdx = $pdf->importPage($pageNo);
+            //     $pdf->useTemplate($tplIdx);
+            // }
+        
+            // // Output the new PDF to the destination file
+            // $pdf->Output($destinationFile, 'F');
     }
     /**
      * Retrieves sell products whose available quntity is less than alert quntity.

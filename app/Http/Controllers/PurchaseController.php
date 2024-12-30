@@ -376,6 +376,7 @@ class PurchaseController extends Controller
             }
                    
         }
+       
         $sup_refe  = [];
         $sup_refe_ = Transaction::whereNotNull("sup_refe")->get();
         
@@ -411,11 +412,11 @@ class PurchaseController extends Controller
 
         $orderStatuses        = $this->productUtil->orderStatuses();
         $business_locations   = BusinessLocation::forDropdown($business_id, false, true);
-        $mainstore            = Warehouse::where('business_id', $business_id)->select(['name','id','status','mainStore','description'])->get();
+        $mainstore            = Warehouse::where('business_id', $business_id)->select(['name','id','status','mainStore','description','parent_id'])->get();
         $mainstore_categories = [];
         if (!empty($mainstore)) {
             foreach ($mainstore as $mainstor) {
-                if($mainstor->status != 0){
+                if($mainstor->parent_id != null){
                     $mainstore_categories[$mainstor->id] = $mainstor->name;
                 }
             }
@@ -999,11 +1000,11 @@ class PurchaseController extends Controller
         }
         $orderStatuses        = $this->productUtil->orderStatuses();
         $business_locations   = BusinessLocation::forDropdown($business_id, false, true);
-        $mainstore            = Warehouse::where('business_id', $business_id)->select(['name','id','status','mainStore','description'])->get();
+        $mainstore            = Warehouse::where('business_id', $business_id)->select(['name','id','status','mainStore','description','parent_id'])->get();
         $mainstore_categories = [];
         if (!empty($mainstore)) {
             foreach ($mainstore as  $key => $mainstor) {
-                if($mainstor->status != 0){
+                if($mainstor->parent_id != null){
                     $mainstore_categories[$mainstor->id] = $mainstor->name;
                 }
                 if($mainstor->id == $id){
@@ -1099,7 +1100,8 @@ class PurchaseController extends Controller
 
             //Check if the transaction can be edited or not.
             $edit_days = request()->session()->get('business.transaction_edit_days');
-            if (!$this->transactionUtil->canBeEdited($request->input('purchase_id'), $edit_days)) {
+           
+            if (!$this->transactionUtil->canBeEdited($id, $edit_days)) {
                 $output =  [
                             'success' => 0,
                             'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_days])];

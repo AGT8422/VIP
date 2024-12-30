@@ -51,7 +51,7 @@
         "ramsey/uuid": "^4.1",
         "razorpay/razorpay": "*",
         "setasign/fpdf": "^1.8",
-        "setasign/fpdi": "^2.3",
+        "setasign/fpdi": "^2.6",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/flysystem-dropbox": "*",
         "spatie/laravel-activitylog": "*",
@@ -61,7 +61,7 @@
         "stripe/stripe-php": "^13.6",
         "swiftmailer/swiftmailer": "^6.0",
         "symfony/mailer": "^6.1",
-        "tecnickcom/tcpdf": "^6.6",
+        "tecnickcom/tcpdf": "^6.8",
         "unicodeveloper/laravel-paystack": "*",
         "yajra/laravel-datatables-oracle": "v9.15.2"
     },

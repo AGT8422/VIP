@@ -12,10 +12,10 @@
 </section>
 
 <!-- Main content -->
-<section class="content no-print" style="width: 80%">
+<section class="content no-print" >
 	{!! Form::open(['url' => action('CombinedPurchaseReturnController@save'), 'method' => 'post', 'id' => 'purchase_return_form', 'files' => true ]) !!}
 	@component("components.widget",["class"=>"box-primary"])
-	<div class="box box-solid">
+	<div class="">
 		<div class="box-body">
 			<div class="row"> 
 				<div class="col-md-4"  style="background-color:#f7f7f7;margin:auto 2%;border-radius:10px;padding:15px;box-shadow:1px 1px 10px grey">
@@ -135,9 +135,10 @@
 			</div>
 		</div>
 	</div>
-
+	@endcomponent
+	@component("components.widget",["class"=>"box-primary"])
 	<!--box end-->
-	<div class="box box-solid">
+	<div class="">
 		<div class="box-header">
         	<h3 class="box-title">{{ __('stock_adjustment.search_products') }}</h3>
        	</div>
@@ -263,204 +264,203 @@
 						{!! Form::hidden('total_return_input', 0 , ['id' => 'total_return_input']); !!}
 					</div>
 				</div>
-					<div class="clearfix"></div>
-					<div>&nbsp;</div>
-					<div>&nbsp;</div>
-			@endcomponent
-			 @component("components.widget",["class"=>"box-primary"])
+				<div class="clearfix"></div>
 				<div>&nbsp;</div>
 				<div>&nbsp;</div>
-				{{-- Discount & Vat --}}
-				<div class="col-sm-12">
-					<table class="table">
-						<tr>
-							<td class="col-md-3 "  >
-								<div class="form-group">
-									{!! Form::label('discount_type', __( 'purchase.discount_type' ) . ':') !!}
-									{!! Form::select('discount_type', [ '' => __('lang_v1.none'), 'fixed_before_vat' => __( 'home.fixed before vat' ), 'fixed_after_vat' => __( 'home.fixed after vat' ), 'percentage' => __( 'lang_v1.percentage' )], '', ['class' => 'form-control select2']); !!}
-								</div>
-							</td>
-							<td class="col-md-3">
-								<div class="form-group">
-								{!! Form::label('discount_amount', __( 'purchase.discount_amount' ) . ':') !!}
-								{!! Form::text('discount_amount', 0, ['class' => 'form-control input_number', 'required']); !!}
-								</div>
-							</td>
-							<td class="col-md-3 pull-right">
-								<b class="i_curr hide"> @lang( 'purchase.discount' ): (-)</b>   
-								 <span id="discount_calculated_amount_cur" class="display_currency hide">0</span>
-							</td>
-							<td class="col-md-3 text-right">
-								<b>@lang( 'purchase.discount' ):</b>(-) 
- 								<span id="discount_calculated_amount2" class="display_currency">0</span>
- 								{!! Form::hidden('discount_amount2', 0 , ['id' => 'discount_amount2']); !!}
-							</td>
-						</tr>
-					
-						<tr>
-							 
-							<td>
-								<div class="col-md-12">
-									<div class="form-group">
-										{!! Form::label('tax_id', __('purchase.purchase_tax') . ':') !!}
-										<select name="tax_id" id="tax_id" class="form-control select2" placeholder="'Please Select'">
-											<option value="" data-tax_amount="0" data-tax_type="fixed" >@lang('lang_v1.none')</option>
-												@php $co = 1; @endphp
-												@foreach($taxes as $tax)
-													<option value="{{ $tax->id }}" data-tax_amount="{{ $tax->amount }}" data-tax_type="{{ $tax->calculation_type }}" @if($co == 1) selected @endif>{{ $tax->name }}</option>
-													@php $co++; @endphp
-												@endforeach
-										</select>
-										{!! Form::hidden('tax_amount', 0, ['id' => 'tax_amount']); !!}
-									</div>
-								</div>
-							</td>
-							<td></td>
-							<td class="col-sm-3 pull-right" >
-									<b class="t_curr hide" >@lang( 'purchase.purchase_tax' ): (+)</b> 
-									<span id="tax_calculated_amount_curr" class="display_currency hide">0</span></td>
-							</td>
-					 
-							<td class="col-sm-3   text-right" >
-								<b>@lang( 'purchase.purchase_tax' ):</b>(+) 
-								<span id="tax_calculated_amount" class="display_currency">0</span>
- 								{!! Form::hidden('tax_amount2', 0 , ['id' => 'tax_amount2']); !!}
-							</td>
-						</tr>
-					 
-				{{-- total bill --}}
-				<tr>
-					<td class=" col-sm-3">&nbsp;</td>
-					<td class=" col-sm-3">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-					<td></td>
-					<td  class="col-sm-3 pull-left"  >
-						<br>
-						<b class="z_curr hide">@lang('purchase.purchase_total_'): </b>
-						<span id="total_final_i_curr" class="display_currency hide">0</span>
-					</td>
-					<td class=" col-sm-3 pull-right">
-						<br>
-						<b>@lang('purchase.purchase_total_'): </b><span id="total_finals" class="display_currency" data-currency_symbol='true'>0</span>
-						{!! Form::hidden('total_finals_', 0 , ['id' => 'total_finals_']); !!}
-
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="form-group">
-						{!! Form::label('shipping_details', __( 'purchase.shipping_details' ) . ':') !!}
-						{!! Form::text('shipping_details', null, ['class' => 'form-control']); !!}
-						</div>
-					</td>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-				 
-					<td class="pull-right">
-						<div class="form-group">
-							<b class="oss_curr hide">@lang('Additional Supplier Cost In Currency'): </b>
-							<span id="cost_amount_supplier_curr" class="display_currency oss_curr hide">0</span> 
-						{!! Form::label('shipping_charges','(+) ' . __( 'purchase.supplier_shipping_charges' ) . ':') !!}
-						<div class="input-group">
-							<span class="input-group-btn">
-								<button type="button"   class="btn btn-default bg-white btn-flat" title="@lang('unit.add_unit')" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
-							</span>
-						      {!! Form::hidden('ADD_SHIP', 0, ['class' => 'form-control input_number' ,"id" => "total_ship_"  ]); !!}
-						      {!! Form::text('ADD_SHIP', 0, ['class' => 'form-control input_number' ,"id" => "total_ship_" , "disabled" ,'required']); !!}
-						</div>
-						</div>
-						<!-- Modal -->
-						<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-							@include('additional_Expense.create')
-								
-						</div>
-					</td>
-				</tr>
-				{{-- purchase total --}}
-				<tr>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-					 
-					<td class="pull-left">
-						<b class="o_curr hide">@lang('purchase.purchase_total'): </b>
-						<span id="grand_total_cur" class="display_currency hide"  >0</span>
-						<br>
-						<br>
-					</td>
-					 
-					<td class="pull-right">
-						{!! Form::hidden('final_total', 0 , ['id' => 'grand_total_hidden']); !!}
-						<b>@lang('purchase.purchase_total'): </b><span id="total_final_" class="display_currency" data-currency_symbol='true'>0</span>
-						<br>
-						<br>
-						{!! Form::hidden('final_total_hidden_', 0 , ['id' => 'total_final_hidden_']); !!}
-						
-					</td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
- 					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-					<td class="pull-right">
-					    
-						<div class="form-group">
-						    <b class="os_curr hide">@lang('Additional Cost In Currency'): </b>
-						    <span id="cost_amount_curr" class="display_currency os_curr  hide">0</span> 
-						{!! Form::label('shipping_charges','(+) ' . __( 'purchase.cost_shipping_charges' ) . ':') !!}
-						<div class="input-group">
-							<span class="input-group-btn">
-								<button type="button"   class="btn btn-default bg-white btn-flat" title="@lang('unit.add_unit')" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
-							</span>
-						      {!! Form::hidden('ADD_SHIP_', 0, ['class' => 'form-control input_number' ,"id" => "total_ship_c"  ]); !!}
-						      {!! Form::text('ADD_SHIP_', 0, ['class' => 'form-control input_number' ,"id" => "total_ship_c" , "disabled" ,'required']); !!}
-						</div>
-						</div>
-						<!-- Modal -->
-						<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-							<input id="ship_from" type="hidden" value="{{$ship_from}}">
-							@include('additional_Expense.create')
-								
-						</div>
-					</td>
-				</tr>
-				{{-- total bill --}}
-				<tr>
-					<td>&nbsp;</td>
-					 
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-					<td class="pull-left">
-						<br>
-						<b class="c_curr hide">@lang('purchase.purchase_pay'): </b>
-						<span id="total_final_curr" class="display_currency hide"  >0</span>
-					</td>
-					<td class="pull-right">
-						<br>
-						<b>@lang('purchase.purchase_pay'): </b><span id="total_final_x" class="display_currency" data-currency_symbol='true'>0</span>
-					</td>
-				</tr>
-				{{-- Note Section !!  --}}
-				<tr>
-					<td colspan="4">
-						<div class="form-group">
-							{!! Form::label('additional_notes',__('purchase.additional_notes')) !!}
-							{!! Form::textarea('additional_notes', null, ['class' => 'form-control', 'rows' => 3]); !!}
-						</div>
-					</td>
-				</tr>
-						 
-					</table>
-				</div>
-				 
-				{{-- Submit --}}
-				<div class="col-md-12">
-					<button type="button" id="submit_purchase_return_form" class="btn btn-primary pull-right btn-flat">@lang('messages.submit')</button>
-				</div>
-			@endcomponent	
 			</div>
 		</div>
 	</div> <!--box end-->
-	 
+	@endcomponent
+		@component("components.widget",["class"=>"box-primary"])
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			{{-- Discount & Vat --}}
+			<div class="col-sm-12">
+				<table class="table">
+					<tr>
+						<td class="col-md-3 "  >
+							<div class="form-group">
+								{!! Form::label('discount_type', __( 'purchase.discount_type' ) . ':') !!}
+								{!! Form::select('discount_type', [ '' => __('lang_v1.none'), 'fixed_before_vat' => __( 'home.fixed before vat' ), 'fixed_after_vat' => __( 'home.fixed after vat' ), 'percentage' => __( 'lang_v1.percentage' )], '', ['class' => 'form-control select2']); !!}
+							</div>
+						</td>
+						<td class="col-md-3">
+							<div class="form-group">
+							{!! Form::label('discount_amount', __( 'purchase.discount_amount' ) . ':') !!}
+							{!! Form::text('discount_amount', 0, ['class' => 'form-control input_number', 'required']); !!}
+							</div>
+						</td>
+						<td class="col-md-3 pull-right">
+							<b class="i_curr hide"> @lang( 'purchase.discount' ): (-)</b>   
+							<span id="discount_calculated_amount_cur" class="display_currency hide">0</span>
+						</td>
+						<td class="col-md-3 text-right">
+							<b>@lang( 'purchase.discount' ):</b>(-) 
+							<span id="discount_calculated_amount2" class="display_currency">0</span>
+							{!! Form::hidden('discount_amount2', 0 , ['id' => 'discount_amount2']); !!}
+						</td>
+					</tr>
+				
+					<tr>
+						
+						<td>
+							<div class="col-md-12">
+								<div class="form-group">
+									{!! Form::label('tax_id', __('purchase.purchase_tax') . ':') !!}
+									<select name="tax_id" id="tax_id" class="form-control select2" placeholder="'Please Select'">
+										<option value="" data-tax_amount="0" data-tax_type="fixed" >@lang('lang_v1.none')</option>
+											@php $co = 1; @endphp
+											@foreach($taxes as $tax)
+												<option value="{{ $tax->id }}" data-tax_amount="{{ $tax->amount }}" data-tax_type="{{ $tax->calculation_type }}" @if($co == 1) selected @endif>{{ $tax->name }}</option>
+												@php $co++; @endphp
+											@endforeach
+									</select>
+									{!! Form::hidden('tax_amount', 0, ['id' => 'tax_amount']); !!}
+								</div>
+							</div>
+						</td>
+						<td></td>
+						<td class="col-sm-3 pull-right" >
+								<b class="t_curr hide" >@lang( 'purchase.purchase_tax' ): (+)</b> 
+								<span id="tax_calculated_amount_curr" class="display_currency hide">0</span></td>
+						</td>
+				
+						<td class="col-sm-3   text-right" >
+							<b>@lang( 'purchase.purchase_tax' ):</b>(+) 
+							<span id="tax_calculated_amount" class="display_currency">0</span>
+							{!! Form::hidden('tax_amount2', 0 , ['id' => 'tax_amount2']); !!}
+						</td>
+					</tr>
+				
+			{{-- total bill --}}
+			<tr>
+				<td class=" col-sm-3">&nbsp;</td>
+				<td class=" col-sm-3">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+				<td></td>
+				<td  class="col-sm-3 pull-left"  >
+					<br>
+					<b class="z_curr hide">@lang('purchase.purchase_total_'): </b>
+					<span id="total_final_i_curr" class="display_currency hide">0</span>
+				</td>
+				<td class=" col-sm-3 pull-right">
+					<br>
+					<b>@lang('purchase.purchase_total_'): </b><span id="total_finals" class="display_currency" data-currency_symbol='true'>0</span>
+					{!! Form::hidden('total_finals_', 0 , ['id' => 'total_finals_']); !!}
+
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="form-group">
+					{!! Form::label('shipping_details', __( 'purchase.shipping_details' ) . ':') !!}
+					{!! Form::text('shipping_details', null, ['class' => 'form-control']); !!}
+					</div>
+				</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			
+				<td class="pull-right">
+					<div class="form-group">
+						<b class="oss_curr hide">@lang('Additional Supplier Cost In Currency'): </b>
+						<span id="cost_amount_supplier_curr" class="display_currency oss_curr hide">0</span> 
+					{!! Form::label('shipping_charges','(+) ' . __( 'purchase.supplier_shipping_charges' ) . ':') !!}
+					<div class="input-group">
+						<span class="input-group-btn">
+							<button type="button"   class="btn btn-default bg-white btn-flat" title="@lang('unit.add_unit')" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
+						</span>
+						{!! Form::hidden('ADD_SHIP', 0, ['class' => 'form-control input_number' ,"id" => "total_ship_"  ]); !!}
+						{!! Form::text('ADD_SHIP', 0, ['class' => 'form-control input_number' ,"id" => "total_ship_" , "disabled" ,'required']); !!}
+					</div>
+					</div>
+					<!-- Modal -->
+					<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						@include('additional_Expense.create')
+							
+					</div>
+				</td>
+			</tr>
+			{{-- purchase total --}}
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				
+				<td class="pull-left">
+					<b class="o_curr hide">@lang('purchase.purchase_total'): </b>
+					<span id="grand_total_cur" class="display_currency hide"  >0</span>
+					<br>
+					<br>
+				</td>
+				
+				<td class="pull-right">
+					{!! Form::hidden('final_total', 0 , ['id' => 'grand_total_hidden']); !!}
+					<b>@lang('purchase.purchase_total'): </b><span id="total_final_" class="display_currency" data-currency_symbol='true'>0</span>
+					<br>
+					<br>
+					{!! Form::hidden('final_total_hidden_', 0 , ['id' => 'total_final_hidden_']); !!}
+					
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td class="pull-right">
+					
+					<div class="form-group">
+						<b class="os_curr hide">@lang('Additional Cost In Currency'): </b>
+						<span id="cost_amount_curr" class="display_currency os_curr  hide">0</span> 
+					{!! Form::label('shipping_charges','(+) ' . __( 'purchase.cost_shipping_charges' ) . ':') !!}
+					<div class="input-group">
+						<span class="input-group-btn">
+							<button type="button"   class="btn btn-default bg-white btn-flat" title="@lang('unit.add_unit')" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
+						</span>
+						{!! Form::hidden('ADD_SHIP_', 0, ['class' => 'form-control input_number' ,"id" => "total_ship_c"  ]); !!}
+						{!! Form::text('ADD_SHIP_', 0, ['class' => 'form-control input_number' ,"id" => "total_ship_c" , "disabled" ,'required']); !!}
+					</div>
+					</div>
+					<!-- Modal -->
+					<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<input id="ship_from" type="hidden" value="{{$ship_from}}">
+						@include('additional_Expense.create')
+							
+					</div>
+				</td>
+			</tr>
+			{{-- total bill --}}
+			<tr>
+				<td>&nbsp;</td>
+				
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td class="pull-left">
+					<br>
+					<b class="c_curr hide">@lang('purchase.purchase_pay'): </b>
+					<span id="total_final_curr" class="display_currency hide"  >0</span>
+				</td>
+				<td class="pull-right">
+					<br>
+					<b>@lang('purchase.purchase_pay'): </b><span id="total_final_x" class="display_currency" data-currency_symbol='true'>0</span>
+				</td>
+			</tr>
+			{{-- Note Section !!  --}}
+			<tr>
+				<td colspan="4">
+					<div class="form-group">
+						{!! Form::label('additional_notes',__('purchase.additional_notes')) !!}
+						{!! Form::textarea('additional_notes', null, ['class' => 'form-control', 'rows' => 3]); !!}
+					</div>
+				</td>
+			</tr>
+					
+				</table>
+			</div>
+			
+			{{-- Submit --}}
+			<div class="col-md-12">
+				<button type="button" id="submit_purchase_return_form" class="btn btn-primary pull-right btn-flat">@lang('messages.submit')</button>
+			</div>
+		@endcomponent
 	{!! Form::close() !!}
 	<!-- /. content-->
 

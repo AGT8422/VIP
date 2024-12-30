@@ -168,10 +168,12 @@ class GournalVoucherController extends Controller
        }
        $type="journalEx";
        \App\Models\Entry::create_entries($item,$type);
-        
+       $output = [
+        'success' => true,
+        'msg'     => trans('home.Done Successfully')
+        ]; 
        DB::commit();
-       return redirect('gournal-voucher')
-                ->with('yes',trans('home.Done Successfully'));
+       return redirect('gournal-voucher')->with('status',$output);
     }
     public function edit($id)
     {
@@ -213,6 +215,7 @@ class GournalVoucherController extends Controller
         $old_status            =  $data->main_credit;
         $old_account_main      =  $data->main_account_id;
         $note_main             =  $request->note_main;
+        $old_date              =  $data->date;
 
         $data->date            =  $request->gournal_date;
         $data->main_account_id =  $request->main_account_id;
@@ -312,7 +315,7 @@ class GournalVoucherController extends Controller
             }
             if($request->main_credit != null && $request->main_credit != 0){ 
                 $access = 1;
-                $this->edit_effect_main($item,$request->total_credit,$request->main_account_id,$request->note_main,$old_account_main,$old_status,$note_main);
+                $this->edit_effect_main($item,$request->total_credit,$request->main_account_id,$request->note_main,$old_account_main,$old_status,$note_main,$old_date);
             }else{
                 $trans    =  \App\AccountTransaction::where('gournal_voucher_id',$id)->where('account_id',$old_account_main)->first();
                 if($trans){
@@ -357,7 +360,7 @@ class GournalVoucherController extends Controller
             }else{ 
                 if($request->main_credit != null  && $request->main_credit != 0){
                     if($access==0){
-                        $this->edit_effect_main($item,$request->total_credit,$request->main_account_id,$request->note_main,$old_account_main,$old_status,$note_main);
+                        $this->edit_effect_main($item,$request->total_credit,$request->main_account_id,$request->note_main,$old_account_main,$old_status,$note_main,$old_date);
                     } 
                 }else{
                     $trans    =  \App\AccountTransaction::where('gournal_voucher_id',$id)->where('account_id',$old_account_main)->first();
@@ -371,10 +374,12 @@ class GournalVoucherController extends Controller
                 }
             }
         }
-     
+       $output = [
+            'success' => true,
+            'msg'     => trans('home.Done Successfully')
+        ];
         DB::commit();
-        return redirect('gournal-voucher')
-        ->with('yes',trans('home.Done Successfully'));
+        return redirect('gournal-voucher')->with('status',$output);
     }
     public function effect_cost_center($data)
     {
@@ -561,8 +566,11 @@ class GournalVoucherController extends Controller
                 $itemCredit->account_id     = $data->credit_account_id ;
                 $itemCredit->update();
                 # ..................................................
-                if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$data->gournal_voucher->business_id,$action_date_old); }
-                if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecords($accountNew->id,$data->gournal_voucher->business_id,$action_date_new); }
+                $dateFinal              = ($action_date_old<$action_date_new)?$action_date_old:$action_date_new;
+                if($old_credit != $data->credit_account_id){ 
+                    if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$data->gournal_voucher->business_id,$dateFinal); }
+                }
+                if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecords($accountNew->id,$data->gournal_voucher->business_id,$dateFinal); }  
             }
             # tax account  
             $taxAccount = \App\AccountTransaction::where('gournal_voucher_item_id',$data->id)->where('account_id',$old_tax)->get();
@@ -578,9 +586,11 @@ class GournalVoucherController extends Controller
                 $itemTax->account_id        = $tax ;
                 $itemTax->update();
                 # ..................................................
-                if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$data->gournal_voucher->business_id,$action_date_old); }
-                if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecords($accountNew->id,$data->gournal_voucher->business_id,$action_date_new); }
-
+                $dateFinal              = ($action_date_old<$action_date_new)?$action_date_old:$action_date_new;
+                if($old_tax != $tax){ 
+                    if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$data->gournal_voucher->business_id,$dateFinal); }
+                }
+                if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecords($accountNew->id,$data->gournal_voucher->business_id,$dateFinal); }
             } 
             # debit account  
             $debitAccount = \App\AccountTransaction::where('gournal_voucher_item_id',$data->id)->where('account_id',$old_debit)->get();
@@ -597,8 +607,11 @@ class GournalVoucherController extends Controller
                 $itemDebit->cs_related_id  = $data->cost_center_id ;
                 $itemDebit->update();
                 # ..................................................
-                if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$data->gournal_voucher->business_id,$action_date_old); }
-                if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecords($accountNew->id,$data->gournal_voucher->business_id,$action_date_new); }
+                $dateFinal              = ($action_date_old<$action_date_new)?$action_date_old:$action_date_new;
+                if($old_debit != $data->debit_account_id){ 
+                    if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$data->gournal_voucher->business_id,$dateFinal); }
+                }
+                if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecords($accountNew->id,$data->gournal_voucher->business_id,$dateFinal); }
             } 
         }
     }
@@ -622,8 +635,11 @@ class GournalVoucherController extends Controller
             $itemTax->account_id        = $tax ;
             $itemTax->update();
             # ..................................................
-            if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$data->gournal_voucher->business_id,$action_date_old); }
-            if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecords($accountNew->id,$data->gournal_voucher->business_id,$action_date_new); }
+            $dateFinal              = ($action_date_old<$action_date_new)?$action_date_old:$action_date_new;
+            if($old_tax != $tax){ 
+                if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$data->gournal_voucher->business_id,$dateFinal); }
+            }
+            if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecords($accountNew->id,$data->gournal_voucher->business_id,$dateFinal); } 
         }
         $debitAccount = \App\AccountTransaction::where('gournal_voucher_item_id',$data->id)->where('account_id',$old_debit)->get();
         foreach($debitAccount as $itemDebit){
@@ -639,12 +655,15 @@ class GournalVoucherController extends Controller
             $itemDebit->cs_related_id   = $data->cost_center_id ;
             $itemDebit->update();
             # ..................................................
-            if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$data->gournal_voucher->business_id,$action_date_old); }
-            if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecords($accountNew->id,$data->gournal_voucher->business_id,$action_date_new); }
+            $dateFinal              = ($action_date_old<$action_date_new)?$action_date_old:$action_date_new;
+            if($old_tax != $tax){ 
+                if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$data->gournal_voucher->business_id,$dateFinal); }
+            }
+            if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecords($accountNew->id,$data->gournal_voucher->business_id,$dateFinal); }
         } 
  
     }
-    public function edit_effect_main($data,$total,$account_id,$note,$old_account_main,$old_status,$note_main) 
+    public function edit_effect_main($data,$total,$account_id,$note,$old_account_main,$old_status,$note_main,$old_date) 
     {
       
         if($data->gournal_voucher->main_account_id != $old_account_main){
@@ -664,10 +683,11 @@ class GournalVoucherController extends Controller
                     // 'gournal_voucher_item_id' => $data->id,
                 ];
                 $credit     = \App\AccountTransaction::createAccountTransaction($credit_data);
-                $account    = \App\Account::find($data->gournal_voucher->main_account_id);
                 $accountOld = \App\Account::find($old_account_main);
-                if($account->cost_center!=1){ \App\AccountTransaction::nextRecords($account->id,$account->business_id,$data->date); }
-                if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$accountOld->business_id,$data->date); }
+                $account    = \App\Account::find($data->gournal_voucher->main_account_id);
+                $dateFinal  = ($old_date<$data->date)?$old_date:$data->date;
+                if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$accountOld->business_id,$dateFinal); }
+                if($account->cost_center!=1){ \App\AccountTransaction::nextRecords($account->id,$account->business_id,$dateFinal); }
 
             }else{
                 # ..........................................
@@ -729,7 +749,7 @@ class GournalVoucherController extends Controller
                         # ...........................................
                         $accountOld            = \App\Account::find($data->gournal_voucher->main_account_id);
                         $account               = \App\Account::find($account_id);
-                        $old_date              = $trans->operation_date;
+                        $oldT_date             = $trans->operation_date;
                         # ...........................................
                         $trans->amount         = $total;
                         $trans->operation_date = $data->date;
@@ -737,8 +757,11 @@ class GournalVoucherController extends Controller
                         $trans->note           = $note;
                         $trans->update();
                         # ...........................................
-                        if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$accountOld->business_id,$old_date); }
-                        if($account->cost_center!=1){ \App\AccountTransaction::nextRecords($account->id,$account->business_id,$data->date); }
+                        $dateFinal              = ($oldT_date<$data->date)?$oldT_date:$data->date;
+                        if($data->gournal_voucher->main_account_id != $account_id){ 
+                            if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$accountOld->business_id,$dateFinal); }
+                        }
+                        if($account->cost_center!=1){ \App\AccountTransaction::nextRecords($account->id,$account->business_id,$dateFinal); } 
                     }
                 }
             }
@@ -810,7 +833,11 @@ class GournalVoucherController extends Controller
         if ($data) {
             $data->delete();
         }
-        return back()->with('yes',trans('home.Done Successfully'));
+        $output = [
+            'success' => true,
+            'msg'     => trans('home.Done Successfully')
+        ];
+        return back()->with('status',$output);
     }
     public function view($id)
     {

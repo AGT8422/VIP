@@ -102,7 +102,7 @@
 				
 				<div class="clearfix"></div>
 				<div class="col-sm-12">
-					<button type="submit" class="btn btn-primary pull-right">@lang('messages.save')</button>
+					<button type="submit" class="btn btn-primary pull-right">@lang('messages.update')</button>
 				</div>
 				<div class="clearfix"></div>
 				<div class="col-sm-6">

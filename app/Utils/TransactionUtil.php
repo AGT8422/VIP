@@ -3679,6 +3679,7 @@ class TransactionUtil extends Util
         if (!is_object($transaction)) {
             $transaction = Transaction::find($transaction);
         }
+     
         if (empty($transaction)) {
             return false;
         }
@@ -3687,7 +3688,6 @@ class TransactionUtil extends Util
                     ->addDays($edit_duration);
 
         $today = today();
-
         if ($date->gte($today)) {
             return true;
         } else {

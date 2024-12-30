@@ -169,8 +169,11 @@ class DailyPaymentController extends Controller
         $type = "journalV";
         \App\Models\Entry::create_entries($data,$type);
         \DB::commit();
-       return redirect('daily-payment')
-                ->with('yes',trans('home.Done Successfully'));
+        $output = [
+            'success' => true,
+            'msg'     => trans('home.Done Successfully')
+            ]; 
+       return redirect('daily-payment')->with('status',$output);
     }
     public function edit($id)
     {
@@ -201,16 +204,16 @@ class DailyPaymentController extends Controller
             abort(403, 'Unauthorized action.');
         }
         \DB::beginTransaction();
-        $business_id  =  request()->session()->get('user.business_id');
-        $data         =  DailyPayment::find($id) ;
-        $entry        =  \App\Models\Entry::where("journal_voucher_id",$id)->first();
-        $data->amount =  round($request->total_credit,2);
-        $data->date   =  $this->productUtil->uf_date($request->date, true);
+        $business_id           =  request()->session()->get('user.business_id');
+        $data                  =  DailyPayment::find($id) ;
+        $entry                 =  \App\Models\Entry::where("journal_voucher_id",$id)->first();
+        $data->amount          =  round($request->total_credit,2);
+        $data->date            =  $this->productUtil->uf_date($request->date, true);
         $data->currency_id     =  $request->currency_id;
         $data->exchange_price  =  $request->currency_id_amount;
         # ................................................
         $company_name      = request()->session()->get("user_main.domain");
-        $old_document    =  $data->document;
+        $old_document      =  $data->document;
         $referencesNewStyle = str_replace('/', '-', $data->ref_no);
         if($old_document == null){ $old_document = []; }
         if ($request->hasFile('document_expense')) {  $id_s = 1;
@@ -250,7 +253,7 @@ class DailyPaymentController extends Controller
         }
         if(json_encode($old_document)!="[]"){ $data->document        = json_encode($old_document) ; }
         # ................................................
-        $data->save();
+        $data->update();
 
         $ids   = ($request->old_item)??[];
         $Daily = DailyPaymentItem::where('daily_payment_id',$id)->whereNotIn('id',$ids)->get();
@@ -283,6 +286,7 @@ class DailyPaymentController extends Controller
                                                                             })->get();
             foreach($accounts_items as $itemOne){
                 # ................................................. 
+                $oldA                      = $itemOne->account_id;
                 $accountOld                = \App\Account::find($itemOne->account_id);
                 $accountNew                = \App\Account::find($request->old_account_id[$key]);
                 $dateOld                   = $itemOne->operation_date;  
@@ -297,8 +301,11 @@ class DailyPaymentController extends Controller
                 $itemOne->entry_id         = ($entry)?$entry->id:null  ; 
                 $itemOne->update() ;
                 # ..................................................
-                if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$data->business_id,$dateOld); }
-                if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecords($accountNew->id,$data->business_id,$dateNew); } 
+                $dateFinal              = ($dateOld<$dateNew)?$dateOld:$dateNew;
+                if($oldA != $request->old_account_id[$key]){ 
+                    if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$data->business_id,$dateFinal); }
+                }
+                if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecords($accountNew->id,$data->business_id,$dateFinal); }
             }
 
             if($request->old_cost_center_id[$key] == null){
@@ -354,9 +361,12 @@ class DailyPaymentController extends Controller
                 if($account->cost_center!=1){ \App\AccountTransaction::nextRecords($account->id,$data->business_id,$this->productUtil->uf_date($request->date, true)); }
              } 
         }
+        $output = [
+            'success' => true,
+            'msg'     => trans('home.Done Successfully')
+            ]; 
         \DB::commit();
-        return redirect('daily-payment')
-                ->with('yes',trans('home.Done Successfully'));
+        return redirect('daily-payment')->with('status',$output);
     }
     public function delete($id)
     {
@@ -380,7 +390,11 @@ class DailyPaymentController extends Controller
         if ($data) {
             $data->delete();
         }
-        return back()->with('yes',trans('home.Done Successfully'));
+        $output = [
+            'success' => true,
+            'msg'     => trans('home.Done Successfully')
+            ];  
+        return back()->with('status',$output);
     }
 
     public function show($id)

@@ -12,7 +12,7 @@ class Warehouse extends Model
     protected $appends = ['parent_name'];
     public  static function childs($id)
     {
-        $allData =  Warehouse::where('status',1)->where('business_id',$id)->get();
+        $allData =  Warehouse::where('parent_id',"!=",null)->where('business_id',$id)->get();
         $arr =  [];
         foreach ($allData as $data) {
             $arr[$data->id] =  $data->name;
@@ -22,7 +22,7 @@ class Warehouse extends Model
     public  static function product_stores($id,$business_id=null)
     {
         $business_id = ($business_id!=null)?$business_id:request()->session()->get('user.business_id'); 
-        $allData =  Warehouse::where('status',1)->where('business_id',$business_id)->whereHas('infos',function($query) use($id){
+        $allData =  Warehouse::where('parent_id',"!=",null)->where('business_id',$business_id)->whereHas('infos',function($query) use($id){
             $query->where('product_id',$id);
             $query->where('product_qty','>',0);
         })->get();
@@ -38,7 +38,7 @@ class Warehouse extends Model
 
         $business_id = request()->session()->get('user.business_id'); 
         $qty         = \App\TransactionSellLine::where('transaction_id',$trans_id)->sum("quantity_returned");
-        $allData     = Warehouse::where('status',1)->where('business_id',$business_id)->get();
+        $allData     = Warehouse::where('parent_id',"!=",null)->where('business_id',$business_id)->get();
         $arr         =  [];
         foreach ($allData as $data) {
             $arr[$data->id] =  ['name'=>$data->name,'available_qty'=>$qty];

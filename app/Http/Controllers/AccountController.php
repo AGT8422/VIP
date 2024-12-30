@@ -239,8 +239,10 @@ class AccountController extends Controller
         $array_of_sub_type_        = [];
         $array_of_sub_type_account = [];
         $account_types_sub         = AccountType::where('business_id', $business_id)
-                                              ->whereNotNull('parent_account_type_id')
-                                              ->whereNotNull('sub_parent_id')
+                                                ->whereNotNull('parent_account_type_id')
+                                                ->whereHas('sub_types',function($query){
+                                                        $query->whereNotNull('parent_account_type_id');
+                                                })
                                               ->with(['sub_types_id'])
                                               ->get();
         $main_account              =  AccountType::where('business_id', $business_id)
@@ -249,7 +251,9 @@ class AccountController extends Controller
                                               ->get();
         $account_types_sub_all     = AccountType::where('business_id', $business_id)
                                               ->whereNotNull('parent_account_type_id')
-                                              ->whereNull('sub_parent_id')
+                                              ->whereHas('sub_types',function($query){
+                                                        $query->whereNotNull('parent_account_type_id');
+                                                })
                                               ->get();
         foreach ($account_types_sub as $key => $value) {
             $array_of_type[$value->id] = $value->sub_parent_id."&".$value->name." /".$value->code;
@@ -951,12 +955,12 @@ class AccountController extends Controller
                                         $ref_no =  ($row->transaction)?$row->transaction->ref_no.' '.$row->transaction->invoice_no:$row->transaction_id;
                                         if ($row->transaction) {
                                             if ($row->transaction->ref_no) {
-                                                return '<a href="#" data-href="'.url('purchases/'.$row->transaction_id).'" class="btn-modal" data-container=".view_modal">'.$ref_no.'</a>';
+                                                return '<a href="#"  data-href="'.url('purchases/'.$row->transaction_id).'" class="btn-modal font_number" data-container=".view_modal">'.$ref_no.'</a>';
                                             }else{
-                                                return '<a href="#" data-href="'.url('sells/'.$row->transaction_id).'" class="btn-modal" data-container=".view_modal">'.$ref_no.'</a>';
+                                                return '<a href="#"  data-href="'.url('sells/'.$row->transaction_id).'" class="btn-modal font_number" data-container=".view_modal">'.$ref_no.'</a>';
                                             }
                                         }else{
-                                            return '<a href="#" data-href="'.url('account/account-ref/'.$row->id).'" class="btn-modal" data-container=".view_modal">'.$row->parent_ref.'</a>';
+                                            return '<a href="#" data-href="'.url('account/account-ref/'.$row->id).'" class="btn-modal font_number" data-container=".view_modal">'.$row->parent_ref.'</a>';
                                         }
                                         
                                     })
@@ -1626,13 +1630,10 @@ class AccountController extends Controller
             $account = \App\AccountType::where("parent_account_type_id",$id)->get();
             $array   = [] ; 
             foreach($account as $it){
-                $array[$it->id] = $it->name  . " || " . $it->code;
+                $array[$it->id] = $it->code  . " || " . $it->name;
                 $idd   =  $it->id ;
-                $acc   =  \App\AccountType::where("parent_account_type_id", $it->id)->get();
-                while(count($acc)>0){
-                    
-                     
-                }
+                $acc   =  \App\AccountType::where("parent_account_type_id", $it->id)->get(); 
+                $array =  $this->takeParent($array,$acc);
             }
             $output = [
                         'success' => true,
@@ -1642,12 +1643,14 @@ class AccountController extends Controller
         }
     }
 
-    public static function takeParent($list,$id){
-        $acc            =  \App\AccountType::where("parent_account_type_id", $id)->get();
+    public function takeParent($list,$acc){
         foreach($acc as $it){
-            $list[$it->id]  =  $it->name  . " || " . $it->code;
+            $list[$it->id]  =  $it->code . " || " . $it->name;
             $idd            =  $it->id ;
             $acc            =  \App\AccountType::where("parent_account_type_id", $it->id)->get();
+            if(count($acc)>0){
+                $this->takeParent($list,$acc);
+            }
         }
         return $list;
     }

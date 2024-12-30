@@ -22,43 +22,44 @@
         @if(!empty($purchase->contact->address_line_1))
           <br>{{$purchase->contact->address_line_1}}
         @endif
+
         @if(!empty($purchase->contact->address_line_2))
           <br>{{$purchase->contact->address_line_2}}
         @endif
+
         @if(!empty($purchase->contact->city) || !empty($purchase->contact->state) || !empty($purchase->contact->country))
           <br>{{implode(',', array_filter([$purchase->contact->city, $purchase->contact->state, $purchase->contact->country, $purchase->contact->zip_code]))}}
         @endif
+
         @if(!empty($purchase->contact->tax_number))
           <br>@lang('contact.tax_no'): {{$purchase->contact->tax_number}}
         @endif
+
         @if(!empty($purchase->contact->mobile))
           <br>@lang('contact.mobile'): {{$purchase->contact->mobile}}
         @endif
+
         @if(!empty($purchase->contact->email))
           <br>@lang('business.email'): {{$purchase->contact->email}}
         @endif
+
       </address>
-      {{-- @if($purchase->document != "[]" )
-          @if($purchase->document_path )
-            <a href="{{$purchase->document_path}}" 
-               download="{{$purchase->document_name}}" class="btn btn-sm btn-success pull-left no-print">
-              <i class="fa fa-download"></i> 
-                &nbsp;{{ __('purchase.download_document') }}
-            </a>
-          @endif
-      @endif --}}
+      
       @php
          $currency = \App\Currency::find($purchase->business->currency_id); 
-        $currency_symbol =isset($currency)?$currency->symbol:"";
+         $currency_symbol =isset($currency)?$currency->symbol:"";
         
       @endphp
       &nbsp;&nbsp;
+
       @if($purchase->status == "final" || $purchase->status == "received")
-      <button data-href="/entry/transaction/{{$purchase->id}}" data-container=".view_modal" class="btn btn-modal bg-blue">@lang("home.Entry")</button>
+        <button data-href="/entry/transaction/{{$purchase->id}}" data-container=".view_modal" class="btn btn-modal bg-blue">@lang("home.Entry")</button>
       @endif
-      @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost')) 
+
+      @can('product.avarage_cost') 
         <a href="/purchases/{{$purchase->id}}/edit"   class="btn bg-yellow" >@lang("messages.edit")</a>
-      @endif
+      @endcan
+
     </div>
 
     <div class="col-sm-4 invoice-col">
@@ -66,9 +67,11 @@
       <address>
         <strong>{{ $purchase->business->name }}</strong>
         {{ $purchase->location->name }}
+
         @if(!empty($purchase->location->landmark))
           <br>{{$purchase->location->landmark}}
         @endif
+
         @if(!empty($purchase->location->city) || !empty($purchase->location->state) || !empty($purchase->location->country))
           <br>{{implode(',', array_filter([$purchase->location->city, $purchase->location->state, $purchase->location->country]))}}
         @endif
@@ -87,6 +90,7 @@
         @if(!empty($purchase->location->email))
           <br>@lang('business.email'): {{$purchase->location->email}}
         @endif
+
       </address>
     </div>
 
@@ -97,21 +101,24 @@
       <b>@lang('purchase.payment_status'):</b> {{ __('lang_v1.' . $purchase->payment_status) }}<br>
       <b>@lang('warehouse.nameW'):</b> {{ $store }}<br>
       @if($purchase->cost_center != null)
-      <b>@lang('home.Cost Center'):</b> {{ $purchase->cost_center->name }}<br>
+        <b>@lang('home.Cost Center'):</b> {{ $purchase->cost_center->name }}<br>
       @endif
+
       @if($purchase->sup_refe)
-      <div>
-        <strong> @lang("purchase.sup_refe") : </strong> 
-        {{$purchase->sup_refe}}
-      </div>
-    @endif
-    @if($purchase->currency_id !== null)
-      <div>
-        <strong> @lang("purchase.Additional Currency") : </strong> 
-        @php $currency = \App\Currency::find($purchase->currency_id); @endphp
-        {{$currency->currency . " ( " . $currency->symbol  . " ) " . $currency->code }}
-      </div>
-    @endif
+        <div>
+          <strong> @lang("purchase.sup_refe") : </strong> 
+          {{$purchase->sup_refe}}
+        </div>
+     @endif
+
+        @if($purchase->currency_id !== null)
+          <div>
+            <strong> @lang("purchase.Additional Currency") : </strong> 
+            @php $currency = \App\Currency::find($purchase->currency_id); @endphp
+            {{$currency->currency . " ( " . $currency->symbol  . " ) " . $currency->code }}
+          </div>
+        @endif
+
     </div>
   </div>
 
@@ -127,41 +134,50 @@
               <th class="text-right">@lang('purchase.purchase_quantity')</th>
               <th class="text-right">@lang( 'lang_v1.unit_cost_before_discount' )</th>
               <th>@lang('home.Price Including Tax')</th>
+
               @if($purchase->currency_id !== null)
                 <th class="text-right">@lang( 'lang_v1.Cost before without Tax' ) {{ " " . $currency->symbol}}</th>
                 <th class="text-right"  >@lang( 'home.Cost before with Tax' ) {{ " " . $currency->symbol}}</th>
               @endif  
+
+
               <th class="text-right">@lang( 'home.Discount' )</th>
               <th class="text-right">@lang('purchase.unit_cost_before_tax_')</th>
               <th class="no-print text-right">@lang('purchase.unit_cost_before_tax')</th>
+
+
               @if($purchase->currency_id !== null)
                 <th class="text-right">@lang( 'home.Cost without Tax currency' )   {{ " " . $currency->symbol}}</th>
                 <th class="text-right" >@lang( 'home.Cost After Tax currency' )  {{ " " . $currency->symbol}}</th>
               @endif  
+
+
               <th class="no-print text-right">@lang('purchase.subtotal_before_tax')</th>
               <th class="text-right">@lang('sale.tax')</th>
               {{-- <th class="text-right">@lang('purchase.unit_selling_price')</th> --}}
+
               @if(session('business.enable_lot_number'))
                 <th>@lang('lang_v1.lot_number')</th>
               @endif
+
               @if(session('business.enable_product_expiry'))
                 <th>@lang('product.mfg_date')</th>
                 <th>@lang('product.exp_date')</th>
               @endif
+
               <th class="text-right">@lang('sale.subtotal')</th>
             </tr>
           </thead>
           
           @php 
-        
             $total_before_tax = 0.00;
             $total_befor_taxx_currency  = 0; 
             $total_befor_taxx  = 0; 
           @endphp
+
           @foreach($purchase->purchase_lines as $purchase_line)
             <?php
-             $tax_price = $purchase_line->purchase_price;
-             
+                $tax_price = $purchase_line->purchase_price;
                 $tx = 0 ;
                 foreach ($array as $key => $value) {
                     if($key == $purchase_line->tax_id ){
@@ -169,19 +185,20 @@
                     }
                 }
      
-             if (isset($purchase_line->transaction->tax->amount)) {
-                $tax_price =  
-                ($tx/100)* $purchase_line->purchase_price  
-                +  $purchase_line->purchase_price  ;
-             
-             }
-             if($purchase_line->pp_without_discount != 0){
-                 
-                $total_befor_taxx += $purchase_line->quantity * ($purchase_line->pp_without_discount - ($purchase_line->discount_percent*100/$purchase_line->pp_without_discount));
-             }else{
-                $total_befor_taxx += $purchase_line->quantity * ($purchase_line->pp_without_discount - 0);
-                 
-             }
+                if (isset($purchase_line->transaction->tax->amount)) {
+                    $tax_price =  
+                    ($tx/100)* $purchase_line->purchase_price  
+                    +  $purchase_line->purchase_price  ;
+                
+                }
+
+                if($purchase_line->pp_without_discount != 0){
+                    
+                    $total_befor_taxx += $purchase_line->quantity * ($purchase_line->pp_without_discount - ($purchase_line->discount_percent*100/$purchase_line->pp_without_discount));
+                }else{
+                    $total_befor_taxx += $purchase_line->quantity * ($purchase_line->pp_without_discount - 0);
+                    
+                }
             ?> 
             <tr>
               <td>{{ $loop->iteration }} 
@@ -190,97 +207,100 @@
                 <a href="/item-move/{{$purchase_line->product->id}}"  target="_blank">
                 {{ $purchase_line->product->name }}
                 </a>
-              
-                
+
                 @if( $purchase_line->product->type == 'variable')
-                - {{ $purchase_line->variations->product_variation->name}}
-                - {{ $purchase_line->variations->name}}
+                    - {{ $purchase_line->variations->product_variation->name}}
+                    - {{ $purchase_line->variations->name}}
                 @endif
-                
-                <div class="btn-group"><button type="button" class="btn btn-info dropdown-toggle btn-xs no-print" data-toggle="dropdown" aria-expanded="false">@lang("messages.actions")<span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button><ul class="dropdown-menu dropdown-menu-left" role="menu">
-                       <li><a data-href="{{action('ProductController@view', [ $purchase_line->product->id])}}" class="btn-modal" data-container=".products_modal"><i class="fa fa-eye"></i>@lang("messages.view")</a></li>
-                       <li><a href="{{action('ProductController@edit', [ $purchase_line->product->id])}}"><i class="glyphicon glyphicon-edit"></i>@lang("messages.edit")</a></li>
-                       <li><a href="{{action('ItemMoveController@index', [$purchase_line->product->id])}}"><i class="fas fa-history"></i>@lang("lang_v1.product_stock_history")</a></li>
-                   </ul>
-                     <button type="button" style="margin-left:10px" class="btn btn-primary btn-xs btn-modal no-print" id="view_s" data-container=".products_modal" data-href="{{action('ProductController@viewStock', [$purchase_line->product->id])}}">@lang('lang_v1.view_Stock')</button> 
-                     <button type="button" style="margin-left:10px" class="btn btn-second btn-xs btn-modal no-print" data-container=".stocks_modal" data-href="{{action('ProductController@viewUnrecieved', [$purchase_line->product->id])}}">@lang('recieved.should_recieved')</button> 
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle btn-xs no-print" data-toggle="dropdown" aria-expanded="false">@lang("messages.actions")<span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+                    <ul class="dropdown-menu dropdown-menu-left" role="menu">
+                        <li><a data-href="{{action('ProductController@view', [ $purchase_line->product->id])}}" class="btn-modal" data-container=".products_modal"><i class="fa fa-eye"></i>@lang("messages.view")</a></li>
+                        <li><a href="{{action('ProductController@edit', [ $purchase_line->product->id])}}"><i class="glyphicon glyphicon-edit"></i>@lang("messages.edit")</a></li>
+                        <li><a href="{{action('ItemMoveController@index', [$purchase_line->product->id])}}"><i class="fas fa-history"></i>@lang("lang_v1.product_stock_history")</a></li>
+                    </ul>
+                    <button type="button" style="margin-left:10px" class="btn btn-primary btn-xs btn-modal no-print" id="view_s" data-container=".products_modal" data-href="{{action('ProductController@viewStock', [$purchase_line->product->id])}}">@lang('lang_v1.view_Stock')</button> 
+                    <button type="button" style="margin-left:10px" class="btn btn-second btn-xs btn-modal no-print" data-container=".stocks_modal" data-href="{{action('ProductController@viewUnrecieved', [$purchase_line->product->id])}}">@lang('recieved.should_recieved')</button> 
                </div>
               </td>
              
               <td><span class="display_currency" data-is_quantity="true" data-currency_symbol="false">{{ $purchase_line->quantity }}</span> @if(!empty($purchase_line->sub_unit)) {{$purchase_line->sub_unit->short_name}} @else {{$purchase_line->product->unit->short_name}} @endif</td>
+              
               <td class="text-right">
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                @can('product.avarage_cost')
                   <span class="display_currency" data-currency_symbol="true">
                     @php $prices = rtrim($purchase_line->pp_without_discount, '0'); @endphp
                     {{rtrim($prices, '.')}}
                   </span>
                 @else
                   {{ "--" }}
-                @endif
+                @endcan
               </td>
+
               <td class="text-right">
-                  @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                  @can('product.avarage_cost')
                     <span class="display_currency" data-currency_symbol="true">
                     {{($purchase_line->pp_without_discount*$tx/100) + $purchase_line->pp_without_discount}}
                     </span>
                   @else
                     {{ "--" }}
-                  @endif
+                  @endcan
               </td>
 
               @if($purchase->currency_id !== null)
                   <td class="text-right">
-                    @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                    @can('product.avarage_cost')
                       <span class="display_currency" data-currency_symbol="true">
                       @php $prices = rtrim($purchase_line->pp_without_discount, '0'); @endphp
                       {{rtrim(round($prices/$purchase->exchange_price,3), '.')}}
                       </span>
                     @else
                       {{ "--" }}
-                    @endif
+                    @endcan
                   </td>
-
                   <td class="text-right">
-                    @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                    @can('product.avarage_cost')
                       <span class="display_currency" data-currency_symbol="true">
                         {{round((($purchase_line->pp_without_discount/($purchase->exchange_price))*$tx/100) + ($purchase_line->pp_without_discount/$purchase->exchange_price),3)}} 
                       </span>
                     @else
                       {{ "--" }}
-                    @endif
+                    @endcan
                   </td>
               @endif
 
               <td class="text-right">
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                @can('product.avarage_cost')
                   <span class="display_currency">
                   {{$purchase_line->discount_percent}}</span> 
                   {{  ($purchase_line->transaction->inline_discount_type == 1)?trans('home.AED'):' ' }}  
                 @else
                   {{ "--" }}
-                @endif
+                @endcan
               </td>
               <td class="text-right">
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                @can('product.avarage_cost')
                   <span class="display_currency" data-currency_symbol="true">   
                     @php $price_after = rtrim($purchase_line->purchase_price, '0'); @endphp
                     {{rtrim($price_after, '.')}}
                   </span>
                 @else
                   {{ "--" }}
-                @endif
+                @endcan
               </td>
               <td class="no-print text-right">
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                @can('product.avarage_cost')
                   <span class="display_currency" data-currency_symbol="true">{{($purchase_line->purchase_price + $purchase_line->purchase_price*$tx/100)}}
                   </span>
                 @else
                   {{ "--" }}
-                @endif
+                @endcan
               </td>
+
               @if($purchase->currency_id !== null)
                 <td class="text-right">
-                  @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                  @can('product.avarage_cost')
                     <span class="display_currency" data-currency_symbol="true">
                       @if($purchase->exchange_price != 0)
                         @php $price_after = rtrim( $purchase_line->purchase_price, '0'); @endphp
@@ -292,22 +312,23 @@
                     </span>
                   @else
                     {{ "--" }}
-                  @endif
+                  @endcan
                 </td>
-                @if($purchase->exchange_price != 0)
-                  <td class="no-print text-right">
-                    @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
-                      <span class="display_currency" data-currency_symbol="true">
-                        {{round((($purchase_line->purchase_price/$purchase->exchange_price) + ($purchase_line->purchase_price/$purchase->exchange_price)*$tx/100),3)}}
-                      </span>
-                    @else
-                      {{ "--" }}
-                    @endif
-                  </td>
-                @endif
+                  @if($purchase->exchange_price != 0)
+                    <td class="no-print text-right">
+                      @can('product.avarage_cost')
+                        <span class="display_currency" data-currency_symbol="true">
+                          {{round((($purchase_line->purchase_price/$purchase->exchange_price) + ($purchase_line->purchase_price/$purchase->exchange_price)*$tx/100),3)}}
+                        </span>
+                      @else
+                        {{ "--" }}
+                      @endcan
+                    </td>
+                  @endif
               @endif
+
               <td class="no-print text-right">
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                @can('product.avarage_cost')
                   <span class="display_currency" data-currency_symbol="true">
                     @php
                     if($purchase_line->pp_without_discount != 0){
@@ -320,15 +341,15 @@
                   </span>
                 @else
                   {{ "--" }}
-                @endif
+                @endcan
               </td>
               <td class="text-right">
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                @can('product.avarage_cost')
                       <span class="display_currency" data-currency_symbol="true">
                       {{ isset($purchase_line->transaction->tax)?$purchase_line->transaction->tax->amount.'%':0 }} </span> <br/><small>@if(!empty($taxes[$purchase_line->tax_id])) ( {{ $taxes[$purchase_line->tax_id]}} ) </small>@endif
                 @else
                   {{ "--" }}
-                @endif 
+                @endcan 
               </td>
           
               @php
@@ -344,39 +365,41 @@
               @endif
 
               @if(session('business.enable_product_expiry'))
-              <td>
-                @if( !empty($purchase_line->product->expiry_period_type) )
-                  @if(!empty($purchase_line->mfg_date))
-                    {{ @format_date($purchase_line->mfg_date) }}
+                <td>
+                  @if( !empty($purchase_line->product->expiry_period_type) )
+                    @if(!empty($purchase_line->mfg_date))
+                      {{ @format_date($purchase_line->mfg_date) }}
+                    @endif
+                  @else
+                    @lang('product.not_applicable')
                   @endif
-                @else
-                  @lang('product.not_applicable')
-                @endif
-              </td>
-              <td>
-                @if( !empty($purchase_line->product->expiry_period_type) )
-                  @if(!empty($purchase_line->exp_date))
-                    {{ @format_date($purchase_line->exp_date) }}
+                </td>
+                <td>
+                  @if( !empty($purchase_line->product->expiry_period_type) )
+                    @if(!empty($purchase_line->exp_date))
+                      {{ @format_date($purchase_line->exp_date) }}
+                    @endif
+                  @else
+                    @lang('product.not_applicable')
                   @endif
-                @else
-                  @lang('product.not_applicable')
-                @endif
-              
-              </td>
+                
+                </td>
               @endif
+
+
               <td class="text-right">
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                @can('product.avarage_cost')
                   <span class="display_currency" data-currency_symbol="true">
-                  {{ number_format(($tax_price * $purchase_line->quantity),2) }}   
-                  <br>
-                  <hr>
-                  @if($purchase->currency_id !== null)
-                  {{ number_format((round($tax_price/$purchase->exchange_price,3) * $purchase_line->quantity),3) }} {{ " " . $currency->symbol}} 
-                  @endif  
-                </span>
+                      {{ number_format(($tax_price * $purchase_line->quantity),2) }}   
+                    <br>
+                    <hr>
+                    @if($purchase->currency_id !== null)
+                      {{ number_format((round($tax_price/$purchase->exchange_price,3) * $purchase_line->quantity),3) }} {{ " " . $currency->symbol}} 
+                    @endif  
+                  </span>
                 @else
                   {{ "--" }}
-                @endif
+                @endcan
             </td>
             </tr>
             @php 
@@ -483,7 +506,7 @@
                 @endphp
               @endif
               <tr @if($type != "other") style="background:#f1f1f1; width:100% !important" @else style="background:#ff5b5b; width:100% !important" @endif>
-                 <td>{{$Recieved->TrRecieved->reciept_no}}</td>
+                <td>{{$Recieved->TrRecieved->reciept_no}}</td>
 							  <td>{{$Recieved->created_at}}</td>
 							  <td>
                   <a href="/item-move/{{$Recieved->product->id}}"  target="_blank">
@@ -505,11 +528,11 @@
 							  <td>{{$Warehouse_name}}</td>
 							  <td>{{$Recieved->note}}</td>
 							  <td>
-                  @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                  @can('product.avarage_cost')
                     {{number_format(\App\Product::product_cost_expense($Recieved->product_id,$Recieved->transaction_id,$Recieved->transaction_deliveries_id),3)}}  {{ " " .$currency_symbol}}  
                   @else
                     {{ "--" }}
-                  @endif
+                  @endcan
                 </td>
 							</tr>
 							
@@ -529,13 +552,13 @@
 
                       @if ($pre != $RecWrong->created_at)
                           @if ($pre == "")  @else
-                          <tr  style="border:1px solid #f1f1f1;" >
-                              <td>{{""}}</td>	
-                              <td>{{""}}</td>	
-                              <td>{{""}}</td>	
-                              <td>{{""}}</td>	
-                              <td>{{""}}</td>	
-                          <tr>
+                              <tr  style="border:1px solid #f1f1f1;" >
+                                  <td>{{""}}</td>	
+                                  <td>{{""}}</td>	
+                                  <td>{{""}}</td>	
+                                  <td>{{""}}</td>	
+                                  <td>{{""}}</td>	
+                              <tr>
                           @endif
                           @php $style = ""; $pre = $RecWrong->created_at; @endphp
                       @endif
@@ -613,7 +636,7 @@
                         <td></td>
                      </tr>
                 @empty @endforelse
-              @endif
+            @endif
 						<tfoot>
 						  <tr class="bg-gray  font-17 footer-total" style="border:1px solid #f1f1f1;  ">
 							<td class="text-center " colspan="2"><strong>@lang('sale.total'):</strong></td>
@@ -658,45 +681,45 @@
             @endphp
             <tr>
               <td>
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                @can('product.avarage_cost')
                     {{ $loop->iteration }}
                 @else
                     {{   "--"   }}
-                @endif
+                @endcan
               </td>
               <td>
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
-                {{ @format_date($payment_line->paid_on) }}
+                @can('product.avarage_cost')
+                  {{ @format_date($payment_line->paid_on) }}
                 @else
                     {{   "--"   }}
-                @endif
+                @endcan
               </td>
               <td>
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
-                {{ $payment_line->payment_ref_no }}
+                @can('product.avarage_cost')
+                  {{ $payment_line->payment_ref_no }}
                 @else
                     {{   "--"   }}
-                @endif
+                @endcan
               </td>
               <td>
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
-                <span class="display_currency" data-currency_symbol="true">@format_currency($payment_line->amount)</span>
+                @can('product.avarage_cost')
+                  <span span class="display_currency" data-currency_symbol="true">@format_currency($payment_line->amount)</span>
                 @else
                     {{   "--"   }}
-                @endif
+                @endcan
               </td>
               <td>
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
-                {{ $payment_methods[$payment_line->method] ?? '' }}
+                @can('product.avarage_cost')
+                  {{ $payment_methods[$payment_line->method] ?? '' }}
                 @else
                     {{   "--"   }}
-                @endif
+                @endcan
               </td>
               <td>
                 @if($payment_line->note) 
-                {{ ucfirst($payment_line->note) }}
+                  {{ ucfirst($payment_line->note) }}
                 @else
-                --
+                  --
                 @endif
               </td>
             </tr>
@@ -726,56 +749,56 @@
               ?>
           <tr>
             <th>@lang('purchase.sub_total_amount'): </th>
-            <td>@if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost')) @if($purchase->currency_id !== null) {{ number_format($total_befor_taxx_currency,3)}}  {{ " " . $currency->symbol }} @endif  @else {{ "--" }} @endif</td>
+            <td>@can('product.avarage_cost') @if($purchase->currency_id !== null) {{ number_format($total_befor_taxx_currency,3)}}  {{ " " . $currency->symbol }} @endif  @else {{ "--" }} @endcan</td>
             <td>
-              @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+              @can('product.avarage_cost')
                   <span class="  pull-right" data-currency_symbol="false">{{number_format($total_befor_taxx,2)}}  {{ " " . $currency_symbol}}</span>
               @else
                   {{ "--" }}
-              @endif
+              @endcan
             </td>
           </tr>
           <tr>
             <th>@lang('purchase.discount'):</th>
             <td>
-            @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))              
-              <b>(-)</b>
-              @if($purchase->currency_id !== null) 
-                  @php
-                  $discount_i = $purchase->discount_amount;
-                  @endphp
-                  @if($purchase->discount_type == 'percentage')
-                    @format_currency((($purchase->discount_amount * $total_before_tax / 100)/$purchase->exchange_price))
-                  @elseif($purchase->discount_type == 'fixed_after_vat')
-                      @php
-                        $tax_ = \App\TaxRate::find($purchase->tax_id);
-                        if($tax_ != null){
-                          $tax = $tax_->amount;
-                        }else{
-                          $tax = 0;  
-                        }
-                      $discount_i = ($purchase->discount_amount - ($purchase->discount_amount*$tax/(100+$tax))/$purchase->exchange_price);
-                      @endphp
-                      {{round($discount_i,3)}}
-                  @else 
-                      {{round($purchase->discount_amount/$purchase->exchange_price,3)}}
-                  @endif                  
-                
-                      
-                {{ " " . $currency->symbol }} 
-              @endif
-              @if($purchase->discount_type == 'percentage')
-                (@format_currency($purchase->discount_amount) %)
-              @endif
-            @else
-                {{ "--" }}
-            @endif  
+              @can('product.avarage_cost')              
+                <b>(-)</b>
+                @if($purchase->currency_id !== null) 
+                    @php
+                    $discount_i = $purchase->discount_amount;
+                    @endphp
+                    @if($purchase->discount_type == 'percentage')
+                      @format_currency((($purchase->discount_amount * $total_before_tax / 100)/$purchase->exchange_price))
+                    @elseif($purchase->discount_type == 'fixed_after_vat')
+                        @php
+                          $tax_ = \App\TaxRate::find($purchase->tax_id);
+                          if($tax_ != null){
+                            $tax = $tax_->amount;
+                          }else{
+                            $tax = 0;  
+                          }
+                        $discount_i = ($purchase->discount_amount - ($purchase->discount_amount*$tax/(100+$tax))/$purchase->exchange_price);
+                        @endphp
+                        {{round($discount_i,3)}}
+                    @else 
+                        {{round($purchase->discount_amount/$purchase->exchange_price,3)}}
+                    @endif                  
+                  
+                        
+                  {{ " " . $currency->symbol }} 
+                @endif
+                @if($purchase->discount_type == 'percentage')
+                  (@format_currency($purchase->discount_amount) %)
+                @endif
+              @else
+                  {{ "--" }}
+              @endcan  
             </td>
             <td>
                 @php
                 $discount_i = $purchase->discount_amount;
                 @endphp
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                @can('product.avarage_cost')
                   <span class="display_currency pull-right" data-currency_symbol="true">
                     @if($purchase->discount_type == 'percentage')
                       @format_currency(($purchase->discount_amount * $total_before_tax / 100))
@@ -795,14 +818,14 @@
                     @endif    
                 @else
                     {{ "--" }}
-                @endif              
+                @endcan              
               </span>
             </td>
           </tr>
           <tr>
             <th>@lang('purchase.purchase_tax'):</th>
             <td><b>(+)</b>
-              @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+              @can('product.avarage_cost')
                   @if($purchase->currency_id !== null) 
                       @php
                         $tax_ = \App\TaxRate::find($purchase->tax_id);
@@ -816,13 +839,14 @@
                     
                   
                     {{ " " . $currency->symbol }} 
+                  @endif
               @else
                 {{ "--" }}     
-              @endif
+              @endcan
 
             </td>
             <td class="text-right">
-              @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+              @can('product.avarage_cost')
                 @if(!empty($purchase_taxes))
                   @foreach($purchase_taxes as $k => $v)
                     <strong><small>{{$k}}</small></strong>  &nbsp;&nbsp; <span class="  pull-right"  > {{number_format(($v),3)}} {{ " " . $currency_symbol}} </span><br>
@@ -832,14 +856,14 @@
                 @endif
               @else
                   {{ "--" }}
-              @endif
+              @endcan
               </td>
           </tr>
           <tr>
             <th>@lang('purchase.purchase_total_'): </th>
             <td>
               @if($purchase->currency_id !== null) 
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost')) 
+                @can('product.avarage_cost') 
                   @php
                     $tax_ = \App\TaxRate::find($purchase->tax_id);
                     if($tax_ != null){
@@ -870,28 +894,28 @@
                   {{round(($total_befor_taxx_currency - $discount_i_c + $tax),3)}}  
                   {{ " " . $currency->symbol }} 
                 @else
-                {{ "--" }}
-                @endif
-            @endif
+                  {{ "--" }}
+                @endcan
+              @endif
 
             </td>
             @if(!empty($purchase_taxes))
               @foreach($purchase_taxes as $k => $v)
                 <td>
-                  @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                  @can('product.avarage_cost')
                     <span class="  pull-right" data-currency_symbol="true">{{number_format(($total_befor_taxx - $discount_i + $v),3)}} {{ " " . $currency_symbol}} </span>
                   @else
                     {{ "--" }}
-                  @endif
+                  @endcan
                 </td>
               @endforeach
             @else
                 <td>
-                  @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                  @can('product.avarage_cost')
                     <span class="  pull-right" data-currency_symbol="true">{{number_format(($total_befor_taxx - $discount_i),3)}} {{ " " . $currency_symbol}}  </span>
                   @else
                     {{ "--" }}
-                  @endif 
+                  @endcan 
                 </td>
             @endif
           </tr>
@@ -960,14 +984,14 @@
                       <tr>
                         <input type="hidden" name="additional_shipping_item_id[]" value="{{ $item->id }}" >
                         <td class="col-xs-2">{{ $item->contact->name }}</td>
-                        <td class="col-xs-2">@if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost')){{ $item->amount }} @else {{ "--" }} @endif</td>
-                        <td class="col-xs-2">@if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost')){{ $item->vat }} @else {{ "--" }} @endif</td>
-                        <td class="col-xs-2">@if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost')){{ $item->total }} @else {{ "--" }} @endif</td>
+                        <td class="col-xs-2">@can('product.avarage_cost'){{ $item->amount }} @else {{ "--" }} @endcan</td>
+                        <td class="col-xs-2">@can('product.avarage_cost'){{ $item->vat }} @else {{ "--" }} @endcan</td>
+                        <td class="col-xs-2">@can('product.avarage_cost'){{ $item->total }} @else {{ "--" }} @endcan</td>
                         <td class="col-xs-2">{{ $item->account->name}}</td>
                         @if($item->cost_center != null)
-                        <td class="col-xs-2">{{ $item->cost_center->name }}</td>
+                          <td class="col-xs-2">{{ $item->cost_center->name }}</td>
                         @else
-                        <td class="col-xs-2">{{  "----" }}</td>
+                          <td class="col-xs-2">{{  "----" }}</td>
                         @endif
                         <td class="col-xs-2">{{ $item->text }}</td>
                         <td class="col-xs-2">{{ $item->date }}</td>
@@ -980,9 +1004,9 @@
                     @endforeach
                 @endforeach
                 <tr id="addRow">
-                  <td class="col-xs-2"> @lang('home.Total Amount') : <span id="shipping_total_amount">@if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost')){{ $total_shiping_amount  }}@else {{ "--" }} @endif </span> </td>
-                  <td class="col-xs-2"> @lang('home.Total Vat') : <span id="shipping_total_vat_s">@if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost')){{ $total_shiping_vat }}@else {{ "--" }} @endif</span>   </td>
-                  <td class="col-xs-2"> @lang('home.Total') : <span id="shipping_total_s">@if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost')){{ $total_shiping_s }}@else {{ "--" }} @endif</span>  </td>
+                  <td class="col-xs-2"> @lang('home.Total Amount') : <span id="shipping_total_amount">@can('product.avarage_cost'){{ $total_shiping_amount  }}@else {{ "--" }} @endcan </span> </td>
+                  <td class="col-xs-2"> @lang('home.Total Vat') : <span id="shipping_total_vat_s">@can('product.avarage_cost'){{ $total_shiping_vat }}@else {{ "--" }} @endcan</span>   </td>
+                  <td class="col-xs-2"> @lang('home.Total') : <span id="shipping_total_s">@can('product.avarage_cost'){{ $total_shiping_s }}@else {{ "--" }} @endcan</span>  </td>
                   <td class="col-xs-2"> </td>
                   <td class="col-xs-2"> </td>
                   <td class="col-xs-2"> </td>
@@ -1015,7 +1039,7 @@
           <tr>
             <th>@lang('purchase.purchase_total'):</th>
             <td>
-              @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+              @can('product.avarage_cost')
                 @if($purchase->currency_id !== null) 
                     @if(!empty($purchase_taxes))
                       @foreach($purchase_taxes as $k => $v)
@@ -1028,25 +1052,25 @@
                   @endif
               @else 
                   {{ "--" }}
-              @endif
+              @endcan
             </td>
             @if(!empty($purchase_taxes))
             @foreach($purchase_taxes as $k => $v)
                 <td>
-                  @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                  @can('product.avarage_cost')
                     <span class="display_currency pull-right" data-currency_symbol="true" >{{number_format(($total_befor_taxx - $discount_i + $v + $total_contact),3)}} {{ " " . $currency_symbol}}</span>
                   @else 
                       {{ "--" }}
-                  @endif
+                  @endcan
                 </td>
             @endforeach
             @else
               <td>
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                @can('product.avarage_cost')
                   <span class="display_currency pull-right" data-currency_symbol="true" >{{number_format(($total_befor_taxx - $discount_i  + $total_contact),3)}} {{ " " . $currency_symbol}}</span>
                 @else 
                     {{ "--" }}
-                @endif
+                @endcan
               </td>
             @endif
           </tr>
@@ -1054,7 +1078,7 @@
             <th>@lang('purchase.purchase_pay'):</th>
             <td>  
               @if($purchase->currency_id !== null) 
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
+                @can('product.avarage_cost')
                   @if(!empty($purchase_taxes))
                     @foreach($purchase_taxes as $k => $v)
                       {{round(($total_befor_taxx_currency - $discount_i_c + $v + $total_contact + $total_expense) ,3) }}
@@ -1065,28 +1089,28 @@
                   {{ " " . $currency->symbol }} 
                 @else
                   {{ "--" }}
-                @endif
+                @endcan
               @endif
 
             </td>
             @if(!empty($purchase_taxes))
               @foreach($purchase_taxes as $k => $v)
-              <td>
-                @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
-                <span class="  pull-right" data-currency_symbol="true" >{{number_format($total_befor_taxx - $discount_i + $v + $total_contact + $total_expense,3)}} {{ " " . $currency_symbol}}</span>
-                @endif
-                  {{ " " }} 
-                @endif
-              </td>
+                <td>
+                  @can('product.avarage_cost')
+                    <span class="  pull-right" data-currency_symbol="true" >{{number_format($total_befor_taxx - $discount_i + $v + $total_contact + $total_expense,3)}} {{ " " . $currency_symbol}}</span>
+                  @else
+                    {{ " " }} 
+                  @endcan
+                </td>
               @endforeach
             @else
-            <td>
-              @if(auth()->user()->hasRole('Admin#' . session('business.id')) ||  auth()->user()->can('product.avarage_cost'))
-                <span class="  pull-right" data-currency_symbol="true" >{{number_format($total_befor_taxx - $discount_i +  $total_contact + $total_expense,3)}} {{ " " . $currency_symbol}}</span>
-              @endif
-                {{ " " . $currency->symbol }} 
-              @endif
-            </td>
+              <td>
+                @can('product.avarage_cost')
+                  <span class="  pull-right" data-currency_symbol="true" >{{number_format($total_befor_taxx - $discount_i +  $total_contact + $total_expense,3)}} {{ " " . $currency_symbol}}</span>
+                @else
+                  {{ " " . $currency->symbol }} 
+                @endcan
+              </td>
             @endif
           </tr>
         </table>

@@ -26,7 +26,6 @@ class CheckController extends Controller
         $this->productUtil = $productUtil;
         $this->transactionUtil = $transactionUtil;
     }
-   
     public function index(Request $request)
     {
         if (!auth()->user()->can('cheque.view') && !auth()->user()->can('cheque.create')) {
@@ -243,9 +242,11 @@ class CheckController extends Controller
         \App\Models\Entry::create_entries($data,$types);
         
 
-
-        return redirect('cheque')
-                ->with('yes',trans('home.Done Successfully'));
+        $output = [
+            'success' => true,
+            'msg'     => trans('home.Done Successfully')
+            ]; 
+        return redirect('cheque')->with('status',$output);
     }
     public function edit($id)
     {
@@ -350,6 +351,7 @@ class CheckController extends Controller
             $data->account_type    =  1;
         }
         $data->update();
+        #......................................
         $allChecks          = \App\AccountTransaction::where('check_id',$id)->get();
         foreach($allChecks as $iCk){
             $account_transaction = $iCk->account_id; 
@@ -358,13 +360,13 @@ class CheckController extends Controller
             $iCk->operation_date = $request->write_date;
             // $iCk->entry_id       = ($entry)?$entry->id:null;
             $iCk->update();
+            $finalDate    = ($action_date<$request->write_date)?$action_date:$request->write_date; 
             $accountCheck = \App\Account::find($account_transaction);
-            if($accountCheck->cost_center!=1){ \App\AccountTransaction::nextRecords($accountCheck->id,$accountCheck->business_id,$action_date); }
+            if($accountCheck->cost_center!=1){ \App\AccountTransaction::nextRecords($accountCheck->id,$accountCheck->business_id,$finalDate); }
         }
-        
         if($old_contact_id != $request->contact_id ){
-            $account     =  \App\Account::where('id',$data->contact_id)->first();
             $old_account =  \App\Account::where('id',$old_contact_id)->first();
+            $account     =  \App\Account::where('id',$data->contact_id)->first();
             $allChecks   =  \App\AccountTransaction::where('check_id',$id)->where('account_id',$old_account->id)->get();
             foreach($allChecks as $iCk){
                 $account_transaction = $iCk->account_id; 
@@ -375,10 +377,14 @@ class CheckController extends Controller
                 $iCk->update();
                 $accountCheck        = \App\Account::find($account_transaction);
                 $accountCheckNew     = \App\Account::find($account->id);
-                if($accountCheck->cost_center!=1){ \App\AccountTransaction::nextRecords($accountCheck->id,$accountCheck->business_id,$action_date); }
-                if($accountCheckNew->cost_center!=1){  \App\AccountTransaction::nextRecords($accountCheckNew->id,$accountCheckNew->business_id,$request->write_date); }
+                $finalDate           = ($action_date<$request->write_date)?$action_date:$request->write_date;
+                if($account_transaction != $account->id){
+                    if($accountCheck->cost_center!=1){ \App\AccountTransaction::nextRecords($accountCheck->id,$accountCheck->business_id,$finalDate); }
+                }
+                if($accountCheckNew->cost_center!=1){  \App\AccountTransaction::nextRecords($accountCheckNew->id,$accountCheckNew->business_id,$finalDate); }
             }
         }
+        #......................................
         if($data->status == 0){
             $entry_id         = ($entry)?$entry->id:null;
             $allChecksDebit   =  \App\AccountTransaction::where('check_id',$id)->where("type","debit")->where('entry_id',$entry_id)->get();
@@ -388,7 +394,6 @@ class CheckController extends Controller
                 $onChk->update();
             }
         }
-
         $transactionPay    = \App\TransactionPayment::where('check_id', $id)->first();
         if($transactionPay){
             $old_payment   = $transactionPay->replicate();
@@ -426,9 +431,12 @@ class CheckController extends Controller
                         ]);
         \App\Services\Cheque\Bill::update_pay_transaction($data->id,$bills);
         DB::commit();
+        $output = [
+            'success' => true,
+            'msg'     => trans('home.Done Successfully')
+            ]; 
       //  Check::add_action($id,'edit');
-        return redirect('cheque')
-                ->with('yes',trans('home.Done Successfully'));
+        return redirect('cheque')->with('status',$output);
     }
     public function delete($id)
     {
@@ -479,8 +487,11 @@ class CheckController extends Controller
             $data->delete();
         }
         DB::commit();
-        return back()
-                ->with('yes',trans('home.Done Successfully'));
+        $output = [
+            'success' => true,
+            'msg'     => trans('home.Done Successfully')
+            ]; 
+        return back()->with('status',$output);
     }
     public function collect($id,Request $request)
     {
@@ -562,9 +573,11 @@ class CheckController extends Controller
         \App\Models\Entry::create_entries($data,$type);
        
         DB::commit();
-
-        return redirect('/cheque')
-                ->with('yes',trans('home.Done Successfully'));
+        $output = [
+            'success' => true,
+            'msg'     => trans('home.Done Successfully')
+            ]; 
+        return redirect('/cheque')->with('status',$output);
     }
     public function delete_collect($id)
     {

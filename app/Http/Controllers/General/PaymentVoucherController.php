@@ -165,8 +165,12 @@ class PaymentVoucherController extends Controller
         $type="voucher";
         \App\Models\Entry::create_entries($data,$type);
         DB::commit();
+        $output = [
+            'success' => true,
+            'msg'     => trans('home.Done Successfully')
+        ];
         return redirect('payment-voucher')
-                ->with('yes',trans('home.Done Successfully'));
+                    ->with('status',$output);
     }
     public function edit($id)
     {
@@ -267,7 +271,7 @@ class PaymentVoucherController extends Controller
             $data->document        =  json_encode($old_document) ;
         }
         #..........................................
-        $data->save();
+        $data->update();
         $type      =  $data->type;
         $state     =  'debit';
         $re_state  =  'credit';
@@ -293,8 +297,11 @@ class PaymentVoucherController extends Controller
             # .......................................
             $accountONE             = \App\Account::find($account_old);
             $accountTWO             = \App\Account::find($account_new);
-            if($accountONE->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountONE->id,$data->business_id,$account_date_old); }
-            if($accountTWO->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountTWO->id,$data->business_id,$account_date_new); }
+            $dateFinal              = ($account_date_old<$account_date_new)?$account_date_old:$account_date_new;
+            if($account_old != $account_new){
+                if($accountONE->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountONE->id,$data->business_id,$dateFinal); }
+            }
+            if($accountTWO->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountTWO->id,$data->business_id,$dateFinal); }
         } 
 
         if($old_type == 0){
@@ -320,9 +327,12 @@ class PaymentVoucherController extends Controller
             $items->update();
             # .......................................
             $accountONE             = \App\Account::find($account_old);
-            $accountTWO             = \App\Account::find($account_new);
-            if($accountONE->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountONE->id,$data->business_id,$account_date_old); }
-            if($accountTWO->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountTWO->id,$data->business_id,$account_date_new); }
+            $accountTWO             = \App\Account::find($account_new); 
+            $dateFinal              = ($account_date_old<$account_date_new)?$account_date_old:$account_date_new;
+            if($account_old != $account_new){
+                if($accountONE->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountONE->id,$data->business_id,$dateFinal); }
+            }
+            if($accountTWO->cost_center!= 1){ \App\AccountTransaction::nextRecords($accountTWO->id,$data->business_id,$dateFinal); }
         } 
         
         if(count($voucherAccountTransaction)==0){
@@ -447,10 +457,13 @@ class PaymentVoucherController extends Controller
 
         // }
         #..........................................................................
+        $output = [
+            'success' => true,
+            'msg'     => trans('home.Done Successfully')
+        ];
         DB::commit();
-       
         return redirect('payment-voucher')
-                   ->with('yes',trans('home.Done Successfully'));
+                   ->with('status',$output);
     }
     public function delete($id)
     {
@@ -553,9 +566,13 @@ class PaymentVoucherController extends Controller
 
             $data->delete();
         }
+        $output = [
+            'success' => true,
+            'msg'     => trans('home.Done Successfully')
+        ];
         DB::commit();
         return redirect('payment-voucher')
-                ->with('yes',trans('home.Done Successfully'));
+                ->with('status',$output); 
     }
     public function effect_account($id,$type,$created_by=null)
     {

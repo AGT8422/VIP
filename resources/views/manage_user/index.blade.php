@@ -19,7 +19,7 @@
      
     @php $mainUrl = '/users';  @endphp  
     <h5><i><b><a href="{{\URL::to($mainUrl)}}">{{ "   User Management  >  " }}</a></b>{{ "List Of Users"   }} <b> {{"   "}} </b></i> <div class="Subscribe_user">
-        {{ __('izo.user_number')  }} : {{session()->get('user_main.seats')??""}}
+        {{ __('izo.user_number')  }} : {{(session()->get('user_main.seats')  != NULL )?session()->get('user_main.seats')+1:""}}
     </div></h5>
     
 </section>

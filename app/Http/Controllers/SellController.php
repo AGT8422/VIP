@@ -917,11 +917,11 @@ class SellController extends Controller
         $taxes = TaxRate::forBusinessDropdown($business_id, true, true);
         
         $business_locations = BusinessLocation::forDropdown($business_id, false, true);
-        $mainstore = Warehouse::where('business_id', $business_id)->select(['name','status','id'])->get();
+        $mainstore = Warehouse::where('business_id', $business_id)->select(['name','status','id','parent_id'])->get();
         $mainstore_categories = [];
         if (!empty($mainstore)) {
             foreach ($mainstore as $mainstor) {
-                if($mainstor->status == 1){
+                if($mainstor->parent_id != null){
                     $mainstore_categories[$mainstor->id] = $mainstor->name;
                 
                 }
@@ -1698,7 +1698,7 @@ class SellController extends Controller
         $stores = [];
         if (!empty($warehouses)) {
             foreach ($warehouses as $mainstor) {
-                if($mainstor->status == 1){
+                if($mainstor->parent_id != null){
                     $stores[$mainstor->id] = $mainstor->name;
                 
                 }

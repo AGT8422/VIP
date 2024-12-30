@@ -26,13 +26,13 @@
                                        @php array_push($entry_ref,$ref->refe_no_e); @endphp 
                                        <thead>
                                           <tr>
-                                             <td colspan="5" style="background-color:#f1f1f1 !important;color:black">{{$ref->refe_no_e}}</td>
+                                             <td colspan="5" style="background-color:#f1f1f1 !important;color:black" class="font_number">{{$ref->refe_no_e}}</td>
                                           </tr>
                                              <tr role="row">
                                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 187px;">Account</th>
                                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 187px;">Date</th>
-                                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 79px;">Credit</th>
-                                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 188px;">Debit</th>
+                                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 79px;">Debit</th>
+                                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 188px;">Credit</th>
                                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 188px;">Cost Center</th>
                                              </tr>
                                           </thead>
@@ -80,12 +80,12 @@
                           <td> 
                             <a target="_blank" href="{{ URL::to('account/account/'.$item->account_id) }}">{{ $item->account->name }}</a> 
                           </td>
-                          <td>{{\Carbon::createFromFormat($D_format,date('Y-m-d',strtotime($item->operation_date)))->format(session()->get('business.date_format'))}}</td>
+                          <td class="font_number">{{\Carbon::createFromFormat($D_format,date('Y-m-d',strtotime($item->operation_date)))->format(session()->get('business.date_format'))}}</td>
                           <td>
-                            <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'credit')?$item->amount:0 }} </span>
+                            <span class="display_currency font_number" data-currency_symbol="true">{{ ($item->type == 'debit')?$item->amount:0 }}</span>
                           </td>
                           <td>
-                            <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'debit')?$item->amount:0 }}</span>
+                            <span class="display_currency font_number" data-currency_symbol="true">{{ ($item->type == 'credit')?$item->amount:0 }} </span>
                           </td>
                         <td>
                            @if($start_point%2 == 0)
@@ -117,12 +117,12 @@
                         <td>
                         </td>
                         <td>
-                       <span class="display_currency" data-currency_symbol="true">{{ number_format($total_credit,config('constants.currency_precision')) }} </span>
-                     </td>
-                        <td>
-                          <span class="display_currency" data-currency_symbol="true">
+                          <span class="display_currency font_number" data-currency_symbol="true">
                              {{ number_format($total_debit,config('constants.currency_precision')) }}</span>
                            </td>
+                        <td>
+                       <span class="display_currency font_number" data-currency_symbol="true">{{ number_format($total_credit,config('constants.currency_precision')) }} </span>
+                     </td>
                         <td></td>
                         </tfoot>
                         

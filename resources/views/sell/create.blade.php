@@ -276,7 +276,7 @@
 										@endif
 										{{-- *2/3/9* store --}}
 										<div class="col-sm-6">
-											@php
+											@php 
 												$store = "";
 												foreach ($mainstore_categories as  $key => $value) {
 													$store = $key;

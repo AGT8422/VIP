@@ -28,8 +28,8 @@
                                           <tr role="row">
                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 187px;">Account</th>
                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 187px;">Date</th>
-                                           <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 79px;">Credit</th>
-                                             <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 188px;">Debit</th>
+                                           <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 79px;">Debit</th>
+                                           <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 188px;">Credit</th>
                                           </tr>
                                        </thead>
                                  @endif
@@ -76,12 +76,12 @@
                            </td>
                            <td>{{\Carbon::createFromFormat($D_format,date('Y-m-d',strtotime($item->operation_date)))->format(session()->get('business.date_format'))}}</td>
                             
-                        <td>
-                          <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'credit')?number_format($item->amount,2):0 }} </span>
-                        </td>
-                          <td>
-                            <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'debit')?number_format($item->amount,2):0 }}</span>
-                          </td>
+                           <td>
+                              <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'debit')?number_format($item->amount,2):0 }}</span>
+                           </td>
+                           <td>
+                             <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'credit')?number_format($item->amount,2):0 }} </span>
+                           </td>
                           
                        </tr>
                        @endforeach
@@ -93,12 +93,12 @@
                         <td>
                         </td>
                         <td>
-                           <span class="display_currency" data-currency_symbol="true">{{ number_format($total_credit,2) }} </span>
-                        </td>
-                        <td>
                           <span class="display_currency" data-currency_symbol="true">
                              {{ number_format($total_debit,2) }}</span>
                            </td>
+                        <td>
+                           <span class="display_currency" data-currency_symbol="true">{{ number_format($total_credit,2) }} </span>
+                        </td>
                         </tfoot>
                         
                      </tr>

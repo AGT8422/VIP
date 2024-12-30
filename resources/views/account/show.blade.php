@@ -31,9 +31,11 @@
             @lang('account.account_book')
 
         @endif
-
+        
     </h1>
-
+    @php $mainUrl = '/account/account';  @endphp  
+    <h5><i><b><a href="{{\URL::to($mainUrl)}}">{{ __("lang_v1.payment_accounts") }} {{  __("izo.>") . " " }}</a></b><b>@if($account->cost_center == 1) @lang('account.account_book_cost_center') @else @lang('account.account_book') @endif </b> </i> {{  __("izo.>") . " " }} <i>  {{ $account->name }}  </i></h5>
+    
 </section>
 
  
@@ -750,7 +752,7 @@
 
                         columns: [
 
-                            {data: 'ref_no', name: 'transaction_id'},
+                            {data: 'ref_no', name: 'transaction_id' , class:'font_number'},
 
                             {data: 'operation_date', name: 'operation_date'},
 
@@ -865,8 +867,8 @@
                                 }
                             //  .....................................................
                                 // initilize footer
-                                $('.debit_footer').html("<b>" +__currency_trans_from_en(debit)+"</b>");
-                                $('.credit_footer').html("<b>" +__currency_trans_from_en(credit)+"</b>");
+                                $('.debit_footer').html("<b style='font-family:arial !important'>" +__currency_trans_from_en(debit)+"</b>");
+                                $('.credit_footer').html("<b style='font-family:arial !important'>" +__currency_trans_from_en(credit)+"</b>");
                             // ........................................................
                                 //  if( id_row != "null"){
                                     $.ajax({
@@ -893,9 +895,9 @@
                                             if(checkboxs != null){
 
 
-                                                $('.debit_footer').html("<b>" +__currency_trans_from_en(debit)+"</b>");
+                                                $('.debit_footer').html("<b style='font-family:arial !important'>" +__currency_trans_from_en(debit)+"</b>");
 
-                                                $('.credit_footer').html("<b>" +__currency_trans_from_en(credit)+"</b>");
+                                                $('.credit_footer').html("<b style='font-family:arial !important'>" +__currency_trans_from_en(credit)+"</b>");
 
                                                 $(".header_credit").html("Credit");
 
@@ -914,9 +916,9 @@
                                             } else{
                                                 if(balances > 0){
                                                     
-                                                    $('.debit_footer').html("<b>" +__currency_trans_from_en(debit+parseFloat(Math.abs(blc)))+"</b>");
+                                                    $('.debit_footer').html("<b style='font-family:arial !important'>" +__currency_trans_from_en(debit+parseFloat(Math.abs(blc)))+"</b>");
                                                     
-                                                    $('.credit_footer').html("<b>" + __currency_trans_from_en(credit)+"</b>" );
+                                                    $('.credit_footer').html("<b style='font-family:arial !important'>" + __currency_trans_from_en(credit)+"</b>" );
                                                     
                                                     $(".header_debit").html("Debit _ " +__currency_trans_from_en(blc));
                                                     $('.header_blc').html( __currency_trans_from_en(blc) + " _ Debit"  );
@@ -935,9 +937,9 @@
                                                 }else if( balances <  0){
  
                                                      
-                                                    $('.debit_footer').html(__currency_trans_from_en(debit) );
+                                                    $('.debit_footer').html("<b style='font-family:arial !important'>"+__currency_trans_from_en(debit)+"</b>" );
 
-                                                    $('.credit_footer').html(__currency_trans_from_en(credit+parseFloat(Math.abs(blc))) );
+                                                    $('.credit_footer').html("<b style='font-family:arial !important'>"+__currency_trans_from_en(credit+parseFloat(Math.abs(blc)))+"</b>" );
 
                                                     $(".header_credit").html("Credit _ " + __currency_trans_from_en(blc));
                                                     $('.header_blc').html( __currency_trans_from_en(blc) + " _ Credit"  );
@@ -963,9 +965,9 @@
                                                     $('.header_blc').html( __currency_trans_from_en(0)   );
                                                     $('#rounded_balance').html( __currency_trans_from_en(0)   );
                                                      
-                                                    $('.debit_footer').html("<b>"+__currency_trans_from_en(debit)+"</b>");
+                                                    $('.debit_footer').html("<b style='font-family:arial !important'>"+__currency_trans_from_en(debit)+"</b>");
 
-                                                    $('.credit_footer').html("<b>"+__currency_trans_from_en(credit)+"</b>");
+                                                    $('.credit_footer').html("<b style='font-family:arial !important'>"+__currency_trans_from_en(credit)+"</b>");
         
                                                     $('#opening_balance').val(__currency_trans_from_en(blc));
                                 

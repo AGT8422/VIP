@@ -15,6 +15,9 @@
     <h1>@lang('lang_v1.payment_accounts')
         <small>@lang('account.manage_your_account')</small>
     </h1>
+    @php $mainUrl = '/account/account';  @endphp  
+    <h5><i><b><a href="{{\URL::to($mainUrl)}}">{{ __("lang_v1.payment_accounts") }} {{  __("izo.>") . " " }}</a></b>{{ __("izo.list_of")   }}  {{__('lang_v1.payment_accounts')}}  </i>  </h5>
+
 </section>
 <!-- Main content -->
 <section class="content">

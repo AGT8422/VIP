@@ -24,6 +24,7 @@
 @section('special_css')
 
     <style>
+       
             p{
                 font-size:{{$p_font}};
             }
@@ -134,6 +135,703 @@
                 padding: 0% 40px;
                 /* overflow-y: scroll; */
             }
+      
+        @media(max-width : 600px){
+            p{
+                font-size:{{$p_font}};
+            }
+            h4{
+                font-size:{{$h4_font}};
+            }
+            .D_rang{
+                font-size:{{$D_rang_font}} !important;
+            }
+            .date_filter  b{
+                font-size:{{$p_font}} !important;
+            }
+            .sec-body * {
+                font-family:Georgia, 'Times New Roman', Times, serif !important;
+            }
+            .standard{
+                font-family:arial !important ;
+            }
+            .card3{
+                margin: 0% 0% 0% 1%;
+                /* max-width: 500px; */
+                position: relative;
+                border-radius: 20px ;
+                padding: 20px ;
+                height: auto;
+                background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card1{
+                /* margin: 20px; */
+                /* max-width: 500px; */
+                border-radius: 20px ;
+                padding: 20px ;
+                height: 170.9px;
+                background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card{
+                /* margin: 20px; */
+                /* max-width: 500px; */
+                border-radius: 20px ;
+                padding: 20px ;
+                /* height: 400px; */
+                 background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card-header{
+                font-size: 20px;
+                margin: 0px;
+                /* border:1px solid black;  */
+            }
+            .card-box-header{
+                margin:auto 10px;
+                width:calc(90%/3);
+                border-radius:10px ;
+                background-color: #f7f7f7;
+            }
+            #date_search{
+                background-color: #d6d6d6d5;
+                color: black;
+                border-radius:2px;
+                padding: 5px;
+                border:0px solid black;
+            }
+            #totalRevenueChart{
+                /* border-right:1px solid black;  */
+
+            }
+            #growthChart{
+                /* border:1px solid black;  */
+            }
+            .sec-total{
+                margin: {{$margin_sec}};
+                max-width: 1400px;
+            }
+            .clear{
+                padding: 10px !important;
+                height: 5px !important;
+            }
+            .big-number{
+                font-size: 16px ;
+            }
+            .date_filter{
+                margin-right: 4%;
+                display: flex;
+                width: 30%;
+
+            }
+            .date_filter_1{
+                margin-left: {{$margin_left}};
+                margin-right: {{$margin_right}};
+                transform: translateX({{$translate}});
+                display: flex;
+                width: 500px;
+
+            }
+           
+            .card-box-body{
+                margin-top: 30px;
+            }
+            .card-chart-body{
+                max-width:90%;
+                /* max-height:100px; */
+                margin: 0% 5% ;  
+            }
+            .scrolling{
+                /* height: 60px ; */
+                padding: 0% 40px;
+                /* overflow-y: scroll; */
+            }
+            .class_row_small{
+                display: block !important;
+            }
+            .class_row{
+                display: block !important;
+            }
+        }
+        @media(min-width : 600px) and (max-width : 900px){
+            p{
+                font-size:{{$p_font}};
+            }
+            h4{
+                font-size:{{$h4_font}};
+            }
+            .D_rang{
+                font-size:{{$D_rang_font}} !important;
+            }
+            .date_filter  b{
+                font-size:{{$p_font}} !important;
+            }
+            .sec-body * {
+                font-family:Georgia, 'Times New Roman', Times, serif !important;
+            }
+            .standard{
+                font-family:arial !important ;
+            }
+            .card3{
+                margin: 0% 0% 0% 1%;
+                /* max-width: 500px; */
+                position: relative;
+                border-radius: 20px ;
+                padding: 20px ;
+                height: auto;
+                background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card1{
+                /* margin: 20px; */
+                /* max-width: 500px; */
+                border-radius: 20px ;
+                padding: 20px ;
+                height: 170.9px;
+                background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card{
+                /* margin: 20px; */
+                /* max-width: 500px; */
+                border-radius: 20px ;
+                padding: 20px ;
+                /* height: 400px; */
+                 background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card-header{
+                font-size: 20px;
+                margin: 0px;
+                /* border:1px solid black;  */
+            }
+            .card-box-header{
+                margin:auto 10px;
+                width:calc(90%/3);
+                border-radius:10px ;
+                background-color: #f7f7f7;
+            }
+            #date_search{
+                background-color: #d6d6d6d5;
+                color: black;
+                border-radius:2px;
+                padding: 5px;
+                border:0px solid black;
+            }
+            #totalRevenueChart{
+                /* border-right:1px solid black;  */
+
+            }
+            #growthChart{
+                /* border:1px solid black;  */
+            }
+            .sec-total{
+                margin: {{$margin_sec}};
+                max-width: 1400px;
+            }
+            .clear{
+                padding: 10px !important;
+                height: 5px !important;
+            }
+            .big-number{
+                font-size: 16px ;
+            }
+            .date_filter{
+                margin-right: 4%;
+                display: flex;
+                width: 30%;
+
+            }
+            .date_filter_1{
+                margin-left: {{$margin_left}};
+                margin-right: {{$margin_right}};
+                transform: translateX({{$translate}});
+                display: flex;
+                width: 500px;
+
+            }
+           
+            .card-box-body{
+                margin-top: 30px;
+            }
+            .card-chart-body{
+                max-width:90%;
+                /* max-height:100px; */
+                margin: 0% 5% ;  
+            }
+            .scrolling{
+                /* height: 60px ; */
+                padding: 0% 40px;
+                /* overflow-y: scroll; */
+            }
+            .class_row_small{
+                display: block !important;
+            }
+            .class_row{
+                display: block !important;
+            }
+        }
+        @media(min-width : 900px) and (max-width : 1090px){
+            p{
+                font-size:9px;
+            }
+            h4{
+                font-size:12px;
+            }
+            .D_rang{
+                font-size:9px !important;
+            }
+            .date_filter  b{
+                font-size:{{$p_font}} !important;
+            }
+            .sec-body * {
+                font-family:Georgia, 'Times New Roman', Times, serif !important;
+            }
+            .standard{
+                font-family:arial !important ;
+            }
+            .card3{
+                margin: 0% 0% 0% 1%;
+                /* max-width: 500px; */
+                position: relative;
+                border-radius: 20px ;
+                padding: 20px ;
+                height: auto;
+                background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card1{
+                /* margin: 20px; */
+                /* max-width: 500px; */
+                border-radius: 20px ;
+                padding: 19px ;
+                height: 131.9px;
+                background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card{
+                /* margin: 20px; */
+                /* max-width: 500px; */
+                border-radius: 20px ;
+                padding: 20px ;
+                /* height: 400px; */
+                 background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card-header{
+                font-size: 20px;
+                margin: 0px;
+                /* border:1px solid black;  */
+            }
+            .card-box-header{
+                margin:auto 10px;
+                width:calc(90%/3);
+                border-radius:10px ;
+                background-color: #f7f7f7;
+            }
+            #date_search{
+                background-color: #d6d6d6d5;
+                color: black;
+                border-radius:2px;
+                padding: 5px;
+                border:0px solid black;
+            }
+            #totalRevenueChart{
+                /* border-right:1px solid black;  */
+
+            }
+            #growthChart{
+                /* border:1px solid black;  */
+            }
+            .sec-total{
+                margin: {{$margin_sec}};
+                max-width: 1400px;
+            }
+            .clear{
+                padding: 10px !important;
+                height: 5px !important;
+            }
+            .big-number{
+                font-size: 9px;
+            }
+            .date_filter{
+                margin-right: 4%;
+                display: flex;
+                width: 30%;
+
+            }
+            .date_filter_1{
+                margin-left: {{$margin_left}};
+                margin-right: {{$margin_right}};
+                transform: translateX({{$translate}});
+                display: flex;
+                width: 500px;
+
+            }
+           
+            .card-box-body{
+                margin-top: 30px;
+            }
+            .card-chart-body{
+                max-width:90%;
+                /* max-height:100px; */
+                margin: 0% 5% ;  
+            }
+            .scrolling{
+                /* height: 60px ; */
+                padding: 0% 40px;
+                /* overflow-y: scroll; */
+            }
+            .class_row_small{
+                display: block !important;
+            }
+            .class_row{
+                display: block !important;
+            }
+        }
+        @media(min-width : 1097px) and (max-width : 1200px){
+            .class_row{
+                display: block !important;
+            }
+        }
+        @media(min-width : 1200px) and (max-width : 1400px){
+            p{
+                font-size:10px;
+            }
+            h4{
+                font-size:12px;
+            }
+            .D_rang{
+                font-size:11px !important;
+            }
+            .date_filter  b{
+                font-size:12px  !important;
+            }
+            .sec-body * {
+                font-family:Georgia, 'Times New Roman', Times, serif !important;
+            }
+            .standard{
+                font-family:arial !important ;
+            }
+            .card3{
+                margin: 0% 0% 0% 1%;
+                /* max-width: 500px; */
+                position: relative;
+                border-radius: 20px ;
+                padding: 20px ;
+                height: auto;
+                background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card1{
+                /* margin: 20px; */
+                /* max-width: 500px; */
+                border-radius: 20px ;
+                padding: 20px ;
+                height: 127.9px;
+                background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card{
+                /* margin: 20px; */
+                /* max-width: 500px; */
+                border-radius: 20px ;
+                padding: 20px ;
+                /* height: 400px; */
+                 background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card-header{
+                font-size: 10px;
+                margin: 0px;
+                /* border:1px solid black;  */
+            }
+            .card-box-header{
+                margin:auto 10px;
+                width:calc(85%/3);
+                border-radius:10px ;
+                background-color: #f7f7f7;
+            }
+            #date_search{
+                background-color: #d6d6d6d5;
+                color: black;
+                border-radius:2px;
+                padding: 5px;
+                border:0px solid black;
+            }
+            #totalRevenueChart{
+                /* border-right:1px solid black;  */
+
+            }
+            #growthChart{
+                /* border:1px solid black;  */
+            }
+            .sec-total{
+                margin: {{$margin_sec}};
+                max-width: 1400px;
+            }
+            .clear{
+                padding: 10px !important;
+                height: 5px !important;
+            }
+            .big-number{
+                font-size: 12px ;
+            }
+            .date_filter{
+                margin-right: 4%;
+                display: flex;
+                width: 30%;
+
+            }
+            .date_filter_1{
+                margin-left: {{$margin_left}};
+                margin-right: {{$margin_right}};
+                transform: translateX({{$translate}});
+                display: flex;
+                width: 500px;
+
+            }
+           
+            .card-box-body{
+                margin-top: 30px;
+            }
+            .card-chart-body{
+                max-width:90%;
+                /* max-height:100px; */
+                margin: 0% 5% ;  
+            }
+            .scrolling{
+                /* height: 60px ; */
+                padding: 0% 40px;
+                /* overflow-y: scroll; */
+            }
+            
+        }
+        @media(min-width : 1400px) and (max-width : 1600px){
+            p{
+                font-size:{{$p_font}};
+            }
+            h4{
+                font-size:{{$h4_font}};
+            }
+            .D_rang{
+                font-size:{{$D_rang_font}} !important;
+            }
+            .date_filter  b{
+                font-size:{{$p_font}} !important;
+            }
+            .sec-body * {
+                font-family:Georgia, 'Times New Roman', Times, serif !important;
+            }
+            .standard{
+                font-family:arial !important ;
+            }
+            .card3{
+                margin: 0% 0% 0% 1%;
+                /* max-width: 500px; */
+                position: relative;
+                border-radius: 20px ;
+                padding: 20px ;
+                height: auto;
+                background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card1{
+                /* margin: 20px; */
+                /* max-width: 500px; */
+                border-radius: 20px ;
+                padding: 20px ;
+                height: 170.9px;
+                background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card{
+                /* margin: 20px; */
+                /* max-width: 500px; */
+                border-radius: 20px ;
+                padding: 20px ;
+                /* height: 400px; */
+                 background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card-header{
+                font-size: 20px;
+                margin: 0px;
+                /* border:1px solid black;  */
+            }
+            .card-box-header{
+                margin:auto 10px;
+                width:calc(85%/3);
+                border-radius:10px ;
+                background-color: #f7f7f7;
+            }
+            #date_search{
+                background-color: #d6d6d6d5;
+                color: black;
+                border-radius:2px;
+                padding: 5px;
+                border:0px solid black;
+            }
+            #totalRevenueChart{
+                /* border-right:1px solid black;  */
+
+            }
+            #growthChart{
+                /* border:1px solid black;  */
+            }
+            .sec-total{
+                margin: {{$margin_sec}};
+                max-width: 1400px;
+            }
+            .clear{
+                padding: 10px !important;
+                height: 5px !important;
+            }
+            .big-number{
+                font-size: 16px ;
+            }
+            .date_filter{
+                margin-right: 4%;
+                display: flex;
+                width: 30%;
+
+            }
+            .date_filter_1{
+                margin-left: {{$margin_left}};
+                margin-right: {{$margin_right}};
+                transform: translateX({{$translate}});
+                display: flex;
+                width: 500px;
+
+            }
+           
+            .card-box-body{
+                margin-top: 30px;
+            }
+            .card-chart-body{
+                max-width:90%;
+                /* max-height:100px; */
+                margin: 0% 5% ;  
+            }
+            .scrolling{
+                /* height: 60px ; */
+                padding: 0% 40px;
+                /* overflow-y: scroll; */
+            }
+        }
+        @media(min-width : 1600px) and (max-width : 1800px){
+            p{
+                font-size:{{$p_font}};
+            }
+            h4{
+                font-size:{{$h4_font}};
+            }
+            .D_rang{
+                font-size:{{$D_rang_font}} !important;
+            }
+            .date_filter  b{
+                font-size:{{$p_font}} !important;
+            }
+            .sec-body * {
+                font-family:Georgia, 'Times New Roman', Times, serif !important;
+            }
+            .standard{
+                font-family:arial !important ;
+            }
+            .card3{
+                margin: 0% 0% 0% 1%;
+                /* max-width: 500px; */
+                position: relative;
+                border-radius: 20px ;
+                padding: 20px ;
+                height: auto;
+                background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card1{
+                /* margin: 20px; */
+                /* max-width: 500px; */
+                border-radius: 20px ;
+                padding: 20px ;
+                height: 170.9px;
+                background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card{
+                /* margin: 20px; */
+                /* max-width: 500px; */
+                border-radius: 20px ;
+                padding: 20px ;
+                /* height: 400px; */
+                 background-color: white;
+                box-shadow: 0px 0px 10px #3a3a3a33;
+            }
+            .card-header{
+                font-size: 20px;
+                margin: 0px;
+                /* border:1px solid black;  */
+            }
+            .card-box-header{
+                margin:auto 10px;
+                width:calc(90%/3);
+                border-radius:10px ;
+                background-color: #f7f7f7;
+            }
+            #date_search{
+                background-color: #d6d6d6d5;
+                color: black;
+                border-radius:2px;
+                padding: 5px;
+                border:0px solid black;
+            }
+            #totalRevenueChart{
+                /* border-right:1px solid black;  */
+
+            }
+            #growthChart{
+                /* border:1px solid black;  */
+            }
+            .sec-total{
+                margin: {{$margin_sec}};
+                max-width: 1400px;
+            }
+            .clear{
+                padding: 10px !important;
+                height: 5px !important;
+            }
+            .big-number{
+                font-size: 16px ;
+            }
+            .date_filter{
+                margin-right: 4%;
+                display: flex;
+                width: 30%;
+
+            }
+            .date_filter_1{
+                margin-left: {{$margin_left}};
+                margin-right: {{$margin_right}};
+                transform: translateX({{$translate}});
+                display: flex;
+                width: 500px;
+
+            }
+           
+            .card-box-body{
+                margin-top: 30px;
+            }
+            .card-chart-body{
+                max-width:90%;
+                /* max-height:100px; */
+                margin: 0% 5% ;  
+            }
+            .scrolling{
+                /* height: 60px ; */
+                padding: 0% 40px;
+                /* overflow-y: scroll; */
+            }
+        }
              
     </style>
 @endsection
@@ -143,13 +841,11 @@
 @section('content')
     <style> 
     </style>
- 
- 
      
  <div class="sec-total">
     <div class="row">
         <div class="col-md-12">&nbsp;</div>
-        <div class="col-md-6 text-center">
+        <div class="col-lg-6 col-md-12 col-sm-12 text-center">
           
                 <small class="date_filter_1" >  
                     <span style="font-size:18px;line-height:34px;font-family:Georgia, 'Times New Roman', Times, serif !important;"> {{__('izo.date_range')}} : &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    &nbsp;</span>
@@ -164,8 +860,7 @@
                  
             
         </div>
-         
-        <div class="col-md-6 text-center">
+        <div class="col-lg-6 col-md-12 col-sm-12 text-center">
             <small class="date_filter_1" >  
                 <b class="p-5" style="line-height: 34px;font-size:17px;font-family:Georgia, 'Times New Roman', Times, serif !important; ">{{__('izo.pattern')}}  </b> &nbsp;
                 <div class="col-md-8 col-md-offset-2 ml-10 ">
@@ -174,14 +869,14 @@
             </small> 
             <h6>&nbsp;</h6>
         </div>
-        <div class="col-md-12">&nbsp;</div> 
+        <div class="col-lg-6 col-md-12 col-sm-12">&nbsp;</div> 
     </div>
     @php  $section_left = 0; @endphp
     <div class="row sec-body">
-         <!-- Total Revenue -->
-         {{-- ***** --}}
+             <!-- Total Revenue -->
+            {{-- ***** --}}
+        <div class=" col-lg-6 col-md-12">
             @if(auth()->user()->can('izo.box_sales'))
-                <div @if(auth()->user()->can('izo.box_invoices')) class="col-md-6" @else  class="col-md-12" @endif>
                 @php  $section_left = 1; @endphp
                 <div @if(auth()->user()->can('izo.box_invoices')) class="col-md-6" @else  class="col-md-12" @endif>
                     <div class="card1">
@@ -196,6 +891,7 @@
                     </div>
                 </div>
             @endif
+            <div class="col-md-12 class_row_small" style="display: none"> &nbsp; </div>
             {{-- ***** --}}
             @if(auth()->user()->can('izo.box_invoices'))
                 @php  $section_left = 1; @endphp
@@ -228,6 +924,7 @@
                     </div>
                 </div>
             @endif
+            <div class="col-md-12 class_row_small" style="display: none"> &nbsp; </div>
             {{-- ***** --}}
             @if(auth()->user()->can('izo.box_customer'))
                 @php  $section_left = 1; @endphp
@@ -261,6 +958,7 @@
                     </div>
                 </div>
             @endif
+            <div class="col-md-12 class_row_small" style="display: none"> &nbsp; </div>
             {{-- ***** --}}
             @if(auth()->user()->can('izo.box_delivered'))
             @php  $section_left = 1; @endphp
@@ -295,6 +993,7 @@
                     </div>
                 </div> 
             @endif 
+            <div class="col-md-12 class_row_small" style="display: none"> &nbsp; </div>
             {{-- ***** --}}
             @if(auth()->user()->can('izo.box_un_delivered'))
             @php  $section_left = 1; @endphp
@@ -341,7 +1040,7 @@
             @php  $section_left = 1; @endphp
             <div @if(auth()->user()->can('izo.box_total_supplier')) class="col-md-6" @else  class="col-md-12" @endif>
                 <div class="card1">
-                    <H4><a href="{{\URL::to($customerUrl)}}">{{__('izo.total_customer')}}</a> <small class="pull-right D_rang"  style="font-size:13px !important">{{__('izo.accumulated')}}</small></H4>
+                    <H4><a href="{{\URL::to($customerUrl)}}">{{__('izo.total_customer')}}</a> <small class="pull-right D_rang" >{{__('izo.accumulated')}}</small></H4>
                     <p>  &nbsp;</p>
                     <p>  &nbsp;</p>
                     @if(auth()->user()->can('izo.box_total_customer_balance'))
@@ -350,12 +1049,13 @@
                 </div>
             </div> 
             @endif 
+            <div class="col-md-12 class_row_small" style="display: none"> &nbsp; </div>
             {{-- ***** --}}
             @if(auth()->user()->can('izo.box_total_supplier'))
             @php  $section_left = 1; @endphp
             <div @if(auth()->user()->can('izo.box_total_customer')) class="col-md-6" @else  class="col-md-12" @endif>
                 <div class="card1">
-                    <H4><a href="{{\URL::to($supplierUrl)}}">{{__('izo.total_supplier')}}</a> <small class="pull-right D_rang" style="font-size:13px !important">{{__('izo.accumulated')}}</small></H4>
+                    <H4><a href="{{\URL::to($supplierUrl)}}">{{__('izo.total_supplier')}}</a> <small class="pull-right D_rang" >{{__('izo.accumulated')}}</small></H4>
                     <p>  &nbsp;</p>
                     <p>  &nbsp;</p>
                     @if(auth()->user()->can('izo.box_total_supplier_balance'))
@@ -364,9 +1064,14 @@
                     </div>
                 </div>
             @endif   
-        </div>   
+        </div>  
+        @if($section_left == 1)
+            {{-- ##### --}}
+            <div class="col-md-12 class_row" style="display: none"> &nbsp; </div>
+            {{-- ##### --}}
+        @endif 
         <!-- Total Revenue -->
-        <div @if($section_left == 1) class="col-md-6" @else  class="col-md-12" @endif>
+        <div @if($section_left == 1) class="col-lg-6 col-md-12" @else  class="col-lg-12" @endif>
             @if(auth()->user()->can('izo.box_paid_unpaid')) 
                 <div @if(auth()->user()->can('izo.box_cash_bank')) class="card" @else class="card" @endif >
                     <H4>{{__('izo.paid_unpaid')}} &nbsp;&nbsp;<small>{{ " " . __('izo.inc_vat')}}</small>
@@ -448,10 +1153,6 @@
         </div>
     </div>
 </div> 
-
- 
- 
-
     
 @stop
  
@@ -611,7 +1312,7 @@
                  
           
                 search("","");
-            });
+        });
 
     </script>
 @endsection

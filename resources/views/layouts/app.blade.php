@@ -226,24 +226,55 @@
 
     <script>
         $(document).ready(function(){
+            $('.menu_button').on('click', function(){
+                $('.main-sidebar-new').css({"transform":"translateX(0%)","transition":".8s ease-in"});
+            });
+            $('.close_menu').on('click', function(){
+                $('.main-sidebar-new').css({"transform":"translateX(-100%)","transition":".8s ease-in"   });
+                // setTimeout(() => {
+                //     $('.main-sidebar-new').css({"transform":"translateX(0%)","z-index":"0","opacity":"0"});
+                // },2000);
+            });
             // .. scroll window
             $("#inside-content").scroll(function(){
-                if ($(this).scrollTop() > 10) {
-                    $('.main-header-new').css({"top":"-8.5%","background-color":"black"});
-                    $('.main-header-new').hover(
-                        function(){
-                            $(this).css({"top":"0%","background-color":"white"});
-                        },function(){
-                            $(this).css({"top":"-8.5%","transaction":"5s ","background-color":"black"});
-                    });
+                var width = $(window).width();
+                if (width <= 900 ) {  // Replace with your specific width range 
+                    if ($(this).scrollTop() > 10) {
+                        $('.main-header-new').css({"top":"-100.5%","background-color":"black"});
+                        $('.main-header-new').hover(
+                            function(){
+                                $(this).css({"top":"0%","background-color":"white"});
+                            },function(){
+                                $(this).css({"top":"-100.5%","transaction":"5s ","background-color":"black"});
+                        });
+                    }else{
+                        $('.main-header-new').css({"top":"0%","background-color":"white"});
+                        $('.main-header-new').hover(
+                            function(){
+                                $(this).css({"top":"0%","background-color":"white"});
+                            },function(){
+                                $(this).css({"top":"0%","transaction":"5s ","background-color":"white"});
+                        });
+                    } 
                 }else{
-                    $('.main-header-new').css({"top":"0%","background-color":"white"});
-                    $('.main-header-new').hover(
-                        function(){
-                            $(this).css({"top":"0%","background-color":"white"});
-                        },function(){
-                            $(this).css({"top":"0%","transaction":"5s ","background-color":"white"});
-                    });
+                    // if ($(this).scrollTop() > 10) {
+                    //     $('.main-header-new').css({"top":"-8.5%","background-color":"black"});
+                    //     $('.main-header-new').hover(
+                    //         function(){
+                    //             $(this).css({"top":"0%","background-color":"white"});
+                    //         },function(){
+                    //             $(this).css({"top":"-8.5%","transaction":"5s ","background-color":"black"});
+                    //     });
+                    // }else{
+                    //     $('.main-header-new').css({"top":"0%","background-color":"white"});
+                    //     $('.main-header-new').hover(
+                    //         function(){
+                    //             $(this).css({"top":"0%","background-color":"white"});
+                    //         },function(){
+                    //             $(this).css({"top":"0%","transaction":"5s ","background-color":"white"});
+                    //     });
+                    // } 
+
                 } 
             });
         });

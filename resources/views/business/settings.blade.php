@@ -38,13 +38,12 @@
                     {{-- @endif --}}
                     <a href="#" class="list-group-item text-center">@lang('lang_v1.custom_labels')</a>
                     @if (auth()->user()->can('superadmin'))  
-                    @php $is_mfg_enabled = true; @endphp
+                        @php $is_mfg_enabled = true; @endphp
                     @else 
-                    @php  
-                        $business_id = session()->get('user.business_id');
-                        $module_util = new App\Utils\ModuleUtil();
-                        $is_mfg_enabled = (boolean)$module_util->hasThePermissionInSubscription($business_id, 'manufacturing_module', 'superadmin_package');
-                        
+                        @php  
+                            $business_id    = session()->get('user.business_id');
+                            $module_util    = new App\Utils\ModuleUtil();
+                            $is_mfg_enabled = (boolean)$module_util->hasThePermissionInSubscription($business_id, 'manufacturing_module', 'superadmin_package');
                         @endphp
                     @endif
                     

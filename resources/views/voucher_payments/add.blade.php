@@ -90,7 +90,7 @@
 				</div>
 				<div class="clearfix"></div>
 				<div class="col-sm-12">
-					<button type="submit" class="btn btn-primary pull-right">@lang('messages.save')</button>
+					<button type="submit" id="save_entry" class="btn btn-primary pull-right">@lang('messages.save')</button>
 				</div>
 			</div>
 		</div>
@@ -207,6 +207,9 @@
 			}
 			
 		})
+		$('#add_expense_form').submit(function(){
+			$('#save_entry').attr('disabled','disabled');
+		});
 		
 	  </script>
       @yield('child_script')

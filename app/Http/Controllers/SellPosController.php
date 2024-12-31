@@ -302,6 +302,17 @@ class SellPosController extends Controller
         }elseif(!$this->moduleUtil->isQuotaAvailable('invoices', $business_id)) {
             return $this->moduleUtil->quotaExpiredResponse('invoices', $business_id, action('SellPosController@index'));
         }
+
+        $edit_days        = request()->session()->get('business.transaction_edit_days');
+        $edit_date        = request()->session()->get('business.transaction_edit_date');
+        
+        if (!$this->transactionUtil->canBeEdited(0, $edit_date,$request->transaction_date)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_add_not_allowed', ['days' => $edit_date])];
+            return redirect('sells')->with('status', $output);
+        }
+
         $sub_status_      = "";
         $final_status     = "";
         $final_sub_status = "";
@@ -1133,6 +1144,16 @@ class SellPosController extends Controller
             abort(403, 'Unauthorized action.');
         }
         
+        $edit_days        = request()->session()->get('business.transaction_edit_days');
+        $edit_date        = request()->session()->get('business.transaction_edit_date');
+        $tr               = \App\Transaction::find($id);
+        $dateFilter       = (\Carbon::parse($request->transaction_date)<\Carbon::parse($tr->transaction_date))?$request->transaction_date:$tr->transaction_date;
+        if (!$this->transactionUtil->canBeEdited($id, $edit_date,$dateFilter)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_date])];
+            return redirect('sells')->with('status', $output);
+        }
         
         try {
             $input = $request->except('_token');

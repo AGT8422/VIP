@@ -39,6 +39,7 @@ class CreateBusinessTable extends Migration
             $table->string('sku_prefix')->nullable();
             $table->boolean('enable_tooltip')->default(1); 
             $table->integer('transaction_edit_days')->unsigned()->default(30);
+            $table->date('transaction_edit_date')->nullable();
             $table->integer('stock_expiry_alert_days')->unsigned()->default(30);
             $table->text('keyboard_shortcuts')->nullable();
             $table->text('pos_settings')->nullable();   

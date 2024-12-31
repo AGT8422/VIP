@@ -136,6 +136,14 @@ class CheckController extends Controller
         if (!auth()->user()->can('cheque.create')) {
             abort(403, 'Unauthorized action.');
         }
+        $edit_days = request()->session()->get('business.transaction_edit_days');
+        $edit_date = request()->session()->get('business.transaction_edit_date');  
+        if (!$this->transactionUtil->canBeEdited(0, $edit_date,$request->write_date)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_add_not_allowed', ['days' => $edit_date])];
+            return redirect('cheque')->with('status', $output);
+        }
         $bills_      =  $request->only(['bill_id','bill_amount']);
         $id_trans    = null;
         $transaction = null;
@@ -285,6 +293,16 @@ class CheckController extends Controller
     {
         if (!auth()->user()->can('cheque.update')) {
             abort(403, 'Unauthorized action.');
+        }
+        $edit_days = request()->session()->get('business.transaction_edit_days');
+        $edit_date = request()->session()->get('business.transaction_edit_date');
+        $tr               = Check::find($id);
+        $dateFilter       = (\Carbon::parse($request->write_date)<\Carbon::parse($tr->write_date))?$request->write_date:$tr->write_date;
+        if (!$this->transactionUtil->canBeEdited($id, $edit_date,$dateFilter)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_date])];
+            return redirect('cheque')->with('status', $output);
         }
         DB::beginTransaction();
         $business_id              = request()->session()->get('user.business_id');
@@ -442,6 +460,16 @@ class CheckController extends Controller
     {
         if (!auth()->user()->can('cheque.delete')) {
             abort(403, 'Unauthorized action.');
+        }
+        $edit_days = request()->session()->get('business.transaction_edit_days');
+        $edit_date = request()->session()->get('business.transaction_edit_date');
+        $tr               = Check::find($id);
+        $dateFilter       = \Carbon::parse($tr->write_date) ;
+        if (!$this->transactionUtil->canBeEdited($id, $edit_date,$dateFilter)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_date])];
+            return redirect('cheque')->with('status', $output);
         }
         $data =  Check::find($id);
         DB::beginTransaction();

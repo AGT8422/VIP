@@ -3674,8 +3674,17 @@ class TransactionUtil extends Util
      *
      * @return boolean
      */
-    public function canBeEdited($transaction, $edit_duration)
+    public function canBeEdited($transaction, $edit_duration,$transaction_date = null)
     {
+        if ($transaction_date != null) {
+            if(\Carbon::parse($edit_duration)>\Carbon::parse($transaction_date)){
+                return false;
+            // }elseif(\Carbon::parse($edit_duration)<\Carbon::now()){
+            //     return false;
+            }else{
+                return true;
+            }
+        }
         if (!is_object($transaction)) {
             $transaction = Transaction::find($transaction);
         }
@@ -3683,9 +3692,8 @@ class TransactionUtil extends Util
         if (empty($transaction)) {
             return false;
         }
-
-        $date = \Carbon::parse($transaction->transaction_date)
-                    ->addDays($edit_duration);
+        // dd(request()->session()->get('business.transaction_edit_date'),$transaction,$edit_duration);
+        $date = \Carbon::parse($transaction->transaction_date)->addDays($edit_duration);
 
         $today = today();
         if ($date->gte($today)) {

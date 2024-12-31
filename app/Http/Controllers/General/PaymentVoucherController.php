@@ -10,6 +10,7 @@ use App\Business;
 use App\TransactionPayment;
 use App\Contact;
 use App\Utils\ModuleUtil;
+use App\Utils\TransactionUtil;
 use App\Utils\ProductUtil;
 use App\Account;
 use App\Models\ContactBank;
@@ -19,9 +20,10 @@ use DB;
 
 class PaymentVoucherController extends Controller
 {
-    public function __construct(ModuleUtil $moduleUtil, ProductUtil $productUtil)
+    public function __construct(ModuleUtil $moduleUtil, TransactionUtil $transactionUtil, ProductUtil $productUtil)
     {
         $this->moduleUtil = $moduleUtil;
+        $this->transactionUtil = $transactionUtil;
         $this->productUtil = $productUtil;
     }
     public function index(Request $request)
@@ -91,6 +93,14 @@ class PaymentVoucherController extends Controller
     {
         if (!auth()->user()->can('payment_voucher.create')) {
             abort(403, 'Unauthorized action.');
+        }
+        $edit_days = request()->session()->get('business.transaction_edit_days');
+        $edit_date = request()->session()->get('business.transaction_edit_date');  
+        if (!$this->transactionUtil->canBeEdited(0, $edit_date,$request->date)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_add_not_allowed', ['days' => $edit_date])];
+            return redirect('payment-voucher')->with('status', $output);
         }
         # note 0=> supplier , 1 =>customer
         DB::beginTransaction();
@@ -210,6 +220,16 @@ class PaymentVoucherController extends Controller
     {
         if (!auth()->user()->can('payment_voucher.update')) {
             abort(403, 'Unauthorized action.');
+        }
+        $edit_days = request()->session()->get('business.transaction_edit_days');
+        $edit_date = request()->session()->get('business.transaction_edit_date');
+        $tr               = PaymentVoucher::find($id);
+        $dateFilter       = (\Carbon::parse($request->date)<\Carbon::parse($tr->date))?$request->date:$tr->date;
+        if (!$this->transactionUtil->canBeEdited($id, $edit_date,$dateFilter)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_date])];
+            return redirect('payment-voucher')->with('status', $output);
         }
         DB::beginTransaction();
         $entry                 =  \App\Models\Entry::where("voucher_id",$id)->first();
@@ -470,6 +490,16 @@ class PaymentVoucherController extends Controller
         
         if (!auth()->user()->can('payment_voucher.delete')) {
             abort(403, 'Unauthorized action.');
+        }
+        $edit_days = request()->session()->get('business.transaction_edit_days');
+        $edit_date = request()->session()->get('business.transaction_edit_date');
+        $tr               = PaymentVoucher::find($id);
+        $dateFilter       = \Carbon::parse($tr->date) ;
+        if (!$this->transactionUtil->canBeEdited($id, $edit_date,$dateFilter)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_date])];
+            return redirect('payment-voucher')->with('status', $output);
         }
         $data    =  PaymentVoucher::find($id);
         DB::beginTransaction();

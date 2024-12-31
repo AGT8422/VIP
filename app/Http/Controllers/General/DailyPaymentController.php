@@ -8,14 +8,16 @@ use App\Models\DailyPayment;
 use App\Models\Entry;
 use App\Models\DailyPaymentItem;
 use App\Account;
+use App\Utils\TransactionUtil;
 use App\Utils\ModuleUtil;
 use App\Utils\ProductUtil;
 use DB;
 class DailyPaymentController extends Controller
 {
-    public function __construct(ModuleUtil $moduleUtil, ProductUtil $productUtil)
+    public function __construct(ModuleUtil $moduleUtil, TransactionUtil $transactionUtil, ProductUtil $productUtil)
     {
         $this->moduleUtil  = $moduleUtil;
+        $this->transactionUtil  = $transactionUtil;
         $this->productUtil = $productUtil;
     }
     public function index(Request $request)
@@ -65,6 +67,14 @@ class DailyPaymentController extends Controller
     {
         if (!auth()->user()->can('daily_payment.create')) {
             abort(403, 'Unauthorized action.');
+        }
+        $edit_days = request()->session()->get('business.transaction_edit_days');
+        $edit_date = request()->session()->get('business.transaction_edit_date');  
+        if (!$this->transactionUtil->canBeEdited(0, $edit_date,$this->productUtil->uf_date($request->date, true))) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_add_not_allowed', ['days' => $edit_date])];
+            return redirect('daily-payment')->with('status', $output);
         }
        \DB::beginTransaction();
        $request->validate([ 'image.mimes'=>'png,jpeg,png,jpeg,pdf' ]);
@@ -202,6 +212,16 @@ class DailyPaymentController extends Controller
     {
         if (!auth()->user()->can('daily_payment.update')) {
             abort(403, 'Unauthorized action.');
+        }
+        $edit_days = request()->session()->get('business.transaction_edit_days');
+        $edit_date = request()->session()->get('business.transaction_edit_date');
+        $tr               = DailyPayment::find($id);
+        $dateFilter       = (\Carbon::parse($this->productUtil->uf_date($request->date, true))<\Carbon::parse($tr->date))?$this->productUtil->uf_date($request->date, true):$tr->date;
+        if (!$this->transactionUtil->canBeEdited($id, $edit_date,$dateFilter)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_date])];
+            return redirect('daily-payment')->with('status', $output);
         }
         \DB::beginTransaction();
         $business_id           =  request()->session()->get('user.business_id');
@@ -372,6 +392,16 @@ class DailyPaymentController extends Controller
     {
         if (!auth()->user()->can('daily_payment.delete')) {
             abort(403, 'Unauthorized action.');
+        }
+        $edit_days = request()->session()->get('business.transaction_edit_days');
+        $edit_date = request()->session()->get('business.transaction_edit_date');
+        $tr               = DailyPayment::find($id);
+        $dateFilter       = \Carbon::parse($tr->date) ;
+        if (!$this->transactionUtil->canBeEdited($id, $edit_date,$dateFilter)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_date])];
+            return redirect('daily-payment')->with('status', $output);
         }
         foreach (DailyPaymentItem::where('daily_payment_id',$id)->get() as $item) {
             $accountTransactions = \App\AccountTransaction::where('daily_payment_item_id',$item->id)->get();

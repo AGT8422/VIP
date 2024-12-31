@@ -475,7 +475,7 @@ class PurchaseController extends Controller
         try {
             $business_id = $request->session()->get('user.business_id');
             //Check if subscribed or not
-        if (!$this->moduleUtil->isSubscribed($business_id)) {
+            if (!$this->moduleUtil->isSubscribed($business_id)) {
                 if (!$this->moduleUtil->isSubscribedPermitted($business_id)) {
                     return $this->moduleUtil->expiredResponse(action('PurchaseController@index'));
                 }
@@ -508,6 +508,15 @@ class PurchaseController extends Controller
                                                 , 'pay_term_number'
                                                 , 'pay_term_type']);
             $exchange_rate    = $transaction_data['exchange_rate'];
+            $edit_days        = request()->session()->get('business.transaction_edit_days');
+            $edit_date        = request()->session()->get('business.transaction_edit_date');
+           
+            if (!$this->transactionUtil->canBeEdited(0, $edit_date,$request->transaction_date)) {
+                $output =  [
+                            'success' => 0,
+                            'msg'     => __('messages.transaction_add_not_allowed', ['days' => $edit_date])];
+                return redirect('purchases')->with('status', $output);
+            }
             //TODO: Check for "Undefined index: total_before_tax" issue
             //Adding temporary fix by validating
             $request->validate([
@@ -1097,14 +1106,16 @@ class PurchaseController extends Controller
             abort(403, 'Unauthorized action.');
         }
         try {
-
+            
             //Check if the transaction can be edited or not.
             $edit_days = request()->session()->get('business.transaction_edit_days');
-           
-            if (!$this->transactionUtil->canBeEdited($id, $edit_days)) {
+            $edit_date = request()->session()->get('business.transaction_edit_date');
+            $tr               = \App\Transaction::find($id);
+            $dateFilter       = (\Carbon::parse($request->transaction_date)<\Carbon::parse($tr->transaction_date))?$request->transaction_date:$tr->transaction_date;
+            if (!$this->transactionUtil->canBeEdited($id, $edit_date,$dateFilter)) {
                 $output =  [
                             'success' => 0,
-                            'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_days])];
+                            'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_date])];
                 return redirect('purchases')->with('status', $output);
             }
             //Validate document size

@@ -120,6 +120,15 @@ class CombinedPurchaseReturnController extends Controller
             }
             $company_name                   = request()->session()->get("user_main.domain");
             // dd($request);
+            $edit_days          = request()->session()->get('business.transaction_edit_days');
+            $edit_date          = request()->session()->get('business.transaction_edit_date');
+           
+            if (!$this->transactionUtil->canBeEdited(0, $edit_date,$request->transaction_date)) {
+                $output =  [
+                            'success' => 0,
+                            'msg'     => __('messages.transaction_add_not_allowed', ['days' => $edit_date])];
+                return redirect('purchase-return')->with('status', $output);
+            }
             $user_id                        = $request->session()->get('user.id');
             $input_data['store']            = $input_data['store_id'];
             $input_data['type']             = 'purchase_return';
@@ -418,7 +427,7 @@ class CombinedPurchaseReturnController extends Controller
         }
 
         $business_id = request()->session()->get('user.business_id');
-
+        
         $purchase_return = Transaction::where('business_id', $business_id)
                                     ->with(['contact'])
                                     ->find($id);
@@ -541,7 +550,7 @@ class CombinedPurchaseReturnController extends Controller
         if (!auth()->user()->can('purchase_return.create')) {
             abort(403, 'Unauthorized action.');
         }
-
+        
         try {
             DB::beginTransaction();
             $input_data     = $request->only([
@@ -584,6 +593,16 @@ class CombinedPurchaseReturnController extends Controller
             $purchase_return_id = $request->input('purchase_return_id');
             $purchase_return    = Transaction::where('business_id', $business_id)->where('type', 'purchase_return')->find($purchase_return_id);
             $old_date           = $purchase_return->transaction_date;
+            $edit_days          = request()->session()->get('business.transaction_edit_days');
+            $edit_date          = request()->session()->get('business.transaction_edit_date');
+           
+            $dateFilter       = (\Carbon::parse($request->transaction_date)<\Carbon::parse($old_date))?$request->transaction_date:$old_date;
+            if (!$this->transactionUtil->canBeEdited($purchase_return_id, $edit_date,$dateFilter)) {
+                $output =  [
+                            'success' => 0,
+                            'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_date])];
+                return redirect('purchase-return')->with('status', $output);
+            }
             # upload document
             $document_purchase                  = [];
             if ($request->hasFile('document_purchase')) {
@@ -591,7 +610,7 @@ class CombinedPurchaseReturnController extends Controller
                 $referencesNewStyle = str_replace('/', '-', $purchase_return->ref_no);
                 foreach ($request->file('document_purchase') as $file) {
                     
-                    #................
+                    #................   
                     if(!in_array($file->getClientOriginalExtension(),["jpg","png","jpeg"])){
                         if ($file->getSize() <= config('constants.document_size_limit')){ 
                             $file_name_m    =   time().'_'.$referencesNewStyle.'_'.$i++.'_'.$file->getClientOriginalName();

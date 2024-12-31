@@ -100,7 +100,8 @@
                     <span class="input-group-addon">
                         <i class="fa fa-edit"></i>
                     </span>
-                    {!! Form::number('transaction_edit_days', $business->transaction_edit_days, ['class' => 'form-control','placeholder' => __('business.transaction_edit_days'), 'required']); !!}
+                    {!! Form::hidden('transaction_edit_days', $business->transaction_edit_days, ['class' => 'form-control','placeholder' => __('business.transaction_edit_days'), 'required']); !!}
+                    {!! Form::date('transaction_edit_date', $business->transaction_edit_date, ['class' => 'form-control', 'required']); !!}
                 </div>
             </div>
         </div>

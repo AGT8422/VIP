@@ -122,7 +122,7 @@
 					  </tbody>
 					</table>
 					  <div class="col-md-1 pull-right">
-						<button class="btn btn-primary pull-right save-daily">{{ trans('home.Save') }}</button>
+						<button id="save_entry" class="btn btn-primary pull-right save-daily">{{ trans('home.Save') }}</button>
 					  </div>
 					</div>
 					<input type="text" id="index" hidden value="3">
@@ -533,14 +533,18 @@
 		
 	}
     $('#save-daily').on("click",function(e){
-			$(this).preventDefault();
+			$(this).attr('disabled','disabled');
 		 
 	})
     $('#daily_payment_form').submit(function(e){
 		if (terms.debit != terms.credit  ||  terms.debit == 0) {
 			e.preventDefault();
 			alert("{{ trans('home.Total Debit  and total credit must be equaled') }}");
+			
+		}else{
+			$('#save_entry').attr('disabled','disabled');
 		}
-	})
+	}) 
+	  
   </script>
 @endsection

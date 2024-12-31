@@ -148,7 +148,7 @@
 					  </tbody>
 					</table>
 					  <div class="col-md-1 pull-right">
-						<button class="btn btn-primary pull-right">{{ trans('home.Save') }}</button>
+						<button id="save_entry" class="btn btn-primary pull-right">{{ trans('home.Save') }}</button>
 					  </div>
 					</div>
 			</div>
@@ -434,7 +434,9 @@
 	}
 	// ****  
 		  
-	 
+		$('#daily_payment_form').submit(function(){
+			$('#save_entry').attr('disabled','disabled');
+		});
 
   </script>
 @endsection

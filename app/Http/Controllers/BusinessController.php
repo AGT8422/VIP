@@ -322,12 +322,9 @@ class BusinessController extends Controller
         $mobile = $request->input('contact_number');
         $old    = $request->input('old_number');
         $edit   = $request->input('edit');
-        $total = 0;
-        
-         
-        
+        $total  = 0;
+        $count  = User::where('contact_number', $mobile)->count();
 
-        $count = User::where('contact_number', $mobile)->count();
         if ($count > 0) {
             if($edit != null){
                 if($old != null){
@@ -543,7 +540,7 @@ class BusinessController extends Controller
              *   'redeem_amount_per_unit_rp', 'min_order_total_for_redeem','source_sell_price',
              *   'min_redeem_point', 'max_redeem_point', 'rp_expiry_period','sale_print_module','quotation_print_module','approve_quotation_print_module','draft_print_module',
              */
-            $business_details = $request->only(['name', 'start_date', 'currency_id', 'tax_label_1', 'tax_number_1', 'tax_label_2', 'tax_number_2', 'default_profit_percent', 'default_sales_tax', 'default_sales_discount', 'sell_price_tax', 'sku_prefix', 'time_zone', 'fy_start_month', 'accounting_method', 'transaction_edit_days', 'sales_cmsn_agnt', 'item_addition_method', 'currency_symbol_placement', 'on_product_expiry',
+            $business_details = $request->only(['name', 'start_date', 'currency_id', 'tax_label_1', 'tax_number_1', 'tax_label_2', 'tax_number_2', 'default_profit_percent', 'default_sales_tax', 'default_sales_discount', 'sell_price_tax', 'sku_prefix', 'time_zone', 'fy_start_month', 'accounting_method', 'transaction_edit_days','transaction_edit_date', 'sales_cmsn_agnt', 'item_addition_method', 'currency_symbol_placement', 'on_product_expiry',
                 'stop_selling_before', 'default_unit', 'expiry_type', 'date_format','customer_type_id','supplier_type_id',
                 'time_format', 'ref_no_prefixes', 'theme_color', 'email_settings','app_store_id','app_pattern_id','app_account',
                 'sms_settings', 'rp_name', 'amount_for_unit_rp','bank','cash','store_mfg','separate_sell','separate_pay_sell',

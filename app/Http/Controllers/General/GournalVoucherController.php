@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Utils\ModuleUtil;
 use App\Utils\ProductUtil;
+use App\Utils\TransactionUtil;
 use App\Models\GournalVoucher;
 use App\Models\Entry;
 use App\Account;
@@ -13,9 +14,10 @@ use App\Models\GournalVoucherItem;
 use DB;
 class GournalVoucherController extends Controller
 {
-    public function __construct(ModuleUtil $moduleUtil, ProductUtil $productUtil)
+    public function __construct(ModuleUtil $moduleUtil, ProductUtil $productUtil, TransactionUtil $transactionUtil)
     {
         $this->moduleUtil = $moduleUtil;
+        $this->transactionUtil = $transactionUtil;
         $this->productUtil = $productUtil;
     }
     public function index(Request $request)
@@ -74,7 +76,14 @@ class GournalVoucherController extends Controller
       
         $request->validate(['image.mimes'=>'png,jpeg,png,jpeg,pdf']);
         $business_id   =  request()->session()->get('user.business_id');
-        
+        $edit_days = request()->session()->get('business.transaction_edit_days');
+        $edit_date = request()->session()->get('business.transaction_edit_date');  
+        if (!$this->transactionUtil->canBeEdited(0, $edit_date,$request->gournal_date)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_add_not_allowed', ['days' => $edit_date])];
+            return redirect('gournal-voucher')->with('status', $output);
+        }
         DB::beginTransaction();
         $company_name      = request()->session()->get("user_main.domain");
         
@@ -204,6 +213,16 @@ class GournalVoucherController extends Controller
     {
         if (!auth()->user()->can('gournal_voucher.update')) {
             abort(403, 'Unauthorized action.');
+        }
+        $edit_days = request()->session()->get('business.transaction_edit_days');
+        $edit_date = request()->session()->get('business.transaction_edit_date');
+        $tr               = GournalVoucher::find($id);
+        $dateFilter       = (\Carbon::parse($request->gournal_date)<\Carbon::parse($tr->date))?$request->gournal_date:$tr->date;
+        if (!$this->transactionUtil->canBeEdited($id, $edit_date,$dateFilter)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_date])];
+            return redirect('gournal-voucher')->with('status', $output);
         }
         DB::beginTransaction();
         $request->validate([  'image.mimes'=>'png,jpeg,png,jpeg,pdf'  ]);
@@ -815,6 +834,16 @@ class GournalVoucherController extends Controller
     {
         if (!auth()->user()->can('gournal_voucher.delete')) {
             abort(403, 'Unauthorized action.');
+        }
+        $edit_days = request()->session()->get('business.transaction_edit_days');
+        $edit_date = request()->session()->get('business.transaction_edit_date');
+        $tr               = GournalVoucher::find($id);
+        $dateFilter       = \Carbon::parse($tr->date) ;
+        if (!$this->transactionUtil->canBeEdited($id, $edit_date,$dateFilter)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_date])];
+            return redirect('gournal-voucher')->with('status', $output);
         }
         foreach (GournalVoucherItem::where('gournal_voucher_id',$id)->get() as $item) {
                 $allAccounts =  \App\AccountTransaction::where('gournal_voucher_item_id',$item->id)->get();

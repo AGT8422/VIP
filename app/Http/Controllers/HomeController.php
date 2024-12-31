@@ -747,9 +747,29 @@ class HomeController extends Controller
                             if (!file_exists($public_path)) {
                                 mkdir($public_path, 0755, true);
                             }
-                            if ($imgs->save($public_path . $new_file_name)) {
-                                $uploaded_file_name = $new_file_name;
+                            // if ($imgs->save($public_path . $new_file_name)) {
+                            //     $uploaded_file_name = $new_file_name;
+                            // }
+                            #............... new way 
+                            // Usage example
+                            $sources      = $file;
+                            $destination  = $file_name;
+                            $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                            if($Data[0] > $Data[1] ){
+                                $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                                $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                            }else if( $Data[0] < $Data[1] ){
+                                $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                                $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                            }else{
+                                $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                                $maxWidth    = ($Data[0]>800)?800:$Data[0];
                             }
+ 
+
+                            $this->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);
+
                         }
                     }
                     #................
@@ -757,8 +777,7 @@ class HomeController extends Controller
                 }
             }
             if(!empty($source)){
-
-                $source->document           = json_encode($document_attach) ;
+                $source->document           = json_encode($document_attach) ; 
                 $source->update();
                 $output = [
                     "success" => 1,
@@ -876,6 +895,68 @@ class HomeController extends Controller
             // // Output the new PDF to the destination file
             // $pdf->Output($destinationFile, 'F');
     }
+
+    # ..... image compress
+    public function compressImage($source, $destination, $quality, $maxWidth, $maxHeight) {
+        // Get image info
+        $imageInfo = getimagesize($source);
+        $mime = $imageInfo['mime'];
+    
+        // Create a new image from file
+        switch ($mime) {
+            case 'image/jpeg':
+                $image = imagecreatefromjpeg($source);
+                break;
+            case 'image/png':
+                $image = imagecreatefrompng($source);
+                break;
+            case 'image/gif':
+                $image = imagecreatefromgif($source);
+                break;
+            default:
+                throw new \Exception('Unsupported image type.');
+        }
+    
+        // Get original dimensions
+        $width = imagesx($image);
+        $height = imagesy($image);
+    
+        // Calculate new dimensions while maintaining aspect ratio
+        $aspectRatio = $width / $height;
+        if ($width > $height) {
+            $newWidth = $maxWidth;
+            $newHeight = $maxWidth / $aspectRatio;
+        } else {
+            $newWidth = $maxHeight * $aspectRatio;
+            $newHeight = $maxHeight;
+        }
+    
+        // Create a new true color image with the new dimensions
+        $newImage = imagecreatetruecolor($newWidth, $newHeight);
+    
+        // Copy and resize the old image into the new image
+        imagecopyresampled($newImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+    
+        // Save the new image to the destination with the specified quality
+        switch ($mime) {
+            case 'image/jpeg':
+                imagejpeg($newImage, $destination, $quality);
+                break;
+            case 'image/png':
+                // PNG quality is 0 (no compression) to 9
+                imagepng($newImage, $destination, floor($quality / 10));
+                break;
+            case 'image/gif':
+                imagegif($newImage, $destination);
+                break;
+        }
+    
+        // Free up memory
+        imagedestroy($image);
+        imagedestroy($newImage);
+    }
+    
+
     /**
      * Retrieves sell products whose available quntity is less than alert quntity.
      *

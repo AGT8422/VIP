@@ -527,6 +527,14 @@ class SellReturnController extends Controller
                  return $this->moduleUtil->expiredResponse(action('SellReturnController@index'));
              } 
         } 
+        $edit_days          = request()->session()->get('business.transaction_edit_days');
+        $edit_date          = request()->session()->get('business.transaction_edit_date'); 
+        if (!$this->transactionUtil->canBeEdited(0, $edit_date,$request->transaction_date)) {
+            $output =  [
+                        'success' => 0,
+                        'msg'     => __('messages.transaction_add_not_allowed', ['days' => $edit_date])];
+            return redirect('sell-return')->with('status', $output);
+        }
         try {
             $input       = $request->except('_token');
             $user_id     = $request->session()->get('user.id');
@@ -778,7 +786,14 @@ class SellReturnController extends Controller
                     return $this->moduleUtil->expiredResponse(action('SellReturnController@index'));
                 } 
             } 
-            
+            $edit_days          = request()->session()->get('business.transaction_edit_days');
+            $edit_date          = request()->session()->get('business.transaction_edit_date');
+            if (!$this->transactionUtil->canBeEdited(0, $edit_date, $request->transaction_date )) {
+                $output =  [
+                            'success' => 0,
+                            'msg'     => __('messages.transaction_add_not_allowed', ['days' => $edit_date])];
+                return redirect('sell-return')->with('status', $output);
+            }
             $user_id                        = $request->session()->get('user.id');
             $input_data['store']            = $input_data['store_id'];
             $input_data['type']             = 'sell_return';
@@ -1032,7 +1047,16 @@ class SellReturnController extends Controller
                     return $this->moduleUtil->expiredResponse(action('SellReturnController@index'));
                 } 
             } 
-        
+            $edit_days          = request()->session()->get('business.transaction_edit_days');
+            $edit_date          = request()->session()->get('business.transaction_edit_date');
+            $tr                 = \App\Transaction::find($request->transaction_id);
+            $dateFilter         = (\Carbon::parse($request->transaction_date)<\Carbon::parse($tr->transaction_date))?$request->transaction_date:$tr->transaction_date;
+            if (!$this->transactionUtil->canBeEdited($request->transaction_id, $edit_date, $dateFilter )) {
+                $output =  [
+                            'success' => 0,
+                            'msg'     => __('messages.transaction_edit_not_allowed', ['days' => $edit_date])];
+                return redirect('purchase-return')->with('status', $output);
+            }
             # Check if delete rows after edit 
             $line_id_delete  = []; 
             foreach($request->products as $it){

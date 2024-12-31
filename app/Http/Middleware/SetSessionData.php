@@ -25,17 +25,18 @@ class SetSessionData
         
         if (!$request->session()->has('user')) {
             $business_util = new BusinessUtil;
-            $i    = session()->get('lang');
-            $user = Auth::user();
+            $i            = session()->get('lang');
+            $user         = Auth::user();
             
-            $session_data = ['id'         => $user->id,
+            $session_data = [
+                            'id'          => $user->id,
                             'surname'     => $user->surname,
                             'first_name'  => $user->first_name,
                             'last_name'   => $user->last_name,
                             'email'       => $user->email,
                             'business_id' => $user->business_id,
                             'language'    => $i,
-                            ];
+                        ];
 
 
             $business = Business::findOrFail($user->business_id);

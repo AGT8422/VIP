@@ -1472,4 +1472,66 @@ class Util
 
         return round($quantity, $quantity_precision);
     }
+
+    # ..... image compress
+    public function compressImage($source, $destination, $quality, $maxWidth, $maxHeight) {
+        // Get image info
+        $imageInfo = getimagesize($source);
+        $mime = $imageInfo['mime'];
+    
+        // Create a new image from file
+        switch ($mime) {
+            case 'image/jpeg':
+                $image = imagecreatefromjpeg($source);
+                break;
+            case 'image/png':
+                $image = imagecreatefrompng($source);
+                break;
+            case 'image/gif':
+                $image = imagecreatefromgif($source);
+                break;
+            default:
+                throw new \Exception('Unsupported image type.');
+        }
+    
+        // Get original dimensions
+        $width = imagesx($image);
+        $height = imagesy($image);
+    
+        // Calculate new dimensions while maintaining aspect ratio
+        $aspectRatio = $width / $height;
+        if ($width > $height) {
+            $newWidth = $maxWidth;
+            $newHeight = $maxWidth / $aspectRatio;
+        } else {
+            $newWidth = $maxHeight * $aspectRatio;
+            $newHeight = $maxHeight;
+        }
+    
+        // Create a new true color image with the new dimensions
+        $newImage = imagecreatetruecolor($newWidth, $newHeight);
+    
+        // Copy and resize the old image into the new image
+        imagecopyresampled($newImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+    
+        // Save the new image to the destination with the specified quality
+        switch ($mime) {
+            case 'image/jpeg':
+                imagejpeg($newImage, $destination, $quality);
+                break;
+            case 'image/png':
+                // PNG quality is 0 (no compression) to 9
+                imagepng($newImage, $destination, floor($quality / 10));
+                break;
+            case 'image/gif':
+                imagegif($newImage, $destination);
+                break;
+        }
+    
+        // Free up memory
+        imagedestroy($image);
+        imagedestroy($newImage);
+    }
+
+
 }

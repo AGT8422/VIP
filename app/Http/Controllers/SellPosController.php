@@ -23,6 +23,7 @@ use App\TypesOfService;
 use App\Models\WarehouseInfo;
 use App\Models\RecievedWrong;
 use App\User;
+use App\Utils\Util;
 use App\Utils\BusinessUtil;
 use App\Utils\CashRegisterUtil;
 use App\Utils\ContactUtil;
@@ -55,6 +56,7 @@ class SellPosController extends Controller
     protected $businessUtil;
     protected $transactionUtil;
     protected $cashRegisterUtil;
+    protected $commonUtil;
     protected $moduleUtil;
     protected $notificationUtil;
 
@@ -71,8 +73,10 @@ class SellPosController extends Controller
         TransactionUtil $transactionUtil,
         CashRegisterUtil $cashRegisterUtil,
         ModuleUtil $moduleUtil,
+        Util $commonUtil,
         NotificationUtil $notificationUtil
     ) {
+        $this->commonUtil = $commonUtil;
         $this->contactUtil = $contactUtil;
         $this->productUtil = $productUtil;
         $this->businessUtil = $businessUtil;
@@ -499,9 +503,28 @@ class SellPosController extends Controller
                                 if (!file_exists($public_path)) {
                                     mkdir($public_path, 0755, true);
                                 }
-                                if ($imgs->save($public_path ."/" . $new_file_name)) {
-                                    $uploaded_file_name = $new_file_name;
-                                }  
+                                // if ($imgs->save($public_path ."/" . $new_file_name)) {
+                                //     $uploaded_file_name = $new_file_name;
+                                // } if ($imgs->save($public_path ."/" . $new_file_name)) {
+                                //     $uploaded_file_name = $new_file_name;
+                                // } 
+                                $sources      = $file;
+                                $destination  = $file_name;
+                                $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                                if($Data[0] > $Data[1] ){
+                                    $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                                    $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                                }else if( $Data[0] < $Data[1] ){
+                                    $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                                    $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                                }else{
+                                    $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                                    $maxWidth    = ($Data[0]>800)?800:$Data[0];
+                                }
+    
+
+                                $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight); 
                             }
                         }
                         #................
@@ -1370,9 +1393,26 @@ class SellPosController extends Controller
                                 if (!file_exists($public_path)) {
                                     mkdir($public_path, 0755, true);
                                 }
-                                if ($imgs->save($public_path ."/" . $new_file_name)) {
-                                    $uploaded_file_name = $new_file_name;
-                                }    
+                                // if ($imgs->save($public_path ."/" . $new_file_name)) {
+                                //     $uploaded_file_name = $new_file_name;
+                                // }  
+                                $sources      = $file;
+                                $destination  = $file_name;
+                                $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                                if($Data[0] > $Data[1] ){
+                                    $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                                    $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                                }else if( $Data[0] < $Data[1] ){
+                                    $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                                    $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                                }else{
+                                    $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                                    $maxWidth    = ($Data[0]>800)?800:$Data[0];
+                                }
+    
+
+                                $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);  
                             }
                         }
                         #................

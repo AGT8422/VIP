@@ -17,6 +17,7 @@ class SellController extends Controller
     public function index($id,Request $request)
     {
         \App::setlocale('en');
+        // dd(request()->header(),$_SERVER['REMOTE_ADDR']);
         ini_set("pcre.backtrack_limit", "5000000");
         $invoice =  Transaction::find($id);
         if(!empty($invoice)){

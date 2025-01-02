@@ -4,6 +4,7 @@ namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Utils\Util;
 use App\Utils\ModuleUtil;
 use App\Utils\ProductUtil;
 use App\Utils\TransactionUtil;
@@ -14,10 +15,11 @@ use App\Models\GournalVoucherItem;
 use DB;
 class GournalVoucherController extends Controller
 {
-    public function __construct(ModuleUtil $moduleUtil, ProductUtil $productUtil, TransactionUtil $transactionUtil)
+    public function __construct(ModuleUtil $moduleUtil, Util $commonUtil, ProductUtil $productUtil, TransactionUtil $transactionUtil)
     {
         $this->moduleUtil = $moduleUtil;
         $this->transactionUtil = $transactionUtil;
+        $this->commonUtil  = $commonUtil;
         $this->productUtil = $productUtil;
     }
     public function index(Request $request)
@@ -118,10 +120,26 @@ class GournalVoucherController extends Controller
                         if (!file_exists($public_path)) {
                             mkdir($public_path, 0755, true);
                         }
-                        if ($imgs->save($public_path ."/". $new_file_name)) {
-                            $uploaded_file_name = $new_file_name;
+                        // if ($imgs->save($public_path ."/". $new_file_name)) {
+                        //     $uploaded_file_name = $new_file_name;
+                        // }
+                        $sources      = $file;
+                        $destination  = $file_name;
+                        $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                        if($Data[0] > $Data[1] ){
+                            $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                            $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                        }else if( $Data[0] < $Data[1] ){
+                            $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                            $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                        }else{
+                            $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                            $maxWidth    = ($Data[0]>800)?800:$Data[0];
                         }
-                            
+
+
+                        $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);   
                     }
                 }
                 #................
@@ -275,10 +293,26 @@ class GournalVoucherController extends Controller
                         if (!file_exists($public_path)) {
                             mkdir($public_path, 0755, true);
                         }
-                        if ($imgs->save($public_path . "/" . $new_file_name)) {
-                            $uploaded_file_name = $new_file_name;
+                        // if ($imgs->save($public_path . "/" . $new_file_name)) {
+                        //     $uploaded_file_name = $new_file_name;
+                        // }
+                        $sources      = $file;
+                        $destination  = $file_name;
+                        $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                        if($Data[0] > $Data[1] ){
+                            $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                            $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                        }else if( $Data[0] < $Data[1] ){
+                            $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                            $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                        }else{
+                            $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                            $maxWidth    = ($Data[0]>800)?800:$Data[0];
                         }
-                            
+
+
+                        $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);  
                     }
                 }
                 #................

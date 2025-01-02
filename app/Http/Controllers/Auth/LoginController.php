@@ -87,6 +87,7 @@ class LoginController extends Controller
         $user->update($input);
         
         // request()->session()->flush();
+        session()->forget('device_id');
         session()->forget('user_main');
         session()->forget('password');
         session()->forget('startLogin');

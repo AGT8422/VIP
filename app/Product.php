@@ -509,7 +509,7 @@ class Product extends Model
     {
         $closing_cost = 0;
         $listed       =  [] ;
-        $products     = Product::where("business_id",$business_id)->get();
+        $products     = Product::where("products.business_id",$business_id)->join('warehouse_infos as wf','wf.product_id','products.id')->get();
         foreach($products as $it){
             $cost          = Product::product_cost($it->id);
             $listed[$it->id.$it->name]      = $cost ;

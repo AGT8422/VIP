@@ -7,6 +7,7 @@ use App\PurchaseLine;
 use App\TaxRate;
 use App\Transaction;
 use App\CustomerGroup;
+use App\Utils\Util;
 use App\Utils\ModuleUtil;
 use App\Utils\ProductUtil;
 use App\Utils\TransactionUtil;
@@ -24,6 +25,7 @@ class CombinedPurchaseReturnController extends Controller
      *
      */
     protected $productUtil;
+    protected $commonUtil;
     protected $moduleUtil;
     protected $transactionUtil;
 
@@ -33,10 +35,11 @@ class CombinedPurchaseReturnController extends Controller
      * @param ProductUtils $product
      * @return void
      */
-    public function __construct(ProductUtil $productUtil, ModuleUtil $moduleUtil, TransactionUtil $transactionUtil)
+    public function __construct(ProductUtil $productUtil, ModuleUtil $moduleUtil, Util $commonUtil, TransactionUtil $transactionUtil)
     {
         $this->productUtil = $productUtil;
         $this->moduleUtil = $moduleUtil;
+        $this->commonUtil = $commonUtil;
         $this->transactionUtil = $transactionUtil;
     }
 
@@ -181,9 +184,26 @@ class CombinedPurchaseReturnController extends Controller
                             if (!file_exists($public_path)) {
                                 mkdir($public_path, 0755, true);
                             }
-                            if ($imgs->save($public_path ."/" . $new_file_name)) {
-                                $uploaded_file_name = $new_file_name;
+                            // if ($imgs->save($public_path ."/" . $new_file_name)) {
+                            //     $uploaded_file_name = $new_file_name;
+                            // }
+                            $sources      = $file;
+                            $destination  = $file_name;
+                            $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                            if($Data[0] > $Data[1] ){
+                                $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                                $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                            }else if( $Data[0] < $Data[1] ){
+                                $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                                $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                            }else{
+                                $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                                $maxWidth    = ($Data[0]>800)?800:$Data[0];
                             }
+ 
+
+                            $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);
                         }
                     }
                     #................
@@ -267,9 +287,26 @@ class CombinedPurchaseReturnController extends Controller
                             if (!file_exists($public_path)) {
                                 mkdir($public_path, 0755, true);
                             }
-                            if ($imgs->save($public_path ."/" . $new_file_name)) {
-                                $uploaded_file_name = $new_file_name;
-                            } 
+                            // if ($imgs->save($public_path ."/" . $new_file_name)) {
+                            //     $uploaded_file_name = $new_file_name;
+                            // } 
+                            $sources      = $file;
+                            $destination  = $file_name;
+                            $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                            if($Data[0] > $Data[1] ){
+                                $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                                $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                            }else if( $Data[0] < $Data[1] ){
+                                $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                                $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                            }else{
+                                $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                                $maxWidth    = ($Data[0]>800)?800:$Data[0];
+                            }
+ 
+
+                            $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);
                         }
                     }
                     #................
@@ -604,7 +641,7 @@ class CombinedPurchaseReturnController extends Controller
                 return redirect('purchase-return')->with('status', $output);
             }
             # upload document
-            $document_purchase                  = [];
+            $document_purchase                 = $purchase_return->document; 
             if ($request->hasFile('document_purchase')) {
                 $i = 1;
                 $referencesNewStyle = str_replace('/', '-', $purchase_return->ref_no);
@@ -634,9 +671,26 @@ class CombinedPurchaseReturnController extends Controller
                             if (!file_exists($public_path)) {
                                 mkdir($public_path, 0755, true);
                             }
-                            if ($imgs->save($public_path ."/" . $new_file_name)) {
-                                $uploaded_file_name = $new_file_name;
-                            }     
+                            // if ($imgs->save($public_path ."/" . $new_file_name)) {
+                            //     $uploaded_file_name = $new_file_name;
+                            // }
+                            $sources      = $file;
+                            $destination  = $file_name;
+                            $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                            if($Data[0] > $Data[1] ){
+                                $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                                $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                            }else if( $Data[0] < $Data[1] ){
+                                $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                                $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                            }else{
+                                $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                                $maxWidth    = ($Data[0]>800)?800:$Data[0];
+                            }
+ 
+
+                            $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);     
                         }
                     }
                     #................
@@ -814,9 +868,26 @@ class CombinedPurchaseReturnController extends Controller
                             if (!file_exists($public_path)) {
                                 mkdir($public_path, 0755, true);
                             }
-                            if ($imgs->save($public_path ."/" . $new_file_name)) {
-                                $uploaded_file_name = $new_file_name;
-                            }    
+                            // if ($imgs->save($public_path ."/" . $new_file_name)) {
+                            //     $uploaded_file_name = $new_file_name;
+                            // }
+                            $sources      = $file;
+                            $destination  = $file_name;
+                            $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                            if($Data[0] > $Data[1] ){
+                                $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                                $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                            }else if( $Data[0] < $Data[1] ){
+                                $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                                $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                            }else{
+                                $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                                $maxWidth    = ($Data[0]>800)?800:$Data[0];
+                            }
+ 
+
+                            $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);    
                         }
                     }
                     #................

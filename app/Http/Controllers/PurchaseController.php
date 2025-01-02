@@ -13,6 +13,7 @@ use App\TaxRate;
 use App\Transaction;
 use App\User; 
 use App\Unit;
+use App\Utils\Util;
 use App\Utils\BusinessUtil;
 
 use App\Utils\ModuleUtil;
@@ -40,6 +41,7 @@ class PurchaseController extends Controller
     protected $productUtil;
     protected $transactionUtil;
     protected $moduleUtil;
+    protected $commonUtil;
 
     /** *F
      * Constructor
@@ -47,13 +49,13 @@ class PurchaseController extends Controller
      * @param ProductUtils $product
      * @return void
      */
-    public function __construct(ProductUtil $productUtil, TransactionUtil $transactionUtil, BusinessUtil $businessUtil, ModuleUtil $moduleUtil)
+    public function __construct(ProductUtil $productUtil,Util $commonUtil , TransactionUtil $transactionUtil, BusinessUtil $businessUtil, ModuleUtil $moduleUtil)
     {
         $this->productUtil     = $productUtil;
         $this->transactionUtil = $transactionUtil;
         $this->businessUtil    = $businessUtil;
         $this->moduleUtil      = $moduleUtil;
-
+        $this->commonUtil      = $commonUtil; 
         $this->dummyPaymentLine = ['method' => 'cash', 'amount' => 0, 'note' => '', 'card_transaction_number' => '', 'card_number' => '', 'card_type' => '', 'card_holder_name' => '', 'card_month' => '', 'card_year' => '', 'card_security' => '', 'cheque_number' => '', 'bank_account_number' => '',
         'is_return' => 0, 'transaction_no' => ''];
     }
@@ -624,9 +626,26 @@ class PurchaseController extends Controller
                             if (!file_exists($public_path)) {
                                 mkdir($public_path, 0755, true);
                             }
-                            if ($imgs->save($public_path ."/" . $new_file_name)) {
-                                $uploaded_file_name = $new_file_name;
+                            // if ($imgs->save($public_path ."/" . $new_file_name)) {
+                            //     $uploaded_file_name = $new_file_name;
+                            // }
+                            $sources      = $file;
+                            $destination  = $file_name;
+                            $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                            if($Data[0] > $Data[1] ){
+                                $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                                $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                            }else if( $Data[0] < $Data[1] ){
+                                $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                                $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                            }else{
+                                $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                                $maxWidth    = ($Data[0]>800)?800:$Data[0];
                             }
+ 
+
+                            $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);
                         }
                     }
                     #................
@@ -687,9 +706,26 @@ class PurchaseController extends Controller
                             if (!file_exists($public_path)) {
                                 mkdir($public_path, 0755, true);
                             }
-                            if ($imgs->save($public_path ."/" . $new_file_name)) {
-                                $uploaded_file_name = $new_file_name;
+                            // if ($imgs->save($public_path ."/" . $new_file_name)) {
+                            //     $uploaded_file_name = $new_file_name;
+                            // }
+                            $sources      = $file;
+                            $destination  = $file_name;
+                            $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                            if($Data[0] > $Data[1] ){
+                                $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                                $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                            }else if( $Data[0] < $Data[1] ){
+                                $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                                $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                            }else{
+                                $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                                $maxWidth    = ($Data[0]>800)?800:$Data[0];
                             }
+ 
+
+                            $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);
                                 
                         }
                     }
@@ -1227,9 +1263,26 @@ class PurchaseController extends Controller
                             if (!file_exists($public_path)) {
                                 mkdir($public_path, 0755, true);
                             }
-                            if ($imgs->save($public_path ."/" . $new_file_name)) {
-                                $uploaded_file_name = $new_file_name;
+                            // if ($imgs->save($public_path ."/" . $new_file_name)) {
+                            //     $uploaded_file_name = $new_file_name;
+                            // }
+                            $sources      = $file;
+                            $destination  = $file_name;
+                            $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                            if($Data[0] > $Data[1] ){
+                                $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                                $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                            }else if( $Data[0] < $Data[1] ){
+                                $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                                $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                            }else{
+                                $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                                $maxWidth    = ($Data[0]>800)?800:$Data[0];
                             }
+ 
+
+                            $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);
                         }
                     }
                     #................
@@ -1277,10 +1330,27 @@ class PurchaseController extends Controller
                             if (!file_exists($public_path)) {
                                 mkdir($public_path, 0755, true);
                             }
-                            if ($imgs->save($public_path ."/" . $new_file_name)) {
-                                $uploaded_file_name = $new_file_name;
+                            // if ($imgs->save($public_path ."/" . $new_file_name)) {
+                            //     $uploaded_file_name = $new_file_name;
+                            // }
+
+                            $sources      = $file;
+                            $destination  = $file_name;
+                            $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                            if($Data[0] > $Data[1] ){
+                                $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                                $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                            }else if( $Data[0] < $Data[1] ){
+                                $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                                $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                            }else{
+                                $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                                $maxWidth    = ($Data[0]>800)?800:$Data[0];
                             }
-                                
+ 
+
+                            $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);   
                         }
                     }
                     #................

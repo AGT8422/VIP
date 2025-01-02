@@ -2,10 +2,12 @@
 
 @php
     $pull               =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'pull-right' : 'pull-left'  ; 
-    $left_menu_margin  =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '20px'  ;
-    $right_menu_margin   =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '20px' : 'initial'  ;
-    $right_menu         =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '30px'  ;
-    $left_menu          =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '30px' : 'initial'  ;
+    $left_menu_margin   =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '20px'  ;
+    $right_menu_margin  =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '20px' : 'initial'  ;
+    $right_profile      =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '30px'  ;
+    $left_profile       =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '30px' : 'initial'  ;
+    $right_menu         =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '60px'  ;
+    $left_menu          =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '60px' : 'initial'  ;
     $right_1200         =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '1%'  ;
     $left_1200          =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '1%' : 'initial'  ;
     $right              =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '10%'  ;
@@ -13,9 +15,9 @@
     $right_mobile       =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'initial' : '0%'  ;
     $left_mobile        =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? '0%' : 'initial'  ;
     $txt                =  in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl')) ? 'left' : 'right'  ;
-    $border_left        = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl'))) ? '0px' : '5px';
-    $border_right       = (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl'))) ? '5px' : '0px';
-    $date_format        = request()->session()->get('business.date_format'); 
+    $border_left        =  (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl'))) ? '0px' : '5px';
+    $border_right       =  (in_array(session()->get('lang', config('app.locale')), config('constants.langs_rtl'))) ? '5px' : '0px';
+    $date_format        =  request()->session()->get('business.date_format'); 
 @endphp
 <style>
     .time_header{
@@ -278,10 +280,29 @@
             color: #000;
 
         }
+        .profile{
+            cursor: pointer;
+            /* box-shadow: 0px 0px 10px #3a3a3a33 !important; */
+            position: absolute;
+            right:{{$right_profile}};
+            left:{{$left_profile}};
+            text-align: center;
+            top:10px;
+            /* width: 75px; */
+            height: auto;
+            /* padding: 10px; */
+            /* border-radius: 10px; */
+            /* background-color: #dddddd; */
+            /* color: #000; */
+
+        }
         .company_name{
             position: absolute;
             left: {{$left_menu_margin}};
             right: {{$right_menu_margin}};
+        }
+        .company_name .company{
+            font-size: 14px;
         }
         
         
@@ -953,8 +974,63 @@
                 <span class="menu_button_span"></span>
                 <span class="menu_button_span"></span>
             </div>
+            <div class="profile">
+                <ul class="nav navbar-nav">
+                    <!-- User Account Menu -->
+                    <li class="dropdown user user-menu" style="position: relative">
+                        <!-- Menu Toggle Button -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!-- The user image in the navbar-->
+                            @php
+                            $profile_photo = auth()->user()->media;
+                            @endphp
+                            @if(!empty($profile_photo))
+                                <img style="position: relative;" src="{{$profile_photo->display_url}}" class="user-image pull-right"  alt="User Image">
+                            @else
+                                <img style="position: relative;" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png" class="user-image pull-right"  alt="User Image">
+                            @endif
+                            <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                            {{-- <span style="font-size: 14px;">{{ Auth::User()->first_name }} {{ Auth::User()->last_name }}</span> --}}
+                        </a>
+                        @php 
+                        $company_name = request()->session()->get("user_main.domain");
+                        @endphp
+                        <ul class="dropdown-menu">
+                            <!-- The user image in the menu -->
+                            <li class="user-header">
+                            @if(!empty(Session::get('business.logo')))
+                                <img src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
+                            @endif
+                            
+                            </li>
+                            <li>
+                            <p class="text-center">
+                                {{ Auth::User()->first_name }} {{ Auth::User()->last_name }}
+                            </p>
+                            </li>
+                            <!-- Menu Body -->
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                            <div class="pull-left">
+                                <a href="{{action('UserController@getProfile')}}" class="btn btn-default btn-flat">@lang('lang_v1.profile')</a>
+                            </div>
+                            <div class="pull-right">
+                                <a href="{{action('Auth\LoginController@logout')}}" class="btn btn-default btn-flat">@lang('lang_v1.sign_out')</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                </ul>  
+            </div>
             <div class="company_name {{$pull}}">
-                <h2  class="company {{$pull}}" style="max-width: 200px;overflow: hidden;  text-overflow: ellipsis;"> <b style="white-space: nowrap;">{{ Session::get('business.name') }}</b></h2>
+                
+                <h2  class="company {{$pull}}" style="max-width: 200px;overflow: hidden;  text-overflow: ellipsis;"> 
+                    
+                    <b style="white-space: nowrap;">
+                        {{ Session::get('business.name') }}
+                    </b>
+                </h2>
             </div>
         </div>
  

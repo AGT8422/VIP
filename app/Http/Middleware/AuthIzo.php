@@ -41,6 +41,7 @@ class AuthIzo
                     // $input                = ["language"=>"en"];
                     // $user                 = \App\User::find($user_id);
                     // $user->update($input); 
+                    session()->forget('device_id');
                     session()->forget('user_main');
                     session()->forget('password');
                     session()->forget('startLogin');
@@ -55,7 +56,7 @@ class AuthIzo
                     return redirect('/login-account'); 
                 }else{
                     if($session->user_actives != null){
-                        if($session->user_actives != (request()->header('user-agent')."_".request()->ip()."_".$user->username."_".$user->id)){
+                        if($session->user_actives != (request()->header('user-agent')."_".request()->ip()."_".$user->username."_".$user->id."_". session('device_id'))){
                             // $business_id          = request()->session()->get('user.business_id');
                             // $user_id              = request()->session()->get('user.id');
                             // $i                    = request()->input('lang');
@@ -64,6 +65,7 @@ class AuthIzo
                             // $input                = ["language"=>"en"];
                             // $user                 = \App\User::find($user_id);
                             // $user->update($input); 
+                            session()->forget('device_id');
                             session()->forget('user_main');
                             session()->forget('password');
                             session()->forget('startLogin');

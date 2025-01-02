@@ -197,6 +197,7 @@ class IzoUserController extends Controller
 
         }
         if($subdomain == ''){
+            session()->forget('device_id');
             session()->forget('user_main');
             session()->forget('password');
             session()->forget('startLogin');
@@ -2122,7 +2123,7 @@ class IzoUserController extends Controller
                     $session->delete(); 
                     session()->put('delete_session','delete');
                 }else{
-                     
+                    session()->forget('device_id');
                     session()->forget('user_main');
                     session()->forget('password');
                     session()->forget('startLogin');
@@ -2192,6 +2193,7 @@ class IzoUserController extends Controller
             $subdomain = '';
 
         }
+        session()->forget('device_id');
         session()->forget('user_main');
         session()->forget('password');
         session()->forget('startLogin');

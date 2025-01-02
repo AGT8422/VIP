@@ -15,7 +15,7 @@
             $sizes = "100px 25px 100px 25px";
             $bottom_sizes = "100px";
         }else{
-            $sizes = "110px 25px 110px 25px";
+            $sizes = "20px 25px 130px 25px";
             $bottom_sizes = "400px";
         }
     @endphp 
@@ -281,81 +281,81 @@
     <!--</header>-->
     @if($invoice->sub_status == 'quotation')        
         <footer>
-        @php
-            $trm = \App\Models\QuatationTerm::where("id",$invoice->additional_notes)->first();
-        @endphp
-        @if($invoice->sub_status == 'quotation')
-             
-            
-            <table  style="width:100%;margin-top: 0px;text-align:left;border-bottom: 0px solid #003496; "  dir="ltr" >
-                <tbody >
-                    <tr >
-                        <td style="width:40% ;text-align:left" >
-                            
-                         @if($invoice->sub_status == 'quotation'  )
-                                <p>
-                                       Validity Date  :  {{ date('M-d-Y',strtotime($invoice->transaction_date. ' +2 weeks')) }}
-                                </p>
-                        @endif
-                        <img src="{{asset("/uploads/img/Footer-Aljazira.png")}}"   style="margin-bottom:-70px;width: 300px;height:50px;margin-right:00px;">
-                            
-                        </td>
-                        <td style="width:60% ;text-align:center;line-height:10px;">
-                            <br>
-                            <br>
-                         
-                         
-                            <b>Tel : +968 24503131   </b> <br>
-                            ست:1479047 , برج الراية , طريق رقم 319 , مبنى رقم : 7/1ب ,ص.ب : 394 , الرمز البريدي : 400 ,غلا , سلطنة عمان <br>
-                             C.R.No.1479047,Al Raya Tower Way No.319,Building No. 1/7B ,  <br>
-                             P.O.Box: 394 PC: 400,Ghala,Sultanate of Oman ,E-mail:info@aljazirah.com 
-                           
-                        </td>
-                    </tr>
-                   
-                </tbody>
-                
-            </table>
-        @else
-            <table class=" " style="position:relative; top:-100px;width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px; border:0px solid black; "  dir="ltr" >
-                <tbody>
-                    <tr>
-                        <td style="width:49%;font-size:15px">
-                                 
-                                    {{ " Customer Signature : " }}                                         
-                                 
-                        </td>
-                        <td style="width:1%">
-                                 
-                                                                          
-                        </td>
-                        <td style="width:1%">
-                                 
-                                                                         
-                        </td>
-                        <td style="width:49%;text-align:center;font-size:15px">
-                                 
-                                    {{ " Salesman Signature : " }}                                         
+                @php
+                    $trm = \App\Models\QuatationTerm::where("id",$invoice->additional_notes)->first();
+                @endphp
+                @if($invoice->sub_status == 'quotation')
+                    <table  style="width:100%;margin-top: 0px;text-align:left;border-bottom: 0px solid #003496; "  dir="ltr" >
+                        <tbody >
+                            <tr >
+                                <td style="width:40% ;text-align:left" >
+                                    
+                                @if($invoice->sub_status == 'quotation'  )
+                                        <p>
+                                            Validity Date  :  {{ date('M-d-Y',strtotime($invoice->transaction_date. ' +2 weeks')) }}
+                                        </p>
+                                @endif
+                                <img src="{{asset("/uploads/img/Footer-Aljazira.png")}}"   style="margin-bottom:-70px;width: 300px;height:50px;margin-right:00px;">
+                                    
+                                </td>
+                                <td style="width:60% ;text-align:center;line-height:10px;">
+                                    <br>
+                                    <br>
                                 
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        @endif
-</footer>
+                                
+                                    <b>Tel : +968 24503131   </b> <br>
+                                    ست:1479047 , برج الراية , طريق رقم 319 , مبنى رقم : 7/1ب ,ص.ب : 394 , الرمز البريدي : 400 ,غلا , سلطنة عمان <br>
+                                    C.R.No.1479047,Al Raya Tower Way No.319,Building No. 1/7B ,  <br>
+                                    P.O.Box: 394 PC: 400,Ghala,Sultanate of Oman ,E-mail:info@aljazirah.com 
+                                
+                                </td>
+                            </tr>
+                        
+                        </tbody>
+                        
+                    </table>
+                @else
+                    <table class=" " style="position:relative; top:-100px;width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px; border:0px solid black; "  dir="ltr" >
+                        <tbody>
+                            <tr>
+                                <td style="width:49%;font-size:15px">
+                                        
+                                            {{ " Customer Signature : " }}                                         
+                                        
+                                </td>
+                                <td style="width:1%">
+                                        
+                                                                                
+                                </td>
+                                <td style="width:1%">
+                                        
+                                                                                
+                                </td>
+                                <td style="width:49%;text-align:center;font-size:15px">
+                                        
+                                            {{ " Salesman Signature : " }}                                         
+                                        
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                @endif
+        </footer>
     @endif
+    
     <div class="bill ">
-        
-             
-        
-             @php $business = \App\Business::find($invoice->business_id); $currency = \App\Currency::find($business->currency_id);  @endphp
+            @php $business = \App\Business::find($invoice->business_id); $currency = \App\Currency::find($business->currency_id);  $company_name = request()->session()->get("user_main.domain");  @endphp
 
-             @if($invoice->sub_status == 'quotation' || ($invoice->sub_status == '' && $invoice->status == 'draft'  ))
-                <img src="{{asset("/uploads/img/aljazira.png")}}"   style="margin-left:-20%; width: 100%; height:150px;margin-top:-100px;">
+            @if($invoice->sub_status == 'quotation' || ($invoice->sub_status == '' && $invoice->status == 'draft'  ))
+                {{-- /uploads/companies/elke/business_logo/1735812828_elke.png    --}}
+                {{-- <img src="{{asset("/uploads/img/aljazira.png")}}"   style="margin-left:-20%; width: 100%; height:150px;margin-top:-100px;"> --}}
+                @if(!empty(Session::get('business.logo')))
+                    <img src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
+                @endif
                 <table style=" position:relative; top:-50px;width: 100%;margin-bottom:0px; border-bottom:7px solid #82c341; padding-bottom:0px">
                     <tbody  >
                         <tr>
-                            <td style="width: 40%;"><h3 style="text-align:left !important;width:100% !important;  ;margin-left:10px;font-size:19px;">VATIN OM1100343792</h3></td>
+                            <td style="width: 40%;"><h3 style="text-align:left !important;width:100% !important;  ;margin-left:10px;font-size:19px;">TRN  {{ Session::get('business.tax_label_1') }}</h3></td>
                             <td style="width: 100%;text-align:right;color:#000;text-align:center;padding-right:200px;"> 
                                 <h1 style=" width:100% !important; text-align:center !important;  font-size:25px;  ">
                                         @if($invoice->sub_status == 'quotation')
@@ -457,24 +457,25 @@
                     </tbody>
                 </table>
             @else
-                <table style=" width: 100%;border:0px solid black;margin-bottom:0px;border-bottom:3px solid #82c341; padding-bottom:0px">
+                <table style=" width: 100%;border:0px solid black;margin-bottom:0px;border-bottom:3px solid #000; padding-bottom:0px">
                     <tbody>
-                        <tr>
+                        <tr> 
                         <td></td>
                         <td style="width: 100%;padding-right:20px;">
                             {{-- <img src="{{asset("/uploads/img/aljazira.png")}}"   style="margin-left:-20%;max-width: 100%;max-height:520px"> --}}
-                            <br>
-                            <br>
-                            <br>
+                            @if(!empty(Session::get('business.logo')))
+                                 <img src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}"  style="margin-left:-20%;width: 500px;max-height:420px" alt="Logo">
+                            @endif 
                             
                         </td>
                         </tr>
                         <tr>
                             
-                            <td style="width: 40%;"><h3 style="text-align:left !important;width:100% !important;  ;margin-left:10px; font-size:19px; ">VATIN OM1100343792</h3></td>
+                            <td style="width: 40%;"></td>
                              <td style="width: 100%;text-align:right;color:#000;text-align:center;padding-right:200px;"> 
-                               
-                            <h1 style="font-size:32px; width:100% ;text-align:center !important;  font-size:25px;  ">
+                                
+                            <h1 style="font-size:32px; width:100% ;text-align:center !important;margin-left:-25px;  font-size:25px;  ">
+                                    <h3 style="text-align:left !important;width:100% !important;  ;margin-left:80px; font-size:19px; ">TRN  {{ Session::get('business.tax_label_1') }}</h3>
                                     @if($invoice->sub_status == 'quotation')
                                     Quotation
                                     @elseif(($invoice->sub_status == '' && $invoice->status == 'draft'  )  )
@@ -495,7 +496,7 @@
                     <tbody >
                     
                         <tr style=" background-color:#dbdee1">
-                        <td style="width:50%;line-height:1px;font-size:12px;padding:10px;">
+                        <td style="width:50%;line-height:1px;font-size:12px;padding:15px;">
                             <h3 style="margin-bottom: 15px;">{{ 'BILLED TO : ' }} </h3>
                        
                             <p>
@@ -544,7 +545,7 @@
                             
                         </td>
                        
-                            <td style=" width:40%;line-height:1px;font-size:12px;padding:10px;">
+                            <td style=" width:40%;line-height:1px;font-size:12px;padding:15px;">
                                
                                   
                                    
@@ -590,42 +591,41 @@
                 </table>
                  
             @endif
-    
-          
-   
+
             <table  class="table" @if($invoice->sub_status == 'quotation') style="position:relative; top:-50px; border:0px solid black; margin-top: 30px;text-align:left;width: 100%;  border-radius:.3rem" @else style="border:0px solid black; margin-top: 30px;text-align:left;width: 100%;  border-radius:.3rem" @endif     dir="ltr" >
-                <thead  >
+                <thead>
     
                     <tr>
-                        
                         <th style="font-size:7px;max-width:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black; text-align:left;">{{ trans('home.NO') }}</th>
                         @php $se = 0; @endphp
                         @foreach($allData as $data) @if( $data->se_note != null && $data->se_note !="")    @php $se = 1; @endphp @endif  @endforeach
                         @if($se != 0)    
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('home.SE') }}</th>
+                            <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('home.SE') }}</th>
                         @else
-                         
-    
+
                         @endif
                         <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('product.brand') }}</th>
                         <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:left;">{{ trans('product.sku') }}</th>
                         @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ')
-                           {{--  <th style="font-size:10px;font-weight: bold;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('home.PHOTO') }}</th>--}}
+                        {{--  <th style="font-size:10px;font-weight: bold;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('home.PHOTO') }}</th>--}}
                         @else
-                              <th style="font-size:10px;font-weight: bold;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('home.PHOTO') }}</th>  
+                        <th style="font-size:10px;font-weight: bold;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('home.PHOTO') }}</th>  
                         @endif 
                         <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:5%;text-align:left;">ITEM &  {{   trans('home.DESCRIPTION') }}</th>
                         <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;width:5%;text-align:left;">{{ trans('home.QTY') }}</th> 
-                         
+                        
                         @php $dis = 0; @endphp
                         @foreach($allData as $data) @if(($data->unit_price_before_discount - $data->unit_price) != 0) @php $dis = 1; @endphp @endif  @endforeach
                         @if($dis != 0)
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">Tot Before Dis</th> 
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">Dis</th> 
+                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{"Price"}}</th> 
+                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{"Disc"}}</th> 
                         @endif
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">RATE</th> 
-                         
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;font-family:arial">AMOUNT</th> 
+                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{"Price Excld.VAT"}}</th> 
+                        
+                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{  "Tot Excld.VAT" }}</th>
+                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:left;">{{ ($invoice->tax)?$invoice->tax->name . ":" : "";  }}</th>
+
+                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;font-family:arial">{{"Tot Incld.vat"}}</th> 
                         
                     </tr>
     
@@ -685,7 +685,7 @@
                                
                                     <td style="font-size:10px;max-width:30px;  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important ">
                                         <p style="font-size:9px;"><b>{{ $data->product->name }}</b></p> 
-                                        
+                                        <pre style="font-size:9px; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre>
                                            </td>
                                 @else 
                                     {{--   $data->sell_line_note  --}} 
@@ -704,14 +704,19 @@
                                 @if($discount!=0)
                                     <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price_before_discount,3) }} {{  isset($currency)?$currency->symbol:""}} </td> 
                                     <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ number_format($discount,3) }} {{  isset($currency)?$currency->symbol:""}}  </td> 
-                                @elseif($dis != 0)
+                                    @elseif($dis != 0)
                                     <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{0}}</td> 
                                     <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{0}}</td> 
-                                @endif
-                                
+                                    @endif
+                                @php
+                                    $vatValue =  ($invoice->tax)?$invoice->tax->amount : 0;
+                                @endphp
                                 <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price,3) }} {{  isset($currency)?$currency->symbol:""}} </td>
+                                
+                                <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price*$data->quantity,3) }} {{  isset($currency)?$currency->symbol:""}} </td> 
+                                <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ number_format( ($data->unit_price*$data->quantity * $vatValue/100),3) }} {{  isset($currency)?$currency->symbol:""}}  </td> 
                                  
-                                <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price*$data->quantity,3) }} {{  isset($currency)?$currency->symbol:""}} </td>
+                                <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ number_format((($data->unit_price*$data->quantity * $vatValue/100)+$data->unit_price*$data->quantity),3) }} {{  isset($currency)?$currency->symbol:""}} </td>
                             
                             </tr>
     
@@ -721,86 +726,84 @@
             </table>
         
             @if($invoice->sub_status == 'quotation'|| (($invoice->sub_status == 'proforma' && $invoice->status == 'draft' )|| $invoice->status == 'ApprovedQuotation'))
-             <table class="table" style="width:100%;font-size:11px;Lline-height:10px; margin-top: 10px;font-weight: bold; ">
-                <thead>
-                    <tr>
-                       
-                        <td>@lang("purchase.qty") : {{$count}}</td>
-                    </tr>
-                </thead>
-            </table>
+                <table class="table" style="width:100%;font-size:11px;Lline-height:10px; margin-top: 10px;font-weight: bold; ">
+                    <thead>
+                        <tr>
+                        
+                            <td>@lang("purchase.qty") : {{$count}}</td>
+                        </tr>
+                    </thead>
+                </table>
             @endif
-             <table class="table" style=" border:0px solid black;width:100%;font-size:13px;  margin-top: 2px; "  dir="ltr"  dir="ltr" >
-                <tbody >
-                    <tr style="width:100% " >
-                        
-                        <td style="text-align:left;width:40%">
-                           @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ' )
-                            {!! $layout->invoice_text !!} 
-                           @endif
-                        </td>
-                        
-                        <td style="text-align:left;width:40%;font-weight: bold;">
-                            <p  style=" width:100%;line-height:1px;padding:0px;">
-                                <span   style="float:left;width:40%;font-family:arial">Subtotal :  </span>  
-                                <span   style="float:right;width:60%">{{ number_format($invoice->total_before_tax,3) }} {{  isset($currency)?$currency->symbol:""}} </span>
-                                 
-                            </p>
- 
+                <table class="table" style=" border:0px solid black;width:100%;font-size:13px;  margin-top: 2px; "  dir="ltr"  dir="ltr" >
+                    <tbody >
+                        <tr style="width:100% " >
                             
-                            @php
-                            if ($invoice->discount_type == "fixed_before_vat"){
-                                $dis = $invoice->discount_amount;
-                            }else if ($invoice->discount_type == "fixed_after_vat"){
-                                $tax = \App\TaxRate::find($invoice->tax_id);
-                                if(!empty($tax)){
-                                    $dis = ($invoice->discount_amount*100)/(100+$tax->amount) ;
-                                }else{
-                                    $dis = ($invoice->discount_amount*100)/(100) ;
-                                }
-                            }else if ($invoice->discount_type == "percentage"){
-                                $dis = ($invoice->total_before_tax *  $invoice->discount_amount)/100;
-                            }else{
-                                $dis = 0;
-                            }
-                            @endphp
-                            @if($invoice->discount_amount != 0)
-                                <p  style=" width:100%;line-height:5px;">
-                                    <span   style="float:left;width:40%;border:0px solid black">Discount :</span>    
-                                    <span   style="float:left;width:40%;border:0px solid black">{{ number_format($dis,3) }} {{  isset($currency)?$currency->symbol:""}}   </span>
-                                
+                            <td style="text-align:left;width:40%">
+                            @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ' )
+                                {!! $layout->invoice_text !!} 
+                            @endif
+                            </td>
+                            
+                            <td style="text-align:left;width:40%;font-weight: bold;">
+                                <p  style=" width:100%;line-height:1px;padding:0px;">
+                                    <span   style="float:left;width:40%;font-family:arial">Tot Exlcd.Vat :  </span>  
+                                    <span   style="float:right;width:60%">{{ number_format($invoice->total_before_tax,3) }} {{  isset($currency)?$currency->symbol:""}} </span>
                                 </p>
-                               <br>
+                                <p style="line-height:3px">&nbsp;</p>
+                                
+                                @php
+                                if ($invoice->discount_type == "fixed_before_vat"){
+                                    $dis = $invoice->discount_amount;
+                                }else if ($invoice->discount_type == "fixed_after_vat"){
+                                    $tax = \App\TaxRate::find($invoice->tax_id);
+                                    if(!empty($tax)){
+                                        $dis = ($invoice->discount_amount*100)/(100+$tax->amount) ;
+                                    }else{
+                                        $dis = ($invoice->discount_amount*100)/(100) ;
+                                    }
+                                }else if ($invoice->discount_type == "percentage"){
+                                    $dis = ($invoice->total_before_tax *  $invoice->discount_amount)/100;
+                                }else{
+                                    $dis = 0;
+                                }
+                                @endphp
+                                @if($invoice->discount_amount != 0)
+                                    <p  style=" width:100%;line-height:5px;">
+                                        <span   style="float:left;width:40%;border:0px solid black">Discount :</span>    
+                                        <span   style="float:left;width:40%;border:0px solid black">{{ number_format($dis,3) }} {{  isset($currency)?$currency->symbol:""}}   </span>
+                                    
+                                    </p>
+                                <br>
+                                <p style="line-height:3px">&nbsp;</p>
                                 <p  style=" width:100%;line-height:10px;">
                                     <span   style="float:left; width:40%;border:0px solid black">Total After Dis  :  </span>    
                                     <span   style=" float:left;width:40%">{{ number_format($invoice->total_before_tax - $dis,3) }} {{  isset($currency)?$currency->symbol:""}}  </span>
                                     
                                 </p>
-                                	  
-                                  
-                            <br>
-                            @endif
-                            <p  style="   width:100%;line-height:1px;padding:0px;">
-                                <span   style="float:left;width:40%">VAT 5%  :	   </span>    
-                                <span   style="float:left;width:60%">{{ number_format($invoice->tax_amount,3) }} {{  isset($currency)?$currency->symbol:""}}  </span>
-                              
-                            </p>
-                       
-                    
-                           <p  style="  width:100%;line-height:1px; border-top:3px solid #444444;padding-top:10px; ">
-                                <span   style="float:left;width:40%"> Total :   </span>    
-                                <span   style="float:right;width:60%">{{ number_format( $invoice->final_total,3) }} {{  isset($currency)?$currency->symbol:""}}  </span>
+                                <p style="line-height:3px">&nbsp;</p>
+                                <br>
+                                @endif
+                                <p  style="   width:100%;line-height:1px;padding:0px;">
+                                    <span   style="float:left;width:40%">{{ ($invoice->tax)?$invoice->tax->name . ":" : ""  }} 	   </span>    
+                                    <span   style="float:left;width:60%">{{ number_format($invoice->tax_amount,3) }} {{  isset($currency)?$currency->symbol:""}}  </span>
                                 
-                            </p>
-                        <br>
-                           	  
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                </p>
+                                <p style="line-height:3px">&nbsp;</p>
+                        
+                                <p  style="  width:100%;line-height:1px; border-top:3px solid #444444;padding-top:10px; ">
+                                    <span   style="float:left;width:40%"> Tot Incld.Vat  :   </span>    
+                                    <span   style="float:right;width:60%">{{ number_format( $invoice->final_total,3) }} {{  isset($currency)?$currency->symbol:""}}  </span>
+                                    
+                                </p>
+                            <br>
+                                
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             
             @php
-              
                 $trm = \App\Models\QuatationTerm::where("id",$invoice->additional_notes)->first();
             @endphp
            
@@ -808,78 +811,86 @@
                          
                 @if(!empty($trm))
                     <table class="table" style="width:100%;font-size:1.3mm; border: 1px solid #BCBAB9;margin-bottom:5px;"  dir="ltr" >
-                    <tbody>
-                        <tr>
-                            <td>
-                                        {!!  $trm->description  !!}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                            {!!  $trm->description  !!}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 @endif
                 
             @else
                 <div class="footer">
-            @php
-
-                $trm = \App\Models\QuatationTerm::where("id",$invoice->additional_notes)->first();
-            @endphp
-            @if($invoice->sub_status == 'quotation')
-                 
-                
-                <table  style="width:100%;margin-top: 10px;text-align:left;border-bottom: 0px solid #003496; "  dir="ltr" >
-                    <tbody >
-                        <tr >
-                            <td style="width:40% ;text-align:left" >
-                             @if($invoice->sub_status == 'quotation'  )
-                                    <p>
-                                           Validity Date  :  {{ date('M-d-Y',strtotime($invoice->transaction_date. ' +2 weeks')) }}
-                                    </p>
-                            @endif
-                            <img src="{{asset("/uploads/img/Footer-Aljazira.png")}}"   style="margin-bottom:-70px;width: 300px;height:50px;margin-right:00px;">
-                                
-                            </td>
-                            <td style="width:60% ;text-align:center;text-height:10px;">
-                                
-                                <b>Tel : +968 24503131   </b> <br>
-                                ست:1479047 , برج الراية , طريق رقم 319 , مبنى رقم : 7/1ب ,ص.ب : 394 , الرمز البريدي : 400 ,غلا , سلطنة عمان <br>
-                                
-                                 C.R.No.1479047,Al Raya Tower Way No.319,Building No. 1/7B ,  <br>
-                                 P.O.Box: 394 PC: 400,Ghala,Sultanate of Oman ,E-mail:info@aljazirah.com 
-                               
-                            </td>
-                        </tr>
-                       
-                    </tbody>
-                    
-                </table>
-            @else
-                <table class=" " style="width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px; border:0px solid black;margin-top:10px"  dir="ltr" >
-                    <tbody>
-                        <tr>
-                            <td style="width:49%;font-size:15px">
-                                     
-                                        {{ " Customer Signature : " }}                                         
-                                     
-                            </td>
-                            <td style="width:1%">
-                                     
-                                                                              
-                            </td>
-                            <td style="width:1%">
-                                     
-                                                                             
-                            </td>
-                            <td style="width:49%;text-align:center;font-size:15px">
-                                     
-                                        {{ " Salesman Signature : " }}                                         
+                    @php
+                        $trm = \App\Models\QuatationTerm::where("id",$invoice->additional_notes)->first();
+                    @endphp
+                    @if($invoice->sub_status == 'quotation')
+                        
+                        
+                        <table  style="width:100%;margin-top: 0px;text-align:left;border-bottom: 0px solid #003496; "  dir="ltr" >
+                            <tbody >
+                                <tr >
+                                    <td style="width:40% ;text-align:left" >
+                                    @if($invoice->sub_status == 'quotation'  )
+                                            <p>
+                                                Validity Date  :  {{ date('M-d-Y',strtotime($invoice->transaction_date. ' +2 weeks')) }}
+                                            </p>
+                                    @endif
+                                    <img src="{{asset("/uploads/img/Footer-Aljazira.png")}}"   style="margin-bottom:-70px;width: 300px;height:50px;margin-right:00px;">
+                                        
+                                    </td>
+                                    <td style="width:60% ;text-align:center;text-height:10px;">
+                                        
+                                        <b>Tel : +968 24503131   </b> <br>
+                                        ست:1479047 , برج الراية , طريق رقم 319 , مبنى رقم : 7/1ب ,ص.ب : 394 , الرمز البريدي : 400 ,غلا , سلطنة عمان <br>
+                                        
+                                        C.R.No.1479047,Al Raya Tower Way No.319,Building No. 1/7B ,  <br>
+                                        P.O.Box: 394 PC: 400,Ghala,Sultanate of Oman ,E-mail:info@aljazirah.com 
                                     
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            @endif
-    </div>
+                                    </td>
+                                </tr>
+                            
+                            </tbody>
+                            
+                        </table>
+                    @else
+                        <table class=" " style="width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px; border:0px solid black;margin-top:0px"  dir="ltr" >
+                            <tbody>
+                                <tr>
+                                    <td style="width:49%;font-size:15px">
+                                            
+                                                {{ " Customer Signature : " }}                                         
+                                            
+                                    </td>
+                                    <td style="width:1%">
+                                            
+                                                                                    
+                                    </td>
+                                    <td style="width:1%">
+                                            
+                                                                                    
+                                    </td>
+                                    <td style="width:49%;text-align:center;font-size:15px">
+                                            
+                                                {{ " Salesman Signature : " }}                                         
+                                            
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    @endif
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <hr style="background-color: #000;border:1px solid black;border-radius:10px;">
+                    <p>
+                        {!!  $layout->footer_text !!} 
+                    </p>
+                </div>
             
             @endif
       

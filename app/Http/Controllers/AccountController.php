@@ -1791,8 +1791,12 @@ class AccountController extends Controller
                 $account = Account::where('business_id', $business_id)
                                                     ->findOrFail($id);
                 $account->is_closed = 1;
-                $account->save();
-
+                $account->save(); 
+                if($account->contact_id != null){
+                   $contact                 = \App\Contact::where('business_id', $business_id)->find($account->contact_id );
+                   $contact->contact_status = 'inactive';
+                   $contact->save();
+               }
                 $output = ['success' => true,
                                     'msg' => __("account.account_closed_success")
                                     ];
@@ -2246,7 +2250,11 @@ class AccountController extends Controller
 
                 $account->is_closed = 0;
                 $account->save();
-
+                 if($account->contact_id != null){
+                    $contact                 = \App\Contact::where('business_id', $business_id)->find($account->contact_id );
+                    $contact->contact_status = 'active';
+                    $contact->save();
+                }
                 $output = ['success' => true,
                         'msg' => __("lang_v1.success")
                         ];

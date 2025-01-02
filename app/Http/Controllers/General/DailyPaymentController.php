@@ -8,17 +8,19 @@ use App\Models\DailyPayment;
 use App\Models\Entry;
 use App\Models\DailyPaymentItem;
 use App\Account;
+use App\Utils\Util;
 use App\Utils\TransactionUtil;
 use App\Utils\ModuleUtil;
 use App\Utils\ProductUtil;
 use DB;
 class DailyPaymentController extends Controller
 {
-    public function __construct(ModuleUtil $moduleUtil, TransactionUtil $transactionUtil, ProductUtil $productUtil)
+    public function __construct(ModuleUtil $moduleUtil, Util $commonUtil,TransactionUtil $transactionUtil, ProductUtil $productUtil)
     {
-        $this->moduleUtil  = $moduleUtil;
+        $this->commonUtil       = $commonUtil;
+        $this->moduleUtil       = $moduleUtil;
         $this->transactionUtil  = $transactionUtil;
-        $this->productUtil = $productUtil;
+        $this->productUtil      = $productUtil;
     }
     public function index(Request $request)
     {
@@ -111,9 +113,26 @@ class DailyPaymentController extends Controller
                         if (!file_exists($public_path)) {
                             mkdir($public_path, 0755, true);
                         }
-                        if ($imgs->save($public_path ."/" . $new_file_name)) {
-                            $uploaded_file_name = $new_file_name;
+                        // if ($imgs->save($public_path ."/" . $new_file_name)) {
+                        //     $uploaded_file_name = $new_file_name;
+                        // }
+                        $sources      = $file;
+                        $destination  = $file_name;
+                        $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                        if($Data[0] > $Data[1] ){
+                            $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                            $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                        }else if( $Data[0] < $Data[1] ){
+                            $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                            $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                        }else{
+                            $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                            $maxWidth    = ($Data[0]>800)?800:$Data[0];
                         }
+
+
+                        $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);
                     }
                 }
                 #................
@@ -262,9 +281,26 @@ class DailyPaymentController extends Controller
                         if (!file_exists($public_path)) {
                             mkdir($public_path, 0755, true);
                         }
-                        if ($imgs->save($public_path ."/" . $new_file_name)) {
-                            $uploaded_file_name = $new_file_name;
-                        }  
+                        // if ($imgs->save($public_path ."/" . $new_file_name)) {
+                        //     $uploaded_file_name = $new_file_name;
+                        // }  
+                        $sources      = $file;
+                        $destination  = $file_name;
+                        $quality      = 99; // 0 (worst quality) to 100 (best quality)
+
+                        if($Data[0] > $Data[1] ){
+                            $maxWidth    = ($Data[0]>1024)?1024:$Data[0];
+                            $maxHeight   = ($Data[1]>768)?768:$Data[1];
+                        }else if( $Data[0] < $Data[1] ){
+                            $maxHeight   = ($Data[1]>1024)?1024:$Data[1];
+                            $maxWidth    = ($Data[0]>768)?768:$Data[0];
+                        }else{
+                            $maxHeight   = ($Data[1]>800)?800:$Data[1];
+                            $maxWidth    = ($Data[0]>800)?800:$Data[0];
+                        }
+
+
+                        $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);
                     }
                 }
                 #................

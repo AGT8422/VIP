@@ -113,6 +113,9 @@
                 width: 30%;
 
             }
+            .date_filter_1 span{
+
+            }
             .date_filter_1{
                 margin-left: {{$margin_left}};
                 margin-right: {{$margin_right}};
@@ -190,8 +193,9 @@
             }
             .card-box-header{
                 margin:auto 10px;
-                width:calc(90%/3);
+                width:calc(90%/1);
                 border-radius:10px ;
+                text-align: center;
                 background-color: #f7f7f7;
             }
             #date_search{
@@ -225,12 +229,16 @@
                 width: 30%;
 
             }
+            .date_filter_1 span{
+                font-size: 14px !important;
+            }
             .date_filter_1{
                 margin-left: {{$margin_left}};
                 margin-right: {{$margin_right}};
                 transform: translateX({{$translate}});
                 display: flex;
-                width: 500px;
+                width: 250px;
+                height:30px;
 
             }
            
@@ -252,6 +260,9 @@
             }
             .class_row{
                 display: block !important;
+            }
+            #transaction_date_range{
+                width: 100%;
             }
         }
         @media(min-width : 600px) and (max-width : 900px){
@@ -341,6 +352,9 @@
                 margin-right: 4%;
                 display: flex;
                 width: 30%;
+
+            }
+            .date_filter_1 span{
 
             }
             .date_filter_1{
@@ -459,6 +473,9 @@
                 margin-right: 4%;
                 display: flex;
                 width: 30%;
+
+            }
+            .date_filter_1 span{
 
             }
             .date_filter_1{
@@ -584,6 +601,9 @@
                 width: 30%;
 
             }
+            .date_filter_1 span{
+
+            }
             .date_filter_1{
                 margin-left: {{$margin_left}};
                 margin-right: {{$margin_right}};
@@ -695,6 +715,9 @@
                 margin-right: 4%;
                 display: flex;
                 width: 30%;
+
+            }
+            .date_filter_1 span{
 
             }
             .date_filter_1{
@@ -809,6 +832,9 @@
                 width: 30%;
 
             }
+            .date_filter_1 span{
+
+            }
             .date_filter_1{
                 margin-left: {{$margin_left}};
                 margin-right: {{$margin_right}};
@@ -845,7 +871,7 @@
  <div class="sec-total">
     <div class="row">
         <div class="col-md-12">&nbsp;</div>
-        <div class="col-lg-6 col-md-12 col-sm-12 text-center">
+        <div class="col-lg-6 col-md-12 col-sm-12 col-6 text-center">
           
                 <small class="date_filter_1" >  
                     <span style="font-size:18px;line-height:34px;font-family:Georgia, 'Times New Roman', Times, serif !important;"> {{__('izo.date_range')}} : &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    &nbsp;</span>

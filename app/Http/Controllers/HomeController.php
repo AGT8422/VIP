@@ -568,6 +568,11 @@ class HomeController extends Controller
 
     public function saveAttach(Request $request){
         try{
+
+            // $request->validate([
+            //     'attach' => 'file|max:'. (config('constants.document_size_limit') / 1000)
+            // ]);
+
             $type              = $request->type_of_attachment;
             $source_id         = $request->source_id;
             
@@ -768,8 +773,14 @@ class HomeController extends Controller
                             }
  
 
-                            $this->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);
+                            $this->commonUtil->compressImage($sources, $destination, $quality, $maxWidth, $maxHeight);
 
+                        }else{
+                            $output = [
+                                "success" => 0,
+                                "msg" => __('The Maximum Size Should Be ') . (floatVal(config('constants.document_size_limit'))/1000000) . " " . __('MB'),
+                            ];
+                            return redirect($url)->with("status",$output);
                         }
                     }
                     #................
@@ -1438,14 +1449,16 @@ class HomeController extends Controller
 
             if(request()->ajax()){ 
                 DB::beginTransaction(); 
+
                 $user              = \App\Models\User::find(\Auth::user()->id);
                 $session           = \App\Models\SessionTable::where("user_id",\Auth::user()->id)->select()->first();
-                if($session){ 
+                if($session){
+                    session(['device_id' => (string) \Str::uuid()]); 
                     $session->ip_address   = request()->ip();
                     $session->user_agent   = request()->header('user-agent') ;
-                    $session->user_actives = request()->header('user-agent')."_".request()->ip()."_".$user->username."_".$user->id;
+                    $session->user_actives = request()->header('user-agent')."_".request()->ip()."_".$user->username."_".$user->id."_". session('device_id');
                     $session->update();
-                    $user->login_token     = request()->header('user-agent')."_".request()->ip()."_".$user->username."_".$user->id;
+                    $user->login_token     = request()->header('user-agent')."_".request()->ip()."_".$user->username."_".$user->id."_". session('device_id');
                     $user->update();
                     request()->session()->forget('create_ses');
                     session()->forget('create_ses');

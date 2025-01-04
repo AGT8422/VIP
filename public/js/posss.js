@@ -248,8 +248,8 @@ $(document).ready(function() {
                         var  quotation =  $('#status option:selected').val();
                     }
                     
-                    // if (ui.item.enable_stock != 1 || is_overselling_allowed || quotation == 'quotation' || quotation == 'final' || quotation == 'draft' || quotation == 'ApprovedQuotation' || quotation == 'proforma' || quotation == 'delivered' || return_type == "return_sale" ) {
-                    if (ui.item.enable_stock != 1 || ui.item.qty_available > 0 || is_overselling_allowed || quotation == 'quotation' || quotation == 'draft' || quotation == 'ApprovedQuotation' || quotation == 'proforma' || quotation == 'delivered' || return_type == "return_sale" ) {
+                    if (ui.item.enable_stock != 1  || is_overselling_allowed || quotation == 'quotation' || quotation == 'final' || quotation == 'draft' || quotation == 'ApprovedQuotation' || quotation == 'proforma' || quotation == 'delivered' || return_type == "return_sale" ) {
+                    // if (ui.item.enable_stock != 1 || is_overselling_allowed || quotation == 'quotation' || quotation == 'draft' || quotation == 'ApprovedQuotation' || quotation == 'proforma' || quotation == 'delivered' || return_type == "return_sale" ) {
                         $(this).val(null);
                         if((quotation == "delivered") && (ui.item.enable_stock == 0)){
                             toastr.warning(LANG.out_of_stock);

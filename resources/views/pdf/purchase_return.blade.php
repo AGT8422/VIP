@@ -17,7 +17,7 @@
 
         body{
 
-            background-color: #f7f7f7;
+            background-color: #fff;
 
         }
 
@@ -25,7 +25,7 @@
 
             min-height: 200px;
 
-            background-color: #f7f7f7;
+            background-color: #fff;
 
             margin: 0 auto;
 
@@ -172,13 +172,16 @@
 <body>
 
     <div class="bill"  >
-
-        <table style="width: 100%;margin-bottom:5px;border-bottom:2px solid #8e0f82">
+        @php    $company_name = request()->session()->get("user_main.domain");  @endphp
+        <table style="width: 100%;margin-bottom:5px;border-bottom:2px solid #b0906c">
             <tbody>
                 <tr>
                    <td style="width: 40%;">
-                    <img src="{{asset("../../../uploads/img/danal.png")}}"    style="max-width: 300px">
-                   </td>
+                    {{-- <img src="{{asset("../../../uploads/img/danal.png")}}"    style="max-width: 300px"> --}}
+                        @if(!empty(Session::get('business.logo')))
+                            <img style="max-width: 300px;height:320px" src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
+                        @endif   
+                    </td>
                     <td style="width: 0%;"></td>
                    <td style="width: 70%;padding-left:10px;"> @if($layout) {!! $layout->header_text !!} @endif</td>
                 </tr>

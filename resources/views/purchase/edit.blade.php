@@ -16,7 +16,7 @@
   <!-- Main content -->
   {{-- *2* SECTION MAIN CONTENT  --}}
   {{-- ********************************** --}}
-    <section class="content" style="margin:0px 10%">
+    <section class="content" >
 
         {{-- *2/1* Currency Section --}}
         <!-- Page level currency setting -->

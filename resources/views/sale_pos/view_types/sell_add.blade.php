@@ -651,10 +651,10 @@
             var tax  =  parseFloat((vat/100)*amount,10);
             currancy = $(".currency_id_amount").val();
             if(currancy != "" && currancy != 0){
-                $('#order_tax_curr').text((tax.toFixed(3)/currancy).toFixed(4));
+                $('#order_tax_curr').text((tax.toFixed(4)/currancy).toFixed(4));
             }
             $('#order_tax').text(tax.toFixed(4));
-            $('#tax_calculation_amount').val(tax);
+            $('#tax_calculation_amount').val(tax.toFixed(4));
             
             var x=   parseFloat(amount,10) + parseFloat(tax,10) ;
             $('#total_payable').text(x.toFixed(2));
@@ -705,11 +705,11 @@
               currancy = $(".currency_id_amount").val();
               if(currancy != "" && currancy != 0){
                   var order_tax   =  (sub_total - (discount_amount*currancy))*(vat/100);
-                  $('#total_discount_curr').text((parseFloat(discount_amount)).toFixed(3));
-                  $('#total_discount').text((discount_amount*currancy).toFixed(3));
-                  $('#order_tax_curr').text((order_tax.toFixed(3)/currancy).toFixed(3));
+                  $('#total_discount_curr').text((parseFloat(discount_amount)).toFixed(4));
+                  $('#total_discount').text((discount_amount*currancy).toFixed(4));
+                  $('#order_tax_curr').text((order_tax.toFixed(4)/currancy).toFixed(4));
               }
-              $('#order_tax').text(order_tax.toFixed(3));
+              $('#order_tax').text(order_tax.toFixed(4));
               $('#tax_calculation_amount').val(order_tax.toFixed(4));
               
 
@@ -717,23 +717,23 @@
               var x =  (discount_amount*100)/(100+parseFloat(vat));
               $('#total_discount').text(x.toFixed(4));
               var order_tax   =  (sub_total - x)*(vat/100);
-              $('#order_tax').text(order_tax.toFixed(3));
-              $('#tax_calculation_amount').val(order_tax);
+              $('#order_tax').text(order_tax.toFixed(4));
+              $('#tax_calculation_amount').val(order_tax.toFixed(4));
               currancy = $(".currency_id_amount").val();
               if(currancy != "" && currancy != 0){
                   var order_tax   =  (sub_total - (x*currancy))*(vat/100);
-                  $('#total_discount_curr').text(parseFloat(x).toFixed(3));
-                  $('#total_discount').text((x*currancy).toFixed(3));
-                  $('#order_tax_curr').text((order_tax.toFixed(3)/currancy).toFixed(3));
+                  $('#total_discount_curr').text(parseFloat(x).toFixed(4));
+                  $('#total_discount').text((x*currancy).toFixed(4));
+                  $('#order_tax_curr').text((order_tax.toFixed(4)/currancy).toFixed(4));
               }
-              $('#order_tax').text(order_tax.toFixed(3));
+              $('#order_tax').text(order_tax.toFixed(4));
               $('#endregionorder_tax').text(order_tax.toFixed(4));
               discount_amount =  x; 
           }else if (type ==  'percentage') {
               var x =  sub_total*(discount_amount/100);
               var order_tax   =  (sub_total - x)*(vat/100);
-              $('#order_tax').text(parseFloat(order_tax).toFixed(3));
-              $('#tax_calculation_amount').val(order_tax);
+              $('#order_tax').text(parseFloat(order_tax).toFixed(4));
+              $('#tax_calculation_amount').val(order_tax.toFixed(4));
               
               currancy = $(".currency_id_amount").val();
               if(currancy != "" && currancy != 0){

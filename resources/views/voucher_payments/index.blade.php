@@ -191,8 +191,8 @@
                                     @endif
                                 @endcan
                                 <li>
-                                    @php  $types_s = ($item->account_type == 0)?(($item->contact->type == "customer")?0:1):0;  @endphp
-                                    @if($types_s == 0)
+                                    @php  $types_s = $item->type;  @endphp
+                                    @if($types_s == 1)
                                         <a style="text-decoration:none" href="{{ URL::to('reports/r-vh/'.$item->id) }}" target="_blank"><i class="fas fa-print"></i>&nbsp;&nbsp;@lang('messages.print')</a>
                                     @else
                                         <a style="text-decoration:none" href="{{ URL::to('reports/p-vh/'.$item->id) }}" target="_blank"><i class="fas fa-print"></i>&nbsp;&nbsp;@lang('messages.print')</a>

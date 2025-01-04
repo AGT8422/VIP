@@ -222,9 +222,10 @@
                     e++;
                 }
                 if(result.type == "account"){
-                    $("#ai").val(zero + (parseInt(result.array)+1));
-                }else{
-                    $("#ai").val(zero + parseInt(result.array)+1);
+                     
+                    $("#ai").val(zero + (parseInt(result.array)+parseInt(1)));
+                }else{ 
+                    $("#ai").val(zero + (parseInt(result.array)+parseInt(1)));
                 }
                 $("#ai").attr("readOnly",true);
                 }

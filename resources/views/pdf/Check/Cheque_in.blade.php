@@ -15,7 +15,7 @@
 
         body{
 
-            background-color: #f7f7f7;
+            background-color: #fff;
 
         }
 
@@ -23,7 +23,7 @@
 
             min-height: 200px;
 
-            background-color: #f7f7f7;
+            background-color: #fff;
 
             margin: 0 auto;
 
@@ -165,7 +165,7 @@
         }
 
         .bord{
-             border: .5px solid #8e0f82;
+             border: .5px solid #b0906c;
             padding: 10px;
             
          }
@@ -209,13 +209,17 @@
 </head>
 
 <body>
+    @php  $company_name = request()->session()->get("user_main.domain");  @endphp
 
     <div class="bill"  >
         <table style="width: 100%;margin-bottom:5px;  padding-bottom:25px">
             <tbody>
                 <tr >
                     <td class=" " style="border:0px solid grey;  border-radius: 5px 10px 15px 20px;">
-                        <img  src="{{asset("../../../uploads/img/danal.png")}}"     style=" padding:10px;max-width: 300px;height:350px;border-bottom:2px solid #8e0f82;border-radius:10px">
+                        {{-- <img  src="{{asset("../../../uploads/img/danal.png")}}"     style=" padding:10px;max-width: 300px;height:350px;border-bottom:2px solid #b0906c;border-radius:10px"> --}}
+                        @if(!empty(Session::get('business.logo')))
+                            <img style=" padding:10px;max-width: 300px;height:350px;border-bottom:2px solid #b0906c;border-radius:10px" src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
+                        @endif
                     </td>
                     <td style="text-align: right; width:400px;padding:10px;
                             line-height:13px;font-size:12px;border-right:1px solid grey;
@@ -289,69 +293,69 @@
                 }else{
                     $account = \App\Account::where("id",$invoice->contact_id)->first();
                 }
-                $Atr     = \App\AccountTransaction::where("account_id",$account->id)->select("amount");
-                if($invoice->account_type == 0){
-                    $pr_amount  =  \App\AccountTransaction::whereHas('transaction',function($query) use( $invoice){
-                                                    $query->where('contact_id',$invoice->contact->id);
-                                                    $query->whereIn('type',['sale','sell_return']);
-                                            })->whereHas('account',function($query) use( $invoice){
-                                                    $query->where('contact_id',$invoice->contact->id);
-                                            })
+                // $Atr     = \App\AccountTransaction::where("account_id",$account->id)->select("amount");
+                // if($invoice->account_type == 0){
+                //     $pr_amount  =  \App\AccountTransaction::whereHas('transaction',function($query) use( $invoice){
+                //                                     $query->where('contact_id',$invoice->contact->id);
+                //                                     $query->whereIn('type',['sale','sell_return']);
+                //                             })->whereHas('account',function($query) use( $invoice){
+                //                                     $query->where('contact_id',$invoice->contact->id);
+                //                             })
                                            
                                             
-                                            ->where('type','credit')->where("note","!=","refund Collect")
-                                            ->sum("amount");
-                    $pr_payed   =  \App\AccountTransaction::whereHas('account',function($query) use( $invoice){
-                                                        $query->where('contact_id',$invoice->contact->id);
-                                                    })
-                                                    ->where('type','debit')
-                                                    ->whereNull("for_repeat")
-                                                    ->whereNull("id_delete")
-                                                    ->sum('amount');
-                }else{
-                    $pr_amount  =  \App\AccountTransaction::whereHas('account',function($query) use( $invoice){
-                                                $query->where('id',$invoice->contact_id);
-                                        })
+                //                             ->where('type','credit')->where("note","!=","refund Collect")
+                //                             ->sum("amount");
+                //     $pr_payed   =  \App\AccountTransaction::whereHas('account',function($query) use( $invoice){
+                //                                         $query->where('contact_id',$invoice->contact->id);
+                //                                     })
+                //                                     ->where('type','debit')
+                //                                     ->whereNull("for_repeat")
+                //                                     ->whereNull("id_delete")
+                //                                     ->sum('amount');
+                // }else{
+                //     $pr_amount  =  \App\AccountTransaction::whereHas('account',function($query) use( $invoice){
+                //                                 $query->where('id',$invoice->contact_id);
+                //                         })
                                         
                                         
-                                        ->where('type','credit')->where("note","!=","refund Collect")
-                                        ->sum("amount");
-                    $pr_payed   =  \App\AccountTransaction::whereHas('account',function($query) use( $invoice){
-                                                    $query->where('id',);
-                                                })
-                                                ->where('type','debit')
-                                                ->whereNull("for_repeat")
-                                                ->whereNull("id_delete")
-                                                ->sum('amount');
+                //                         ->where('type','credit')->where("note","!=","refund Collect")
+                //                         ->sum("amount");
+                //     $pr_payed   =  \App\AccountTransaction::whereHas('account',function($query) use( $invoice){
+                //                                     $query->where('id',);
+                //                                 })
+                //                                 ->where('type','debit')
+                //                                 ->whereNull("for_repeat")
+                //                                 ->whereNull("id_delete")
+                //                                 ->sum('amount');
                     
-                }
+                // }
                 
-                $diff       =   $pr_payed - $pr_amount;
-                if($diff < 0 ){
-                    $price= ($diff*-1)  ;
-                    $type= " / Credit"  ;
-                }else{
-                    $price= ($diff)  ;
-                    $type= " / Debit"  ;
-                }
+                // $diff       =   $pr_payed - $pr_amount;
+                // if($diff < 0 ){
+                //     $price= ($diff*-1)  ;
+                //     $type= " / Credit"  ;
+                // }else{
+                //     $price= ($diff)  ;
+                //     $type= " / Debit"  ;
+                // }
                 @endphp
                 
                 
                 @php 
                     $business_id = session()->get('user.business_id');
-                    $account_BALANCE = \App\Account::leftjoin(
-                                    'account_transactions as AT',
-                                    'AT.account_id',
-                                    '=',
-                                    'accounts.id'
-                                )
-                            ->whereNull('AT.deleted_at')
-                            ->where('accounts.business_id', $business_id)
-                            ->where('accounts.id', $account->id)
-                            ->where('AT.for_repeat',"=", null)
-                            ->select('accounts.*', DB::raw("SUM( IF(AT.type='credit', amount, -1 * amount) ) as balance"))
-                            ->first();
-                    $BALC = ($account_BALANCE)?$account_BALANCE->balance : 0;
+                    // $account_BALANCE = \App\Account::leftjoin(
+                    //                 'account_transactions as AT',
+                    //                 'AT.account_id',
+                    //                 '=',
+                    //                 'accounts.id'
+                    //             )
+                    //         ->whereNull('AT.deleted_at')
+                    //         ->where('accounts.business_id', $business_id)
+                    //         ->where('accounts.id', $account->id)
+                    //         ->where('AT.for_repeat',"=", null)
+                    //         ->select('accounts.*', DB::raw("SUM( IF(AT.type='credit', amount, -1 * amount) ) as balance"))
+                    //         ->first();
+                    $BALC = $account->balance;
                     if($BALC < 0 ){
                         $price= ($BALC*-1)  ;
                         $type= " / Debit"  ;
@@ -366,7 +370,7 @@
             
 
             
-            <div style="border-bottom:2px solid #8e0f82">&nbsp;</div>
+            <div style="border-bottom:2px solid #b0906c">&nbsp;</div>
             <div>&nbsp;</div>
         
             <div style="font-size: 12px; text-align:left">

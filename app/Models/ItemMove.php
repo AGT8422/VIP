@@ -3313,7 +3313,7 @@ class ItemMove extends Model
                 $multiple_product             = ($pli->sub_unit_qty != null)?(($pli->sub_unit_qty != 0)?$pli->sub_unit_qty:1):1;
                 $item->product_id	          = $pli->product_id;
                 $item->qty                    = $multiple_product*$pli->quantity;
-                $item->row_price              = ($type=="transfer" || $type == "purchase_transfer")?$FINAL_COST:$pli->purchase_price/($pli->quantity*$multiple_product) ;
+                $item->row_price              = ($type=="transfer" || $type == "purchase_transfer")?$FINAL_COST:$pli->purchase_price/($multiple_product) ;
                 $item->row_price_inc_exp      = ($type=="transfer" || $type == "purchase_transfer")?$FINAL_COST:$cost_inc_exp;
                 $item->product_unit           = ($pli->sub_unit_id != null)?$pli->sub_unit_id:(($pli->product)?$pli->product->unit->id:null);
                 $item->product_unit_qty       = ($pli->sub_unit_qty != null)?(($pli->sub_unit_qty != 0)?$pli->sub_unit_qty:1):1;
@@ -3439,7 +3439,7 @@ class ItemMove extends Model
             }else{
                 $multiple_product                 = ($pli->sub_unit_qty != null)?(($pli->sub_unit_qty != 0)?$pli->sub_unit_qty:1):1;
                 $itemMove->qty                    = $multiple_product*$pli->quantity;
-                $itemMove->row_price              = round($pli->purchase_price/($pli->quantity*$multiple_product),config('constants.currency_precision')) ;
+                $itemMove->row_price              = round($pli->purchase_price/($multiple_product),config('constants.currency_precision')) ;
                 $itemMove->row_price_inc_exp      = round($cost_inc_exp,config('constants.currency_precision'));
                 $itemMove->product_unit           = ($pli->sub_unit_id  != null)?$pli->sub_unit_id:(($pli->product)?$pli->product->unit->id:null);
                 $itemMove->product_unit_qty       = ($pli->sub_unit_qty != null)?(($pli->sub_unit_qty != 0)?$pli->sub_unit_qty:1):1;
@@ -3985,7 +3985,7 @@ class ItemMove extends Model
      */ 
     public static function tableFresh($product_id,$variation_id=null) {
         try{
-            \DB::beginTransaction();
+            
             $itemMove = \App\Models\ItemMove::orderBy("date","asc")
                                             ->orderBy("order_id","desc")
                                             ->orderBy("id","asc")
@@ -4003,7 +4003,7 @@ class ItemMove extends Model
                     \App\Models\ItemMove::updateRefresh($itemMove,$itemMove,$move_id,$date);
                 }
             }
-            \DB::commit();
+            
             return true;   
         }catch(Exception $e){
             return false;   

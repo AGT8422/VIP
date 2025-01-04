@@ -214,6 +214,19 @@
 		background-color: black !important;
 		color:#fff;
 	}
+	.nav .open>a{
+		background-color: #ec660800 !important;
+		border-color: #00000033;
+	}
+	.nav>li>a:active, .nav>li>a:focus, .nav>li>a:hover{
+		
+		background-color: #ec660800 !important;
+	}
+	.navbar-nav>.dropdown>.dropdown-menu{
+		background-color: #3a3a3a !important;
+		color:white !important;
+
+	}
 </style>
 @if(!empty($__system_settings['additional_css']))
     {!! $__system_settings['additional_css'] !!}

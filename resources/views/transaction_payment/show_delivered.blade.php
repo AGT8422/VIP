@@ -326,19 +326,19 @@
                                         <i class="fa fa-eye" aria-hidden="true"></i>
                                     </button>
                                     &nbsp; 
-                                    @if( request()->session()->get("user.id") == 1)
-                                    @if(request()->type == "p_return")
-                                        <button type="button" class="btn btn-danger btn-xs delete_recieve" 
-                                                data-href="{{ action('TransactionPaymentController@destroy_recieve', [$owner,"return_type"=>"return_type"]) }}"
-                                                ><i class="fa fa-trash" aria-hidden="true"></i>
-                                        </button>
-                                    @else
-                                        <button type="button" class="btn btn-danger btn-xs delete_recieve" 
-                                                data-href="{{ action('TransactionPaymentController@destroy_recieve', [$owner]) }}"
-                                                ><i class="fa fa-trash" aria-hidden="true"></i>
-                                        </button>
-                                    @endif
-                                    @endif
+                                    @can('receive_delete')
+                                        @if(request()->type == "p_return")
+                                            <button type="button" class="btn btn-danger btn-xs delete_recieve" 
+                                                    data-href="{{ action('TransactionPaymentController@destroy_recieve', [$owner,"return_type"=>"return_type"]) }}"
+                                                    ><i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn btn-danger btn-xs delete_recieve" 
+                                                    data-href="{{ action('TransactionPaymentController@destroy_recieve', [$owner]) }}"
+                                                    ><i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+                                        @endif
+                                    @endcan
                                     
                             
                                     @if(!empty($payment->document_path))

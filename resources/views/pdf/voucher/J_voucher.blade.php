@@ -15,7 +15,7 @@
 
         body{
 
-            background-color: #f7f7f7;
+            background-color: #fff;
 
         }
 
@@ -23,7 +23,7 @@
 
             min-height: 200px;
 
-            background-color: #f7f7f7;
+            background-color: #fff;
 
             margin: 0 auto;
 
@@ -165,7 +165,7 @@
         }
 
         .bord{
-             border: .5px solid #8e0f82;
+             border: .5px solid #b0906c;
             padding: 10px;
             
          }
@@ -205,16 +205,16 @@
             width:100%;
          }
         tr {
-            border-bottom: 1px solid #8e0f82 !important;
+            border-bottom: 1px solid #b0906c !important;
         }
        .head{
-            background-color: #8e0f82;
+            background-color: #b0906c;
             color:#f7f7f7;
-            border: 1px solid #8e0f82;
+            border: 1px solid #b0906c;
         }
         
         td{
-            border: 0px solid #8e0f82;
+            border: 0px solid #b0906c;
             text-align: left;
             box-shadow: 2px 2px 1px black;
             padding:0px;
@@ -238,7 +238,7 @@
         th{
             font-size: 12px;
             color:  #ffffff;
-            border-bottom:1px solid #8e0f82;
+            border-bottom:1px solid #b0906c;
             text-align: left;
             padding-left:3px;
             
@@ -257,13 +257,17 @@
 </head>
 
 <body>
+    @php  $company_name = request()->session()->get("user_main.domain");  @endphp
 
     <div class="bill"  >
         <table style="width: 100%;margin-bottom:5px;  padding-bottom:25px">
             <tbody>
                 <tr >
                     <td class=" " style="border:0px solid grey;  border-radius: 5px 10px 15px 20px;">
-                        <img src="{{asset("../../../uploads/img/danal.png")}}"    style=" padding:10px;max-width: 300px;height:350px;border-bottom:2px solid #8e0f82;border-radius:10px">
+                        {{-- <img src="{{asset("../../../uploads/img/danal.png")}}"    style=" padding:10px;max-width: 300px;height:350px;border-bottom:2px solid #b0906c;border-radius:10px"> --}}
+                        @if(!empty(Session::get('business.logo')))
+                            <img style=" padding:10px;max-width: 300px;height:350px;border-bottom:2px solid #b0906c;border-radius:10px" src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
+                        @endif
                     </td>
                     <td style="text-align: right; width:400px;padding:10px;
                             line-height:13px;font-size:12px;border-right:1px solid grey;

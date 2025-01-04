@@ -349,13 +349,18 @@
             @if($invoice->sub_status == 'quotation' || ($invoice->sub_status == '' && $invoice->status == 'draft'  ))
                 {{-- /uploads/companies/elke/business_logo/1735812828_elke.png    --}}
                 {{-- <img src="{{asset("/uploads/img/aljazira.png")}}"   style="margin-left:-20%; width: 100%; height:150px;margin-top:-100px;"> --}}
-                @if(!empty(Session::get('business.logo')))
-                    <img src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
-                @endif
-                <table style=" position:relative; top:-50px;width: 100%;margin-bottom:0px; border-bottom:7px solid #82c341; padding-bottom:0px">
+                
+                <table style=" position:relative; top:-50px;width: 100%;margin-bottom:0px; border-bottom:7px solid #b0906c; padding-bottom:0px">
                     <tbody  >
                         <tr>
-                            <td style="width: 40%;"><h3 style="text-align:left !important;width:100% !important;  ;margin-left:10px;font-size:19px;">TRN  {{ Session::get('business.tax_label_1') }}</h3></td>
+                            <td style="width: 100%">
+                                @if(!empty(Session::get('business.logo')))
+                                    <img style="width:100%" src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
+                                @endif 
+                            </td>
+                        </tr> 
+                        <tr>
+                            {{-- <td style="width: 40%;"><h3 style="text-align:left !important;width:100% !important;  ;margin-left:10px;font-size:19px;">TRN  {{ Session::get('business.tax_label_1') }}</h3></td> --}}
                             <td style="width: 100%;text-align:right;color:#000;text-align:center;padding-right:200px;"> 
                                 <h1 style=" width:100% !important; text-align:center !important;  font-size:25px;  ">
                                         @if($invoice->sub_status == 'quotation')
@@ -459,8 +464,8 @@
             @else
                 <table style=" width: 100%;border:0px solid black;margin-bottom:0px;border-bottom:3px solid #000; padding-bottom:0px">
                     <tbody>
-                        <tr> 
-                        <td></td>
+                        <tr>  
+                        <td style="width: 40%;"></td>
                         <td style="width: 100%;padding-right:20px;">
                             {{-- <img src="{{asset("/uploads/img/aljazira.png")}}"   style="margin-left:-20%;max-width: 100%;max-height:520px"> --}}
                             @if(!empty(Session::get('business.logo')))
@@ -692,8 +697,8 @@
                                     <td style="font-size:9px;max-width:40px;  border-bottom: 1px solid grey;padding:1px !important ">
                                         <p style="font-size:9px;">
                                              <b> {{ $data->product->name }} </b>
-                                            <pre style="font-size:9px; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre>
                                         </p> 
+                                        <pre style="width:100px; font-size:9px; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre>
                                     </td>
                                     
                                 

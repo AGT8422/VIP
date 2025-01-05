@@ -51,6 +51,7 @@ use App\MovementWarehouse;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ExceptionOccured;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Crypt;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
@@ -4662,5 +4663,25 @@ class ProductController extends Controller
         $writer->save($newFilePath); 
         return redirect("/products");
     }
-
+    public function changeDescription($id) {
+        $text       =  request()->input('text');
+        $text       =  Crypt::decryptString($text); 
+        $row        =  request()->input('line');
+        $product    =  \App\Product::find($id);
+        if($text != null){
+            return view('alerts.change_description')->with(compact(["text","product","row"]));
+        } 
+    }
+    public function urlDescriptionEncrypt() {
+        
+        if(request()->ajax()){
+            $url          =  request()->input('text');
+            $encryptedUrl =  Crypt::encryptString($url);  
+            return response()->json([
+                "success" => true,
+                "text"    => $encryptedUrl
+            ]);
+        }
+        
+    }
 }

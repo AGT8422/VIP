@@ -132,8 +132,11 @@
             </div>
             @if(app('request')->input('type_o') == 'store' || isset($open) )
              @else
-                <?php $pr =  \App\Product::find($product->product_id);  ?>
-                <textarea class="form-control" id="purchases[{{$row_count}}][purchase_note]" name="purchases[{{$row_count}}][purchase_note]" rows="{{$row_count}}"> {{ strip_tags($product->product_description) }}</textarea>
+                <?php $pr =  \App\Product::find($product->product_id);  $cypher = Illuminate\Support\Facades\Crypt::encryptString($product->product_description);  ?>
+                <div class="description_line" data-line="{{$row_count}}">
+                    <pre style="white-space: nowrap;max-width:300px;max-height:150px" class="btn btn-modal products_details" data-href="{{action('ProductController@changeDescription', ['id'=>$product->id,'text'=> $cypher  ,'line'=>$row_count])}}" data-container=".view_modal">{!! $product->product_description !!}</pre>
+                </div>
+                <textarea class="form-control control_products_details" data-line="{{$row_count}}" style="visibility:hidden" id="purchases[{{$row_count}}][purchase_note]" name="purchases[{{$row_count}}][purchase_note]" rows="{{$row_count}}"> {!! $product->product_description !!}</textarea>
             @endif
       </td>
    

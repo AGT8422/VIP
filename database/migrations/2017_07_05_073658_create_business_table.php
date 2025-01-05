@@ -93,6 +93,7 @@ class CreateBusinessTable extends Migration
             $table->text('share')->nullable();
             $table->integer('customer_type_id')->nullable();
             $table->integer('supplier_type_id')->nullable();
+            $table->tinyInteger('continuous_inventory')->default(0);
             $table->tinyInteger('separate_sell')->default(0);
             $table->tinyInteger('separate_pay_sell')->default(0);
             $table->text('sale_print_module')->nullable();

@@ -1706,4 +1706,5 @@ return [
    "create_payment_invoice"  => "Create Separate Invoice Depending On Payments",
     "subscribe_wrang"        => "Alert !!! <br> It seems that your subscription has expired, so hurry to renew your subscription before the permitted period expires",
     "user_number_device"     => "Number Of Device",
+    'Continuous Inventory'   => 'Continuous Inventory',
 ];

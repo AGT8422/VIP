@@ -276,6 +276,8 @@
 </head>
 
 <body >
+    @php $company_name = request()->session()->get("user_main.domain");  @endphp
+
     <!--<header>-->
     <!--    Fixed Header Content-->
     <!--</header>-->
@@ -295,8 +297,9 @@
                                             Validity Date  :  {{ date('M-d-Y',strtotime($invoice->transaction_date. ' +2 weeks')) }}
                                         </p>
                                 @endif
-                                <img src="{{asset("/uploads/img/Footer-Aljazira.png")}}"   style="margin-bottom:-70px;width: 300px;height:50px;margin-right:00px;">
-                                    
+                                @if(!empty(Session::get('business.logo')))
+                                    <img style="width:100%" src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
+                                @endif 
                                 </td>
                                 <td style="width:60% ;text-align:center;line-height:10px;">
                                     <br>
@@ -344,7 +347,7 @@
     @endif
     
     <div class="bill ">
-            @php $business = \App\Business::find($invoice->business_id); $currency = \App\Currency::find($business->currency_id);  $company_name = request()->session()->get("user_main.domain");  @endphp
+            @php $business = \App\Business::find($invoice->business_id); $currency = \App\Currency::find($business->currency_id); @endphp
 
             @if($invoice->sub_status == 'quotation' || ($invoice->sub_status == '' && $invoice->status == 'draft'  ))
                 {{-- /uploads/companies/elke/business_logo/1735812828_elke.png    --}}
@@ -353,14 +356,15 @@
                 <table style=" position:relative; top:-50px;width: 100%;margin-bottom:0px; border-bottom:7px solid #b0906c; padding-bottom:0px">
                     <tbody  >
                         <tr>
-                            <td style="width: 100%">
+                           
+                            <td colspan="2" style="width: 100%">
                                 @if(!empty(Session::get('business.logo')))
                                     <img style="width:100%" src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
                                 @endif 
                             </td>
                         </tr> 
                         <tr>
-                            {{-- <td style="width: 40%;"><h3 style="text-align:left !important;width:100% !important;  ;margin-left:10px;font-size:19px;">TRN  {{ Session::get('business.tax_label_1') }}</h3></td> --}}
+                            <td style="width: 40%;"><h3 style="text-align:left !important;width:100% !important;  ;margin-left:0px;font-size:19px;">&nbsp;</h3></td>
                             <td style="width: 100%;text-align:right;color:#000;text-align:center;padding-right:200px;"> 
                                 <h1 style=" width:100% !important; text-align:center !important;  font-size:25px;  ">
                                         @if($invoice->sub_status == 'quotation')
@@ -781,7 +785,7 @@
                                     </p>
                                 <br>
                                 <p style="line-height:3px">&nbsp;</p>
-                                <p  style=" width:100%;line-height:10px;">
+                                <p  style=" width:100%;line-height:3px;">
                                     <span   style="float:left; width:40%;border:0px solid black">Total After Dis  :  </span>    
                                     <span   style=" float:left;width:40%">{{ number_format($invoice->total_before_tax - $dis,3) }} {{  isset($currency)?$currency->symbol:""}}  </span>
                                     
@@ -843,17 +847,19 @@
                                                 Validity Date  :  {{ date('M-d-Y',strtotime($invoice->transaction_date. ' +2 weeks')) }}
                                             </p>
                                     @endif
-                                    <img src="{{asset("/uploads/img/Footer-Aljazira.png")}}"   style="margin-bottom:-70px;width: 300px;height:50px;margin-right:00px;">
-                                        
+                                    {{-- <img src="{{asset("/uploads/img/Footer-Aljazira.png")}}"   style="margin-bottom:-70px;width: 300px;height:50px;margin-right:00px;"> --}}
+                                    {{-- @if(!empty(Session::get('business.logo')))
+                                        <img style="width:100%" src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
+                                    @endif --}}
                                     </td>
                                     <td style="width:60% ;text-align:center;text-height:10px;">
-                                        
+{{--                                         
                                         <b>Tel : +968 24503131   </b> <br>
                                         ست:1479047 , برج الراية , طريق رقم 319 , مبنى رقم : 7/1ب ,ص.ب : 394 , الرمز البريدي : 400 ,غلا , سلطنة عمان <br>
                                         
                                         C.R.No.1479047,Al Raya Tower Way No.319,Building No. 1/7B ,  <br>
                                         P.O.Box: 394 PC: 400,Ghala,Sultanate of Oman ,E-mail:info@aljazirah.com 
-                                    
+                                     --}}
                                     </td>
                                 </tr>
                             

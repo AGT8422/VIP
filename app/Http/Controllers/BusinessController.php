@@ -455,6 +455,7 @@ class BusinessController extends Controller
         $profitMfg          =   $business->profitMfg;
         $store_mfg          =   $business->store_mfg;
         $wastageMfg         =   $business->wastageMfg;
+        $continuous_inventory=$business->continuous_inventory;
         $source_sell_price  =   $business->source_sell_price;
         $separate_sell      =   $business->separate_sell;
         $separate_pay_sell  =   $business->separate_pay_sell;
@@ -509,7 +510,7 @@ class BusinessController extends Controller
 
         $weighing_scale_setting = !empty($business->weighing_scale_setting) ? $business->weighing_scale_setting : [];
 
-        return view('business.settings', compact('business','default_price_unit','listModules','listModulesPurchase','units','unitsP','separate_sell','separate_pay_sell','product_price','source_sell_price','patterns','excange_rates','app_account','app_store_id','app_pattern_id','Stores' , 'store_mfg' ,'account_type_', 'accounts', 'itemMfg', 'profitMfg', 'wastageMfg', 'currencies', 'tax_rates', 'timezone_list', 'months', 'accounting_methods', 'commission_agent_dropdown', 'units_dropdown', 'date_formats', 'shortcuts', 'pos_settings', 'modules', 'theme_colors', 'email_settings', 'sms_settings', 'mail_drivers', 'allow_superadmin_email_settings', 'custom_labels', 'common_settings', 'weighing_scale_setting'));
+        return view('business.settings', compact('business','continuous_inventory','default_price_unit','listModules','listModulesPurchase','units','unitsP','separate_sell','separate_pay_sell','product_price','source_sell_price','patterns','excange_rates','app_account','app_store_id','app_pattern_id','Stores' , 'store_mfg' ,'account_type_', 'accounts', 'itemMfg', 'profitMfg', 'wastageMfg', 'currencies', 'tax_rates', 'timezone_list', 'months', 'accounting_methods', 'commission_agent_dropdown', 'units_dropdown', 'date_formats', 'shortcuts', 'pos_settings', 'modules', 'theme_colors', 'email_settings', 'sms_settings', 'mail_drivers', 'allow_superadmin_email_settings', 'custom_labels', 'common_settings', 'weighing_scale_setting'));
     }
 
     /**
@@ -610,7 +611,7 @@ class BusinessController extends Controller
             }
 
             $checkboxes = ['enable_editing_product_from_purchase',
-                'enable_inline_tax','wastageMfg',
+                'enable_inline_tax','wastageMfg','continuous_inventory',
                 'enable_brand', 'enable_category', 'enable_sub_category', 'enable_price_tax', 'enable_purchase_status',
                 'enable_lot_number', 'enable_racks', 'enable_row', 'default_price_unit','enable_position', 'enable_sub_units'];
             foreach ($checkboxes as $key => $value) {

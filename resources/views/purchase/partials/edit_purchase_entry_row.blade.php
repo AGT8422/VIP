@@ -58,6 +58,7 @@
             @foreach($purchase->purchase_lines as $purchase_line)
                 @php 
                     $list_of_prices_in_unit = \App\Product::getProductPrices($purchase_line->product->id);
+                    $cypher = Illuminate\Support\Facades\Crypt::encryptString($purchase_line->purchase_note);
                 @endphp 
 
                 <tr class="line_sorting">
@@ -71,10 +72,17 @@
                     <td>
                         <a  target="_blank" href="/item-move/{{$purchase_line->product->id}}">
                         {{ $purchase_line->product->name }} ({{$purchase_line->variations->sub_sku}})
+                        <br>
+                        <br>
                         </a>
                         @if( $purchase_line->product->type == 'variable') 
                             <br/>(<b>{{ $purchase_line->variations->product_variation->name}}</b> : {{ $purchase_line->variations->name}})
                         @endif
+                        <div class="description_line" data-line="{{$row_count}}">
+                            <pre style="white-space: nowrap;max-width:300px;max-height:150px" class="btn btn-modal products_details" data-href="{{action('ProductController@changeDescription', ['id'=>$purchase_line->product->id,'text'=> $cypher  ,'line'=>$row_count])}}" data-container=".view_modal">{!! $purchase_line->purchase_note !!}</pre>
+                        </div>
+                        <textarea class="form-control control_products_details" style="visibility:hidden" data-line="{{$row_count}}"  id="purchases[{{$row_count}}][purchase_note]" name="purchases[{{$row_count}}][purchase_note]" rows="{{$row_count}}"> {!! $purchase_line->purchase_note !!}</textarea>
+                        
                     </td>
                     
                     <td>
@@ -178,7 +186,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-                        <textarea class="form-control" id="purchases[{{$row_count}}][purchase_note]" name="purchases[{{$row_count}}][purchase_note]" rows="{{$row_count}}"> {{ strip_tags($purchase_line->purchase_note) }}</textarea>
                         <!--<p class="help-block"><small>@lang('lang_v1.sell_line_description_help')</small></p>-->
                     
                     </td>

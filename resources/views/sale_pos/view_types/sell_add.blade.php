@@ -100,9 +100,11 @@
                 $discount_amount = $so_line->line_discount_amount;
             }
 
-              $sell_line_note = strip_tags($product->product_description);
+            //   $sell_line_note = strip_tags($product->product_description);
+              $sell_line_note = $product->product_description;
               if(!empty($product->sell_line_note)){
-                  $sell_line_note = strip_tags($product->sell_line_note);
+                //   $sell_line_note = strip_tags($product->sell_line_note);
+                  $sell_line_note = $product->sell_line_note;
               }
         @endphp
 
@@ -226,8 +228,11 @@
         @endif
         @if(!empty($is_direct_sell))
             <br>
-            <?php $pr =  \App\Product::find($product->product_id);  ?>
-            <textarea class="form-control"  name="products[{{$row_count}}][sell_line_note]" rows="2" style="max-width:200px;white-space: normal; word-break: break-word;word-wrap: 
+            <?php $pr =  \App\Product::find($product->product_id);  $cypher = Illuminate\Support\Facades\Crypt::encryptString($sell_line_note);  ?>
+            <div class="description_line" data-line="{{$row_count}}">
+                <pre style="white-space: nowrap;max-width:300px;max-height:150px" class="btn btn-modal products_details" data-href="{{action('ProductController@changeDescription', ['id'=>$product->product_id,'text'=> $cypher  ,'line'=>$row_count])}}" data-container=".view_modal">{!! $sell_line_note !!}</pre>
+            </div>
+            <textarea class="form-control control_products_details"   data-line="{{$row_count}}"  name="products[{{$row_count}}][sell_line_note]" rows="2" style="max-width:200px;white-space: normal; word-break: break-word;word-wrap: 
                     break-word;  
                     width: min-intrinsic;
                     width: -webkit-min-content;
@@ -235,8 +240,8 @@
                     width: min-content;
                     display: table-caption;
                     display: -ms-grid;
-                    -ms-grid-columns: min-content;
-                        "  > {{ $sell_line_note }}</textarea>
+                    -ms-grid-columns: min-content;visibility:hidden
+                        "  > {!! $sell_line_note !!}</textarea>
             <!--<p class="help-block"><small>@lang('lang_v1.sell_line_description_help')</small></p>-->
         @endif
 
@@ -520,7 +525,13 @@
 </tr>
 @section('inner_script')
 <script>
-       
+        $(document).ready(function() {
+                ClassicEditor
+                .create(document.querySelector('#product_description'))
+                .catch(error => {
+                    console.error(error);
+                });
+            });
         $('.row_discount_percentage').change(function(){
             var  el     =  $(this).parent().parent();
             var dis     =  parseFloat($(this).val());

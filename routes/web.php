@@ -259,6 +259,8 @@ include_once('install_r.php');
             Route::get('/products/view-Stock/{id}', 'ProductController@viewStock');
             Route::get('/products/view-Stock_status/{id}', 'ProductController@viewStatusReport');
             Route::get('/product/remove-image', 'ProductController@removeImage');
+            Route::get('/product/change-description/{id}', 'ProductController@changeDescription');
+            Route::get('/product/description-url', 'ProductController@urlDescriptionEncrypt');
         // 19 ***
         
         // 3 ***

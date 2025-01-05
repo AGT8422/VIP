@@ -1036,7 +1036,7 @@ class ProductUtil extends Util
             'p.tax as tax_id',
             'p.enable_stock',
             'p.enable_sr_no',
-            'p.type as product_type',
+            'p.product_description',
             'p.name as product_actual_name',
             'p.warranty_id',
             'pv.name as product_variation_name',
@@ -2614,6 +2614,7 @@ class ProductUtil extends Util
                /* 'products.hide_pos',*/
                 'products.name',
                 'products.type',
+                'products.product_description',
                 'variations.default_purchase_price',
                 'products.enable_stock',
                 'variations.id as variation_id',

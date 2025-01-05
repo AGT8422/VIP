@@ -507,6 +507,7 @@ class CombinedPurchaseReturnController extends Controller
                             'units.short_name as unit',
                             'units.allow_decimal as unit_allow_decimal',
                             'purchase_lines.purchase_price',
+                            'purchase_lines.purchase_note',
                             'purchase_lines.sub_unit_id',
                             'purchase_lines.list_price',
                             'purchase_lines.id as purchase_line_id',

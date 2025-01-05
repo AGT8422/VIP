@@ -181,6 +181,7 @@ class AccountReportsController extends Controller
 
             $date_range   = request()->input('date_range');
           
+            $check = 0;
             if (!empty($date_range)) {
                 $date_range_array = explode('~', $date_range);
                 $filters['start_date'] = $this->transactionUtil->uf_date(trim($date_range_array[0]));
@@ -188,7 +189,8 @@ class AccountReportsController extends Controller
                 $start_date            = $filters['start_date'];
                 $end_date              = $filters['end_date'];
                
-            } else {
+            } else {  
+                $check                 = 1;
                 $filters['start_date'] = \Carbon::now()->startOfMonth()->format('Y-m-d');
                 $filters['end_date']   = \Carbon::now()->endOfMonth()->format('Y-m-d');
                 $start_date            = $filters['start_date'];
@@ -216,19 +218,18 @@ class AccountReportsController extends Controller
                 $user_id,
                 $reportSetting
             );  
-
-            $account_details = $this->getAccountBalance($business_id,$start_date, $end_date);
-            $account_name    = $this->getAccountName($business_id,$start_date, $end_date);
-            $account_number  = $this->getAccountNumber($business_id,$start_date, $end_date);
+            $all             = ($check == 1)?"all":null;
+            $account_details = $this->getAccountBalance($business_id,$start_date, $end_date,"others",$all);
+            $account_name    = $this->getAccountName($business_id,$start_date, $end_date,"others",$all);
+            $account_number  = $this->getAccountNumber($business_id,$start_date, $end_date,"others",$all);
             // $capital_account_details = $this->getAccountBalance($business_id, $end_date, 'capital');
         
             $output = [
-                'supplier_due'     => $purchase_details['purchase_due'],
-                'customer_due'     => $sell_details['invoice_due'],
-                'account_balances' => $account_details,
-                'account_name'     => $account_name,
-                'account_number'   => $account_number,
-
+                'supplier_due'            => $purchase_details['purchase_due'],
+                'customer_due'            => $sell_details['invoice_due'],
+                'account_balances'        => $account_details,
+                'account_name'            => $account_name,
+                'account_number'          => $account_number,
                 'capital_account_details' => null
             ];
              
@@ -323,7 +324,7 @@ class AccountReportsController extends Controller
      * Retrives account balances.
      * @return Obj
      */
-    private function getAccountBalance($business_id, $start_date,$end_date, $account_type = 'others')
+    private function getAccountBalance($business_id, $start_date,$end_date, $account_type = 'others',$all = null)
     {
         $query = Account::leftjoin(
             'account_transactions as AT',
@@ -336,9 +337,11 @@ class AccountReportsController extends Controller
                 ->where('business_id', $business_id)
                 ->where("accounts.cost_center",0)
                 // ->where("AT.amount",">",0)
-                ->whereNull("AT.for_repeat")
-                ->whereDate('AT.operation_date', '<=', $end_date)
-                ->whereDate('AT.operation_date', '>=', $start_date);
+                ->whereNull("AT.for_repeat");
+                if($all == null){
+                    $query->whereDate('AT.operation_date', '<=', $end_date)
+                    ->whereDate('AT.operation_date', '>=', $start_date);
+                }
             
         // if ($account_type == 'others') {
         //    $query->NotCapital();
@@ -459,7 +462,7 @@ class AccountReportsController extends Controller
      * Retrives account balances.
      * @return Obj
      */
-    private function getAccountNumber($business_id, $start_date,$end_date, $account_type = 'others')
+    private function getAccountNumber($business_id, $start_date,$end_date, $account_type = 'others',$all = null)
     {
         $query = Account::leftjoin(
             'account_transactions as AT',
@@ -472,9 +475,11 @@ class AccountReportsController extends Controller
                 // ->where("AT.amount",">",0)
                 ->where('business_id', $business_id)
                 ->where("accounts.cost_center",0)
-                ->whereNull("AT.for_repeat")
-                ->whereDate('AT.operation_date', '<=', $end_date)
-                ->whereDate('AT.operation_date', '>=', $start_date);
+                ->whereNull("AT.for_repeat");
+                if($all == null){
+                    $query->whereDate('AT.operation_date', '<=', $end_date)
+                    ->whereDate('AT.operation_date', '>=', $start_date);
+                }
 
         // if ($account_type == 'others') {
         //    $query->NotCapital();
@@ -592,7 +597,7 @@ class AccountReportsController extends Controller
      * Retrives account balances.
      * @return Obj
      */
-    private function getAccountName($business_id, $start_date,$end_date, $account_type = 'others')
+    private function getAccountName($business_id, $start_date,$end_date, $account_type = 'others' , $all = null)
     {
         $query = Account::leftjoin(
             'account_transactions as AT',
@@ -605,9 +610,11 @@ class AccountReportsController extends Controller
                 // ->where("AT.amount",">",0)
                 ->where("accounts.cost_center",0)
                 ->whereNull("AT.for_repeat")
-                ->where('business_id', $business_id)
-                ->whereDate('AT.operation_date', '<=', $end_date)
-                ->whereDate('AT.operation_date', '>=', $start_date);
+                ->where('business_id', $business_id);
+                if($all == null){
+                    $query->whereDate('AT.operation_date', '<=', $end_date)
+                    ->whereDate('AT.operation_date', '>=', $start_date);
+                }
                 
         // if ($account_type == 'others') {
         //    $query->NotCapital();

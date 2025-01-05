@@ -127,6 +127,16 @@
                 </div>
             </div>
         </div>
+        <div class="clearfix"></div>
+        <div class="col-md-4 col-sm-12 "> 
+            <div class="form-group">
+                <div class="checkbox">
+                    
+                   {!! Form::checkbox('continuous_inventory',    1  , $continuous_inventory  , [ 'class' => 'input-icheck']); !!} {{ __( 'lang_v1.Continuous Inventory' ) }} 
+                    
+                </div> 
+            </div>
+        </div>
         
         <div class="col-md-12 col-sm-12 ">
             <hr style="width:90% !important;height:5px !important">

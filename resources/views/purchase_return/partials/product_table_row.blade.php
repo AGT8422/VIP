@@ -3,7 +3,16 @@
         {{$product->product_name}}
         <br/>
         {{$product->sub_sku}}
+        <br/> 
+        <?php   $cypher = Illuminate\Support\Facades\Crypt::encryptString($product->product_description);  ?>
+        <div class="description_line" data-line="{{$row_index}}">
+            <pre style="white-space: nowrap;max-width:300px;max-height:150px" data-line="{{$row_index}}" class="btn btn-modal products_details" data-href="{{action('ProductController@changeDescription', ['id'=>$product->product_id,'text'=> $cypher  ,'line'=>$row_index,'return'=>'return'])}}" data-container=".view_modal">{!! $product->product_description !!}</pre>
+        </div>
+        <textarea class="form-control control_products_details" data-line="{{$row_index}}" style="visibility:hidden" id="products[{{$row_index}}][purchase_note]" name="products[{{$row_index}}][purchase_note]" rows="{{$row_index}}"> {!! $product->product_description !!}</textarea>
+       
+    
     </td>
+
     @if(session('business.enable_lot_number'))
         <td>
             <input type="text" name="products[{{$row_index}}][lot_number]" class="form-control" value="{{$product->lot_number ?? ''}}">

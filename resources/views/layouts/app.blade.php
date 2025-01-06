@@ -281,8 +281,6 @@
         });
          
         setTimeout(() => {
-             
-            
             @if(session()->get('change_lang'))
                 @php
                     session()->forget('change_lang')
@@ -292,8 +290,9 @@
                 @php
                     $user            = \App\Models\User::find(\Auth::user()->id);
                     $session         = \App\Models\SessionTable::where("user_id",\Auth::user()->id)->first();
+                    
                 @endphp 
-                @if($session)
+                @if($session->user_actives  != (request()->header('user-agent')."_".request()->ip()."_".$user->username."_".$user->id."_". session('device_id')))
                     $.ajax({
                         url: '/update-session-home',
                         dataType: 'json',
@@ -305,10 +304,10 @@
             @endif
         }, 500);
         
-        
-         setInterval(function() {
+        setInterval(function() {
             $('meta[name="csrf-token"]').attr('content', '{{ csrf_token() }}');
         }, 300000); 
+
      </script>
 
 </html>

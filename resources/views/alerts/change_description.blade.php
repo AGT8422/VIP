@@ -50,42 +50,63 @@ $(document).ready(function() {
     //     new FroalaEditor('.product_descriptions');
     // },100);
     $('.update_desc').on('click',function(){
+        console.log("########## hi ##########");
         product_id_desc  = $('#product_id_desc').val();
         product_id_row   = $('#product_id_row').val();
         text             = $('#product_description').val();
         vaReturn         = $('#product_return').val(); 
+
+        console.log("## description ## " + product_id_desc);
+        console.log("## row_index ## " + product_id_row);
+        console.log("## text ## " + text);
+        console.log("## vaReturn ## " + vaReturn);
+        check   = 0 ;
         $('.products_details').each(function() {
-            var e  = $(this); 
-            parent = e.parent(); 
-            if(parent.attr('data-line') == product_id_row){
-                html = '<pre style="white-space: nowrap;max-width:300px;max-height:150px" data-line="'+product_id_row+'" class="btn btn-modal products_details" data-href="" data-container=".view_modal">'+ text +'</pre>';
-                parent.html(html);
-                setTimeout(() => { 
-                    $.ajax({
-                        type: 'GET',
-                        url: "/product/description-url",
-                        dataType:"json",
-                        data:{
-                            text:text,
-                        },
-                        success: function(result) {
-                            if(result.success == true){
-                                text_text = result.text;
-                                if(vaReturn != ''){
-                                    url      = "https://"+window.location.hostname+"/product/change-description/"+product_id_desc+"?text="+text_text+"&line="+product_id_row+"&return=return";
-                                    parent.find('pre').attr('data-href',url);
-                                }else{
-                                    url      = "https://"+window.location.hostname+"/product/change-description/"+product_id_desc+"?text="+text_text+"&line="+product_id_row;
-                                    parent.find('.products_details').attr('data-href',url);
+            if( check   == 0){
+
+                var e  = $(this); 
+                parent = e.parent(); 
+                
+                console.log("## element ## " + e.html());
+                console.log("## parent element ## " + parent.html());
+                console.log("## parent element line ## " + parent.attr('data-line'));
+                console.log("## parent element row ## " + product_id_row);
+                console.log("## compare element ## " + (parent.attr('data-line') == product_id_row));
+                if(parent.attr('data-line') == product_id_row){
+                    check = 1;
+                    html = '<pre style="white-space: nowrap;max-width:300px;max-height:150px" data-line="'+product_id_row+'" class="btn btn-modal products_details" data-href="" data-container=".view_modal">'+ text +'</pre>';
+                    parent.html(html);
+                    setTimeout(() => { 
+                        $.ajax({
+                            type: 'GET',
+                            url: "/product/description-url",
+                            dataType:"json",
+                            data:{
+                                text:text,
+                            },
+                            success: function(result) {
+                                if(result.success == true){
+                                    console.log("## success ## " + result.success);
+                                    text_text = result.text;
+                                    console.log("## text success ## " + result.text);
+                                    if(vaReturn != ''){
+                                        url      = "https://"+window.location.hostname+"/product/change-description/"+product_id_desc+"?text="+text_text+"&line="+product_id_row+"&return=return";
+                                        console.log("## url 1 ## " + url);
+                                        parent.find('pre').attr('data-href',url);
+                                        console.log("## textarea 1 ## " + parent.find('pre').html());
+                                    }else{
+                                        url      = "https://"+window.location.hostname+"/product/change-description/"+product_id_desc+"?text="+text_text+"&line="+product_id_row;
+                                        console.log("## url 2 ## " + url);
+                                        console.log("## textarea 2 ## " + parent.find('.products_details').html());
+                                        parent.find('.products_details').attr('data-href',url);
+                                    }
+                                    
                                 }
-                                
-                                 
                             }
-                        }
-                    });
-                }, 1000);
+                        });
+                    }, 1000);
+                }
             }
-            
         });
         $('.control_products_details').each(function()  {
             var e = $(this); 
@@ -94,7 +115,7 @@ $(document).ready(function() {
                 e.html($('#product_description').val());
             }
         });
-         
+        console.log("########## Good Evening ##########");
     });
    
     /*..2..*/

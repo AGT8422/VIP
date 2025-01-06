@@ -109,7 +109,7 @@ class CombinedPurchaseReturnController extends Controller
             DB::beginTransaction();
            
             $input_data = $request->only([ 
-                'location_id', 'transaction_date', 'final_total','total_finals_','status',
+                'location_id', 'transaction_date', 'final_total','total_finals_','status', 
                 'ref_no','cost_center_id','store_id','discount_amount2','discount_type','currency_id','currency_id_amount',
                 'tax_id', 'tax_amount2', 'contact_id','sup_ref_no','shipping_details','additional_notes'
                 ]);
@@ -234,6 +234,7 @@ class CombinedPurchaseReturnController extends Controller
                         'purchase_price'           => $unit_price_after_dis_exc,
                         'bill_return_price'        => $unit_price_after_dis_exc,
                         'discount_percent'         => $product["discount_percent_return"],  
+                        'purchase_note'            => $product["purchase_note"],  
                         'purchase_price_inc_tax'   => $unit_price_after_dis_inc,
                         'quantity_returned'        => $this->productUtil->num_uf($product['quantity']),
                         'lot_number'               => !empty($product['lot_number']) ? $product['lot_number'] : null,
@@ -733,6 +734,7 @@ class CombinedPurchaseReturnController extends Controller
                     $return_line->purchase_price         = $unit_price_after_dis_exc;
                     $return_line->pp_without_discount    = $unit_price;
                     $return_line->purchase_price_inc_tax = $unit_price_after_dis_inc;
+                    $return_line->purchase_note          = $product["purchase_note"];
                     $return_line->discount_percent       = $product['discount_percent_return'];
                     $return_line->bill_return_price      =  $unit_price_after_dis_exc;
                     $return_line->quantity_returned      = $this->productUtil->num_uf($product['quantity']);

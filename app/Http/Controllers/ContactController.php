@@ -493,10 +493,12 @@ class ContactController extends Controller
             }
             $input['business_id']     = $business_id;
             $input['created_by']      = $request->session()->get('user.id');
+            $input['e_commerce']      = 0;
             $input['credit_limit']    = $request->input('credit_limit') != '' ? $this->commonUtil->num_uf($request->input('credit_limit')) : null;
             $input['opening_balance'] = $this->commonUtil->num_uf($request->input('opening_balance'));
         
             $output                   = $this->contactUtil->createNewContact($input);
+
             $this->moduleUtil->getModuleData('after_contact_saved', ['contact' => $output['data'], 'input' => $request->input()]);
             $this->contactUtil->activityLog($output['data'], 'added');
             $last                     = \App\Contact::OrderBy('id','desc')->first(); 

@@ -306,10 +306,9 @@
                                     <br>
                                 
                                 
-                                    <b>Tel : +968 24503131   </b> <br>
-                                    ست:1479047 , برج الراية , طريق رقم 319 , مبنى رقم : 7/1ب ,ص.ب : 394 , الرمز البريدي : 400 ,غلا , سلطنة عمان <br>
-                                    C.R.No.1479047,Al Raya Tower Way No.319,Building No. 1/7B ,  <br>
-                                    P.O.Box: 394 PC: 400,Ghala,Sultanate of Oman ,E-mail:info@aljazirah.com 
+                                    <b>  </b> <br>
+                                      <br>
+                                   
                                 
                                 </td>
                             </tr>
@@ -336,12 +335,12 @@
                                 </td>
                                 <td style="width:49%;text-align:center;font-size:15px">
                                         
-                                            {{ " Salesman Signature : " }}                                         
+                                            {{ " Authriz Signature : " }}                                         
                                         
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table>  
                 @endif
         </footer>
     @endif
@@ -505,12 +504,12 @@
                     <tbody >
                     
                         <tr style=" background-color:#dbdee1">
-                        <td style="width:50%;line-height:1px;font-size:12px;padding:15px;">
+                        <td style="width:50%;line-height:1px;font-size:15px;padding:15px;">
                             <h3 style="margin-bottom: 15px;">{{ 'BILLED TO : ' }} </h3>
                        
                             <p>
                                  
-                                {{ trans('home.Company Name')  }}  : {{ $invoice->contact?$invoice->contact->name:' ' }}
+                                {{ trans('home.Company Name')  }}  : {{ $invoice->contact? $invoice->contact->name . " " . $invoice->contact->first_name :' ' }}
                                 
                             </p>
                             
@@ -554,7 +553,7 @@
                             
                         </td>
                        
-                            <td style=" width:40%;line-height:1px;font-size:12px;padding:15px;">
+                            <td style=" width:40%;line-height:1px;font-size:15px;padding:15px;">
                                
                                   
                                    
@@ -614,7 +613,7 @@
 
                         @endif
                         <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('product.brand') }}</th>
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:left;">{{ trans('product.sku') }}</th>
+                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:left;">{{ trans('product.model_no') }}</th>
                         @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ')
                         {{--  <th style="font-size:10px;font-weight: bold;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('home.PHOTO') }}</th>--}}
                         @else
@@ -629,9 +628,9 @@
                         <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{"Price"}}</th> 
                         <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{"Disc"}}</th> 
                         @endif
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{"Price Excld.VAT"}}</th> 
+                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{"Unit Price"}}</th> 
                         
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{  "Tot Excld.VAT" }}</th>
+                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{  "Tot Price" }}</th>
                         <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:left;">{{ ($invoice->tax)?$invoice->tax->name . ":" : "";  }}</th>
 
                         <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;font-family:arial">{{"Tot Incld.vat"}}</th> 
@@ -885,7 +884,7 @@
                                     </td>
                                     <td style="width:49%;text-align:center;font-size:15px">
                                             
-                                                {{ " Salesman Signature : " }}                                         
+                                                {{ " Authriz Signature : " }}                                         
                                             
                                     </td>
                                 </tr>

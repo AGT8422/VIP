@@ -54,6 +54,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Crypt;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Illuminate\Support\Facades\Config;
+
 
 class ProductController extends Controller
 {
@@ -542,6 +544,7 @@ class ProductController extends Controller
      */
     public function create()
     {
+ 
         if (!auth()->user()->can('product.create') ) {
             abort(403, 'Unauthorized action.');
         }
@@ -4667,9 +4670,10 @@ class ProductController extends Controller
         $text       =  request()->input('text');
         $text       =  Crypt::decryptString($text); 
         $row        =  request()->input('line');
+        $return     =  request()->input('return');
         $product    =  \App\Product::find($id);
         if($text != null){
-            return view('alerts.change_description')->with(compact(["text","product","row"]));
+            return view('alerts.change_description')->with(compact(["text","product","row","return"]));
         } 
     }
     public function urlDescriptionEncrypt() {

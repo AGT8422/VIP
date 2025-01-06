@@ -14,7 +14,7 @@
       $life_stages = [];
       $users = [];
       $lead_users = [];
-    }
+    } 
   @endphp
 
     {!! Form::open(['url' => $url, 'method' => 'PUT', 'id' => 'contact_edit_form']) !!}

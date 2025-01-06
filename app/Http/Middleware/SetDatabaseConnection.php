@@ -33,7 +33,7 @@ class SetDatabaseConnection
         //     }
         // }
         // request()->session()->flush(); 
-         
+        
         if($request->session()->get('startLogin')){
             $databaseName = request()->session()->get('user_main.database');
            

@@ -75,5 +75,6 @@ return [
     "product_price" => "Product Price",  
     "pro_name"=>"Product Name",
     "msg_prices"=>" Here You Will Define ' The Default Price Before Vat ' For All Type Of Prices ",
+    "model_no" => "Model No",
 
  ];

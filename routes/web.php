@@ -169,7 +169,7 @@ include_once('install_r.php');
     Route::get('/home/change-lang-app', 'HomeController@changeLanguageApp');
 // ***********************************************************************
     //Routes for authenticated users only
-    Route::middleware(['SetDatabaseConnection',  'setData', 'authIzo', 'SetSessionData',  'language', 'timezone', 'AdminSidebarMenu', 'CheckUserLogin'])->group(function () {
+    Route::middleware([ 'setData', 'SetDatabaseConnection' , 'authIzo', 'SetSessionData',  'language', 'timezone', 'AdminSidebarMenu', 'CheckUserLogin'])->group(function () {
         // 10 ***
             Route::get('/', 'HomeController@index');
             Route::get('/main', 'HomeController@index')->name('home');

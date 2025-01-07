@@ -164,7 +164,7 @@
                     <td>
                         {!! Form::text('purchases[' . $loop->index . '][pp_without_discount_s]', round($purchase_line->pp_without_discount/$purchase->exchange_rate,config('constants.currency_percision'))  ,
                             ['class' => 'form-control  input-sm purchase_unit_cost_without_discount_s input_number' , "data-number" =>  $loop->index , 'required']); !!}
-                        {!! Form::text('purchases[' . $loop->index . '][pp_without_discount]',  $purchase_line->pp_without_discount/$purchase->exchange_rate ,
+                        {!! Form::hidden('purchases[' . $loop->index . '][pp_without_discount]',  $purchase_line->pp_without_discount/$purchase->exchange_rate ,
                             ['class' => 'form-control  input-sm purchase_unit_cost_without_discount_origin input_number' , "data-number" =>  $loop->index , 'required']); !!}
                         {!! Form::hidden('purchases[' . $loop->index . '][pp_without_discount]',  round($purchase_line->pp_without_discount/$purchase->exchange_rate,config('constants.currency_percision')) ,
                             ['class' => 'form-control  input-sm purchase_unit_cost_without_discount input_number' , "data-number" =>  $loop->index , 'required']); !!}

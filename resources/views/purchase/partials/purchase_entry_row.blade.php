@@ -100,12 +100,12 @@
            @if(isset($open))
               {!! Form::text('purchases[' . $row_count . '][pp_without_discount]',
                  round($cost,config('constants.currency_precision')), [ ' class' => 'form-control input-sm  eb_price input_number ', 'required']); !!}
-              {!! Form::text('purchases[' . $row_count . '][purchase_unit_cost_without_discount_origin]',
+              {!! Form::hidden('purchases[' . $row_count . '][purchase_unit_cost_without_discount_origin]',
                $cost, ['class' => 'form-control input-sm purchase_unit_cost_without_discount_origin input_number', 'required']); !!}
             @else
                   {!! Form::text('purchases[' . $row_count . '][pp_without_discount_s]',
                   (!empty($item_price))?round($item_price->purchase_price, config('constants.currency_precision')):round($cost, config('constants.currency_precision')), [ 'class' => 'form-control input-sm purchase_unit_cost_without_discount input_number ', 'required']); !!}
-                    {!! Form::text('purchases[' . $row_count . '][purchase_unit_cost_without_discount_origin]',
+                    {!! Form::hidden('purchases[' . $row_count . '][purchase_unit_cost_without_discount_origin]',
                   (!empty($item_price))?$item_price->purchase_price:$cost, ['class' => 'form-control input-sm purchase_unit_cost_without_discount_origin input_number', 'required']); !!}
                     {!! Form::hidden('purchases[' . $row_count . '][pp_without_discount]',
                   (!empty($item_price))?round($item_price->purchase_price, config('constants.currency_precision')):round($cost, config('constants.currency_precision')), ['class' => 'form-control input-sm purchase_unit_cost_without_discount_s input_number', 'required']); !!}

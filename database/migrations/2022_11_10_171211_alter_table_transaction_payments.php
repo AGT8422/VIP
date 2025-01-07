@@ -14,7 +14,7 @@ class AlterTableTransactionPayments extends Migration
     public function up()
     {
         Schema::table('transaction_payments', function (Blueprint $table) {
-            $table->integer('store_id')->unsigned();
+            $table->integer('store_id')->unsigned()->nullable();
             $table->foreign('store_id')->references('id')->on('warehouses')->onDelete('cascade')->nullable();        
         });
     }

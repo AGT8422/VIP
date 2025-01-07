@@ -926,6 +926,7 @@ class SellReturnController extends Controller
                             'quantity'                   => $product['quantity'],
                             'unit_price_before_discount' => $unit_price,
                             'line_discount_type'         => 'percentage',
+                            'sell_line_note'             => $product['sell_line_note'],
                             'line_discount_amount'       => $product['discount_percent_return'],
                             'unit_price'                 => $unit_price_after_dis_exc,
                             'unit_price_inc_tax'         => $unit_price_after_dis_inc,
@@ -1260,6 +1261,7 @@ class SellReturnController extends Controller
                             $return_line->store_id                   = $request->store_id;
                             $return_line->unit_price                 = $unit_price_after_dis_exc;
                             $return_line->unit_price_before_discount = $unit_price;
+                            $return_line->sell_line_note             = $product['sell_line_note'];
                             $return_line->unit_price_inc_tax         = $unit_price_after_dis_inc;
                             $return_line->line_discount_type         = 'percentage';
                             $return_line->line_discount_amount       = $product['discount_percent_return'];

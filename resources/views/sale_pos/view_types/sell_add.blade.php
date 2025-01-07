@@ -228,10 +228,17 @@
         @endif
         @if(!empty($is_direct_sell))
             <br>
-            <?php $pr =  \App\Product::find($product->product_id);  $cypher = Illuminate\Support\Facades\Crypt::encryptString($sell_line_note);  ?>
-            <div class="description_line" data-line="{{$row_count}}">
-                <pre style="white-space: nowrap;max-width:300px;max-height:150px" class="btn btn-modal products_details" data-href="{{action('ProductController@changeDescription', ['id'=>$product->product_id,'text'=> $cypher  ,'line'=>$row_count])}}" data-container=".view_modal">{!! $sell_line_note !!}</pre>
-            </div>
+            @if($sell_line_note == null || $sell_line_note == "") 
+                <?php $pr =  \App\Product::find($product->product_id);  $cypher = Illuminate\Support\Facades\Crypt::encryptString(".");  ?>
+                <div class="description_line" data-line="{{$row_count}}">
+                    <pre style="white-space: nowrap;max-width:300px;max-height:150px" class="btn btn-modal products_details" data-href="{{action('ProductController@changeDescription', ['id'=>$product->product_id,'text'=> $cypher  ,'line'=>$row_count])}}" data-container=".view_modal">{!! "Enter Description" !!}</pre>
+                </div>
+            @else 
+                <?php $pr =  \App\Product::find($product->product_id);  $cypher = Illuminate\Support\Facades\Crypt::encryptString($sell_line_note);  ?>
+                    <div class="description_line" data-line="{{$row_count}}">
+                        <pre style="white-space: nowrap;max-width:300px;max-height:150px" class="btn btn-modal products_details" data-href="{{action('ProductController@changeDescription', ['id'=>$product->product_id,'text'=> $cypher  ,'line'=>$row_count])}}" data-container=".view_modal">{!! $sell_line_note !!}</pre>
+                    </div>
+            @endif
             <textarea class="form-control control_products_details"   data-line="{{$row_count}}"  name="products[{{$row_count}}][sell_line_note]" rows="2" style="max-width:200px;white-space: normal; word-break: break-word;word-wrap: 
                     break-word;  
                     width: min-intrinsic;

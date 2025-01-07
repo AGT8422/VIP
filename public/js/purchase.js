@@ -244,19 +244,20 @@ $(document).ready(function() {
         });
     });
 
-    $('.purchase_table .purchase_unit_cost_with_tax').on("change",function(){
-        var tax_amount  = parseFloat($('#tax_id option:selected').data('tax_amount')) ;
-        var el          =  $(this).parent().parent();
-        var price       =  parseFloat($(this).val())/((tax_amount/100)+1) ;
-        el.children().find('.purchase_unit_cost_without_discount_s').val(price.toFixed(2));
-        el.children().find('.purchase_unit_cost_without_discount').val(price);
-        os_total_sub();
-        os_grand();
-    });
+    // $('.purchase_table .purchase_unit_cost_with_tax').on("change",function(){
+    //     var tax_amount  = parseFloat($('#tax_id option:selected').data('tax_amount')) ;
+    //     var el          =  $(this).parent().parent();
+    //     var price       =  parseFloat($(this).val())/((tax_amount/100)+1) ;
+    //     el.children().find('.purchase_unit_cost_without_discount_s').val(price.toFixed(2));
+    //     el.children().find('.purchase_unit_cost_without_discount').val(price.toFixed(2));
+    //     os_total_sub();
+    //     os_grand();
+    // });
     $('.purchase_table .purchase_unit_cost_without_discount').on("change",function(){
         var tax_amount  = parseFloat($('#tax_id option:selected').data('tax_amount')) ;
         var el          =  $(this).parent().parent();
         var price       =   parseFloat($(this).val())*(tax_amount/100) + parseFloat($(this).val()) ; 
+        el.children().find('.purchase_unit_cost_without_discount_origin').val($(this).val());
         el.children().find('.purchase_unit_cost_with_tax').val(price.toFixed(2));
         var intial_avl =  parseFloat($(this).val());
             os_total_sub();
@@ -293,6 +294,11 @@ $(document).ready(function() {
         var purchase_before_discount = __get_principle(purchase_before_tax, discount_percent, true);
         __write_number(
             row.find('input.purchase_unit_cost_without_discount'),
+            purchase_before_discount,
+            true
+        );
+        __write_number(
+            row.find('input.purchase_unit_cost_without_discount_origin'),
             purchase_before_discount,
             true
         );
@@ -389,6 +395,11 @@ $(document).ready(function() {
         var purchase_before_discount = __get_principle(purchase_before_tax, discount_percent, true);
         __write_number(
             row.find('input.purchase_unit_cost_without_discount'),
+            purchase_before_discount,
+            true
+        );
+        __write_number(
+            row.find('input.purchase_unit_cost_without_discount_origin'),
             purchase_before_discount,
             true
         );
@@ -778,8 +789,11 @@ $(document).ready(function() {
         var tax_amount  = parseFloat($('#tax_id option:selected').data('tax_amount')) ;
         var el          =  $(this).parent().parent();
         var price       =  parseFloat($(this).val())/((tax_amount/100)+1) ;
-        el.children().find('.purchase_unit_cost_without_discount_s').val(price.toFixed(3));
-        el.children().find('.purchase_unit_cost_without_discount').val(price.toFixed(3));
+        el.children().find('.purchase_unit_cost_without_discount_s').val(price.toFixed(2));
+        el.children().find('.purchase_unit_cost_without_discount').val(price.toFixed(2));
+        el.children().find('.purchase_unit_cost_without_discount_origin').val(price);
+        // el.children().find('.purchase_unit_cost_without_discount_s').val(price );
+        // el.children().find('.purchase_unit_cost_without_discount').val(price );
         os_total_sub();
         os_grand();
     });
@@ -787,9 +801,10 @@ $(document).ready(function() {
     $('.purchase_table .purchase_unit_cost_without_discount_s').change(function(){
         var tax_amount  = parseFloat($('#tax_id option:selected').data('tax_amount')) ;
         var el          =  $(this).parent().parent();
-        el.children().find('.purchase_unit_cost_without_discount').val( parseFloat($(this).val()).toFixed(3));
+        el.children().find('.purchase_unit_cost_without_discount').val( parseFloat($(this).val()).toFixed(2));
+        el.children().find('.purchase_unit_cost_without_discount_origin').val( $(this).val());
         var price       =   parseFloat($(this).val())*(tax_amount/100) + parseFloat($(this).val()) ; 
-        el.children().find('.purchase_unit_cost_with_tax').val(price.toFixed(3));
+        el.children().find('.purchase_unit_cost_with_tax').val(price.toFixed(2));
         var intial_avl =  parseFloat($(this).val());
             os_total_sub();
             os_grand();
@@ -812,21 +827,22 @@ $(document).ready(function() {
         $('.purchase_unit_cost_without_discount').each(function () {
             var el        =  $(this).parent().parent();
             var dis_amount   = ( parseFloat(el.children().find('.inline_discounts').val()) > 0 )?parseFloat(el.children().find('.inline_discounts').val()) :0;
+            var price_origin     =  parseFloat(el.children().find('.purchase_unit_cost_without_discount_origin').val());
             var price     =  parseFloat(el.children().find('.purchase_unit_cost_without_discount').val());
             
             var tax_price =  price + (tax_rate/100)*price;
             var quantity =  parseFloat(el.children().find('.purchase_quantity').val());
             if (discount == 0) {
-                var amount       = price  -  (dis_amount/100)*price ;
-                var  tax_amount  = tax_price  -  (dis_amount/100)*price ;
+                var amount       = price_origin  -  (dis_amount/100)*price_origin ;
+                var  tax_amount  = tax_price  -  (dis_amount/100)*price_origin ;
             }else{
-                var amount        = price  -   dis_amount ;
+                var amount        = price_origin  -   dis_amount ;
                 var tax_amount    = tax_price  -   dis_amount ;
                 
             }
-            el.children().find('.purchase_unit_cost').val(amount.toFixed(3));
-            el.children().find('.total_unit_cost_with_tax').val(tax_amount.toFixed(3));
-            el.children().find('.purchase_unit_cost_after_tax').val(tax_amount.toFixed(3));
+            el.children().find('.purchase_unit_cost').val(amount.toFixed(2));
+            el.children().find('.total_unit_cost_with_tax').val(tax_amount.toFixed(2));
+            el.children().find('.purchase_unit_cost_after_tax').val(tax_amount.toFixed(2));
             var total_unit_cost_with_tax   =  parseFloat(el.children().find('.total_unit_cost_with_tax').val());
             el.children().find('.row_total_cost').val(total_unit_cost_with_tax*quantity);
 
@@ -864,7 +880,7 @@ $(document).ready(function() {
         var total_items =  $("#total_subtotal_input").val();       
         var ship =  $("#total_ship_").val();       
         var ship_ =  $("#total_ship_c").val();       
-        $("#total_final_i").html(parseFloat(total).toFixed(3));  
+        $("#total_final_i").html(parseFloat(total).toFixed(2));  
         
         currancy = $(".currency_id_amount").val();
         if(currancy != "" && currancy != 0){
@@ -872,7 +888,7 @@ $(document).ready(function() {
             $("#grand_total_cur").html( (  parseFloat(total_curr) + parseFloat(ship)  ).toFixed(2));       
             $("#total_final_curr").html((  parseFloat(total_curr)  + parseFloat(ship)  + parseFloat(ship_)  ).toFixed(2));       
         }    
-        $("#total_final_hidden_").val((parseFloat(total) + parseFloat(ship)).toFixed(3));       
+        $("#total_final_hidden_").val((parseFloat(total) + parseFloat(ship)).toFixed(2));       
         $("#grand_total").html( parseFloat(total).toFixed(2) + parseFloat(ship).toFixed(2) );       
         $("#total_final_").html(  parseFloat(total).toFixed(2) + parseFloat(ship).toFixed(2) + parseFloat(ship_).toFixed(2)  );       
         $("#grand_total2").html(  parseFloat(total).toFixed(2) + parseFloat(ship).toFixed(2) + parseFloat(ship_).toFixed(2)  );       
@@ -1036,6 +1052,11 @@ $(document).ready(function() {
             purchase_unit_cost_without_discount,
             true
         );
+        __write_number(
+            row.find('.purchase_unit_cost_without_discount_origin'),
+            purchase_unit_cost_without_discount,
+            true
+        );
 
         var purchase_unit_cost = __read_number(row.find('.purchase_unit_cost'), true) / exchange_rate;
         __write_number(row.find('.purchase_unit_cost'), purchase_unit_cost, true);
@@ -1111,17 +1132,19 @@ $(document).ready(function() {
         $('.purchase_quantity').each(function(){
             var  el       =  $(this).parent().parent();
             var  quantity = parseFloat($(this).val());
+            // var  amount   = parseFloat(el.children().find('.purchase_unit_cost').val()) ;
             var  amount   = parseFloat(el.children().find('.purchase_unit_cost').val()) ;
-            
+            console.log("##first : " + amount);
             total_quantity +=quantity;
             total_amount += (amount*quantity);
             var os_x      =  os_tax((amount*quantity));
             el.children().find('.row_total_cost').val(os_x);
             el.children().find('.row_total_cost').val(amount*quantity);
         });
+        console.log("##second : " + total_amount);
         $('#total_quantity').text(total_quantity);
-        $('#total_subtotal_input').val(total_amount.toFixed(3));
-        $('#total_subtotal').text(total_amount.toFixed(3));
+        $('#total_subtotal_input').val(total_amount.toFixed(2));
+        $('#total_subtotal').text(total_amount.toFixed(2));
         
 
     }
@@ -1143,7 +1166,7 @@ $(document).ready(function() {
                     amount  += item;
                 });
             
-                var inital_amount  =  amount  + os_tax_amount(amount.toFixed(3));
+                var inital_amount  =  amount  + os_tax_amount(amount.toFixed(2));
                 currancy = $(".currency_id_amount").val();
                 // ########
                 var dis_currency  =  parseInt($('input[name="dis_currency"]:checked').val());
@@ -1155,8 +1178,8 @@ $(document).ready(function() {
                     if(!isNaN(dis_currency)){
                         $('#discount_calculated_amount2').text(dis);/***#$% */
                         if(currancy != "" && currancy != 0){/***#$% */
-                            $('#discount_calculated_amount_cur').text((dis).toFixed(3));/***#$% */
-                            $('#discount_calculated_amount2').text((dis*currancy).toFixed(3));/***#$% */
+                            $('#discount_calculated_amount_cur').text((dis).toFixed(2));/***#$% */
+                            $('#discount_calculated_amount2').text((dis*currancy).toFixed(2));/***#$% */
                         }
                     }else{ 
                         if(currancy != "" && currancy != 0){
@@ -1164,10 +1187,10 @@ $(document).ready(function() {
                             amount  =  amount -  dis; 
                             amount  =  amount +  os_tax_amount(amount);
                             var discount_amount  =  inital_amount - amount; 
-                            $('#discount_calculated_amount2').text(dis.toFixed(3));  
+                            $('#discount_calculated_amount2').text(dis.toFixed(2));  
                             $('#discount_calculated_amount_cur').text((dis/currancy).toFixed(2));   
                         }else{
-                            $('#discount_calculated_amount2').text(dis.toFixed(3));  
+                            $('#discount_calculated_amount2').text(dis.toFixed(2));  
                         }
                     }
                 }else if(dis_type ==  'fixed_after_vat'){
@@ -1176,11 +1199,11 @@ $(document).ready(function() {
                         amount  =  amount - dis;
                         var discount_amount  =  inital_amount - amount;
                        
-                        var x =  (dis*100)/(100+parseFloat(vat_per.toFixed(3)));
-                        $('#discount_calculated_amount2').text(x.toFixed(3));
+                        var x =  (dis*100)/(100+parseFloat(vat_per.toFixed(2)));
+                        $('#discount_calculated_amount2').text(x.toFixed(2));
                         if(currancy != "" && currancy != 0){
-                            $('#discount_calculated_amount_cur').text((x).toFixed(3));
-                            $('#discount_calculated_amount2').text((x*currancy).toFixed(3));/***#$% */
+                            $('#discount_calculated_amount_cur').text((x).toFixed(2));
+                            $('#discount_calculated_amount2').text((x*currancy).toFixed(2));/***#$% */
                         }
                     }else{
                         if(currancy != "" && currancy != 0){
@@ -1189,12 +1212,12 @@ $(document).ready(function() {
                             amount  =  amount - dis;
                             var discount_amount  =  inital_amount - amount;
                             var x                =  (dis*100)/(100+parseFloat(vat_per.toFixed(2)));
-                            $('#discount_calculated_amount2').text((x*currancy).toFixed(3));
-                            $('#discount_calculated_amount_cur').text(x.toFixed(3));  
+                            $('#discount_calculated_amount2').text((x*currancy).toFixed(2));
+                            $('#discount_calculated_amount_cur').text(x.toFixed(2));  
                         }else{ 
                             var x                =  (dis*100)/(100+parseFloat(vat_per.toFixed(2)));
                             var discount_amount  =  x;
-                            $('#discount_calculated_amount2').text((x).toFixed(3));
+                            $('#discount_calculated_amount2').text((x).toFixed(2));
                         }
                     }
                 }else{
@@ -1202,18 +1225,18 @@ $(document).ready(function() {
                         var discount_amount = (dis/100)*amount;
                         var os_sub = parseFloat($('#total_subtotal_input').val());
                         var x      =  os_sub*(dis/100);
-                        $('#discount_calculated_amount2').text(x.toFixed(3));
+                        $('#discount_calculated_amount2').text(x.toFixed(2));
                         if(currancy != "" && currancy != 0){
-                            $('#discount_calculated_amount_cur').text((x.toFixed(3)/currancy).toFixed(3));
+                            $('#discount_calculated_amount_cur').text((x.toFixed(2)/currancy).toFixed(2));
                         }
                     }else{
                         var discount_amount = (dis/100)*amount;
                         var os_sub = parseFloat($('#total_subtotal_input').val());
                         var x      =  os_sub*(dis/100);
-                        $('#discount_calculated_amount2').text(x.toFixed(3));
-                        $('#discount_calculated_amount2').text(x.toFixed(3));
+                        $('#discount_calculated_amount2').text(x.toFixed(2));
+                        $('#discount_calculated_amount2').text(x.toFixed(2));
                         if(currancy != "" && currancy != 0){ 
-                            $('#discount_calculated_amount_cur').text((x.toFixed(3)/currancy).toFixed(3)); 
+                            $('#discount_calculated_amount_cur').text((x.toFixed(2)/currancy).toFixed(2)); 
                         }
                     }
                   
@@ -1275,9 +1298,9 @@ $(document).ready(function() {
         if ($('#shipping_charges').val()) {
             shipping   =  parseFloat($('#shipping_charges').val());
         }
-        netTotal_final  = parseFloat(net - parseFloat(dis_count)).toFixed(3) ;
-        vat_final       = parseFloat(((vat_per/100)*(net-parseFloat(dis_count)))).toFixed(3);
-        shipping_final  = parseFloat(shipping).toFixed(3) ;
+        netTotal_final  = parseFloat(net - parseFloat(dis_count)).toFixed(2) ;
+        vat_final       = parseFloat(((vat_per/100)*(net-parseFloat(dis_count)))).toFixed(2);
+        shipping_final  = parseFloat(shipping).toFixed(2) ;
         // var grand     =  net + ((vat_per/100)*net) + shipping - dis_count;
         var grand          =  parseFloat(netTotal_final)  +  parseFloat(vat_final)   + parseFloat(shipping_final)  ;
         var grand_curr     =  parseFloat(net_curr) - dis_xx_curr + x_curr + parseFloat(shipping) ;
@@ -1293,7 +1316,7 @@ $(document).ready(function() {
         $('#grand_total_hidden').val(grand);
 
         $('#grand_total2').text(grand);
-        // $('#payment_due_').text(grand.toFixed(3));
+        // $('#payment_due_').text(grand.toFixed(2));
         total_bill();
     }
 // ** 12
@@ -1321,6 +1344,7 @@ $(document).ready(function() {
         $('.purchase_unit_cost').each(function () {
             var el            =  $(this).parent().parent();
             // ........................
+            var pp_price_origin    =  parseFloat(el.children().find('.purchase_unit_cost_without_discount_origin').val())
             var pp_price      =  parseFloat(el.children().find('.purchase_unit_cost_without_discount').val())
             var tax_price     =  parseFloat(el.children().find('.purchase_unit_cost_with_tax').val());
             var tax_rates     =  parseFloat($('option:selected', $('#tax_id')).data('tax_amount'));
@@ -1361,9 +1385,11 @@ $(document).ready(function() {
                 }
             }else{
                 if(isNaN(dis_currency)){
-                    var final_amount =  pp_price  - ((dis_amount/100)*pp_price);
+                    var final_amount_origin =  pp_price_origin  - ((dis_amount/100)*pp_price_origin);
+                    var final_amount =  pp_price - ((dis_amount/100)*pp_price);
                     var final_tax    =  tax_price - ((dis_amount/100)*tax_price);
                 }else{
+                    var final_amount_origin = pp_price_origin  - ((dis_amount/100)*pp_price_origin);
                     var final_amount = pp_price  - ((dis_amount/100)*pp_price);
                     var final_tax   =  tax_price - ((dis_amount/100)*tax_price);
                 }
@@ -1374,25 +1400,25 @@ $(document).ready(function() {
             var price           =  parseFloat(el.children().find('.eb_price ').val());
             
             total_qty_os    +=quantity;
-            el.children().find('.purchase_unit_cost').val(final_amount.toFixed(3));
-            el.children().find('.row_total_cost').val(parseInt(final_amount*quantity).toFixed(3));
+            el.children().find('.purchase_unit_cost').val(final_amount_origin.toFixed(2));
+            el.children().find('.row_total_cost').val(parseInt(final_amount_origin*quantity).toFixed(2));
             
             var before_tax_dis           = el.children().find('.total_cost_dis_new_currency'); 
             var before_tax_dis_edit      = (el.children().find('.unit_cost_after_new_currency') != null)?el.children().find('.unit_cost_after_new_currency'):el.children().find('.total_cost_dis_new_currency'); 
             var after_tax_dis            = el.children().find('.purchase_unit_cost_with_tax_new_currency'); 
             
             // ........................................................................................ price after dis with vat 
-            var total_unit_cost_with_tax      =  os_tax(final_amount);
-            el.children().find('.total_unit_cost_with_tax').val(total_unit_cost_with_tax.toFixed(3));
+            var total_unit_cost_with_tax      =  os_tax(final_amount_origin);
+            el.children().find('.total_unit_cost_with_tax').val(total_unit_cost_with_tax.toFixed(2));
             // ........................................................................................
             
             if(currancy != "" && currancy != 0){
                 
-                var pp_price_dis_currency      =  parseFloat(el.children().find('.total_cost_dis_new_currency').val((final_amount/currancy).toFixed(2)));
-                var tax_price_dis_currency     =  parseFloat(el.children().find('.total_unit_cost_with_tax_new_currency').val((total_unit_cost_with_tax.toFixed(3)/currancy).toFixed(2)));
+                var pp_price_dis_currency      =  parseFloat(el.children().find('.total_cost_dis_new_currency').val((final_amount_origin/currancy).toFixed(2)));
+                var tax_price_dis_currency     =  parseFloat(el.children().find('.total_unit_cost_with_tax_new_currency').val((total_unit_cost_with_tax.toFixed(2)/currancy).toFixed(2)));
                 
-                var tax_price_edit             =  parseFloat(el.children().find('.unit_cost_after_new_currency').val((final_amount.toFixed(3)/currancy).toFixed(2)));
-                var tax_price_edit_currency    =  parseFloat(el.children().find('.unit_cost_after_tax_new_currency').val((total_unit_cost_with_tax.toFixed(3)/currancy).toFixed(2)));
+                var tax_price_edit             =  parseFloat(el.children().find('.unit_cost_after_new_currency').val((final_amount_origin.toFixed(2)/currancy).toFixed(2)));
+                var tax_price_edit_currency    =  parseFloat(el.children().find('.unit_cost_after_tax_new_currency').val((total_unit_cost_with_tax.toFixed(2)/currancy).toFixed(2)));
                 // ************************************************************************************************************************************************************ previous error currency 1075.01
                 if( el.children().find('.total_unit_cost_with_tax_new_currency').val() != null){
                     el.children().find('.row_total_cost_new_currency').val((parseFloat(el.children().find('.total_unit_cost_with_tax_new_currency').val()*quantity)).toFixed(2));
@@ -1408,7 +1434,7 @@ $(document).ready(function() {
                 el.children().find('.row_total_cost_new_currency').val(0);
                 
             }
-            el.children().find('.purchase_unit_cost_with_tax').val(((pp_price*tax_rates/100) + pp_price).toFixed(3));
+            el.children().find('.purchase_unit_cost_with_tax').val(((pp_price_origin*tax_rates/100) + pp_price_origin).toFixed(2));
             out_tax_amount =  out_tax_amount + quantity*final_amount;
             out_tax_amount_cur = out_tax_amount_cur+ quantity*(before_tax_dis.val());
             out_tax_amount_cur_edit = out_tax_amount_cur_edit + quantity*(before_tax_dis_edit.val());
@@ -1417,22 +1443,23 @@ $(document).ready(function() {
             var total_unit_cost_with_tax = parseFloat(el.children().find('.total_unit_cost_with_tax').val());
             var tax_row =  total_unit_cost_with_tax*quantity;
             
-            el.children().find('.row_total_cost').val(parseFloat(total_unit_cost_with_tax*quantity).toFixed(3));
-            el.children().find('.purchase_unit_cost_after_tax_').val(parseFloat(price*quantity).toFixed(3));
-            el.children().find('.row_total_cost_').val(parseFloat(price*quantity).toFixed(3));
+            el.children().find('.row_total_cost').val(parseFloat(total_unit_cost_with_tax*quantity).toFixed(2));
+            el.children().find('.purchase_unit_cost_after_tax_').val(parseFloat(price*quantity).toFixed(2));
+            el.children().find('.row_total_cost_').val(parseFloat(price*quantity).toFixed(2));
         })
         
         var tax_calculated_amount  =  os_tax_amount(out_tax_amount);
         var tax_calculated_amount_curr  =  os_tax_amount(out_tax_amount_cur);
         var tax_calculated_amount_edit_curr  =  os_tax_amount(out_tax_amount_cur_edit);
         // console.log("TAXSSSSS : " + out_tax_amount_cur_edit + " _ " +tax_calculated_amount_edit_curr);
-        $('#total_subtotal').html(out_tax_amount.toFixed(3));
-        $('#total_subtotal_input').val(out_tax_amount.toFixed(3));
+    
+        $('#total_subtotal').html(out_tax_amount.toFixed(2));
+        $('#total_subtotal_input').val(out_tax_amount.toFixed(2));
         $('#total_subtotal_cur').html(out_tax_amount_cur.toFixed(2));
         $('#total_subtotal_cur_edit').html(out_tax_amount_cur_edit.toFixed(2));
         $('#total_subtotal_input_cur_edit').val(out_tax_amount_cur_edit.toFixed(2));
         $('#total_subtotal_input_cur').val(out_tax_amount_cur.toFixed(2));
-        $('#tax_calculated_amount').html(tax_calculated_amount.toFixed(3));
+        $('#tax_calculated_amount').html(tax_calculated_amount.toFixed(2));
         currancy = $(".currency_id_amount").val();
         if(currancy != "" && currancy != 0){
             if(   check_edit   != 1){ 
@@ -1462,11 +1489,12 @@ $(document).ready(function() {
         $('.purchase_unit_cost').each(function () {
             check_counter++;
             var el            =  $(this).parent().parent();
+            var pp_price_origin      =  parseFloat(el.children().find('.purchase_unit_cost_without_discount_origin').val())
             var pp_price      =  parseFloat(el.children().find('.purchase_unit_cost_without_discount').val())
             var tax_price     =  parseFloat(el.children().find('.purchase_unit_cost_with_tax').val())
             currancy = $(".currency_id_amount").val();
             if(currancy != "" && currancy != 0){
-                var pp_price_currency      =  parseFloat(el.children().find('.purchase_unit_cost_new_currency').val((pp_price/currancy).toFixed(2)));
+                var pp_price_currency      =  parseFloat(el.children().find('.purchase_unit_cost_new_currency').val((final_amount_origin/currancy).toFixed(2)));
                 var tax_price_currency     =  parseFloat(el.children().find('.purchase_unit_cost_with_tax_new_currency').val((tax_price/currancy).toFixed(2)));
             }else{
                 var pp_price_currency      =  parseFloat(el.children().find('.purchase_unit_cost_new_currency').val(0))
@@ -1481,14 +1509,17 @@ $(document).ready(function() {
             if (dis_type == 1) {
                  // ########
                 if(isNaN(dis_currency)){
+                    var final_amount_origin =  pp_price_origin - dis_amount;
                     var final_amount=  pp_price - dis_amount;
                     var final_tax   =  tax_price - dis_amount;
                 }else{
                     if(currancy != "" && currancy != 0){
                         dis_amount = dis_amount * currancy;                       
+                        var final_amount_origin=  pp_price_origin - dis_amount;
                         var final_amount=  pp_price - dis_amount;
                         var final_tax   =  tax_price - dis_amount;
                     }else{
+                        var final_amount_origin=  pp_price_origin - dis_amount;
                         var final_amount=  pp_price - dis_amount;
                         var final_tax   =  tax_price - dis_amount;
                     }
@@ -1497,11 +1528,13 @@ $(document).ready(function() {
             }else{
                  // ########
                 if(isNaN(dis_currency)){
+                    var final_amount_origin = pp_price_origin  - ((dis_amount/100)*pp_price_origin);
                     var final_amount = pp_price  - ((dis_amount/100)*pp_price);
-                    var final_tax   =  tax_price - ((dis_amount/100)*tax_price);
+                    var final_tax    =  tax_price - ((dis_amount/100)*tax_price);
                 }else{
+                    var final_amount_origin = pp_price_origin  - ((dis_amount/100)*pp_price_origin);
                     var final_amount = pp_price  - ((dis_amount/100)*pp_price);
-                    var final_tax   =  tax_price - ((dis_amount/100)*tax_price);
+                    var final_tax    =  tax_price - ((dis_amount/100)*tax_price);
                 }
                  // ########
             }
@@ -1509,19 +1542,19 @@ $(document).ready(function() {
             var price           =  parseFloat(el.children().find('.eb_price').val());
             total_qty_os +=quantity;
 
-            el.children().find('.purchase_unit_cost').val(final_amount.toFixed(2));
-            el.children().find('.row_total_cost').val(parseInt(final_amount*quantity).toFixed(2));
+            el.children().find('.purchase_unit_cost').val(final_amount_origin.toFixed(2));
+            el.children().find('.row_total_cost').val(parseInt(final_amount_origin*quantity).toFixed(2));
             
             var before_tax_dis = el.children().find('.total_cost_dis_new_currency'); 
             var before_tax_dis_edit      = (el.children().find('.unit_cost_after_new_currency').val() != null)?el.children().find('.unit_cost_after_new_currency'):el.children().find('.total_cost_dis_new_currency'); 
             var after_tax_dis  = el.children().find('.purchase_unit_cost_with_tax_new_currency'); 
             
-            var total_unit_cost_with_tax      =  os_tax(final_amount);
+            var total_unit_cost_with_tax      =  os_tax(final_amount_origin);
             el.children().find('.total_unit_cost_with_tax').val(total_unit_cost_with_tax.toFixed(2));
             if(currancy != "" && currancy != 0){
-                var pp_price_dis_currency      =  parseFloat(el.children().find('.total_cost_dis_new_currency').val((final_amount/currancy).toFixed(2)));
+                var pp_price_dis_currency      =  parseFloat(el.children().find('.total_cost_dis_new_currency').val((final_amount_origin/currancy).toFixed(2)));
                 var tax_price_dis_currency     =  parseFloat(el.children().find('.total_unit_cost_with_tax_new_currency').val((total_unit_cost_with_tax.toFixed(2)/currancy).toFixed(2)));
-                var tax_price_edit             =  parseFloat(el.children().find('.unit_cost_after_new_currency').val((final_amount.toFixed(2)/currancy).toFixed(2)));
+                var tax_price_edit             =  parseFloat(el.children().find('.unit_cost_after_new_currency').val((final_amount_origin.toFixed(2)/currancy).toFixed(2)));
                 var tax_price_edit_currency    =  parseFloat(el.children().find('.unit_cost_after_tax_new_currency').val((total_unit_cost_with_tax.toFixed(2)/currancy).toFixed(2)));
                 if( el.children().find('.total_unit_cost_with_tax_new_currency').val() != null){
                     el.children().find('.row_total_cost_new_currency').val((parseFloat(el.children().find('.total_unit_cost_with_tax_new_currency').val()*quantity)).toFixed(2));
@@ -1537,9 +1570,15 @@ $(document).ready(function() {
                 el.children().find('.row_total_cost_new_currency').val(0);
                 
             }
-            //  el.children().find('.purchase_unit_cost_with_tax').val(total_unit_cost_with_tax.toFixed(3));
-            // el.children().find('.purchase_unit_cost_with_tax').val(((pp_price*tax_rates/100) + pp_price).toFixed(3));
-            out_tax_amount          =  out_tax_amount + quantity*final_amount;
+            //  el.children().find('.purchase_unit_cost_with_tax').val(total_unit_cost_with_tax.toFixed(2));
+            // el.children().find('.purchase_unit_cost_with_tax').val(((pp_price*tax_rates/100) + pp_price).toFixed(2));
+            if($('#total_subtotal_cur_edit')){
+                 
+                out_tax_amount          =  out_tax_amount + quantity*(final_amount).toFixed(2);
+            }else{ 
+
+                out_tax_amount          =  out_tax_amount + quantity*final_amount;
+            }
             out_tax_amount_cur      =  out_tax_amount_cur+ quantity*(before_tax_dis.val());
             out_tax_amount_cur_edit =  out_tax_amount_cur_edit + quantity*(before_tax_dis_edit.val());
            
@@ -1552,15 +1591,16 @@ $(document).ready(function() {
                 sub_unit.find(':selected')
                     .data('multiplier')
             );
-            el.children().find('.row_total_cost').val(parseFloat(total_unit_cost_with_tax*quantity).toFixed(3));
+            el.children().find('.row_total_cost').val(parseFloat(total_unit_cost_with_tax*quantity).toFixed(2));
             // el.children().find('.purchase_unit_cost_after_tax_').val(price*multiplier*quantity);#2024-8-6
-            el.children().find('.row_total_cost_').val(parseFloat(price*quantity).toFixed(3));
+            el.children().find('.row_total_cost_').val(parseFloat(price*quantity).toFixed(2));
         })
         var tax_calculated_amount  =  os_tax_amount(out_tax_amount);
         var tax_calculated_amount_curr  =  os_tax_amount(out_tax_amount_cur);
         var tax_calculated_amount_edit_curr  =  os_tax_amount(out_tax_amount_cur_edit);
-        $('#total_subtotal').html(out_tax_amount.toFixed(3));
-        $('#total_subtotal_input').val(out_tax_amount.toFixed(3));
+        console.log("##fourth : " + out_tax_amount);
+        $('#total_subtotal').html(out_tax_amount.toFixed(2));
+        $('#total_subtotal_input').val(out_tax_amount.toFixed(2));
         $('#total_subtotal_cur').html(out_tax_amount_cur.toFixed(2));
         $('#total_subtotal_cur_edit').html(out_tax_amount_cur_edit.toFixed(2));
         $('#total_subtotal_input_cur_edit').val(out_tax_amount_cur_edit.toFixed(2));
@@ -1608,6 +1648,7 @@ $(document).ready(function() {
             var el = e.children().find(".purchase_unit_cost_with_tax_new_currency");
             var inc_vat = e.children().find(".purchase_unit_cost_with_tax");
             var exc_vat = e.children().find(".purchase_unit_cost_without_discount");
+            var exc_vat_origin = e.children().find(".purchase_unit_cost_without_discount_origin");
             var exc_vat_s = e.children().find(".purchase_unit_cost_without_discount_s");
             var exc_dis_vat  = e.children().find(".purchase_unit_cost");
             var inc_dis_vat  = e.children().find(".total_unit_cost_with_tax");
@@ -1621,24 +1662,25 @@ $(document).ready(function() {
                 var  unit_tax   = ((tax_amount/100)*vl) + parseFloat(vl);
                 var  percent    = currancy*vl;
                 var  percent_tax    = ((tax_amount/100)*(currancy*vl)) + parseFloat(currancy*vl);
-                exc_vat.val(percent.toFixed(3));
-                exc_vat_s.val(percent.toFixed(3));
-                inc_vat.val(percent_tax.toFixed(3));
+                exc_vat.val(percent.toFixed(2));
+                exc_vat_origin.val(percent.toFixed(2));
+                exc_vat_s.val(percent.toFixed(2));
+                inc_vat.val(percent_tax.toFixed(2));
                 el.val(unit_tax.toFixed(2));
             }else{
                 el.val(0);
             }
-            var tax_price =  parseFloat(exc_vat.val()) + parseFloat((tax_rate/100)*exc_vat.val());
+            var tax_price =  parseFloat(exc_vat_origin.val()) + parseFloat((tax_rate/100)*exc_vat_origin.val());
              if (discount == 0) {
-                var  amount         = exc_vat.val()  -  (dis_amount/100)*exc_vat.val() ;
-                var  tax_amount_    = tax_price  -  (dis_amount/100)*exc_vat.val() ;
+                var  amount         = exc_vat_origin.val()  -  (dis_amount/100)*exc_vat_origin.val() ;
+                var  tax_amount_    = tax_price  -  (dis_amount/100)*exc_vat_origin.val() ;
             }else{
-                var amount         = exc_vat.val()  -   dis_amount ;
+                var amount         = exc_vat_origin.val()  -   dis_amount ;
                 var tax_amount_    = tax_price  -   dis_amount ;
                 
             }
-            exc_dis_vat.val(amount.toFixed(3));
-            inc_dis_vat.val(((tax_amount/100)*(amount) + parseFloat(amount)).toFixed(3));
+            exc_dis_vat.val(amount.toFixed(2));
+            inc_dis_vat.val(((tax_amount/100)*(amount) + parseFloat(amount)).toFixed(2));
            
     
             // os_total_sub();
@@ -1655,8 +1697,11 @@ $(document).ready(function() {
             var tax_amount      = parseFloat($('#tax_id option:selected').data('tax_amount')) ;
             var el              =  $(this).parent().parent();
             var price           =  parseFloat($(this).val())/((tax_amount/100)+1) ;
-            var before_cur      = el.children().find('.purchase_unit_cost_without_discount_s').val(price.toFixed(3));
-            var before_cur_tax  = el.children().find('.purchase_unit_cost_without_discount').val(price);
+            var before_cur      = el.children().find('.purchase_unit_cost_without_discount_s').val(price.toFixed(2));
+            var before_cur_tax  = el.children().find('.purchase_unit_cost_without_discount').val(price.toFixed(2));
+            var before_cur_tax_origin  = el.children().find('.purchase_unit_cost_without_discount_origin').val(price);
+            // var before_cur      = el.children().find('.purchase_unit_cost_without_discount_s').val(price);
+            // var before_cur_tax  = el.children().find('.purchase_unit_cost_without_discount').val(price);
             currancy = $(".currency_id_amount").val();
             if(currancy != "" && currancy != 0){
                 el.children().find('.purchase_unit_cost_new_currency').val(price/currancy);
@@ -1672,7 +1717,8 @@ $(document).ready(function() {
             var tax_amount  = parseFloat($('#tax_id option:selected').data('tax_amount')) ;
             var el          =  $(this).parent().parent();
             var price       =   parseFloat($(this).val())*(tax_amount/100) + parseFloat($(this).val()) ; 
-            el.children().find('.purchase_unit_cost_with_tax').val(price.toFixed(3));
+            el.children().find('.purchase_unit_cost_without_discount_origin').val($(this).val());
+            el.children().find('.purchase_unit_cost_with_tax').val(price.toFixed(2));
             var intial_avl =  parseFloat($(this).val());
             currancy = $(".currency_id_amount").val();
             if(currancy != "" && currancy != 0){
@@ -1690,19 +1736,19 @@ $(document).ready(function() {
             
         });
         //**....................... eb
-    $('.purchase_table .purchase_unit_cost_without_discount_s').on("click",function(){
-                        var el          =  $(this).parent().parent();
-                        
-                        // el.children().find('.purchase_unit_cost_without_discount').attr("type","text");
-                        // el.children().find('.purchase_unit_cost_without_discount_s').attr("type","hidden");
-                        
+        $('.purchase_table .purchase_unit_cost_without_discount_s').on("click",function(){
+                            var el          =  $(this).parent().parent();
+                            
+                            // el.children().find('.purchase_unit_cost_without_discount').attr("type","text");
+                            // el.children().find('.purchase_unit_cost_without_discount_s').attr("type","hidden");
+                            
         });
-    $('.purchase_table .purchase_unit_cost_without_discount').on("change",function(){
-            var el          =  $(this).parent().parent();
-            el.children().find('.purchase_unit_cost_without_discount_s').val($(this).val());
-                        
+        $('.purchase_table .purchase_unit_cost_without_discount').on("change",function(){
+                var el          =  $(this).parent().parent();
+                el.children().find('.purchase_unit_cost_without_discount_origin').val($(this).val());
+                el.children().find('.purchase_unit_cost_without_discount_s').val($(this).val());
+                            
         });
-    
     }  
 // ** 17
     function update_purchase_entry_row_values(row) {
@@ -1720,9 +1766,9 @@ $(document).ready(function() {
             var row_subtotal_after_tax = quantity * unit_cost_price_after_tax;
             var tax_amount  = parseFloat($('#tax_id option:selected').data('tax_amount')) ;
             var  unit_tax   = (tax_amount/100)*unit_cost_price + unit_cost_price;
-            row.find('.purchase_unit_cost_with_tax').val(unit_tax);
+            row.find('.purchase_unit_cost_with_tax').val(unit_tax.toFixed(2));
             row.find('.total_unit_cost_with_tax').val(unit_tax);
-            row.find('.purchase_unit_cost_with_tax').val(unit_tax);
+            row.find('.purchase_unit_cost_with_tax').val(unit_tax.toFixed(2));
             row.find('.row_total_cost').val(unit_tax);
             
             row.find('.row_subtotal_before_tax').text(
@@ -1765,7 +1811,8 @@ $(document).ready(function() {
                     $(".total_amount").val("");
                 }else{
                     
-                    var  amount   = parseFloat(el.children().find('.purchase_unit_cost_without_discount').val()) ;
+                    // var  amount   = parseFloat(el.children().find('.purchase_unit_cost_without_discount').val()) ;
+                    var  amount   = parseFloat(el.children().find('.purchase_unit_cost_without_discount_origin').val()) ;
                     // alert(quantity);
                     total_quantity += quantity;
                     total_amount += amount*quantity;
@@ -1843,6 +1890,7 @@ $(document).ready(function() {
             var el = e.children().find(".purchase_unit_cost_with_tax_new_currency");
             var inc_vat = e.children().find(".purchase_unit_cost_with_tax");
             var exc_vat = e.children().find(".purchase_unit_cost_without_discount");
+            var exc_vat_origin = e.children().find(".purchase_unit_cost_without_discount_origin");
             var exc_vat_s = e.children().find(".purchase_unit_cost_without_discount_s");
             var exc_dis_vat  = e.children().find(".purchase_unit_cost");
             var inc_dis_vat  = e.children().find(".total_unit_cost_with_tax");
@@ -1859,23 +1907,24 @@ $(document).ready(function() {
                 var  unit_tax   = ((tax_amount/100)*vl) + parseFloat(vl);
                 var  percent    = currancy*vl;
                 var  percent_tax    = ((tax_amount/100)*(currancy*vl)) + parseFloat(currancy*vl);
-                exc_vat.val(percent.toFixed(3));
-                exc_vat_s.val(percent.toFixed(3));
-                inc_vat.val(percent_tax.toFixed(3));
-                el.val(unit_tax.toFixed(3));
+                exc_vat.val(percent.toFixed(2));
+                exc_vat_origin.val(percent.toFixed(2));
+                exc_vat_s.val(percent.toFixed(2));
+                inc_vat.val(percent_tax.toFixed(2));
+                el.val(unit_tax.toFixed(2));
             }else{
                 el.val(0);
             }
-            var tax_price =  parseFloat(exc_vat.val()) + parseFloat((tax_rate/100)*exc_vat.val());
+            var tax_price =  parseFloat(exc_vat_origin.val()) + parseFloat((tax_rate/100)*exc_vat_origin.val());
             if (discount == 0) {
-                var  amount         = exc_vat.val()  -  (dis_amount/100)*exc_vat.val() ;
-                var  tax_amount_    = tax_price  -  (dis_amount/100)*exc_vat.val() ;
+                var  amount         = exc_vat_origin.val()  -  (dis_amount/100)*exc_vat_origin.val() ;
+                var  tax_amount_    = tax_price  -  (dis_amount/100)*exc_vat_origin.val() ;
             }else{
-                var amount         = exc_vat.val()  -   dis_amount ;
+                var amount         = exc_vat_origin.val()  -   dis_amount ;
                 var tax_amount_    = tax_price  -   dis_amount ;
                 
             }
-            exc_dis_vat.val(amount.toFixed(3));
+            exc_dis_vat.val(amount.toFixed(2));
             inc_dis_vat.val(((tax_amount/100)*(amount) + parseFloat(amount)).toFixed(2));
         
 

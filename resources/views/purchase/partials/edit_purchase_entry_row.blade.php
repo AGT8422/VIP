@@ -57,8 +57,9 @@
             <?php $row_count = 0; ?>
             @foreach($purchase->purchase_lines as $purchase_line)
                 @php 
+                    $txd  = ($purchase_line->purchase_note!=null || $purchase_line->purchase_note!="")?$purchase_line->purchase_note:"Enter Description";
                     $list_of_prices_in_unit = \App\Product::getProductPrices($purchase_line->product->id);
-                    $cypher = Illuminate\Support\Facades\Crypt::encryptString($purchase_line->purchase_note);
+                    $cypher = Illuminate\Support\Facades\Crypt::encryptString($txd);
                 @endphp 
 
                 <tr class="line_sorting">
@@ -78,8 +79,9 @@
                         @if( $purchase_line->product->type == 'variable') 
                             <br/>(<b>{{ $purchase_line->variations->product_variation->name}}</b> : {{ $purchase_line->variations->name}})
                         @endif
+                        
                         <div class="description_line" data-line="{{$row_count}}">
-                            <pre style="white-space: nowrap;max-width:300px;max-height:150px" class="btn btn-modal products_details" data-href="{{action('ProductController@changeDescription', ['id'=>$purchase_line->product->id,'text'=> $cypher  ,'line'=>$row_count])}}" data-container=".view_modal">{!! $purchase_line->purchase_note !!}</pre>
+                            <pre style="white-space: nowrap;max-width:300px;max-height:150px" class="btn btn-modal products_details" data-href="{{action('ProductController@changeDescription', ['id'=>$purchase_line->product->id,'text'=> $cypher  ,'line'=>$row_count])}}" data-container=".view_modal">{!! $txd !!}</pre>
                         </div>
                         <textarea class="form-control control_products_details" style="visibility:hidden" data-line="{{$row_count}}"  id="purchases[{{$row_count}}][purchase_note]" name="purchases[{{$row_count}}][purchase_note]" rows="{{$row_count}}"> {!! $purchase_line->purchase_note !!}</textarea>
                         
@@ -162,6 +164,8 @@
                     <td>
                         {!! Form::text('purchases[' . $loop->index . '][pp_without_discount_s]', round($purchase_line->pp_without_discount/$purchase->exchange_rate,config('constants.currency_percision'))  ,
                             ['class' => 'form-control  input-sm purchase_unit_cost_without_discount_s input_number' , "data-number" =>  $loop->index , 'required']); !!}
+                        {!! Form::text('purchases[' . $loop->index . '][pp_without_discount]',  $purchase_line->pp_without_discount/$purchase->exchange_rate ,
+                            ['class' => 'form-control  input-sm purchase_unit_cost_without_discount_origin input_number' , "data-number" =>  $loop->index , 'required']); !!}
                         {!! Form::hidden('purchases[' . $loop->index . '][pp_without_discount]',  round($purchase_line->pp_without_discount/$purchase->exchange_rate,config('constants.currency_percision')) ,
                             ['class' => 'form-control  input-sm purchase_unit_cost_without_discount input_number' , "data-number" =>  $loop->index , 'required']); !!}
                         <br>

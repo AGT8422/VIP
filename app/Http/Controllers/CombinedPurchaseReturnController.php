@@ -591,6 +591,7 @@ class CombinedPurchaseReturnController extends Controller
         }
         
         try {
+            dd($request);
             DB::beginTransaction();
             $input_data     = $request->only([
                             'location_id', 
@@ -717,6 +718,7 @@ class CombinedPurchaseReturnController extends Controller
                     $unit_price                   = $this->productUtil->num_uf($product['unit_price_before_dis_exc']);
                     $unit_price_after_dis_exc     = $this->productUtil->num_uf($product['unit_price_after_dis_exc']);
                     $unit_price_after_dis_inc     = $this->productUtil->num_uf($product['unit_price_after_dis_inc']);
+                    
                     if (!empty($product['purchase_line_id'])) {
                         $return_line              = PurchaseLine::find($product['purchase_line_id']);
                         $updated_purchase_lines[] = $return_line->id;
@@ -728,6 +730,7 @@ class CombinedPurchaseReturnController extends Controller
                             'transaction_id' => $purchase_return_id
                         ]);
                     }
+                    dd($request,$products);
                     $sub_total_rt_purchase              += ($product['quantity']*$unit_price_after_dis_exc) ;
                     $return_line->store_id               = $request->store_id;
                     $return_line->quantity               = $this->productUtil->num_uf($product['quantity']);
@@ -736,7 +739,7 @@ class CombinedPurchaseReturnController extends Controller
                     $return_line->purchase_price_inc_tax = $unit_price_after_dis_inc;
                     $return_line->purchase_note          = $product["purchase_note"];
                     $return_line->discount_percent       = $product['discount_percent_return'];
-                    $return_line->bill_return_price      =  $unit_price_after_dis_exc;
+                    $return_line->bill_return_price      = $unit_price_after_dis_exc;
                     $return_line->quantity_returned      = $this->productUtil->num_uf($product['quantity']);
                     $return_line->lot_number             = !empty($product['lot_number']) ? $product['lot_number'] : null;
                     $return_line->exp_date               = !empty($product['exp_date']) ? $this->productUtil->uf_date($product['exp_date']) : null;
@@ -842,6 +845,7 @@ class CombinedPurchaseReturnController extends Controller
                 'shiping_date','additional_shipping_item_id','old_shipping_amount','old_shipping_vat','old_shipping_total','old_shipping_account_id',
                 'old_shiping_text','old_shiping_date','old_shipping_contact_id','shipping_contact_id','old_shipping_cost_center_id','cost_center_id'
             ]);
+
             $document_expense = $request->old_document??[];
             if ($request->hasFile('document_expense')) {
                 $id_ex = 1;
@@ -1004,9 +1008,11 @@ class CombinedPurchaseReturnController extends Controller
             $sub_units = $allUnits  ;
 
             if(app("request")->input("check")){
+                
                 return view('sell_return.partials.product_row')
                     ->with(compact('product','stores' ,'sub_units' ,'list_of_prices_in_unit' , 'currency' ,'row_index' , 'quantity' ,'row_count','tax_dropdown' ));
             }else{
+               
                 return view('purchase_return.partials.product_table_row')
                     ->with(compact('product','currency','sub_units' ,'list_of_prices_in_unit' ,'stores' ,'row_index' , 'quantity'));
             }

@@ -353,7 +353,7 @@
                             @endif
 
                         </td>
-                            <td style="font-size:9px;width:40%">{{ strip_tags($data->sell_line_note) }}</td>
+                            <td style="font-size:9px;width:40%">{!! $data->sell_line_note !!}</td>
                             <td style="font-size:9px;width:5%">{{ $data->quantity }}</td>
                             <!--<td style="font-size:12px;font-weight: bold;">@format_currency($data->unit_price_before_discount)</td>-->
                             <!--<td style="font-size:12px;font-weight: bold;">@format_currency($data->unit_price_inc_tax)</td>-->

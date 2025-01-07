@@ -243,7 +243,7 @@
         <div class="col-md-12">
           <div class="form-group">
             {!! Form::label("note", __('lang_v1.payment_note') . ':') !!}
-            {!! Form::textarea("note", $payment_line->note, ['class' => 'form-control', 'required' ,'rows' => 3]); !!}
+            {!! Form::textarea("note", $payment_line->note, ['class' => 'form-control','rows' => 3]); !!}
           </div>
         </div>
       </div>

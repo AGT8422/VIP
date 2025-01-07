@@ -1836,7 +1836,7 @@ class TransactionPaymentController extends Controller
         }
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
-
+            $business = \App\Business::where("id",$business_id)->first();
             $transaction = Transaction::where('business_id', $business_id)
                                         ->with(['contact', 'location'])
                                         ->findOrFail($transaction_id);
@@ -1853,8 +1853,7 @@ class TransactionPaymentController extends Controller
                     $amount = 0;
                 } 
 
-                $amount_formated = $this->transactionUtil->num_f($amount);
-
+                $amount_formated       = $this->transactionUtil->num_f($amount);
                 $payment_line          = new TransactionPayment();
                 $payment_line->amount  = $amount;
                 $payment_line->method  = 'cash';
@@ -1864,7 +1863,13 @@ class TransactionPaymentController extends Controller
                 $transaction_child     = \App\Transaction::where("separate_parent",$transaction->id)->where("separate_type","payment")->get();
 
                 //Accounts
-                $accounts     = $this->moduleUtil->accountsDropdown($business_id, true, false, true);
+                // $accounts     = $this->moduleUtil->accountsDropdown($business_id, true, false, true);
+                $account      = \App\Account::where("account_type_id",$business->cash)->get();
+                $accounts = [];
+                foreach($account as  $it){
+                    $accounts[""] = __('messages.please_select');
+                    $accounts[$it->id] = $it->account_number . " || " . $it->name; 
+                }
                 $cheque_type  =  ($transaction->type == 'purchase' || $transaction->type == 'sell_return')?1:0;
                 $view         = view('transaction_payment.payment_row')
                                 ->with(compact('transaction','transaction_child' ,'paymentVoucher','payment_types', 'payment_line',  'amount_formated', 'accounts','cheque_type','cheques'))->render();

@@ -37,7 +37,11 @@
                 <br>
                 <small class="text-muted" style="white-space: nowrap;">@lang('report.current_stock'):  {{@num_format($qty_pro)}}   {{ $product->unit->short_name }}</small>
             @endif
-            
+            <?php $pr =  \App\Product::find($product->product_id); $txd = ($product->product_description != null || $product->product_description != "")?$product->product_description:"Enter Description";  $cypher = ($product->product_description != null || $product->product_description != "")?Illuminate\Support\Facades\Crypt::encryptString($product->product_description):Illuminate\Support\Facades\Crypt::encryptString('.');  ?>
+            <div class="description_line" data-line="{{$row_count}}">
+                <pre style="white-space: nowrap;max-width:300px;max-height:150px" class="btn btn-modal products_details" data-href="{{action('ProductController@changeDescription', ['id'=>$product->id,'text'=> $cypher  ,'line'=>$row_count])}}" data-container=".view_modal">{!! $txd !!}</pre>
+            </div>
+            <textarea class="form-control control_products_details" data-line="{{$row_count}}" style="visibility:hidden" id="purchases[{{$row_count}}][purchase_note]" name="purchases[{{$row_count}}][purchase_note]" rows="{{$row_count}}"> {!! $product->product_description !!}</textarea>
         </td>
         <td>
             {!! Form::hidden('purchases[' . $row_count . '][product_id]', $product->id ); !!}
@@ -96,9 +100,13 @@
            @if(isset($open))
               {!! Form::text('purchases[' . $row_count . '][pp_without_discount]',
                  round($cost,config('constants.currency_precision')), [ ' class' => 'form-control input-sm  eb_price input_number ', 'required']); !!}
+              {!! Form::text('purchases[' . $row_count . '][purchase_unit_cost_without_discount_origin]',
+               $cost, ['class' => 'form-control input-sm purchase_unit_cost_without_discount_origin input_number', 'required']); !!}
             @else
                   {!! Form::text('purchases[' . $row_count . '][pp_without_discount_s]',
                   (!empty($item_price))?round($item_price->purchase_price, config('constants.currency_precision')):round($cost, config('constants.currency_precision')), [ 'class' => 'form-control input-sm purchase_unit_cost_without_discount input_number ', 'required']); !!}
+                    {!! Form::text('purchases[' . $row_count . '][purchase_unit_cost_without_discount_origin]',
+                  (!empty($item_price))?$item_price->purchase_price:$cost, ['class' => 'form-control input-sm purchase_unit_cost_without_discount_origin input_number', 'required']); !!}
                     {!! Form::hidden('purchases[' . $row_count . '][pp_without_discount]',
                   (!empty($item_price))?round($item_price->purchase_price, config('constants.currency_precision')):round($cost, config('constants.currency_precision')), ['class' => 'form-control input-sm purchase_unit_cost_without_discount_s input_number', 'required']); !!}
             @endif
@@ -124,20 +132,21 @@
                         @if($key == $count)
                             @foreach ($row_line as $item)
                                 @php $price_line = ($item['price'])??0; @endphp
-                                <option value="{{$item['line_id']}}" data-price="{{$price_line}}" data-value="{{$item['line_id']}}" >{{$item["name"]}}</option>
+                                <option value="{{$item['line_id']}}" data-price="{{$price_line}}" data-value="{{$item['line_id']}}" >{{$item["name"] ." ( " .$price_line. " ) "}}</option>
                             @endforeach
                         @endif
                     @endforeach
                 </select>
             </div>
-            @if(app('request')->input('type_o') == 'store' || isset($open) )
+             @if(app('request')->input('type_o') == 'store' || isset($open) )
              @else
-                <?php $pr =  \App\Product::find($product->product_id);  $cypher = Illuminate\Support\Facades\Crypt::encryptString($product->product_description);  ?>
-                <div class="description_line" data-line="{{$row_count}}">
-                    <pre style="white-space: nowrap;max-width:300px;max-height:150px" class="btn btn-modal products_details" data-href="{{action('ProductController@changeDescription', ['id'=>$product->id,'text'=> $cypher  ,'line'=>$row_count])}}" data-container=".view_modal">{!! $product->product_description !!}</pre>
+                <?php $pr =  \App\Product::find($product->product_id); $txd = ($product->product_description != null || $product->product_description != "")?$product->product_description:"Enter Description";  $cypher = ($product->product_description != null || $product->product_description != "")?Illuminate\Support\Facades\Crypt::encryptString($product->product_description):Illuminate\Support\Facades\Crypt::encryptString('.');  ?>
+                {{-- <div class="description_line" data-line="{{$row_count}}">
+                    <pre style="white-space: nowrap;max-width:300px;max-height:150px" class="btn btn-modal products_details" data-href="{{action('ProductController@changeDescription', ['id'=>$product->id,'text'=> $cypher  ,'line'=>$row_count])}}" data-container=".view_modal">{!! $txd !!}</pre>
                 </div>
                 <textarea class="form-control control_products_details" data-line="{{$row_count}}" style="visibility:hidden" id="purchases[{{$row_count}}][purchase_note]" name="purchases[{{$row_count}}][purchase_note]" rows="{{$row_count}}"> {!! $product->product_description !!}</textarea>
-            @endif
+                --}}
+            @endif 
       </td>
    
         <td>

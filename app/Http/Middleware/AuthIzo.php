@@ -79,19 +79,19 @@ class AuthIzo
                             // $input                = ["language"=>"en"];
                             // $user                 = \App\User::find($user_id);
                             // $user->update($input); 
-                            session()->forget('device_id');
-                            session()->forget('user_main');
-                            session()->forget('password');
-                            session()->forget('startLogin');
-                            session()->forget('create_session');
-                            session()->forget('user');
-                            session()->forget('business');
-                            session()->forget('currency');
-                            session()->forget('locale');
-                            session()->forget('financial_year');
-                            session()->put('log_out_back','logout');
-                            \Auth::logout(); 
-                            return redirect('/login-account'); 
+                            // session()->forget('device_id');
+                            // session()->forget('user_main');
+                            // session()->forget('password');
+                            // session()->forget('startLogin');
+                            // session()->forget('create_session');
+                            // session()->forget('user');
+                            // session()->forget('business');
+                            // session()->forget('currency');
+                            // session()->forget('locale');
+                            // session()->forget('financial_year');
+                            // session()->put('log_out_back','logout');
+                            // \Auth::logout(); 
+                            // return redirect('/login-account'); 
                         }
                     }
                 }

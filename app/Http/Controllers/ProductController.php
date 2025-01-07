@@ -2432,7 +2432,8 @@ class ProductController extends Controller
             }
             
             
-        $result = $this->productUtil->filterProduct($business_id, $search_term, $location_id, $not_for_selling, $price_group_id, $product_types, $search_fields, $check_qty,false,"like",1);
+            // $result = $this->productUtil->filterProduct($business_id, $search_term, $location_id, $not_for_selling, $price_group_id, $product_types, $search_fields, $check_qty,false,"like",1);
+            $result = $this->productUtil->filterProduct($business_id, $search_term, $location_id, $not_for_selling, $price_group_id, $product_types, $search_fields, $check_qty,false,"like",false);
             
             $warahouse_info_qty = WarehouseInfo::where("business_id",$business_id)->where("product_id",$result[0]->product_id)->sum("product_qty");
          

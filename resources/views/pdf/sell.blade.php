@@ -11,6 +11,12 @@
     <title>Sell</title>
 
     @php 
+        $text_align     = "center" ;
+        $font_text      = "15px" ;
+        $color          =  "#b0906c";
+        $font_bill_text = "18px" ;
+        $font_table_bill_text = "15px" ;
+        $number_format_digit = 2;
         if($invoice->sub_status == 'quotation'){
             $sizes = "100px 25px 100px 25px";
             $bottom_sizes = "100px";
@@ -200,7 +206,7 @@
         .tables th, .tables td {
             
             
-            text-align:left !important;
+            text-align:center !important;
             padding: 0.01rem;
             width:9.9%;
             /*vertical-align: top;*/
@@ -210,11 +216,14 @@
         }
 
         .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
-
+            
             border-color: #ededed;
-
             padding: 1px;
-
+            
+        }
+        .row_item>tr>td, .row_item>tr>th{
+            border-right:0px solid #000;
+            border-left:0px solid #000;
         }
         .tables>tbody>tr>td, .tables>tbody>tr>th, .tables>tfoot>tr>td, .tables>tfoot>tr>th, .tables>thead>tr>td, .tables>thead>tr>th {
 
@@ -335,7 +344,7 @@
                                 </td>
                                 <td style="width:49%;text-align:center;font-size:15px">
                                         
-                                            {{ " Authriz Signature : " }}                                         
+                                            {{ " Authorize Signature : " }}                                         
                                         
                                 </td>
                             </tr>
@@ -352,7 +361,7 @@
                 {{-- /uploads/companies/elke/business_logo/1735812828_elke.png    --}}
                 {{-- <img src="{{asset("/uploads/img/aljazira.png")}}"   style="margin-left:-20%; width: 100%; height:150px;margin-top:-100px;"> --}}
                 
-                <table style=" position:relative; top:-50px;width: 100%;margin-bottom:0px; border-bottom:7px solid #b0906c; padding-bottom:0px">
+                <table style=" position:relative; top:-50px;width: 100%;margin-bottom:0px; border-bottom:7px solid {{$color}} ; padding-bottom:0px">
                     <tbody  >
                         <tr>
                            
@@ -365,7 +374,7 @@
                         <tr>
                             <td style="width: 40%;"><h3 style="text-align:left !important;width:100% !important;  ;margin-left:0px;font-size:19px;">&nbsp;</h3></td>
                             <td style="width: 100%;text-align:right;color:#000;text-align:center;padding-right:200px;"> 
-                                <h1 style=" width:100% !important; text-align:center !important;  font-size:25px;  ">
+                                <h1 style=" width:100% !important; text-align:center !important;  font-size:{{$font_bill_text}};  ">
                                         @if($invoice->sub_status == 'quotation')
                                         QUOTATION
                                         @elseif(($invoice->sub_status == '' && $invoice->status == 'draft'  )  )
@@ -388,45 +397,40 @@
                         <tr style=" background-color:#fff">
                         <td style="padding-left:30px;width:55%;line-height:1px;font-size:12px;padding:10px;">
                                  
-                                <h3 style="font-size:15px;">{{ 'CUSTOMER INFORMATION ' }}</h3>
+                                <h3 style=" font-size:{{$font_table_bill_text}} !important;">{{ 'CUSTOMER INFORMATION ' }}</h3>
                                 <p>
-                                     
-                                    {{ trans('home.Company Name')  }}  : {{ $invoice->contact?$invoice->contact->name:' ' }}
-                                    
+                                    {{ trans('home.Company Name')  }}  : 
+                                    {{ $invoice->contact?$invoice->contact->name:' ' }}
                                 </p>
                             
                                 <p >
-                                   
-                                        {{ trans('home.Address') }} :  {!! ( $invoice->contact)? ( $invoice->contact->address_line_1. " " .  $invoice->contact->city  . " " . $invoice->contact->country ):' ' !!} 
-                                    
+                                    {{ trans('home.Address') }} :  
+                                    {!! ( $invoice->contact)? ( $invoice->contact->address_line_1. " " .  $invoice->contact->city  . " " . $invoice->contact->country ):' ' !!} 
                                 </p>
                                 
                                 <p>
-                                     
-                                    {{ trans('home.Attention') }} : {{ $invoice->contact?($invoice->contact->supplier_business_name ." ". $invoice->contact->middle_name ." ". $invoice->contact->last_name  ):' ' }}
+                                    {{ trans('home.Attention') }} : 
+                                    {{ $invoice->contact?($invoice->contact->supplier_business_name ." ". $invoice->contact->middle_name ." ". $invoice->contact->last_name  ):' ' }}
                                 </p>
-                                
                                  
                                 <p >
-                                    
-                                    {{ trans('Tel No. ') }} : {{ ( $invoice->contact)? $invoice->contact->mobile:' ' }} 
-                                    
+                                    {{ trans('Tel No. ') }} : 
+                                    {{ ( $invoice->contact)? $invoice->contact->mobile:' ' }} 
                                 </p>
                                 <p >
-                                      
-                                    {{ trans('lang_v1.email_address') }} : {{ ( $invoice->contact)? $invoice->contact->email:' ' }} 
-                                  
-                                   
+                                    {{ trans('lang_v1.email_address') }} : 
+                                    {{ ( $invoice->contact)? $invoice->contact->email:' ' }} 
                                 </p>
                              
                                 <p>
-                                     
-                                    {{ trans('TAX No. ') }}: </b> {{ ($invoice->contact)?($invoice->contact->tax_number ):"" }}</p></td>
+                                    {{ trans('TRN. ') }}: 
+                                    {{ ($invoice->contact)?($invoice->contact->tax_number ):"" }}</p>
+                                </td>
                         <td style="width: 5%;text-align:right;color:#fff;text-align:center;padding-right:30px;">
                             
                         </td>
                         <td style=" width:45%;line-height:1px;font-size:12px;padding:10px;">
-                                    <h3 style="font-size:15px;">{{ 'DETAILS' }}</h3>
+                                    <h3 style=" font-size:{{$font_table_bill_text}} !important;">{{ 'DETAILS' }}</h3>
         
                                   
                                    
@@ -465,7 +469,7 @@
                     </tbody>
                 </table>
             @else
-                <table style=" width: 100%;border:0px solid black;margin-bottom:0px;border-bottom:3px solid #000; padding-bottom:0px">
+                <table style=" width: 100%;border:0px solid black;margin-bottom:0px;border-bottom:3px solid {{$color}}; padding-bottom:0px">
                     <tbody>
                         <tr>  
                         <td style="width: 40%;"></td>
@@ -482,8 +486,7 @@
                             <td style="width: 40%;"></td>
                              <td style="width: 100%;text-align:right;color:#000;text-align:center;padding-right:200px;"> 
                                 
-                            <h1 style="font-size:32px; width:100% ;text-align:center !important;margin-left:-25px;  font-size:25px;  ">
-                                    <h3 style="text-align:left !important;width:100% !important;  ;margin-left:80px; font-size:19px; ">TRN  {{ Session::get('business.tax_label_1') }}</h3>
+                            <h1 style="font-size:{{$font_bill_text}}; width:100% ;text-align:center !important;margin-left:-25px;  font-size:{{$font_bill_text}};  ">
                                     @if($invoice->sub_status == 'quotation')
                                     Quotation
                                     @elseif(($invoice->sub_status == '' && $invoice->status == 'draft'  )  )
@@ -493,6 +496,7 @@
                                     @elseif($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final '   )
                                     TAX INVOICE  
                                     @endif
+                                <h3 style="text-align:left !important;width:100% !important;  ;margin-left:80px; font-size:{{$font_bill_text}}; ">TRN  {{ Session::get('business.tax_label_1') }}</h3>
                                 </h1>
                         </td>
                        
@@ -504,42 +508,48 @@
                     <tbody >
                     
                         <tr style=" background-color:#dbdee1">
-                        <td style="width:50%;line-height:1px;font-size:15px;padding:15px;">
-                            <h3 style="margin-bottom: 15px;">{{ 'BILLED TO : ' }} </h3>
+                        <td style="width:50%;line-height:1px;font-size:{{$font_text}};padding:15px;">
+                            <h3 style="margin-bottom: 15px; font-size:{{$font_table_bill_text}} !important">{{ 'BILLED TO : ' }} </h3>
                        
                             <p>
                                  
-                                {{ trans('home.Company Name')  }}  : {{ $invoice->contact? $invoice->contact->name . " " . $invoice->contact->first_name :' ' }}
+                                {{ trans('home.Company Name')  }}  : 
+                                {{ $invoice->contact? $invoice->contact->name  :' ' }}
                                 
                             </p>
                             
                             <p >
                                
-                                    {{ trans('home.Address') }} : {!! ( $invoice->contact)? ( $invoice->contact->address_line_1 . " " .  $invoice->contact->city  . " " . $invoice->contact->country ):' ' !!} 
+                                    {{ trans('home.Address') }} : 
+                                    {!! ( $invoice->contact)? ( $invoice->contact->address_line_1 . " " .  $invoice->contact->city  . " " . $invoice->contact->country ):' ' !!} 
                                 
                             </p>
                             
                             <p>
                                  
-                                {{ trans('home.Attention') }} : {{ $invoice->contact?($invoice->contact->supplier_business_name ." ". $invoice->contact->middle_name ." ". $invoice->contact->last_name  ):' ' }}
+                                {{ trans('home.Attention') }} : 
+                                {{ $invoice->contact?($invoice->contact->supplier_business_name ." ". $invoice->contact->middle_name ." ". $invoice->contact->last_name  ):' ' }}
                             </p>
                             
                              
                             <p >
                                 
-                                {{ trans('Tel No. ') }} : {{ ( $invoice->contact)? $invoice->contact->mobile:' ' }} 
+                                {{ trans('Tel No. ') }} : 
+                                {{ ( $invoice->contact)? $invoice->contact->mobile:' ' }} 
                                 
                             </p>
                             <p >
                                   
-                                {{ trans('lang_v1.email_address') }} : {{ ( $invoice->contact)? $invoice->contact->email:' ' }} 
+                                {{ trans('lang_v1.email_address') }} : 
+                                {{ ( $invoice->contact)? $invoice->contact->email:' ' }} 
                               
                                
                             </p>
                              
                             <p>
                                  
-                                {{ trans('TAX No. ') }}: </b> {{ $invoice->contact?($invoice->contact->tax_number ):"" }}
+                                {{ trans('TRN. ') }}: 
+                                {{ $invoice->contact?($invoice->contact->tax_number ):"" }}
                                 
                             </p>
                            
@@ -553,7 +563,7 @@
                             
                         </td>
                        
-                            <td style=" width:40%;line-height:1px;font-size:15px;padding:15px;">
+                            <td style=" width:40%;line-height:1px;font-size:{{$font_text}};padding:15px;">
                                
                                   
                                    
@@ -580,15 +590,15 @@
                                      
                                     </p>
                                     <p>
+                                         AMOUNT DUE :{{ number_format($invoice->final_total,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}}  
+                                         
+                                    </p>      
+                                    <p style="visibility: hidden">
                                          
                                         @php $user =  \App\User::find($invoice->created_by); @endphp
                                         Prepared by : {{  ($user)?$user->first_name:"" }}
                                      
                                     </p>
-                                    <p>
-                                         AMOUNT DUE :{{ number_format($invoice->final_total,3) }} {{  isset($currency)?$currency->symbol:""}}  
-                                         
-                                    </p>      
                                     <p>&nbsp;</p>
                                    
                         </td>
@@ -600,72 +610,90 @@
                  
             @endif
 
-            <table  class="table" @if($invoice->sub_status == 'quotation') style="position:relative; top:-50px; border:0px solid black; margin-top: 30px;text-align:left;width: 100%;  border-radius:.3rem" @else style="border:0px solid black; margin-top: 30px;text-align:left;width: 100%;  border-radius:.3rem" @endif     dir="ltr" >
+            <table  class="table" @if($invoice->sub_status == 'quotation') style="position:relative; top:-50px; border:0px solid black; margin-top: 30px;text-align:{{$text_align}};width: 100%;  border-radius:.3rem" @else style="border:0px solid black; margin-top: 30px;text-align:left;width: 100%;  border-radius:.3rem" @endif     dir="ltr" >
                 <thead>
     
                     <tr>
-                        <th style="font-size:7px;max-width:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black; text-align:left;">{{ trans('home.NO') }}</th>
+                        <th style="font-size:{{$font_text}};max-width:20px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black; text-align:{{$text_align}};">{{ trans('home.NO') }}</th>
                         @php $se = 0; @endphp
                         @foreach($allData as $data) @if( $data->se_note != null && $data->se_note !="")    @php $se = 1; @endphp @endif  @endforeach
                         @if($se != 0)    
-                            <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('home.SE') }}</th>
+                            <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{ trans('home.SE') }}</th>
                         @else
-
+                            
                         @endif
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('product.brand') }}</th>
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:left;">{{ trans('product.model_no') }}</th>
+                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:5%;text-align:{{$text_align}};">ITEM &  {{   trans('home.DESCRIPTION') }}</th>
+                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;width:5%;text-align:{{$text_align}};">{{ trans('home.QTY') }}</th> 
+                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{ trans('product.brand') }}</th>
+                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:{{$text_align}};">{{ trans('product.model_no') }}</th>
                         @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ')
                         {{--  <th style="font-size:10px;font-weight: bold;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('home.PHOTO') }}</th>--}}
                         @else
-                        <th style="font-size:10px;font-weight: bold;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('home.PHOTO') }}</th>  
+                        <th style="font-size:{{$font_text}};font-weight: bold;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{ trans('home.PHOTO') }}</th>  
                         @endif 
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:5%;text-align:left;">ITEM &  {{   trans('home.DESCRIPTION') }}</th>
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;width:5%;text-align:left;">{{ trans('home.QTY') }}</th> 
                         
                         @php $dis = 0; @endphp
                         @foreach($allData as $data) @if(($data->unit_price_before_discount - $data->unit_price) != 0) @php $dis = 1; @endphp @endif  @endforeach
                         @if($dis != 0)
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{"Price"}}</th> 
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{"Disc"}}</th> 
+                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{"Price"}}</th> 
+                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{"Disc"}}</th> 
                         @endif
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{"Unit Price"}}</th> 
+                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{"Unit Price"}}</th> 
                         
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{  "Tot Price" }}</th>
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:left;">{{ ($invoice->tax)?$invoice->tax->name . ":" : "";  }}</th>
+                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{  "Tot Price" }}</th>
+                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:{{$text_align}};">{{ ($invoice->tax)?$invoice->tax->name . ":" : "";  }}</th>
 
-                        <th style="font-size:10px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;font-family:arial">{{"Tot Incld.vat"}}</th> 
+                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};font-family:arial">{{"Tot Incld.vat"}}</th> 
                         
                     </tr>
     
                 </thead>
-                <tbody style="padding:0px !important">
+                <tbody class="row_item" style="padding:0px !important">
                     <?php $total = 0;  $count = 0 ; $count_id = 1 ;?>
                            
                     @foreach ($allData as $data)
                             <?php 
     
                                     
-                                    $discount =  $data->line_discount_amount ;
-                                    $total   += ($data->unit_price_inc_tax*$data->quantity);
-    
+                            $discount =  $data->line_discount_amount ;
+                            $total   += ($data->unit_price_inc_tax*$data->quantity);
+                            
     
                             ?>
                             <tr style="margin-bottom:1px; !important;padding:0px !important">
                                 @php $count += $data->quantity; @endphp
-                                <td style="font-size:7px;width:1%;border-bottom: 1px solid grey;padding:1px !important">{{ $count_id++;  }}</td>
+                                <td style="font-size:{{$font_text}};width:1%;border-bottom: 1px solid grey;padding:1px !important">{{ $count_id++;  }}</td>
                                 @if($data->se_note != null && $data->se_note != "")
-                                        <td style="font-size:10px;max-width:5px;  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ $data->se_note }}</td>
-                                @else
+                                        <td style="font-size:{{$font_text}};max-width:5px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ $data->se_note }}</td>
+                                        @else
                                         
-                                
-                                @endif
-                                <td style="font-size:10px;max-width:5px;  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ ($data->product->brand)?$data->product->brand->name:"" }}</td>
-                                <td style="font-size:10px;max-width:5px;  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ $data->product->sku }}</td>
+                                        
+                                        @endif
+                                    @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' )
+                                    
+                                        <td style="font-size:{{$font_text}};max-width:30px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:0px !important ">
+                                            <b style="font-size:{{$font_text}};">{{ $data->product->name }}</b> 
+                                            <pre style="font-size:9px; text-align:left; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre>
+                                        </td>
+                                    @else 
+                                        {{--   $data->sell_line_note  --}} 
+                                        <td style="font-size:{{$font_text}};max-width:40px;text-align:{{$text_align}};  border-bottom: 1px solid grey;padding:0px !important ">
+                                            
+                                            <b style="font-size:{{$font_text}};"style="font-size:{{$font_text}};"> {{ $data->product->name }} </b>
+                                    
+                                            <pre style="width:100px;text-align:left; font-size:9px; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre>
+                                        </td>
+                                        
+                                    
+                                    @endif
+                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ $data->quantity }}</td>
+                                <td style="font-size:{{$font_text}};max-width:5px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ ($data->product->brand)?$data->product->brand->name:"" }}</td>
+                                <td style="font-size:{{$font_text}};max-width:5px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ $data->product->sku }}</td>
                                  
                                 @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ' )
                                    
                                 @else
-                                    <td style="font-size:10px;max-width:20px;border-bottom: 1px solid grey;">
+                                    <td style="font-size:15px;max-width:20px;border-bottom: 1px solid grey;">
                                         @if($data->product->image_url)
                                         
                                      <img src="{{ URL::to($data->product->image_url) }}" style="max-width: 100%">   
@@ -675,7 +703,7 @@
                                 @endif
                                 
                                 @if(!empty($data->warranties->first()))
-                                    <small  style=" padding:20px;font-size:10px;background-color:#f1f1f1 ; padding:10px;margin: 00px 0px !important;padding:1px !important">
+                                    <small  style=" padding:20px;font-size:{{$font_text}};background-color:#f1f1f1 ;text-align:{{$text_align}}; padding:10px;margin: 00px 0px !important;padding:1px !important">
                                         
                                         {{$data->warranties->first()->display_name ?? ''}} 
                                     </small>
@@ -689,42 +717,24 @@
                             
                                 {{-- <pre style="font-size:9px; line-height:9px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!}</pre>  --}}
                             
-                                @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' )
+                                
                                
-                                    <td style="font-size:10px;max-width:30px;  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important ">
-                                        <p style="font-size:9px;"><b>{{ $data->product->name }}</b></p> 
-                                        <pre style="font-size:9px; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre>
-                                           </td>
-                                @else 
-                                    {{--   $data->sell_line_note  --}} 
-                                    <td style="font-size:9px;max-width:40px;  border-bottom: 1px solid grey;padding:1px !important ">
-                                        <p style="font-size:9px;">
-                                             <b> {{ $data->product->name }} </b>
-                                        </p> 
-                                        <pre style="width:100px; font-size:9px; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre>
-                                    </td>
-                                    
-                                
-                                @endif
-                                
-                                <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ $data->quantity }}</td>
-                                 
                                 @if($discount!=0)
-                                    <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price_before_discount,3) }} {{  isset($currency)?$currency->symbol:""}} </td> 
-                                    <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ number_format($discount,3) }} {{  isset($currency)?$currency->symbol:""}}  </td> 
-                                    @elseif($dis != 0)
-                                    <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{0}}</td> 
-                                    <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{0}}</td> 
-                                    @endif
+                                    <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price_before_discount,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}} </td> 
+                                    <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($discount,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}}  </td> 
+                                @elseif($dis != 0)
+                                    <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{0}}</td> 
+                                    <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{0}}</td> 
+                                @endif
                                 @php
                                     $vatValue =  ($invoice->tax)?$invoice->tax->amount : 0;
                                 @endphp
-                                <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price,3) }} {{  isset($currency)?$currency->symbol:""}} </td>
+                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}} </td>
                                 
-                                <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price*$data->quantity,3) }} {{  isset($currency)?$currency->symbol:""}} </td> 
-                                <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ number_format( ($data->unit_price*$data->quantity * $vatValue/100),3) }} {{  isset($currency)?$currency->symbol:""}}  </td> 
+                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price*$data->quantity,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}} </td> 
+                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format( ($data->unit_price*$data->quantity * $vatValue/100),$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}}  </td> 
                                  
-                                <td style="font-size:10px;max-width:10px;border-bottom: 1px solid grey;padding:1px !important">{{ number_format((($data->unit_price*$data->quantity * $vatValue/100)+$data->unit_price*$data->quantity),3) }} {{  isset($currency)?$currency->symbol:""}} </td>
+                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format((($data->unit_price*$data->quantity * $vatValue/100)+$data->unit_price*$data->quantity),$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}} </td>
                             
                             </tr>
     
@@ -733,7 +743,7 @@
                 </tbody>
             </table>
         
-            @if($invoice->sub_status == 'quotation'|| (($invoice->sub_status == 'proforma' && $invoice->status == 'draft' )|| $invoice->status == 'ApprovedQuotation'))
+            {{-- @if($invoice->sub_status == 'quotation'|| (($invoice->sub_status == 'proforma' && $invoice->status == 'draft' )|| $invoice->status == 'ApprovedQuotation')) --}}
                 <table class="table" style="width:100%;font-size:11px;Lline-height:10px; margin-top: 10px;font-weight: bold; ">
                     <thead>
                         <tr>
@@ -742,75 +752,76 @@
                         </tr>
                     </thead>
                 </table>
-            @endif
-                <table class="table" style=" border:0px solid black;width:100%;font-size:13px;  margin-top: 2px; "  dir="ltr"  dir="ltr" >
-                    <tbody >
-                        <tr style="width:100% " >
-                            
-                            <td style="text-align:left;width:40%">
-                            @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ' )
-                                {!! $layout->invoice_text !!} 
-                            @endif
-                            </td>
-                            
-                            <td style="text-align:left;width:40%;font-weight: bold;">
-                                <p  style=" width:100%;line-height:1px;padding:0px;">
-                                    <span   style="float:left;width:40%;font-family:arial">Tot Exlcd.Vat :  </span>  
-                                    <span   style="float:right;width:60%">{{ number_format($invoice->total_before_tax,3) }} {{  isset($currency)?$currency->symbol:""}} </span>
-                                </p>
-                                <p style="line-height:3px">&nbsp;</p>
-                                
-                                @php
-                                if ($invoice->discount_type == "fixed_before_vat"){
-                                    $dis = $invoice->discount_amount;
-                                }else if ($invoice->discount_type == "fixed_after_vat"){
-                                    $tax = \App\TaxRate::find($invoice->tax_id);
-                                    if(!empty($tax)){
-                                        $dis = ($invoice->discount_amount*100)/(100+$tax->amount) ;
-                                    }else{
-                                        $dis = ($invoice->discount_amount*100)/(100) ;
-                                    }
-                                }else if ($invoice->discount_type == "percentage"){
-                                    $dis = ($invoice->total_before_tax *  $invoice->discount_amount)/100;
-                                }else{
-                                    $dis = 0;
-                                }
-                                @endphp
-                                @if($invoice->discount_amount != 0)
-                                    <p  style=" width:100%;line-height:5px;">
-                                        <span   style="float:left;width:40%;border:0px solid black">Discount :</span>    
-                                        <span   style="float:left;width:40%;border:0px solid black">{{ number_format($dis,3) }} {{  isset($currency)?$currency->symbol:""}}   </span>
-                                    
-                                    </p>
-                                <br>
-                                <p style="line-height:3px">&nbsp;</p>
-                                <p  style=" width:100%;line-height:3px;">
-                                    <span   style="float:left; width:40%;border:0px solid black">Total After Dis  :  </span>    
-                                    <span   style=" float:left;width:40%">{{ number_format($invoice->total_before_tax - $dis,3) }} {{  isset($currency)?$currency->symbol:""}}  </span>
-                                    
-                                </p>
-                                <p style="line-height:3px">&nbsp;</p>
-                                <br>
-                                @endif
-                                <p  style="   width:100%;line-height:1px;padding:0px;">
-                                    <span   style="float:left;width:40%">{{ ($invoice->tax)?$invoice->tax->name . ":" : ""  }} 	   </span>    
-                                    <span   style="float:left;width:60%">{{ number_format($invoice->tax_amount,3) }} {{  isset($currency)?$currency->symbol:""}}  </span>
-                                
-                                </p>
-                                <p style="line-height:3px">&nbsp;</p>
+            {{-- @endif --}}
+            
+            <table class="table" style=" border:0px solid black;width:100%;font-size:13px;  margin-top: 2px; "  dir="ltr"  dir="ltr" >
+                <tbody >
+                    <tr style="width:100% " >
                         
-                                <p  style="  width:100%;line-height:1px; border-top:3px solid #444444;padding-top:10px; ">
-                                    <span   style="float:left;width:40%"> Tot Incld.Vat  :   </span>    
-                                    <span   style="float:right;width:60%">{{ number_format( $invoice->final_total,3) }} {{  isset($currency)?$currency->symbol:""}}  </span>
-                                    
+                        <td style="text-align:left;width:70%">
+                        @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ' )
+                            {!! $layout->invoice_text !!} 
+                        @endif
+                        </td>
+                        
+                        <td style="text-align:left;width:30%;font-weight: bold;">
+                            <p  style=" width:100%;line-height:1px;padding:0px;">
+                                <span   style="float:left;width:50%;font-family:arial">Tot Exlcd.Vat :  </span>  
+                                <span   style="float:right;width:50%">{{ number_format($invoice->total_before_tax,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}} </span>
+                            </p>
+                            <p style="line-height:3px">&nbsp;</p>
+                            
+                            @php
+                            if ($invoice->discount_type == "fixed_before_vat"){
+                                $dis = $invoice->discount_amount;
+                            }else if ($invoice->discount_type == "fixed_after_vat"){
+                                $tax = \App\TaxRate::find($invoice->tax_id);
+                                if(!empty($tax)){
+                                    $dis = ($invoice->discount_amount*100)/(100+$tax->amount) ;
+                                }else{
+                                    $dis = ($invoice->discount_amount*100)/(100) ;
+                                }
+                            }else if ($invoice->discount_type == "percentage"){
+                                $dis = ($invoice->total_before_tax *  $invoice->discount_amount)/100;
+                            }else{
+                                $dis = 0;
+                            }
+                            @endphp
+                            @if($invoice->discount_amount != 0)
+                                <p  style=" width:100%;line-height:5px;">
+                                    <span   style="float:left;width:50%;border:0px solid black">Discount :</span>    
+                                    <span   style="float:left;width:50%;border:0px solid black">{{ number_format($dis,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}}   </span>
+                                
                                 </p>
                             <br>
+                            <p style="line-height:3px">&nbsp;</p>
+                            <p  style=" width:100%;line-height:3px;">
+                                <span   style="float:left; width:50%;border:0px solid black">Total After Dis  :  </span>    
+                                <span   style=" float:left;width:50%">{{ number_format($invoice->total_before_tax - $dis,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}}  </span>
                                 
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            
+                            </p>
+                            <p style="line-height:3px">&nbsp;</p>
+                            <br>
+                            @endif
+                            <p  style="   width:100%;line-height:1px;padding:0px;">
+                                <span   style="float:left;width:50%">{{ ($invoice->tax)?$invoice->tax->name . ":" : ""  }} 	   </span>    
+                                <span   style="float:left;width:50%">{{ number_format($invoice->tax_amount,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}}  </span>
+                            
+                            </p>
+                            <p style="line-height:1px">&nbsp;</p>
+                    
+                            <p  style="  width:100%;line-height:1px; border-top:3px solid #444444;padding-top:20px;">
+                                <span   style="float:left;width:50%"> Tot Incld.Vat  :   </span>    
+                                <span   style="float:right;width:50%">{{ number_format( $invoice->final_total,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}}  </span>
+                                
+                            </p>
+                        <br>
+                            
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
             @php
                 $trm = \App\Models\QuatationTerm::where("id",$invoice->additional_notes)->first();
             @endphp
@@ -822,13 +833,13 @@
                         <tbody>
                             <tr>
                                 <td>
-                                            {!!  $trm->description  !!}
+                                    {!!  $trm->description  !!}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 @endif
-                
+                 
             @else
                 <div class="footer">
                     @php
@@ -852,7 +863,7 @@
                                     @endif --}}
                                     </td>
                                     <td style="width:60% ;text-align:center;text-height:10px;">
-{{--                                         
+                                    {{--                                         
                                         <b>Tel : +968 24503131   </b> <br>
                                         ست:1479047 , برج الراية , طريق رقم 319 , مبنى رقم : 7/1ب ,ص.ب : 394 , الرمز البريدي : 400 ,غلا , سلطنة عمان <br>
                                         
@@ -884,19 +895,20 @@
                                     </td>
                                     <td style="width:49%;text-align:center;font-size:15px">
                                             
-                                                {{ " Authriz Signature : " }}                                         
+                                                {{ " Authorized Signature : " }}                                         
                                             
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                    @endif
+                        @endif
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        
                     <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <hr style="background-color: #000;border:1px solid black;border-radius:10px;">
+                    <hr style="background-color: {{$color}};border:1px solid {{$color}};border-radius:10px;">
                     <p>
                         {!!  $layout->footer_text !!} 
                     </p>

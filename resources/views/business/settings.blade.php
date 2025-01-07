@@ -34,13 +34,15 @@
                     <a href="#" class="list-group-item text-center">@lang('lang_v1.sms_settings')</a>
                     <a href="#" class="list-group-item text-center">@lang('lang_v1.reward_point_settings')</a>
                     {{-- @if(auth()->user()->can('superadmin')) --}}
-                    <a href="#" @can  class="list-group-item text-center"  @else class="list-group-item text-center"  @endcan>@lang('lang_v1.modules')</a>
+                    <a href="#" @can('superadmin')  class="list-group-item text-center"  @else class="list-group-item text-center"  @endcan>@lang('lang_v1.modules')</a>
+                   
                     {{-- @endif --}}
                     <a href="#" class="list-group-item text-center">@lang('lang_v1.custom_labels')</a>
                     @if (auth()->user()->can('superadmin'))  
                         @php $is_mfg_enabled = true; @endphp
                     @else 
                         @php  
+                        
                             $business_id    = session()->get('user.business_id');
                             $module_util    = new App\Utils\ModuleUtil();
                             $is_mfg_enabled = (boolean)$module_util->hasThePermissionInSubscription($business_id, 'manufacturing_module', 'superadmin_package');

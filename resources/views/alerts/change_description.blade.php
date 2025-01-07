@@ -14,9 +14,9 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-12 ">
                     <div class="form-group">
-                      {!! Form::textarea('product_description', $text, ['class' => 'form-control product_descriptions','id'=>'product_description']); !!}
+                      {!! Form::textarea('product_description', $text, ['class' => 'form-control product_descriptions hide','id'=>'product_description']); !!}
                     </div>
                   </div>
              

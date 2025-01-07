@@ -12,7 +12,7 @@
 <!-- Main content -->
 <section class="content no-print">
 	{!! Form::open(['url' => action('SellReturnController@update_return'), 'method' => 'post', 'id' => 'purchase_return_form', 'files' => true ]) !!}
-	@component("components.widget",["class"=>"box-primary"])
+	 
 	{!! Form::hidden('transaction_id', $transaction_return->id, ['id' => 'transaction_id']) !!}
 
 	<div class="box box-solid">
@@ -342,7 +342,11 @@
 					<div>&nbsp;</div>
 					<div>&nbsp;</div>
 				</div>
-			@endcomponent
+		 
+				</div>
+			</div>
+			</div>
+		
 			 @component("components.widget",["class"=>"box-primary"])
 				<div>&nbsp;</div>
 				<div>&nbsp;</div>
@@ -441,7 +445,6 @@
 					<button type="button" id="submit_purchase_return_form" class="btn btn-primary pull-right btn-flat">@lang('messages.submit')</button>
 				</div>
 			@endcomponent	
-			</div>
 		</div>
 	</div> <!--box end-->
 	 

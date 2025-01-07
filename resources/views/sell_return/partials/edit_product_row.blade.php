@@ -7,6 +7,12 @@
 		&nbsp;
 		<input type="hidden" class="enable_sr_no" value="{{$product->enable_sr_no}}">
 		<i class="fa fa-commenting cursor-pointer text-primary add-pos-row-description" title="@lang('lang_v1.add_description')" data-toggle="modal" data-target="#row_description_modal_{{$row_count}}"></i>
+		<?php $txt = ($product->sell_line_note)?$product->sell_line_note:(($product->product->product_description!=null || $product->product->product_description != '')?$product->product->product_description:'.');   $cypher = Illuminate\Support\Facades\Crypt::encryptString($txt);  ?>
+        <div class="description_line" data-line="{{$row_count}}">
+            <pre style="white-space: nowrap;max-width:300px;max-height:150px" data-line="{{$row_count}}" class="btn btn-modal products_details" data-href="{{action('ProductController@changeDescription', ['id'=>$product->product->id,'text'=> $cypher  ,'line'=>$row_count,'return'=>'return'])}}" data-container=".view_modal">{!! ($product->sell_line_note)?$product->sell_line_note:(($product->product->product_description!=null||$product->product->product_description!="")?$product->product->product_description:"Enter Description") !!}</pre>
+        </div>
+        <textarea class="form-control control_products_details" data-line="{{$row_count}}" style="visibility:hidden" id="products[{{$row_count}}][sell_line_note]" name="products[{{$row_count}}][sell_line_note]" rows="{{$row_count}}"> {!! ($product->sell_line_note)?$product->sell_line_note:$product->product->product_description !!}</textarea>
+       
 	</td>
 
 	{{-- Product Quantity --}}

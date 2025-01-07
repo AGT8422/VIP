@@ -2516,10 +2516,10 @@ class ProductUtil extends Util
                         }
                     }
                 );
-
         if (!is_null($not_for_selling)) {
             $query->where('products.not_for_selling', $not_for_selling);
         }
+       
 
         //Note
         if (!empty($price_group_id)) {
@@ -2531,10 +2531,10 @@ class ProductUtil extends Util
                 }
             );
         }
-
+       
         $query->where('products.business_id', $business_id)
                 ->where('products.type', '!=', 'modifier');
-
+                
         if (!empty($product_types)) {
             $query->whereIn('products.type', $product_types);
         }
@@ -2546,7 +2546,7 @@ class ProductUtil extends Util
            // return "test";
              $query->whereNull('products.hide_pos');
         }*/
-
+        
         //Include search
         if (!empty($search_term)) {
 
@@ -2557,7 +2557,6 @@ class ProductUtil extends Util
                     if (in_array('name', $search_fields)) {
                         $query->where('products.name', 'like', '%' . $search_term .'%');
                     }
-
                     if (in_array('sku', $search_fields)) {
                         $query->orWhere('sku', 'like', '%' . $search_term .'%')
                               ->orWhere('sku2', 'like', '%' . $search_term .'%')
@@ -2573,6 +2572,7 @@ class ProductUtil extends Util
                     }
                 });
             }
+            
 
             //Search with exact condition
             if($search_type == 'exact'){
@@ -2596,7 +2596,7 @@ class ProductUtil extends Util
                 });
             }
         }
-
+        
         if($return_check){
             $query->where('products.enable_stock', '!=', 0);
         }
@@ -2608,7 +2608,7 @@ class ProductUtil extends Util
         if (!empty($location_id)) {
             $query->ForLocation($location_id);
         }
-
+        
         $query->select(
                 'products.id as product_id',
                /* 'products.hide_pos',*/
@@ -2625,7 +2625,7 @@ class ProductUtil extends Util
                 'U.short_name as unit'
             );
 
-            $query1 = $query->get();  
+            // $query1 = $query->get();  
             // dd($query1);
 
         if (!empty($price_group_id)) {
@@ -2662,6 +2662,7 @@ class ProductUtil extends Util
             
             
         } 
+        
         return $allData;
     }
      // 32*

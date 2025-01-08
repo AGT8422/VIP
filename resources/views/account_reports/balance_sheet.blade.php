@@ -138,7 +138,7 @@
 
                                     <td>
 
-                                        <span id="total_liabilty"><i class="fas fa-sync fa-spin fa-fw"></i></span>
+                                        <span id="total_liabilty" style=";font-family:Arial !important"><i class="fas fa-sync fa-spin fa-fw"></i></span>
 
                                     </td>
 
@@ -162,7 +162,7 @@
 
                                     <td>
 
-                                        <span id="total_assets"><i class="fas fa-sync fa-spin fa-fw"></i></span>
+                                        <span id="total_assets" style=";font-family:Arial !important"><i class="fas fa-sync fa-spin fa-fw"></i></span>
 
                                     </td>
 
@@ -195,7 +195,7 @@
 
                                     <td>
                                         
-                                        <span id="profit_amount" style="text-align: right"><i class="fas fa-sync fa-spin fa-fw"></i></span>
+                                        <span id="profit_amount" style="text-align: right;font-family:Arial !important"><i class="fas fa-sync fa-spin fa-fw"></i></span>
 
                                     </td>
 
@@ -221,7 +221,7 @@
 
                                     <td>
 
-                                        <span id="loss_amount" style="text-align: right"><i class="fas fa-sync fa-spin fa-fw"></i></span>
+                                        <span id="loss_amount" style="text-align: right;font-family:Arial !important"><i class="fas fa-sync fa-spin fa-fw"></i></span>
 
                                     </td>
 
@@ -267,7 +267,7 @@
 
                                         <td>
 
-                                            <span id="close_stock" style="text-align: right"><i class="fas fa-sync fa-spin fa-fw"></i></span>  
+                                            <span id="close_stock" style="text-align: right;font-family:Arial !important"><i class="fas fa-sync fa-spin fa-fw"></i></span>  
 
                                         </td>
 
@@ -297,7 +297,7 @@
 
                                     <td>
 
-                                        <span id="total_l" style="text-align: right"><i class="fas fa-sync fa-spin fa-fw"></i></span>
+                                        <span id="total_l" style="text-align: right ;font-family:Arial !important"><i class="fas fa-sync fa-spin fa-fw"></i></span>
 
                                     </td>
 
@@ -327,7 +327,7 @@
 
                                         <td>
 
-                                            <span id="total_s" style="text-align: right"><i class="fas fa-sync fa-spin fa-fw"></i></span>
+                                            <span id="total_s" style="text-align: right ; font-family:Arial !important"><i class="fas fa-sync fa-spin fa-fw"></i></span>
 
                                         </td>
 

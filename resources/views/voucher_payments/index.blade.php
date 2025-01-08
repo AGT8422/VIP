@@ -106,7 +106,7 @@
                     @endphp
                     {{-- <td>{{ $item->contact?$item->contact->name:'' }}</td> --}}
                     <td>{{$name}}</td>
-                    <td>@format_currency($item->amount)</td>
+                    <td style="font-family: Arial !important">@format_currency($item->amount)</td>
                     @php
                        $payment     = \App\TransactionPayment::where("payment_voucher_id",$item->id)->first();
                        if(!empty($payment)){
@@ -125,7 +125,7 @@
                         }
                     
                     @endphp 
-                    <td>@format_currency($total_bill) 
+                    <td style="font-family: Arial !important">@format_currency($total_bill) 
                         <br>
                         @if(!empty($payment))
                             @if(!empty($transaction))
@@ -167,7 +167,7 @@
                             }
                         } 
                     @endphp
-                    <td>{{\Carbon::createFromFormat($D_format,$item->date)->format(session()->get('business.date_format'))}}</td>
+                    <td style="font-family: Arial !important">{{\Carbon::createFromFormat($D_format,$item->date)->format(session()->get('business.date_format'))}}</td>
                     <td>
                         <div class="btn-group">
                             <button type="button" class="btn btn-info dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">@lang('home.Action')<span class="caret"></span><span class="sr-only">Toggle Dropdown </span></button>

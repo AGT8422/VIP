@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\AccountController;
 use Illuminate\Http\Request;
 use App\Utils\Util;
 use App\Utils\ModuleUtil;
@@ -15,8 +16,9 @@ use App\Models\GournalVoucherItem;
 use DB;
 class GournalVoucherController extends Controller
 {
-    public function __construct(ModuleUtil $moduleUtil, Util $commonUtil, ProductUtil $productUtil, TransactionUtil $transactionUtil)
+    public function __construct(ModuleUtil $moduleUtil, Util $commonUtil, ProductUtil $productUtil, TransactionUtil $transactionUtil, AccountController $accountMainData)
     {
+        $this->accountMainData = $accountMainData;
         $this->moduleUtil = $moduleUtil;
         $this->transactionUtil = $transactionUtil;
         $this->commonUtil  = $commonUtil;
@@ -58,7 +60,25 @@ class GournalVoucherController extends Controller
             $currencies[$i->currency->id] = $i->currency->country . " " . $i->currency->currency . " ( " . $i->currency->code . " )";
         }
         $accounts     =  Account::main('cash',null,'bank');
-        $expenses     =  Account::main('Expenses');
+        $reportSetting = \App\Models\ReportSetting::first();
+        if($reportSetting){
+            $expenses = [];
+            if($reportSetting->expense != null){
+               $all_expenses =  $this->accountMainData->childOfType($reportSetting->expense);
+            }
+            foreach($all_expenses as $ie => $exp_id){
+                $get_expenses = \App\Account::where('account_type_id',$ie)
+                                        ->orWhereHas('account_type',function($query) use($ie){
+                                                $query->where('parent_account_type_id',$ie);
+                                                $query->orWhere('id',$ie);
+                                        })->select(['id','name','account_number'])->get();
+                foreach($get_expenses as $e => $exp)
+                {
+                    $expenses[$exp->id] = $exp->name . " || " . $exp->account_number;
+                }
+            }
+            // $expenses     =  Account::main('Expenses');
+        } 
         $taxes        =  Account::main('Tax Vat 100355364900003');
         $cost_centers =  Account::cost_centers();
         return view('gournal_voucher.add')
@@ -213,7 +233,25 @@ class GournalVoucherController extends Controller
             $currencies[$i->currency->id] = $i->currency->country . " " . $i->currency->currency . " ( " . $i->currency->code . " )";
         }
         $accounts     =  Account::main('cash',null,'bank');
-        $expenses     =  Account::main('Expenses');
+        $reportSetting = \App\Models\ReportSetting::first();
+        if($reportSetting){
+            $expenses = [];
+            if($reportSetting->expense != null){
+               $all_expenses =  $this->accountMainData->childOfType($reportSetting->expense);
+            }
+            foreach($all_expenses as $ie => $exp_id){
+                $get_expenses = \App\Account::where('account_type_id',$ie)
+                                        ->orWhereHas('account_type',function($query) use($ie){
+                                                $query->where('parent_account_type_id',$ie);
+                                                $query->orWhere('id',$ie);
+                                        })->select(['id','name','account_number'])->get();
+                foreach($get_expenses as $e => $exp)
+                {
+                    $expenses[$exp->id] = $exp->name . " || " . $exp->account_number;
+                }
+            }
+            // $expenses     =  Account::main('Expenses');
+        } 
         $taxes        =  Account::main('Tax Vat 100355364900003');
         $data         =  GournalVoucher::find($id);
         $cost_centers =  Account::cost_centers();

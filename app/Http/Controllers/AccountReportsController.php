@@ -180,7 +180,8 @@ class AccountReportsController extends Controller
             }
 
             $date_range   = request()->input('date_range');
-          
+            
+
             $check = 0;
             if (!empty($date_range)) {
                 $date_range_array = explode('~', $date_range);
@@ -198,11 +199,12 @@ class AccountReportsController extends Controller
                 $end_date              = $filters['end_date'];
 
             }
+          
             $reportSetting  =  \App\Models\ReportSetting::select("*")->first();
             
             $purchase_details = $this->transactionUtil->getPurchaseTotals(
                 $business_id,
-                 $start_date,
+                $start_date,
                 $end_date,
                 NULL,
                 $user_id,
@@ -218,6 +220,7 @@ class AccountReportsController extends Controller
                 $user_id,
                 $reportSetting
             );  
+            
             $all             = ($check == 1)?"all":null;
             $account_details = $this->getAccountBalance($business_id,$start_date, $end_date,"others",$all);
             $account_name    = $this->getAccountName($business_id,$start_date, $end_date,"others",$all);

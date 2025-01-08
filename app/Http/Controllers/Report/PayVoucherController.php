@@ -19,29 +19,55 @@ class PayVoucherController extends Controller
     public function index($id,Request $request)
     {
         \App::setlocale('en');
-        $invoice =   PaymentVoucher::find($id);
-        $pattern =   request()->input("patten_id");
-        $entry   =   Entry::where("voucher_id",$id)->first(); 
-       
+        $business_id  =   request()->session()->get('user.business_id');
+        $business     =   \App\Business::find($business_id);
+        $invoice      =   PaymentVoucher::find($id);
+        $pattern      =   request()->input("patten_id");
+        $entry        =   Entry::where("voucher_id",$id)->first(); 
+        
+        $account_id   = $invoice->account_id;
+        $list_of_cash = [$business->cash,$business->bank];
+        $paymentType  = "";
+        foreach($list_of_cash as $i => $aid){
+            $typ_account  = \App\Account::where('account_type_id',$aid)
+                                        ->orWhereHas('account_type',function($query) use($aid){
+                                                $query->where('parent_account_type_id',$aid);
+                                                $query->orWhere('id',$aid);
+                                        })->select(['id','name','account_number'])
+                                        ->pluck('id');
+            $array_accounts = [];
+            foreach($typ_account as $iid){
+                $array_accounts[] = $iid;
+            }
+            if(in_array($account_id,$array_accounts) && $i == 0){
+                $paymentType = "<b>Payment Type : </b> Cash";
+            }elseif(in_array($account_id,$array_accounts) && $i == 1){
+                $paymentType = "<b>Payment Type : </b> Bank Transfer";
+            }else{
+                $paymentType = "";
+                
+            }
+        } 
+        
+
         if ($invoice) {
-            $busines_id =  request()->session()->get('user.business_id');
             if($pattern != null){
-                $layout    =  InvoiceLayout::where('business_id',$busines_id)
+                $layout    =  InvoiceLayout::where('business_id',$business_id)
                                 ->where('is_default',1)->first();
             }else{
-                $layout    =  InvoiceLayout::where('business_id',$busines_id)
+                $layout    =  InvoiceLayout::where('business_id',$business_id)
                                 ->where('is_default',1)->first();
             }
              
-            $allData =  PaymentVoucher::where('business_id',$busines_id)->get();
+            $allData =  PaymentVoucher::where('business_id',$business_id)->get();
             $arr = [
-                'layout' =>$layout,
-                'pattern'=>$pattern,
-                'invoice'=>$invoice,
-                'allData'=>$allData,
-                'entry'  =>$entry
-            ];
-        
+                'layout'       => $layout,
+                'pattern'      => $pattern,
+                'invoice'      => $invoice,
+                'allData'      => $allData,
+                'entry'        => $entry,
+                'paymentType'  => $paymentType
+            ]; 
             $pdf = PDF::loadView('pdf.voucher.P_voucher', $arr);
              
             return $pdf->stream('P_voucher.pdf');

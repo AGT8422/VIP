@@ -124,8 +124,8 @@
                         <td ></td>
                         <td ></td>
                         <td ></td>
-                        <td class="footer_trial_credit"></td>
-                        <td class="footer_trial_debit"></td>
+                        <td class="footer_trial_credit"style="font-family: Arial !important" ></td>
+                        <td class="footer_trial_debit"  style="font-family: Arial !important"></td>
                     </tr>
                 </tfoot>
             </table>
@@ -322,8 +322,8 @@ function print_ledger(){
             { data: 'Main_name'  , name: 'Main_name'   },
             { data: 'sub_name'  , name: 'sub_name'   },
             { data: 'name'  , name: 'name'   },
-            { data: 'credit', name: 'credit' , class: 'am_cur display_currency'  },
-            { data: 'debit' , name: 'debit' , class: 'am_cur display_currency'  },
+            { data: 'credit', name: 'credit' , class: 'am_cur display_currency font_number'  },
+            { data: 'debit' , name: 'debit' , class: 'am_cur display_currency font_number'  },
         ],
         fnDrawCallback: function(oSettings) {
             __currency_convert_recursively($('#trial'));

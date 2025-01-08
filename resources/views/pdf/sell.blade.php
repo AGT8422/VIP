@@ -21,7 +21,7 @@
             $sizes = "100px 25px 100px 25px";
             $bottom_sizes = "100px";
         }else{
-            $sizes = "20px 25px 130px 25px";
+            $sizes = "20px 25px 230px 25px";
             $bottom_sizes = "400px";
         }
     @endphp 
@@ -623,9 +623,9 @@
                             
                         @endif
                         <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:5%;text-align:{{$text_align}};">ITEM &  {{   trans('home.DESCRIPTION') }}</th>
-                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;width:5%;text-align:{{$text_align}};">{{ trans('home.QTY') }}</th> 
-                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{ trans('product.brand') }}</th>
+                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:4%;text-align:{{$text_align}};">{{ trans('product.brand') }}</th>
                         <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:{{$text_align}};">{{ trans('product.model_no') }}</th>
+                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;width:5%;text-align:{{$text_align}};">{{ trans('home.QTY') }}</th> 
                         @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ')
                         {{--  <th style="font-size:10px;font-weight: bold;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('home.PHOTO') }}</th>--}}
                         @else
@@ -686,10 +686,10 @@
                                         
                                     
                                     @endif
-                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ $data->quantity }}</td>
-                                <td style="font-size:{{$font_text}};max-width:5px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ ($data->product->brand)?$data->product->brand->name:"" }}</td>
+                                <td style="font-size:{{$font_text}};max-width:5%;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ ($data->product->brand)?$data->product->brand->name:"" }}</td>
                                 <td style="font-size:{{$font_text}};max-width:5px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ $data->product->sku }}</td>
-                                 
+                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ $data->quantity }}</td>
+                                    
                                 @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ' )
                                    
                                 @else
@@ -720,8 +720,8 @@
                                 
                                
                                 @if($discount!=0)
-                                    <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price_before_discount,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}} </td> 
-                                    <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($discount,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}}  </td> 
+                                    <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price_before_discount,$number_format_digit) }} {{  isset($currency)?"":""}} </td> 
+                                    <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($discount,$number_format_digit) }} {{  isset($currency)?"":""}}  </td> 
                                 @elseif($dis != 0)
                                     <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{0}}</td> 
                                     <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{0}}</td> 
@@ -729,12 +729,12 @@
                                 @php
                                     $vatValue =  ($invoice->tax)?$invoice->tax->amount : 0;
                                 @endphp
-                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}} </td>
+                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price,$number_format_digit) }} {{  isset($currency)?"":""}} </td>
                                 
-                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price*$data->quantity,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}} </td> 
-                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format( ($data->unit_price*$data->quantity * $vatValue/100),$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}}  </td> 
+                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price*$data->quantity,$number_format_digit) }} {{  isset($currency)?"":""}} </td> 
+                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format( ($data->unit_price*$data->quantity * $vatValue/100),$number_format_digit) }} {{  isset($currency)?"":""}}  </td> 
                                  
-                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format((($data->unit_price*$data->quantity * $vatValue/100)+$data->unit_price*$data->quantity),$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}} </td>
+                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format((($data->unit_price*$data->quantity * $vatValue/100)+$data->unit_price*$data->quantity),$number_format_digit) }} {{  isset($currency)?"":""}} </td>
                             
                             </tr>
     
@@ -743,7 +743,7 @@
                 </tbody>
             </table>
         
-            {{-- @if($invoice->sub_status == 'quotation'|| (($invoice->sub_status == 'proforma' && $invoice->status == 'draft' )|| $invoice->status == 'ApprovedQuotation')) --}}
+            @if($invoice->sub_status == 'quotation'|| (($invoice->sub_status == 'proforma' && $invoice->status == 'draft' )|| $invoice->status == 'ApprovedQuotation'))
                 <table class="table" style="width:100%;font-size:11px;Lline-height:10px; margin-top: 10px;font-weight: bold; ">
                     <thead>
                         <tr>
@@ -752,7 +752,7 @@
                         </tr>
                     </thead>
                 </table>
-            {{-- @endif --}}
+            @endif
             
             <table class="table" style=" border:0px solid black;width:100%;font-size:13px;  margin-top: 2px; "  dir="ltr"  dir="ltr" >
                 <tbody >
@@ -762,6 +762,17 @@
                         @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ' )
                             {!! $layout->invoice_text !!} 
                         @endif
+                        <br>
+                        @php 
+                            // $convert           = new Kwn\NumberToWords\NumberToWords();  
+                            // $numberTransformer = $numberToWords->getNumberTransformer('en');
+                            // $words = $numberTransformer->toWords($invoice->final_total);
+                            $f     = new \NumberFormatter("en", \NumberFormatter::SPELLOUT);
+                            $words =  $f->format(number_format( $invoice->final_total,$number_format_digit));
+                        @endphp
+                        <span style="text-transform: capitalize">
+                                <b>{{ __('Total : ')}} </b>   {{$words}} {{  isset($currency)?$currency->symbol:" "}}  
+                        </span>
                         </td>
                         
                         <td style="text-align:left;width:30%;font-weight: bold;">
@@ -899,17 +910,44 @@
                                             
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td colspan="4">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">&nbsp;</td>
+                                </tr>
                             </tbody>
                         </table>
-                        @endif
+                        <table class=" " style="width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px; border-top:1px solid black;margin-top:0px"  dir="ltr" >
+                            <tbody>
+                                <tr>
+                                    <td style="width:50%;font-size:12px">
+                                        Bank Details : <br>
+                                        Account Name: Efficient Line Kitchen & Restaurant Equipment Trading LLC <br>
+                                        OR: Efficient Line Kit & Rest Eq Tr LLC <br>
+                                        Bank Name: Abu Dhabi Commercial Bank, Khaled Bin Waleed, Dubai-UAE <br>
+                                        Currency: AED CID: 10559494 <br>
+                                        Account Number: 1055 9494 124 001 <br>
+                                        IBAN: AE 9600 300 1055 9494 124 001 <br>
+                                        Swift Code: ADCBAEAA <br>
+
+                                    </td> 
+                                    <td style="width:1%">
+                                            
+                                                                                    
+                                    </td>
+                                    <td style="width:49%;text-align:center;font-size:15px">
+                                            
+                                                                                    
+                                            
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        @endif 
                         <br>
-                        <br>
-                        <br>
-                        <br>
-                        
-                    <br>
                     <hr style="background-color: {{$color}};border:1px solid {{$color}};border-radius:10px;">
-                    <p>
+                    <p style="line-height: 1px;margin-top:-4px">
                         {!!  $layout->footer_text !!} 
                     </p>
                 </div>

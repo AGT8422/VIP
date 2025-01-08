@@ -2309,7 +2309,7 @@ class TransactionUtil extends Util
      *
      * @return array
      */
-    public function getPurchaseTotals($business_id, $start_date = null, $end_date = null, $location_id = null, $user_id = null,$reportSetting=null,$loc=null)
+    public function getPurchaseTotals($business_id, $start_date = null, $end_date = null, $location_id = null, $user_id = null,$reportSetting=null,$loc=null,$type=null)
     {
         $purchases = $this->getTotalByType("purchase",$reportSetting,$start_date,$end_date);
         $purchases_shipping = $this->getTotalByType("purchase_shipping",$reportSetting,$start_date,$end_date);
@@ -2367,7 +2367,7 @@ class TransactionUtil extends Util
         $output['total_shipping_charges'] = $purchase_details->total_shipping_charges;
         $output['total_additional_expense'] = ($purchases["total"])?$purchases["total"]->total_amounts:0;;
         $output['accounts'] = $purchases["accounts"];
-        
+       
         return $output;
     }
 
@@ -2379,7 +2379,7 @@ class TransactionUtil extends Util
      *
      * @return array
      */
-    public function getSellTotals($business_id, $start_date = null, $end_date = null, $location_id = null, $created_by = null,$reportSetting=null,$type=null)
+    public function getSellTotals($business_id, $start_date = null, $end_date = null, $location_id = null, $created_by = null,$reportSetting=null,$loc=null,$type=null)
     {
         $sales = $this->getTotalByType("sell",$reportSetting,$start_date,$end_date);
         $sales_shipping = $this->getTotalByType("sell_shipping",$reportSetting,$start_date,$end_date);
@@ -4736,6 +4736,7 @@ class TransactionUtil extends Util
                             "total"=>$ac,
                             "accounts"=>$total,
                         ];
+        
         return $output_array;
 
     }

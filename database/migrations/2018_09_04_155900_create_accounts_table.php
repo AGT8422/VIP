@@ -28,7 +28,7 @@ class CreateAccountsTable extends Migration
             $table->boolean('is_closed')->default(0);
             $table->integer('is_second_curr'); 
             $table->integer('cost_center')->default(0);
-            $table->decimal('balance',22,4);
+            $table->decimal('balance',22,4)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

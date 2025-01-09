@@ -156,7 +156,7 @@ class HomeController extends Controller
             foreach($moves as $move){
                 $delivered             = \App\Models\DeliveredPrevious::find($move->recieve_id);
                 $lineSel               = \App\TransactionSellLine::find($move->line_id);
-                $margin                = $lineSel->quantity-$delivered->current_qty;
+                $margin                = (($lineSel)?$lineSel->quantity:0)-(($delivered)?$delivered->current_qty:0);
                 $amountOfDeliveredSale = $amountOfDeliveredSale + ($move->qty * $move->row_price_inc_exp);   
                 $costOfDeliveredSale   = $costOfDeliveredSale   + ($move->qty * $move->out_price);   
                 if($margin!=0){
@@ -326,7 +326,7 @@ class HomeController extends Controller
                 foreach($moves as $move){
                 $delivered             = \App\Models\DeliveredPrevious::find($move->recieve_id);
                 $lineSel               = \App\TransactionSellLine::find($move->line_id);
-                $margin                = $lineSel->quantity-$delivered->current_qty;
+                $margin                = (($lineSel)?$lineSel->quantity:0)-(($delivered)?$delivered->current_qty:0);
                 $amountOfDeliveredSale = $amountOfDeliveredSale + ($move->qty * $move->row_price_inc_exp);   
                 $costOfDeliveredSale   = $costOfDeliveredSale   + ($move->qty * $move->out_price);   
                 if($margin!=0){

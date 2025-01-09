@@ -67,8 +67,9 @@
 <!-- Main content -->
 <section class="content no-print">
 	{!! Form::open(['url' => action('CombinedPurchaseReturnController@update'), 'method' => 'post', 'id' => 'purchase_return_form', 'files' => true ]) !!}
-	@component("components.widget",["class"=>"box-primary"])
-		<div class=" ">
+	
+		<div class="box-body">
+			@component("components.widget",["class"=>"box-primary"])
 			<div class="box-body">
 				<div class="row">
 					<div class="col-md-4 col-sm-12 col-md-offset-1 col-12" style="background-color:#f7f7f7;padding:10px;border-radius:10px;box-shadow:1px 1px 10px grey;margin:10px 2%;">
@@ -207,9 +208,9 @@
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		@endcomponent
+				@endcomponent
+			
+	 
 		<!--box end-->
 		<div class="box-body">
 			@component("components.widget",["class"=>"box-primary"])
@@ -552,6 +553,8 @@
 				@endcomponent	
 		</div>
 	{!! Form::close() !!}
+</div>
+</div>
 </section>
 <!-- /.content -->
 <!-- quick product modal -->

@@ -185,6 +185,7 @@
 			remain(i,id);
 		});
 		$(document).ready(function(){
+			var contact_id =  $('#contact_id option:selected').val();
 			oTable = 	$('#example').DataTable( {
 								"ajax": "/cheque/bills?contact_id={{ $data->contact_id }}&type="+cheque_type+'&account_id='+contact_id,
 								"pageLength" : -1,

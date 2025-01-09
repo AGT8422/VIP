@@ -695,6 +695,12 @@
 										{!! Form::select('sale_note',  $terms ,null , ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), "id"=>"sale_note"]); !!}
 									</div>
 								</div>
+								<div class="col-md-12">
+									<div class="form-group">
+										{!! Form::label('note',__('sale.note')) !!}
+										{!! Form::textarea('note',  null , ['class' => 'form-control',   "id"=>"note"]); !!}
+									</div>
+								</div>
 								<input type="hidden" name="is_direct_sale" value="1">
 							@endcomponent
 							@component('components.widget', ['class' => 'box-primary hide' ,'title'=>__('sale.payment_section')])

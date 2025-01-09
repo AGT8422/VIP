@@ -591,7 +591,7 @@ class CombinedPurchaseReturnController extends Controller
         }
         
         try {
-            dd($request);
+            // dd($request);
             DB::beginTransaction();
             $input_data     = $request->only([
                             'location_id', 
@@ -730,7 +730,7 @@ class CombinedPurchaseReturnController extends Controller
                             'transaction_id' => $purchase_return_id
                         ]);
                     }
-                    dd($request,$products);
+                    
                     $sub_total_rt_purchase              += ($product['quantity']*$unit_price_after_dis_exc) ;
                     $return_line->store_id               = $request->store_id;
                     $return_line->quantity               = $this->productUtil->num_uf($product['quantity']);

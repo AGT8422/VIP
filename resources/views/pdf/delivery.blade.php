@@ -17,7 +17,7 @@
 
         body{
 
-            background-color: #f7f7f7;
+            background-color: #fff;
 
         }
 
@@ -25,7 +25,7 @@
 
             min-height: 200px;
 
-            background-color: #f7f7f7;
+            background-color: #fff;
 
             margin: 0 auto;
 
@@ -169,20 +169,28 @@
 
 </head>
 
-<body>
+<body> 
+        @php 
+            $date_format    = request()->session()->get('business.date_format');  
+            $company_name   = request()->session()->get("user_main.domain"); 
+            // $currency       = \App\Currency::find($invoice->currency_id); 
+            $mainCurrency   = \App\Models\ExchangeRate::where('source',1)->first();  
+            // $symbol         = ($mainCurrency)?(\App\Currency::find($mainCurrency->currency_id)?\App\Currency::find($mainCurrency->currency_id):null):null;
+            $business_color = '#b0906c';
+        @endphp
 
     <div class="bill"  >
 
-        <table style="width: 100%;margin-bottom:5px;border-bottom:2px solid #8e0f82">
+        <table style="width: 100%;margin-bottom:5px;border-bottom:2px solid {{$business_color}}">
             <tbody>
                 <tr>
                    <td>
-                    <img src="http://order-uae.com/assets/dana.jpeg"   style="max-width: 300px ">
+                    <img src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}"   style="max-width: 300px ">
                    </td>
                   
                    <td style="text-align: right;
                             line-height:15px;font-size:12px;
-                        "> @if($layout) {!! $layout->delivery_text !!} @endif</td>
+                        "> @if($layout) {!! $layout->header_text !!} @endif</td>
                 </tr>
             </tbody>
         </table>
@@ -258,7 +266,7 @@
 
        <!--  -->
 
-        <table class="table" style="width:100%;margin-top: 30px;text-align:left;border: 1px solid;"  dir="ltr" >
+        <table class="table" style="width:100%;margin-top: 30px;text-align:left;border: 0px solid;"  dir="ltr" >
             <thead >
 
                 <tr>
@@ -271,10 +279,10 @@
                     <!--<th style="font-size:12px;font-weight: bold;background-color:#000;color:#fff">Unit Cost Inc.vat	</th> -->
                     <!--<th style="font-size:12px;font-weight: bold;background-color:#000;color:#fff">Subtotal	</th> -->
                     
-                    <th style="font-size:12px;font-weight: bold;background-color:#d31084 !important;color:#fff;width:10%">{{ trans('home.NO') }}</th>
-                    <th style="font-size:12px;font-weight: bold;background-color:#d31084 !important;color:#fff;width:70%">{{ trans('home.DESCRIPTION') }}</th>
-                    {{-- <th style="font-size:12px;font-weight: bold;background-color:#d31084 !important;color:#fff;width:10%">{{ trans('purchase.qty_total') }}</th>  --}}
-                    <th style="font-size:12px;font-weight: bold;background-color:#d31084 !important;color:#fff;width:10%">{{ trans('purchase.qty_total') }}</th> 
+                    <th style="font-size:12px;font-weight: bold;background-color:{{$business_color}} !important;color:#fff;width:10%">{{ trans('home.NO') }}</th>
+                    <th style="font-size:12px;font-weight: bold;background-color:{{$business_color}} !important;color:#fff;width:70%">{{ trans('home.DESCRIPTION') }}</th>
+                    {{-- <th style="font-size:12px;font-weight: bold;background-color:{{$business_color}} !important;color:#fff;width:10%">{{ trans('purchase.qty_total') }}</th>  --}}
+                    <th style="font-size:12px;font-weight: bold;background-color:{{$business_color}} !important;color:#fff;width:10%">{{ trans('purchase.qty_total') }}</th> 
                     	
                     
                 </tr>

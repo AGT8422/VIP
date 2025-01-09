@@ -229,7 +229,7 @@
                 <tr>
                    <td style="width:70%;font-size:14px;">
                       <p>
-                        <span style="margin-bottom: 15px;color:#b0906c">{{ trans('SUPPLIER DETAILS') }} : </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@if($invoice->contact->first_name){{ $invoice->contact->first_name    }}@endif<br> 
+                        <span style="margin-bottom: 15px;color:#b0906c">{{ trans('SUPPLIER DETAILS') }} : </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@if($invoice->contact->first_name){{ $invoice->contact->first_name  }} @else @if($invoice->contact->name){{$invoice->contact->name . " "}} @endif @endif<br> 
                         @if($invoice->contact->address_line_1)<span style="margin-bottom: 15px;color:#fff">{{ trans('SUPPLIER DETAILS') }} : </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@if($invoice->contact->prefix){{$invoice->contact->prefix . " "}} @endif @if($invoice->contact->supplier_business_name){{$invoice->contact->supplier_business_name . " "  }}@endif @if($invoice->contact->middle_name){{ $invoice->contact->middle_name . " " }}@endif @if($invoice->contact->last_name){{ $invoice->contact->last_name    }}@endif <br> @endif
                         @if($invoice->contact->mobile|| $invoice->contact->alternate_number || $invoice->contact->landline)<span style="margin-bottom: 15px;color:#fff">{{ trans('SUPPLIER DETAILS') }} : </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@if($invoice->contact->mobile ){{   $invoice->contact->mobile  }}@endif  @if($invoice->contact->alternate_number ){{ ($invoice->contact->mobile)?" - ":" "  }}{{   $invoice->contact->alternate_number  }}@endif  @if($invoice->contact->landline ) {{ ($invoice->contact->alternate_number ||$invoice->contact->mobile )?" - ":" "  }}{{   $invoice->contact->landline  }}@endif <br> @endif
                         @if($invoice->contact->email)<span style="margin-bottom: 15px;color:#fff">{{ trans('SUPPLIER DETAILS') }} : </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ ( $invoice->contact)? $invoice->contact->email:' ' }} <br>@endif
@@ -353,7 +353,7 @@
             <tbody >
                 <tr style="width:100% " >
                     
-                    <td style="text-align:left;width:40%;font-size:3px ">
+                    <td style="text-align:left;width:70%;font-size:3px ">
                          <b>{!! $layout->purchase_footer !!} </b> 
                      </td>
                     

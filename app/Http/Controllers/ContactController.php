@@ -1390,10 +1390,13 @@ class ContactController extends Controller
         $array_change                = [];
         $array_number_change         = [];
         foreach($contact as $it){
-            if(!in_array($it->first_name,$array_first_name)){   
-                array_push($array_first_name,$it->first_name);
-            }else{ 
-                array_push($array_first_name_repeat,["id"=>$it->id ,"first_name"=>$it->first_name,"name"=>$it->name,"contact_id"=>$it->contact_id]);
+            if($it->first_name != null || $it->first_name != ""){
+
+                if(!in_array($it->first_name,$array_first_name)){   
+                    array_push($array_first_name,$it->first_name);
+                }else{ 
+                    array_push($array_first_name_repeat,["id"=>$it->id ,"first_name"=>$it->first_name,"name"=>$it->name,"contact_id"=>$it->contact_id]);
+                }
             }
             if(!in_array($it->name,$array_name)){   
                 array_push($array_name,$it->name);

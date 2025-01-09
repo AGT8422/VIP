@@ -21,7 +21,7 @@
             $sizes = "100px 25px 100px 25px";
             $bottom_sizes = "100px";
         }else{
-            $sizes = "20px 25px 230px 25px";
+            $sizes = "20px 25px 100px 25px";
             $bottom_sizes = "400px";
         }
     @endphp 
@@ -266,7 +266,7 @@
         }
         footer {
             position: fixed;
-            bottom: -60px;
+            bottom: -130px;
             left: 0px;
             right: 0px;
             height: 100px;
@@ -279,18 +279,18 @@
             margin-top: 00px;
             margin-bottom: {{ $bottom_sizes }};
         }
-   
+
     </style>
 
 </head>
 
 <body >
-    @php $company_name = request()->session()->get("user_main.domain");  @endphp
+    @php $company_name = request()->session()->get("user_main.domain"); $brand_check = 0; @endphp
 
     <!--<header>-->
     <!--    Fixed Header Content-->
     <!--</header>-->
-    @if($invoice->sub_status == 'quotation')        
+    {{-- @if($invoice->sub_status == 'quotation')         --}}
         <footer>
                 @php
                     $trm = \App\Models\QuatationTerm::where("id",$invoice->additional_notes)->first();
@@ -326,33 +326,15 @@
                         
                     </table>
                 @else
-                    <table class=" " style="position:relative; top:-100px;width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px; border:0px solid black; "  dir="ltr" >
-                        <tbody>
-                            <tr>
-                                <td style="width:49%;font-size:15px">
-                                        
-                                            {{ " Customer Signature : " }}                                         
-                                        
-                                </td>
-                                <td style="width:1%">
-                                        
-                                                                                
-                                </td>
-                                <td style="width:1%">
-                                        
-                                                                                
-                                </td>
-                                <td style="width:49%;text-align:center;font-size:15px">
-                                        
-                                            {{ " Authorize Signature : " }}                                         
-                                        
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>  
-                @endif
+ 
+                    <hr style="background-color: {{$color}};border:1px solid {{$color}};border-radius:10px;">
+                    <p style="line-height: 1px;margin-top:-4px">
+                        {!!  $layout->footer_text !!} 
+                    </p> 
+                @endif 
+              
         </footer>
-    @endif
+    {{-- @endif --}}
     
     <div class="bill ">
             @php $business = \App\Business::find($invoice->business_id); $currency = \App\Currency::find($business->currency_id); @endphp
@@ -399,8 +381,8 @@
                                  
                                 <h3 style=" font-size:{{$font_table_bill_text}} !important;">{{ 'CUSTOMER INFORMATION ' }}</h3>
                                 <p>
-                                    {{ trans('home.Company Name')  }}  : 
-                                    {{ $invoice->contact?$invoice->contact->name:' ' }}
+                                    {{ trans('home.Company Name')  }}  : <span style="word-break: break-all:position:relative;line-height:12px;">{{ $invoice->contact?$invoice->contact->name:' ' }} </span>
+                                    
                                 </p>
                             
                                 <p >
@@ -456,11 +438,19 @@
                                      
                                     </p>
                                     <p>
-                                         
+                                        
                                         @php $user =  \App\User::find($invoice->created_by); @endphp
                                         Prepared by : {{  ($user)?$user->first_name:"" }}
-                                     
+                                        
                                     </p>
+                                    @php $note =   $invoice->note ; @endphp
+                                    @if($note != null || $note != "")
+                                    <p >
+                                            
+                                        {{__('sale.note') }}:  <span style="word-break: break-all:position:relative;line-height:12px;">{!! $note !!} </span>
+                                    
+                                    </p>
+                                    @endif
                                       
                                     
                                     <p>&nbsp;</p>
@@ -513,8 +503,7 @@
                        
                             <p>
                                  
-                                {{ trans('home.Company Name')  }}  : 
-                                {{ $invoice->contact? $invoice->contact->name  :' ' }}
+                                {{ trans('home.Company Name')  }}  : <span style="word-break: break-all:position:relative;line-height:12px;">{{ $invoice->contact?$invoice->contact->name:' ' }} </span>
                                 
                             </p>
                             
@@ -589,7 +578,15 @@
                                         Sales Rep : {{ $it }}
                                      
                                     </p>
-                                    <p>
+                                    @php $note =   $invoice->note ; @endphp
+                                    @if($note != null || $note != "")
+                                    <p  >
+                                            
+                                        {{__('sale.note') }}:  <span style="word-break: break-all:position:relative;line-height:12px;">{!! $note !!} </span>
+                                    
+                                    </p>
+                                    @endif
+                                    <p style="visibility: hidden">
                                          AMOUNT DUE :{{ number_format($invoice->final_total,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}}  
                                          
                                     </p>      
@@ -616,14 +613,18 @@
                     <tr>
                         <th style="font-size:{{$font_text}};max-width:20px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black; text-align:{{$text_align}};">{{ trans('home.NO') }}</th>
                         @php $se = 0; @endphp
-                        @foreach($allData as $data) @if( $data->se_note != null && $data->se_note !="")    @php $se = 1; @endphp @endif  @endforeach
+                        @foreach($allData as $data) @if( $data->se_note != null && $data->se_note !="")    @php $se = 1; @endphp @endif @if( $data->product->brand != null &&$data->product->brand !="")    @php $brand_check = 1; @endphp @endif  @endforeach
                         @if($se != 0)    
                             <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{ trans('home.SE') }}</th>
                         @else
                             
                         @endif
                         <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:5%;text-align:{{$text_align}};">ITEM &  {{   trans('home.DESCRIPTION') }}</th>
-                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:4%;text-align:{{$text_align}};">{{ trans('product.brand') }}</th>
+                        @if($brand_check != 0)    
+                            <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:4%;text-align:{{$text_align}};">{{ trans('product.brand') }}</th>
+                        @else
+                            
+                        @endif
                         <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:{{$text_align}};">{{ trans('product.model_no') }}</th>
                         <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;width:5%;text-align:{{$text_align}};">{{ trans('home.QTY') }}</th> 
                         @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ')
@@ -686,7 +687,11 @@
                                         
                                     
                                     @endif
-                                <td style="font-size:{{$font_text}};max-width:5%;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ ($data->product->brand)?$data->product->brand->name:"" }}</td>
+                                    @if($brand_check != 0)    
+                                        <td style="font-size:{{$font_text}};max-width:5%;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ ($data->product->brand)?$data->product->brand->name:"" }}</td>
+                                    @else
+                                        
+                                    @endif
                                 <td style="font-size:{{$font_text}};max-width:5px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ $data->product->sku }}</td>
                                 <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ $data->quantity }}</td>
                                     
@@ -768,7 +773,7 @@
                             // $numberTransformer = $numberToWords->getNumberTransformer('en');
                             // $words = $numberTransformer->toWords($invoice->final_total);
                             $f     = new \NumberFormatter("en", \NumberFormatter::SPELLOUT);
-                            $words =  $f->format(number_format( $invoice->final_total,$number_format_digit));
+                            $words =  $f->format(round($invoice->final_total,$number_format_digit));
                         @endphp
                         <span style="text-transform: capitalize">
                                 <b>{{ __('Total : ')}} </b>   {{$words}} {{  isset($currency)?$currency->symbol:" "}}  
@@ -832,7 +837,56 @@
                     </tr>
                 </tbody>
             </table>
+            <table class=" " style="position:relative; top:-30px;width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px;margin-top:50px; border:0px solid black; "  dir="ltr" >
+                <tbody>
+                    <tr>
+                        <td style="width:49%;font-size:15px">
+                                
+                                    {{ " Customer Signature : " }}                                         
+                                
+                        </td>
+                        <td style="width:1%">
+                                
+                                                                        
+                        </td>
+                        <td style="width:1%">
+                                
+                                                                        
+                        </td>
+                        <td style="width:49%;text-align:center;font-size:15px">
+                                
+                                    {{ " Authorize Signature : " }}                                         
+                                
+                        </td>
+                    </tr>
+                </tbody>
+            </table> 
+            <table class=" " style="width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px; border-top:1px solid black;margin-top:0px"  dir="ltr" >
+                <tbody>
+                    <tr>
+                        <td style="width:50%;font-size:12px">
+                            Bank Details : <br>
+                            Account Name: Efficient Line Kitchen & Restaurant Equipment Trading LLC <br>
+                            OR: Efficient Line Kit & Rest Eq Tr LLC <br>
+                            Bank Name: Abu Dhabi Commercial Bank, Khaled Bin Waleed, Dubai-UAE <br>
+                            Currency: AED CID: 10559494 <br>
+                            Account Number: 1055 9494 124 001 <br>
+                            IBAN: AE 9600 300 1055 9494 124 001 <br>
+                            Swift Code: ADCBAEAA <br>
 
+                        </td> 
+                        <td style="width:1%">
+                                
+                                                                        
+                        </td>
+                        <td style="width:49%;text-align:center;font-size:15px">
+                                
+                                                                        
+                                
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
             @php
                 $trm = \App\Models\QuatationTerm::where("id",$invoice->additional_notes)->first();
             @endphp
@@ -852,7 +906,7 @@
                 @endif
                  
             @else
-                <div class="footer">
+                <div class="footer" style="display:none;">
                     @php
                         $trm = \App\Models\QuatationTerm::where("id",$invoice->additional_notes)->first();
                     @endphp
@@ -888,7 +942,7 @@
                             
                         </table>
                     @else
-                        <table class=" " style="width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px; border:0px solid black;margin-top:0px"  dir="ltr" >
+                        <table class=" " style="display:none;width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px; border:0px solid black;margin-top:0px"  dir="ltr" >
                             <tbody>
                                 <tr>
                                     <td style="width:49%;font-size:15px">
@@ -918,7 +972,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <table class=" " style="width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px; border-top:1px solid black;margin-top:0px"  dir="ltr" >
+                        <table class=" " style="display:none;width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px; border-top:1px solid black;margin-top:0px"  dir="ltr" >
                             <tbody>
                                 <tr>
                                     <td style="width:50%;font-size:12px">
@@ -946,8 +1000,8 @@
                         </table>
                         @endif 
                         <br>
-                    <hr style="background-color: {{$color}};border:1px solid {{$color}};border-radius:10px;">
-                    <p style="line-height: 1px;margin-top:-4px">
+                    <hr style="display:none;background-color: {{$color}};border:1px solid {{$color}};border-radius:10px;">
+                    <p style="display:none;line-height: 1px;margin-top:-4px">
                         {!!  $layout->footer_text !!} 
                     </p>
                 </div>

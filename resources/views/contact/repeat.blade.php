@@ -58,18 +58,8 @@
                     <table>
                         <tbody>
                             @foreach($list as $key => $value)
-                            @php if( $value["enable"] != 0){ $list_minus[] = [ "qty" =>$value["Qty"] , "code" => $value["Sku"] ];}  @endphp
-                            <tr>
-                                <td>
-                                      <b>{{$value["Qty"]}}</b>        <br>
-                                </td>
-                                <td>
-                                     <b>{{$value["Sku"]}}</b>  <br>
-                                </td>
-                                <td>
-                                      <b>{{$value["Product"]}}</b>  <br>
-                                </td>
-                            </tr> 
+                            @php if( $value["enable"] != 0){ $list_minus[] = [ "qty" =>$value["Qty"] , "code" => $value["Sku"] , "name" => $value["Product"] ];}  @endphp
+                             
                             @endforeach
                         </tbody>
                     </table>
@@ -84,13 +74,14 @@
                             @endphp
                             @foreach($list_minus as $s => $v)
                                 @php
+                                   
                                    $Product         =  \App\Product::where("sku",$v["code"])->where("name",$v["name"])->first();
                                    $ItemMove        =  \App\Models\ItemMove::where("product_id",$Product->id)->orderBy("date","desc")->orderBy("id","desc")->first();
                                    $sum             =  \App\Models\WarehouseInfo::where("product_id",$Product->id)->sum("product_qty");
                                    $warehouse_plus  =  \App\MovementWarehouse::where("product_id",$Product->id)->sum("plus_qty");
                                    $warehouse_minus =  \App\MovementWarehouse::where("product_id",$Product->id)->sum("minus_qty");
                                 @endphp
-                                @if(round($v["qty"],2) != round($sum,2)  || round($v["qty"],2) != (round($warehouse_plus,2) - round($warehouse_minus,2)) || round($sum,2)   != (round($warehouse_plus,2) - round($warehouse_minus,2)))
+                                @if(round($v["qty"],2) != round($sum,2)  || round($v["qty"],2) != round((round($warehouse_plus,2) - round($warehouse_minus,2)),2) || round($sum,2)   != round((round($warehouse_plus,2) - round($warehouse_minus,2)),2))
                                      @php
                                      $ies++;
                                      @endphp
@@ -115,7 +106,7 @@
                                               {{"  Stock  "}}
                                         </td>
                                         <td style="width:200px">
-                                              <b>{{ "  **  ".  ($warehouse_plus - $warehouse_minus) . "  ** "}}</b>   <br>
+                                              <b>{{ "  **  ".  (round((round($warehouse_plus,2) - round($warehouse_minus,2)),2)) . "  ** "}}</b>   <br>
                                                {{"  Store  "}}
                                         </td>
                                         

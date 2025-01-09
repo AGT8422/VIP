@@ -72,7 +72,7 @@ return [
     'amount' => 'Amount',
     'payment_mode' => 'Payment mode',
     'payment_note' => 'Payment note',
-    'sell_note' => 'Sale note',
+    'sell_note' => 'Terms & And Conditions',
     'staff_note' => 'Staff note',
     'draft_updated' => 'Draft updated successfully',
     'pos_sale_updated' => 'Sale updated successfully',
@@ -127,6 +127,7 @@ return [
     "search_section"=>"Search Section",
     "footer_section"=>"Footer Section",
     "payment_section"=>"Payment Section",
+    "note"=>"Reference Note",
 
 
 

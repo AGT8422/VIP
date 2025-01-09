@@ -30,7 +30,7 @@
 			</section>
 		<!-- /.header -->
 		<!-- Main content -->
-			<section class="content" style="margin:0px 5%">
+			<section class="content" >
 		        <input type="hidden" id="type_of_sell" value="{{$title}}">
 				<input type="hidden" id="amount_rounding_method" value="{{$pos_settings['amount_rounding_method'] ?? ''}}">
 				<input type="hidden" id="amount_rounding_method" value="{{$pos_settings['amount_rounding_method'] ?? 'none'}}">
@@ -688,6 +688,12 @@
 											<div class="form-group">
 												{!! Form::label('sell_note',__('sale.sell_note')) !!}
 												{!! Form::select('sale_note',  $terms ,$transaction->additional_notes , ['class' => 'form-control select2','placeholder' => __('messages.please_select'),  "id"=>"sale_note"]); !!}
+											</div>
+										</div>
+										<div class="col-md-12">
+											<div class="form-group">
+												{!! Form::label('note',__('sale.note')) !!}
+												{!! Form::textarea('note',  $transaction->note  , ['class' => 'form-control',   "id"=>"note"]); !!}
 											</div>
 										</div>
 									<input type="hidden" name="is_direct_sale" value="1">

@@ -208,7 +208,14 @@
 </head>
 
 <body>
-    @php  $company_name = request()->session()->get("user_main.domain");  $currency = \App\Currency::find($invoice->currency_id); $mainCurrency = \App\Models\ExchangeRate::where('source',1)->first();  $symbol = ($mainCurrency)?(\App\Currency::find($mainCurrency->currency_id)?\App\Currency::find($mainCurrency->currency_id):null):null; @endphp
+    @php  
+        $date_format        = request()->session()->get('business.date_format');  
+        $company_name       = request()->session()->get("user_main.domain");  
+        $currency           = \App\Currency::find($invoice->currency_id); 
+        $mainCurrency       = \App\Models\ExchangeRate::where('source',1)->first();  
+        $symbol             = ($mainCurrency)?(\App\Currency::find($mainCurrency->currency_id)?\App\Currency::find($mainCurrency->currency_id):null):null; 
+        $business_color     = '#b0906c';
+    @endphp
 
     <div class="bill"  >
         <table style="width: 100%;margin-bottom:5px;  padding-bottom:25px">
@@ -217,7 +224,7 @@
                     <td class=" " style="border:0px solid grey;  border-radius: 5px 10px 15px 20px;">
                         {{-- <img src="{{asset("../../../uploads/img/danal.png")}}"     style=" padding:10px;max-width: 300px;height:350px;border-bottom:2px solid #b0906c;border-radius:10px"> --}}
                         @if(!empty(Session::get('business.logo')))
-                            <img style=" padding:10px;max-width: 300px;height:350px;border-bottom:2px solid #b0906c;border-radius:10px" src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
+                            <img style=" padding:10px;max-width: 300px;height:350px;border-bottom:2px solid {{$business_color}};border-radius:10px" src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
                         @endif
                     </td>
                     <td style="text-align: right; width:400px;padding:10px;
@@ -233,7 +240,7 @@
             <span class="references">( {{$invoice->ref_no}}  . {{"/"}} .  {{isset($entry)?$entry->refe_no_e:""}} )</span>
         </div>
         <div class="date_voucher">
-            <b> @lang("lang_v1.date") : </b>{{$invoice->created_at->format("Y-m-d")}} 
+            <b> @lang("lang_v1.date") : </b>{{\Carbon::parse($invoice->date)->format($date_format)}} 
         </div>
      
         @php $payment  = \App\TransactionPayment::where("payment_voucher_id",$invoice->id)->first(); @endphp
@@ -265,10 +272,23 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;<b>- Amount :</b> <span>@if($invoice->currency_id != null ) {{number_format($invoice->currency_amount,config('constants.currency_precision')) . " " }} {{  isset($currency)?$currency->symbol:""}}  @else @format_currency($invoice->amount) @endif</span> <br>
                 &nbsp;&nbsp;&nbsp;&nbsp;<b>- Description :</b> <span>{{$invoice->text}}</span> <br>
                 @if(!empty($payment))
-                    &nbsp;&nbsp;&nbsp;&nbsp;<b>- For Invoice :</b> <span>{{(!empty($payment))?$trans->ref_no:"0"}}</span> <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<b>- Invoice Ref:</b> 
+                <span>
+                    @if(!empty($payment))
+                        @if(!empty($trans))
+                            @if($trans->type == "sale")
+                                 {{$trans->invoice_no}}
+                                 
+                            @elseif($trans->type == "purchase")
+                                {{$trans->ref_no}}
+                            @endif
+                        @endif
+                    @endif 
+                </span> <br>
+                {{-- &nbsp;&nbsp;&nbsp;&nbsp;<b>- For Invoice :</b> <span>{{(!empty($payment))?$trans->ref_no:"0"}}</span> <br> --}}
                     &nbsp;&nbsp;&nbsp;&nbsp;<b>- invoice balance :</b> <span>@format_currency($trans->final_total - $payment->amount )</span> <br>
                 @endif
-                &nbsp;&nbsp;&nbsp;&nbsp; {!! $paymentType !!}    <br> 
+                &nbsp;&nbsp;&nbsp;&nbsp;<b>-</b> {!! $paymentType !!}    <br> 
                 
             </div>
                      
@@ -276,7 +296,7 @@
                     
             
             <div class="row   final " style="text-align: right">
-                <b>Final Balance : </b>
+                <b>Final Amount : </b>
                 @php
                 // $account = \App\Account::where("contact_id",$invoice->contact->id)->first();
                 // $Atr     = \App\AccountTransaction::where("account_id",$account->id)->select("amount");
@@ -337,21 +357,22 @@
                     }
                 @endphp
                 
-                <span >@format_currency($price)  {{$type}}</span><br>
+                {{-- <span >@format_currency($price)  {{$type}}</span><br> --}}
+                <span >@if($invoice->currency_id != null ) {{number_format($invoice->currency_amount,config('constants.currency_precision')) . " " }} {{  isset($currency)?$currency->symbol:""}}  @else @format_currency($invoice->amount) @endif</span><br>
                 @php 
                     // $convert           = new Kwn\NumberToWords\NumberToWords();  
                     // $numberTransformer = $numberToWords->getNumberTransformer('en');
                     // $words = $numberTransformer->toWords($invoice->final_total);
                     $f     = new \NumberFormatter("en", \NumberFormatter::SPELLOUT);
-                    $words =  $f->format($price);
-                @endphp
+                    $words =  ($invoice->currency_id != null )? $f->format($invoice->currency_amount)  :  $f->format($invoice->amount);
+                 @endphp
                 <span style="text-transform: capitalize">
                         <b>{{ __('Total : ')}} </b>   {{$words}}  <span style="text-transform: uppercase">{{   isset($symbol )?$symbol->symbol:" "}} </span> 
                 </span> 
             </div>
             
             
-             <div style="border-bottom:2px solid #b0906c">&nbsp;</div>
+             <div style="border-bottom:2px solid {{$business_color}}">&nbsp;</div>
             <div>&nbsp;</div>
         
             <div style="font-size: 12px; text-align:left">

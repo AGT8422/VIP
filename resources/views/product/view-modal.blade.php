@@ -119,7 +119,8 @@
 	      		</div>
       			<div class="col-sm-3 col-md-3 invoice-col">
       				<div class="thumbnail">
-      					<img src="{{$product->image_url}}" alt="Product image">
+						 
+      					<img @if($product->image_url) src="{{$product->image_url}}" @else src="https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwAAAA?rs=1&pid=ImgDetMain" @endif alt="Product image">
       				</div>
 					<br>
 				    @php $vedi = json_decode($product->product_vedio)  ; $vedio = ""; @endphp
@@ -144,9 +145,11 @@
     					@endforeach
     					
 					@endforeach
-					        <div class="img-thumbnail" style="border:0px solid black">
-    							<img src="{{$product->image_url}}" width="50" height="50" alt="Product image">
-    						</div>
+					@if($product->image_url)
+					<div class="img-thumbnail" style="border:0px solid black">
+						<img @if($product->image_url) src="{{$product->image_url}}" @else src="https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwAAAA?rs=1&pid=ImgDetMain" @endif width="50" height="50" alt="Product image">
+					</div>
+					@endif
 				
       			</div>
       		</div>

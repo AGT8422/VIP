@@ -563,7 +563,13 @@
 
 @endsection
 
-
+@php    
+    $layout         = \App\InvoiceLayout::where('business_id',request()->session()->get("business.id"))->where('is_default',1)->first();
+    $company_name   = request()->session()->get("user_main.domain");
+    $business_color = "#b0906c";
+    $header_text    = (!empty($layout))?$layout->header_text:"";
+    $img_url        = 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo');
+@endphp
 
 @section('javascript')
 
@@ -619,7 +625,7 @@
 
         printWindow.document.write( '<table style="width:100%; ; font-weight:bold;"><tr >' );
 
-        printWindow.document.write( '<td style="width:30%; border:0px solid black;text-align:left"><img src="{{asset("../../../uploads/img/ledger.png")}}"   style="max-width: 400px;height:100px"> </td>');
+        printWindow.document.write( '<td style="width:30%; border:0px solid black;text-align:left"><img src="{{ asset( $img_url ) }}"   style="max-width: 400px;height:100px"> </td>');
 
         printWindow.document.write( '<td style="width:30%;font-size:19px; border:0px solid black;text-align:left"><br><br>General Ledger</td>' );
 
@@ -631,9 +637,9 @@
 
         printWindow.document.write( '<td style="width:0%; border:0px solid black;text-align:left"></td>' );
 
-        printWindow.document.write( '<td style="width:35%; border:0px solid black;text-align:right"><span style="font-size:17px"><b>TAX No:</b> 100355364900003</span><br><span style="font-size:17px"> <b>P.O. Box:</b> 95659, Dubai, UAE </span><br><span style="font-size:17px"><b> Email:</b> info@dikitchen.ae </span><br><span style="font-size:17px"><b>Website:</b> www.dikitchen.ae </span><br><span style="font-size:13px"><b>Dubai:</b> (04)2520680 &nbsp;<b>Abu Dubai:</b> (02)2460163</span> <br><span style="font-size:13px"><b>Sharijah:</b> (06)5444595&nbsp;<b> Factory:</b> (06)7444305</span>');
+        printWindow.document.write( '<td style="width:35%; border:0px solid black;text-align:right"><span style="font-size:17px">{!!$header_text!!}</span>');
 
-        printWindow.document.write( '</td></tr></table ><table style="width:100%;border-top:3px solid #8e0f82;padding-top:10px;"><tr><td><b> Account name : <span> '+printContainer2.html()+'</span></b><br><b> Balance: '+printContainer1.html()+'</b><br><b>Opening Balance: '+printContainer3.val()+'</b><br><b> Date: '+transaction_date_range.val()+'</b></td></tr></table>' );
+        printWindow.document.write( '</td></tr></table ><table style="width:100%;border-top:3px solid {{$business_color}};padding-top:10px;"><tr><td><b> Account name : <span> '+printContainer2.html()+'</span></b><br><b> Balance: '+printContainer1.html()+'</b><br><b>Opening Balance: '+printContainer3.val()+'</b><br><b> Date: '+transaction_date_range.val()+'</b></td></tr></table>' );
 
         printWindow.document.write( '<table  >'+printContainer.html()+'</table>');
 

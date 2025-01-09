@@ -114,6 +114,7 @@ class TransactionUtil extends Util
             'recur_repetitions' => !empty($input['recur_repetitions']) ? $input['recur_repetitions'] : 0,
             'order_addresses' => !empty($input['order_addresses']) ? $input['order_addresses'] : null,
             'sub_type' => !empty($input['sub_type']) ? $input['sub_type'] : null,
+            'note'     => !empty($input['note']) ? $input['note'] : null,
             'rp_earned' => $input['status'] == 'final' ? $this->calculateRewardPoints($business_id, $final_total) : 0,
             'rp_redeemed' => !empty($input['rp_redeemed']) ? $input['rp_redeemed'] : 0,
             'rp_redeemed_amount' => !empty($input['rp_redeemed_amount']) ? $input['rp_redeemed_amount'] : 0,
@@ -257,6 +258,7 @@ class TransactionUtil extends Util
             'prefer_payment_account' => !empty($input['prefer_payment_account']) ? $input['prefer_payment_account'] : null,
             'is_export' => !empty($input['is_export']) ? 1 : 0,
             'export_custom_fields_info' => (!empty($input['is_export']) && !empty($input['export_custom_fields_info'])) ? $input['export_custom_fields_info'] : null
+            ,'note' => (!empty($input['note']) ) ? $input['note'] : null 
             ,'refe_no' => (!empty($input['refe_no']) ) ? $input['refe_no'] : null 
             ,'project_no' => (!empty($input['project_no'])) ? $input['project_no'] : null 
             ,'pattern_id' => (!empty($input['pattern_id'])) ? $input['pattern_id'] : null

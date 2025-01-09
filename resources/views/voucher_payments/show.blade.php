@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-xl font_text" role="document">
+<div class="modal-dialog modal-xl font_text" @if(count($payment)>0) style="width:60%" @else style="width:40%" @endif role="document">
 	<div class="modal-content">
       <div class="modal-header">
          <button type="button" class="close no-print" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -6,6 +6,7 @@
          </h4>
      </div>
       @php
+         $line_height = "12px";
          $dt =  date('d/m/Y',strtotime($data->created_at));
          $formats = [
             'Y-m-d',       // 2024-12-25
@@ -31,45 +32,42 @@
       @endphp
 		<div class="modal-body">
          <div class="col-sm-12">
+
             <p class="pull-right"><b>@lang('home.Date'):</b> {{\Carbon::createFromFormat($D_format,date('d/m/Y',strtotime($data->created_at)))->format(session()->get('business.date_format'))}}</p>
-            
-            
          </div>
         
          <div class="row invoice-info font_number">
             <div class="col-sm-4 invoice-col">
                @if($data->transaction)
-               <b>@lang('home.Transaction'):</b> #<button type="button" class="btn btn-link btn-modal"
-               data-href="{{action('PurchaseController@show', [$data->transaction_id])}}" data-container=".view_modal">{{ $data->transaction->ref_no }}</button><br />
+                  <b>@lang('home.Transaction'):</b> #<button type="button" class="btn btn-link btn-modal"
+                  data-href="{{action('PurchaseController@show', [$data->transaction_id])}}" data-container=".view_modal">{{ $data->transaction->ref_no }}</button><br/>
                @endif
-               {{ trans('home.Contact') }}: 
-               
                @php 
-                     if($data->account_type == 0){
-                           $account = \App\Account::where("contact_id",$data->contact_id)->first();
-                           if($account){
-                           $name = $account->name; 
-                           }else{
-                              $name = "--"; 
-                           }
-                     }else{
-                           $account = \App\Account::where("id",$data->contact_id)->first();
-                           if($account){
-                           $name = $account->name; 
-                           }else{
+                  if($data->account_type == 0){
+                        $account = \App\Account::where("contact_id",$data->contact_id)->first();
+                        if($account){
+                        $name = $account->name; 
+                        }else{
                            $name = "--"; 
-                           }
-                     }
-                @endphp
-               <a href="/account/account/{{$account->id}}">
-                  {{ $name }}
-               </a>
-               
-               <address>
-                  
-                  <br />
-                   @lang('home.Phone') : {{ $account->contact? $account->contact->mobile:' ' }}
-               </address>
+                        }
+                  }else{
+                        $account = \App\Account::where("id",$data->contact_id)->first();
+                        if($account){
+                        $name = $account->name; 
+                        }else{
+                        $name = "--"; 
+                        }
+                  }
+               @endphp
+               <p style="line-height: {{$line_height}}">
+                  <b>{{ trans('home.Contact') }}:</b> 
+                  <a href="/account/account/{{$account->id}}">
+                     {{ $name }}
+                  </a>
+               </p>
+               <p style="line-height: {{$line_height}}"> 
+                   <b>@lang('home.Phone') : </b>{{ $account->contact? $account->contact->mobile:' ' }}
+               </p>
             </div>
             @php
                   $dt =$data->date;
@@ -106,7 +104,7 @@
             </div>
          </div>
 
-         @if($payment)
+         @if(count($payment)>0)
             @component("components.widget",["title"=>"All Payments"])
                <table class="table table-bordered">
                   <tbody>

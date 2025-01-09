@@ -404,7 +404,7 @@ class ProductController extends Controller
                     if($row->image_url){
                             $image = $row->image_url;
                     }else {
-                            $image = "";
+                            $image = "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwAAAA?rs=1&pid=ImgDetMain";
                     
                         
                     }

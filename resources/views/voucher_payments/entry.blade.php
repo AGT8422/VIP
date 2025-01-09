@@ -9,7 +9,7 @@
          <div class="row">
             <div class="col-md-12">
                @foreach($last as $key=>$items)
-                  {{-- @php dd($entry); @endphp  --}}
+                  @php  $cur = (session()->get('business.currency.symbol'))?session()->get('business.currency.symbol'):""; @endphp 
                   <?php
                      $total_debit  = 0;
                      $total_credit = 0;
@@ -24,8 +24,8 @@
                         <tr role="row">
                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 187px;">Account</th>
                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 187px;">Date</th>
-                           <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 79px;">Debit</th>
-                           <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 188px;">Credit</th>
+                           <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 79px;">Debit - ( {{$cur}} ) </th>
+                           <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 188px;">Credit - ( {{$cur}} ) </th>
                            @if($data->currency_id != null)
                               <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 79px;">Debit - ( {{($data->currency)?$data->currency->symbol:""}} ) </th>
                               <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 188px;">Credit - ( {{($data->currency)?$data->currency->symbol:""}} ) </th>

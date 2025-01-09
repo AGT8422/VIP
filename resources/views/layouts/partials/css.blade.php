@@ -227,6 +227,9 @@
 		color:white !important;
 
 	}
+	.modal-content{
+		border-radius:10px !important;
+	}
 </style>
 @if(!empty($__system_settings['additional_css']))
     {!! $__system_settings['additional_css'] !!}

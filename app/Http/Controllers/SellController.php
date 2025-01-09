@@ -16,6 +16,7 @@ use App\TypesOfService;
 use App\User;
 use App\Utils\BusinessUtil;
 use App\Utils\ContactUtil;
+use Illuminate\Support\Facades\Config; 
 use App\Utils\ModuleUtil;
 use App\Utils\ProductUtil;
 use App\Utils\TransactionUtil;
@@ -146,7 +147,6 @@ class SellController extends Controller
                     if (auth()->user()->hasAnyPermission(['view_own_sell_only', 'access_own_shipping'])) {
                         $q->where('transactions.created_by', request()->session()->get('user.id'));
                     }
-
                     //if user is commission agent display only assigned sells
                     if (auth()->user()->hasAnyPermission(['view_commission_agent_sell', 'access_commission_agent_shipping'])) {
                         $q->orWhere('transactions.commission_agent', request()->session()->get('user.id'));
@@ -214,18 +214,7 @@ class SellController extends Controller
                     $sells->whereNotNull('transactions.woocommerce_order_id');
                 }
             }
-            if(!auth()->user()->can("warehouse.views")){
-                $os_check =  \App\User::where('id',auth()->id())->whereHas('roles',function($query){
-                    $query->where('id',1);
-                })->first();
-                if(empty($os_check)) {
-                        $users =  \App\User::where('id',auth()->id())->first();
-                        if(!empty($users)) {
-                            $patterns = json_decode($users->pattern_id);
-                            $sells->whereIn('transactions.pattern_id',$patterns);
-                        }
-                 }
-            }
+            
             if (request()->only_subscriptions) {
                 $sells->where(function ($q) {
                     $q->whereNotNull('transactions.recur_parent_id')
@@ -293,13 +282,19 @@ class SellController extends Controller
                     if($is_admin){
                         
                     }else{
-                        $sells->where('transactions.created_by', request()->session()->get('user.id'));
+                        // $sells->where('transactions.created_by', request()->session()->get('user.id'));
                     }
                 }
             }
-            if(!$is_admin){
-                    $sells->where('transactions.created_by', request()->session()->get('user.id'));
+            // if(!$is_admin){
+            //         $sells->where('transactions.created_by', request()->session()->get('user.id'));
+            // }
+              
+            if(!$is_admin) {
+                $patterns = json_decode(auth()->user()->pattern_id);
+                $sells->whereIn('transactions.pattern_id',$patterns);
             }
+            
             $sells->groupBy('transactions.id');
 
             if (!empty(request()->suspended)) {

@@ -80,6 +80,7 @@ class CreateTransactionsTable extends Migration
             $table->decimal('amount_in_currency', 22, 4)->default(0)->nullable();
             $table->decimal('exchange_price', 22, 12)->default(1);
             $table->integer('ecommerce')->nullable();
+            $table->text('note')->nullable();
             
             //Indexing
             $table->index('business_id');

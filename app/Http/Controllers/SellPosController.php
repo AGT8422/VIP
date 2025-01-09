@@ -537,6 +537,7 @@ class SellPosController extends Controller
                 $input['cost_center_id']         = $request->input('cost_center_id');
                 $input['tax_amount']             = $request->input('tax_calculation_amount');
                 $input['pattern_id']             = $request->pattern_id;
+                $input['note']                   = $request->note;
                 $input['currency_id']            = $request->currency_id;
                 $input['exchange_price']         = ($request->currency_id != "" && $request->currency_id != null)?$request->currency_id_amount:null;
                 $input['amount_in_currency']     = ($request->currency_id != "" && $request->currency_id != null)?$request->final_total / $request->currency_id_amount:null;
@@ -1317,9 +1318,9 @@ class SellPosController extends Controller
                 $price_group_id = $request->has('price_group') ? $request->input('price_group') : null;
                 
                 $input['is_suspend'] = isset($input['is_suspend']) && 1 == $input['is_suspend']  ? 1 : 0;
-                // if ($input['is_suspend']) {
-                //     $input['sale_note'] = !empty($input['additional_notes']) ? $input['additional_notes'] : null;
-                // }
+                if ($input['is_suspend']) {
+                    $input['note'] = !empty($input['note']) ? $input['note'] : null;
+                }
                 if($request->sale_note != null){
                     $it_terms = \App\Models\QuatationTerm::where("business_id",$business_id)->where("id",$request->sale_note)->first(); 
                     if ($input['is_suspend']) {

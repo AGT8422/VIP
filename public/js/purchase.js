@@ -1984,6 +1984,7 @@ $(document).ready(function() {
                             discount_cal_amount2() ;
                             os_total_sub();
                             change_currency();
+                            updatePattern();
                             //Check if multipler is present then multiply it when a new row is added.
                             if(__getUnitMultiplier(row) > 1){
                                 row.find('select.sub_unit').trigger('change');

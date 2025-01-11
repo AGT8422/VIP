@@ -150,7 +150,7 @@
 								<div class="col-sm-6 @if(!empty($default_purchase_status)) hide @endif">
 									<div class="form-group">
 										{!! Form::label('status', __('purchase.purchase_status') . ':*') !!} @show_tooltip(__('tooltip.order_status'))
-										{!! Form::select('status', $orderStatuses, $default_purchase_status, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'required']); !!}
+										{!! Form::select('status', $orderStatuses, ($default_purchase_status != null)?$default_purchase_status:'ordered', ['class' => 'form-control select2',   'required']); !!}
 									</div>
 								</div>	
 								
@@ -214,12 +214,31 @@
 								</div>
 								{{-- *2/3/1-12* List Price--}}
 								{{-- #2024-8-6 --}}
-								<div class="col-sm-12">
+								<div class="col-sm-6">
 									<div class="form-group">
 										{!! Form::label('list_price', __('List  Of Prices').':') !!}
 										{!! Form::select('list_price',$list_of_prices,null, ['class' => 'form-control select2' , 'id' => 'list_price' ]); !!}
 									</div>
 								</div>
+								@php $databaseName     =  "izo26102024_esai" ; $dab = Illuminate\Support\Facades\Config::get('database.connections.mysql.database'); @endphp
+								{{-- @if($databaseName == $dab)  --}}
+									@if(count($patterns)>1)
+										<div class="col-sm-6 ">
+											<div class="form-group">
+												{!! Form::label('pattern_id', __('business.patterns') . ':*') !!}
+												{!! Form::select('pattern_id', $patterns, null , ['class' => 'pattern_id form-control select2', 'required','placeholder' => __('messages.please_select')]); !!}
+											</div>
+										</div>
+									@else
+										@php  $default  =  array_key_first($patterns); @endphp 
+										<div class="col-sm-6 ">
+											<div class="form-group">
+												{!! Form::label('pattern_id', __('business.patterns') . ':*') !!}
+												{!! Form::select('pattern_id', $patterns, $default , ['class' => 'pattern_id form-control select2', 'required']); !!}
+											</div>
+										</div>
+									@endif
+								{{-- @endif --}}
 							</div>
 						</div>
 					@endcomponent
@@ -522,11 +541,26 @@
 								<tr>
 									<td colspan="4">
 										<br>
-										<div class="row">
+										{{-- <div class="row">
 											<div class="col-sm-12">
 												<button type="button" id="submit_purchase_form" class="btn btn-primary pull-right btn-flat">@lang('messages.save')</button>
 											</div>
-										</div>
+										</div> --}}
+										{{-- @if($databaseName == $dab)  --}}
+											<div class="row">
+												<div class="col-sm-12 sub    @if(session()->get('user.language', config('app.locale'))=='ar') text-right @else text-left  @endif ">
+													{{-- <button type="button" id="submit-sell" class="btn btn-primary btn-flat">@lang('messages.save')</button> --}}
+													<a data-pattern="3434"  data-href='{{action('SellController@check_msg')}}'  id='submit-purchase' data-container='.view_modal' class='update_transfer btn btn-modal btn-primary pull-right btn-flat'>@lang('messages.save')</a>
+													{{-- <button type="button" id="save-and-print" class="btn btn-primary btn-flat">@lang('lang_v1.save_and_print')</button> --}}
+												</div>
+											</div>
+										{{-- @else  --}}
+											{{-- <div class="row">
+												<div class="col-sm-12">
+													<button type="button" id="submit_purchase_form" class="btn btn-primary pull-right btn-flat">@lang('messages.save')</button>
+												</div>
+											</div> --}}
+										{{-- @endif --}}
 									</td>
 								</tr>
 							</table>
@@ -560,6 +594,7 @@
 									<button type="button" id="submit_purchase_form" class="btn btn-primary pull-right btn-flat">@lang('messages.save')</button>
 								</div>
 							</div>
+							
 						</div>
 					@endcomponent
 
@@ -584,6 +619,12 @@
 	<script src="{{ asset('js/purchase.js?v=' . $asset_v) }}"></script>
 	<script src="{{ asset('js/producte.js?v=' . $asset_v) }}"></script>
 	<script type="text/javascript">
+		updatePattern();
+			$("#pattern_id").each( function(e){  
+				$(this).on("change",function(){
+					updatePattern();
+				})
+			});
 		$('#purchase_entry_table tbody').sortable({
 			cursor: "move",
 			handle: ".handle",
@@ -839,6 +880,15 @@
 			}
 			
 		})
+		function updatePattern(){
+			pattern = $("#pattern_id").val();
+			row     = $(".purchase_unit_cost_without_discount").val();
+			type    = "Add Purchase";
+			button  = $(".sub").html("");
+			button  = $(".sub").html("<a  data-href='{{action('SellController@check_msg')}}'  id='submit-purchase' data-container='.view_modal' class='update_transfer btn btn-modal btn-primary pull-right btn-flat'>@lang('messages.save')</a>");
+			html    = "{{\URL::to('alert-check/show')}}"+"?pattern="+pattern+"&complete="+row+"&type="+type;
+			$("#submit-purchase").attr("data-href", html) ;
+		}
 		// #2024-8-6
 		$('table#purchase_entry_table').on('change', 'select.list_price', function() {
 			 

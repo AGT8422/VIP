@@ -31,8 +31,8 @@
           @php
             $currency_precision = config('constants.currency_precision', 2);
           @endphp
-          <input type="hidden" id="edit_page" value="edit">
-          <input type="hidden" id="purchase_id" value="{{ $purchase->id }}">
+          <input type="hidden" id="edit_page"   value="edit">
+          <input type="hidden" id="purchase_id" value="{{$purchase->id}}">
           {{-- *2/3/1* purchase main info --}}
           @component('components.widget', ['class' => 'box-primary' , 'title'=>__('purchase.main_section')])
               <div class="row" style="padding:10px;">
@@ -52,7 +52,7 @@
                           </div>
                         </div>
                         <strong>
-                          @lang('business.address'):
+                        @lang('business.address'):
                         </strong>
                         <div id="supplier_address_div">
                           {!! $purchase->contact->contact_address !!}
@@ -109,9 +109,7 @@
                           {!! Form::select('status', $orderStatuses, $state, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select') , $type ,'required' ]); !!}
                           @endif   
                         @else
-                          
                           {!! Form::select('status', $orderStatuses, $state, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select') , $type ,'required' ]); !!}
-                            
                         @endif   
                         {!! Form::hidden('old_sts',$purchase->status, ['class' => 'form-control ',"id" => "old_sts"]); !!}
                       </div>
@@ -211,12 +209,22 @@
                     </div>
 
                     {{-- #2024-8-6 --}}
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
                       <div class="form-group">
                         {!! Form::label('list_price', __('List  Of Prices').':') !!}
                         {!! Form::select('list_price',$list_of_prices,$purchase->list_price, ['class' => 'form-control select2' , 'id' => 'list_price' ]); !!}
                       </div>
                     </div>
+                  @php $databaseName     =  "izo26102024_esai" ; $dab = Illuminate\Support\Facades\Config::get('database.connections.mysql.database'); @endphp
+                  {{-- @if($databaseName == $dab)  --}}
+                      <div class="col-sm-6 ">
+                        <div class="form-group">
+                          {!! Form::label('pattern_id', __('business.patterns') . ':*') !!}
+                          {!! Form::select('pattern_id', $patterns,  $purchase->pattern_id , ['class' => 'form-control select2','required', 'placeholder' => __('messages.please_select')]); !!}
+                        </div>
+                      </div>
+                  {{-- @endif --}}
+
                     
                   </div>
               </div>
@@ -487,7 +495,6 @@
                           <td class="pull-right" >
 
                             <br>
-                            
                             <b>@lang('purchase.purchase_pay') .{{$currency_details->symbol}}: </b><span id="total_final_"  class="display_currency"  data-currency_symbol='true'>0</span>
                             
                           </td>
@@ -516,10 +523,22 @@
                   </p>  
                 </div>
                 <h2>&nbsp;</h2> --}}
-                <div class="col-sm-12 type_submit">
-                            <button  type="button"  id="submit_purchase_form"   class="  btn   btn-primary pull-right btn-flat">@lang('messages.update')</button>
-                </div>
-            </div>
+                {{-- @if($databaseName == $dab)  --}}
+                  <div class="row">
+                    <div class="col-md-12 sub">
+                      {{-- {!! Form::hidden('is_save_and_print', 0, ['id' => 'is_save_and_print']); !!} --}}
+                      {{-- <button type="button" class="btn btn-primary" id="submit-sell">@lang('messages.update')</button> --}}
+                      <a data-pattern="3434"  data-href='{{action('SellController@check_msg')}}'  id='submit-purchase' data-container='.view_modal' class='update_transfer btn btn-modal btn-primary pull-right btn-flat'>@lang('messages.update')</a>
+                      {{-- <button type="button" id="save-and-print" class="btn btn-primary btn-flat">@lang('lang_v1.update_and_print')</button> --}}
+                    </div>
+                  </div>
+                {{-- @else 
+                  <div class="col-sm-12 type_submit">
+                      <button  type="button"  id="submit_purchase_form"  class="btn btn-primary pull-right btn-flat">@lang('messages.update')</button>
+                  </div>
+                @endif --}}
+                
+              </div>
           @endcomponent
           
         {!! Form::close() !!}
@@ -541,167 +560,173 @@
   <script src="{{ asset('js/producte.js?v=' . $asset_v) }}"></script>
 
   <script type="text/javascript">
-    refresh();
-    $('#purchase_entry_table tbody').sortable({
-			cursor: "move",
-			handle: ".handle",
-            items: "> tr",
-			update: function(event, ui) {
-				var count = 1;
-				$(".line_sorting").each(function(){
-					e      = $(this); 
-					var el = $(this).children().find(".line_sort"); 
-					var inner = $(this).children().find(".line_ordered");  
-					e.attr("data-row_index",count);
-					inner.html(count);
-					el.attr("value",count++);
-					// el.val(count++);					
-				});
-			}
-		});
-    change_currency();
-    console.log("console.log('check ebrahemm #$%#$%#$% : sdsd')");
-    function refresh(){
-         
-      $('.ship_curr').each(function(){
-           if($('.currency_id').val() == ""){
-            $(this).addClass("hide");
-        }else{
-            $(this).removeClass("hide");
-        }
-          
+      refresh();
+      updatePattern();
+      $("#pattern_id").each( function(e){  
+        $(this).on("change",function(){
+          updatePattern();
+        })
       });
-       
-    }
-    $('.currency_id_amount').change(function(){
-    //     if ($('input.depending_curr').is(':checked')) {
-		  //  depending_curr();
-    //     }else{
-		  //  update_os();
-            os_total_sub();
-        // }
-    })
-    $('.currency_id').change(function(){
-        var id = $(this).val();
-        if(id == ""){
-          // $(".purchase_unit_cost_without_discount_s").each(function(){
-            //     var e =$(this).parent().parent();
-            //     exc_before = e.children().find(".purchase_unit_cost_new_currency").val(0);
-            //     inc_before = e.children().find(".purchase_unit_cost_with_tax_new_currency").val(0);
-            //     exc_after  = e.children().find(".unit_cost_after_new_currency").val(0);
-            //     inc_after  = e.children().find(".unit_cost_after_tax_new_currency").val(0);
-            
-            // });
-            $(".currency_id_amount").val("");
-            $(".curr_column").attr("disabled",true);
-            $(".curr_column").val(0);
-            // $(".cur_symbol").html("Sub Total : " );
-            $(".cur_symbol").addClass("hide" );
-            $("#total_subtotal_cur").addClass("hide" );
-            $("#total_subtotal_cur_edit").addClass("hide" );
-            $(".i_curr").addClass("hide" );
-            $("#discount_calculated_amount_cur").addClass("hide" );
-            $(".t_curr").addClass("hide" );
-            $("#tax_calculated_amount_curr").addClass("hide" );
-            $(".o_curr").addClass("hide" );
-            $("#grand_total_cur").addClass("hide" );
-            $(".z_curr").addClass("hide" );
-            $("#total_final_i_curr").addClass("hide" );
-            $(".c_curr").addClass("hide" );
-            $(".cur_check").addClass("hide" );
-            $("#total_final_curr").addClass("hide" );
-            $(".os_curr").addClass("hide" );
-			$(".oss_curr").addClass("hide" );
-			$(".ship_curr").addClass("hide" );
-			$(".check_dep_curr").addClass("hide" );
-			$('input[name="dis_currency"]').prop('checked', false);
-    		$('#depending_curr').prop('checked', false);;
-    		discount_cal_amount2() ;
-            os_total_sub();
-            os_grand();
-          }else{
-            $(".cur_symbol").removeClass("hide" );
-            $("#total_subtotal_cur").removeClass("hide" );
-            $("#total_subtotal_cur_edit").removeClass("hide" );
-            $(".curr_column").attr("disabled",false);
-            $(".i_curr").removeClass("hide" );
-            $("#discount_calculated_amount_cur").removeClass("hide" );
-            $(".t_curr").removeClass("hide" );
-            $("#tax_calculated_amount_curr").removeClass("hide" );
-            $(".o_curr").removeClass("hide" );
-            $("#grand_total_cur").removeClass("hide" );
-            $(".z_curr").removeClass("hide" );
-            $("#total_final_i_curr").removeClass("hide" );
-            $(".c_curr").removeClass("hide" );
-            $("#total_final_curr").removeClass("hide" );
-            $(".cur_check").removeClass("hide" );
-            $(".currency_id_amount").val("");
-		    $(".os_curr").removeClass("hide" );
-			$(".oss_curr").removeClass("hide" );
-			$(".ship_curr").removeClass("hide" );
-// 			$(".check_dep_curr").removeClass("hide" );
-			$('input[name="dis_currency"]').prop('checked', true);
-    		$('#depending_curr').prop('checked', true);
-          $.ajax({
-              url:"/symbol/amount/"+id,
-            dataType: 'html',
-            success:function(data){
-              var object  = JSON.parse(data);
-            
-              $(".currency_id_amount").val(object.amount);
-              $(".cur_symbol").html( @json(__('purchase.sub_total_amount')) + " " + object.symbol + " : "  );
-              $(".i_curr").html( @json(__('purchase.discount')) + " " + object.symbol +" : " + "(-)");
-              $(".t_curr").html( @json(__('purchase.purchase_tax')) + " " + object.symbol +" : " + "(+)" );
-              $(".o_curr").html( @json(__('purchase.purchase_total')) + " " + object.symbol +" : "   );
-              $(".z_curr").html( @json(__('purchase.purchase_total_')) + " " + object.symbol +" : "   );
-              $(".c_curr").html( @json(__('purchase.purchase_pay')) + " " + object.symbol +" : "   );
-              $(".ar_dis").html( @json(__('home.Cost without Tax currency')) + " " + object.symbol +"   "   );
-              $(".ar_dis_total").html( @json(__('home.Total Currency')) + " " + object.symbol +"   "   );
-              $(".br_dis").html( @json(__('lang_v1.Cost before without Tax')) + " " + object.symbol +"   "   );
-              $(".header_texts").html( @json(__('Amount')) + " " + object.symbol +"   "    );
-     		  $(".header_totals").html( @json(__('Total')) + " " + object.symbol +"   "    );
-     		  $(".header_vats").html( @json(__('Vat')) + " " + object.symbol +"   "    );
 
-              os_total_sub();
-            },
-          });	 
-        }
-      })
-      $(document).ready(function(){
-          change_supplier();
-          $("#first_name").on("input",function(){
-          $("#first_name").css({"outline":"0px solid red","box-shadow":"1px 1px 10px transparent","color":"gray"});
-          $("#contact-submit").attr("disabled",false);
-
-        });
-
-        
-
-        
-
-        $("#first_name").on("change" ,function(e){
-        var name = $("#first_name").val();
-        // $("#name_p").css({"outline":"0px solid red","box-shadow":"1px 1px 10px transparent"});
-        $.ajax({
-          method: 'GET',
-          url: '/contacts/check/' + name,
-          async: false,
-          data: {
-            name: name,
-          },
-          dataType: 'json',
-          success: function(result) {
-            $results = result.status;
-            if($results == true){
-              toastr.error(LANG.product_name);
-              $("#first_name").css({"outline":"1px solid red","box-shadow":"1px 1px 10px red","color":"red"})
-              $("#contact-submit").attr("disabled",true);
-            }
-          }
+      $('#purchase_entry_table tbody').sortable({
+        cursor: "move",
+        handle: ".handle",
+              items: "> tr",
+        update: function(event, ui) {
+          var count = 1;
+          $(".line_sorting").each(function(){
+            e      = $(this); 
+            var el = $(this).children().find(".line_sort"); 
+            var inner = $(this).children().find(".line_ordered");  
+            e.attr("data-row_index",count);
+            inner.html(count);
+            el.attr("value",count++);
+            // el.val(count++);					
           });
-        }); 
+        }
       });
 
+      change_currency();
+
+      console.log("console.log('check ebrahemm #$%#$%#$% : sdsd')");
+      function refresh(){
+          
+        $('.ship_curr').each(function(){
+            if($('.currency_id').val() == ""){
+              $(this).addClass("hide");
+          }else{
+              $(this).removeClass("hide");
+          }
+            
+        });
+        
+      }
+
+      $('.currency_id_amount').change(function(){
+        //     if ($('input.depending_curr').is(':checked')) {
+          //  depending_curr();
+        //     }else{
+          //  update_os();
+                os_total_sub();
+            // }
+      })
+
+      $('.currency_id').change(function(){
+          var id = $(this).val();
+          if(id == ""){
+            // $(".purchase_unit_cost_without_discount_s").each(function(){
+              //     var e =$(this).parent().parent();
+              //     exc_before = e.children().find(".purchase_unit_cost_new_currency").val(0);
+              //     inc_before = e.children().find(".purchase_unit_cost_with_tax_new_currency").val(0);
+              //     exc_after  = e.children().find(".unit_cost_after_new_currency").val(0);
+              //     inc_after  = e.children().find(".unit_cost_after_tax_new_currency").val(0);
+              
+              // });
+              $(".currency_id_amount").val("");
+              $(".curr_column").attr("disabled",true);
+              $(".curr_column").val(0);
+              // $(".cur_symbol").html("Sub Total : " );
+              $(".cur_symbol").addClass("hide" );
+              $("#total_subtotal_cur").addClass("hide" );
+              $("#total_subtotal_cur_edit").addClass("hide" );
+              $(".i_curr").addClass("hide" );
+              $("#discount_calculated_amount_cur").addClass("hide" );
+              $(".t_curr").addClass("hide" );
+              $("#tax_calculated_amount_curr").addClass("hide" );
+              $(".o_curr").addClass("hide" );
+              $("#grand_total_cur").addClass("hide" );
+              $(".z_curr").addClass("hide" );
+              $("#total_final_i_curr").addClass("hide" );
+              $(".c_curr").addClass("hide" );
+              $(".cur_check").addClass("hide" );
+              $("#total_final_curr").addClass("hide" );
+              $(".os_curr").addClass("hide" );
+              $(".oss_curr").addClass("hide" );
+              $(".ship_curr").addClass("hide" );
+              $(".check_dep_curr").addClass("hide" );
+              $('input[name="dis_currency"]').prop('checked', false);
+              $('#depending_curr').prop('checked', false);;
+              discount_cal_amount2() ;
+              os_total_sub();
+              os_grand();
+            }else{
+              $(".cur_symbol").removeClass("hide" );
+              $("#total_subtotal_cur").removeClass("hide" );
+              $("#total_subtotal_cur_edit").removeClass("hide" );
+              $(".curr_column").attr("disabled",false);
+              $(".i_curr").removeClass("hide" );
+              $("#discount_calculated_amount_cur").removeClass("hide" );
+              $(".t_curr").removeClass("hide" );
+              $("#tax_calculated_amount_curr").removeClass("hide" );
+              $(".o_curr").removeClass("hide" );
+              $("#grand_total_cur").removeClass("hide" );
+              $(".z_curr").removeClass("hide" );
+              $("#total_final_i_curr").removeClass("hide" );
+              $(".c_curr").removeClass("hide" );
+              $("#total_final_curr").removeClass("hide" );
+              $(".cur_check").removeClass("hide" );
+              $(".currency_id_amount").val("");
+          $(".os_curr").removeClass("hide" );
+          $(".oss_curr").removeClass("hide" );
+          $(".ship_curr").removeClass("hide" );
+          // 			$(".check_dep_curr").removeClass("hide" );
+          $('input[name="dis_currency"]').prop('checked', true);
+            $('#depending_curr').prop('checked', true);
+              $.ajax({
+                  url:"/symbol/amount/"+id,
+                dataType: 'html',
+                success:function(data){
+                  var object  = JSON.parse(data);
+                
+                  $(".currency_id_amount").val(object.amount);
+                  $(".cur_symbol").html( @json(__('purchase.sub_total_amount')) + " " + object.symbol + " : "  );
+                  $(".i_curr").html( @json(__('purchase.discount')) + " " + object.symbol +" : " + "(-)");
+                  $(".t_curr").html( @json(__('purchase.purchase_tax')) + " " + object.symbol +" : " + "(+)" );
+                  $(".o_curr").html( @json(__('purchase.purchase_total')) + " " + object.symbol +" : "   );
+                  $(".z_curr").html( @json(__('purchase.purchase_total_')) + " " + object.symbol +" : "   );
+                  $(".c_curr").html( @json(__('purchase.purchase_pay')) + " " + object.symbol +" : "   );
+                  $(".ar_dis").html( @json(__('home.Cost without Tax currency')) + " " + object.symbol +"   "   );
+                  $(".ar_dis_total").html( @json(__('home.Total Currency')) + " " + object.symbol +"   "   );
+                  $(".br_dis").html( @json(__('lang_v1.Cost before without Tax')) + " " + object.symbol +"   "   );
+                  $(".header_texts").html( @json(__('Amount')) + " " + object.symbol +"   "    );
+              $(".header_totals").html( @json(__('Total')) + " " + object.symbol +"   "    );
+              $(".header_vats").html( @json(__('Vat')) + " " + object.symbol +"   "    );
+
+                  os_total_sub();
+                },
+              });	 
+            }
+          })
+          $(document).ready(function(){
+              change_supplier();
+              $("#first_name").on("input",function(){
+              $("#first_name").css({"outline":"0px solid red","box-shadow":"1px 1px 10px transparent","color":"gray"});
+              $("#contact-submit").attr("disabled",false);
+
+          });
+
+          $("#first_name").on("change" ,function(e){
+          var name = $("#first_name").val();
+          // $("#name_p").css({"outline":"0px solid red","box-shadow":"1px 1px 10px transparent"});
+          $.ajax({
+              method: 'GET',
+              url: '/contacts/check/' + name,
+              async: false,
+              data: {
+                name: name,
+              },
+              dataType: 'json',
+              success: function(result) {
+                $results = result.status;
+                if($results == true){
+                  toastr.error(LANG.product_name);
+                  $("#first_name").css({"outline":"1px solid red","box-shadow":"1px 1px 10px red","color":"red"})
+                  $("#contact-submit").attr("disabled",true);
+                }
+              }
+            });
+          }); 
+      });
 
       function change_supplier(){
         $("#supplier_id").on("change",function(){
@@ -716,68 +741,78 @@
               }
           });  
       }
-// #2024-8-6
-$('table#purchase_entry_table').on('change', 'select.list_price', function() {
-			 
-       var tr                      = $(this).closest('tr');
-       var base_unit_cost          = tr.find('input.base_unit_cost').val();
-       var base_unit_selling_price = tr.find('input.base_unit_selling_price').val();
-       var global_price            = $("#list_price").val();
-       var price = parseFloat(
-         $(this)
-           .find(':selected')
-           .data('price')
-         );
-       var cp_element = tr.find('input.purchase_unit_cost_without_discount_s');
-       var cp_element_2 = tr.find('input.purchase_unit_cost_without_discount');
-       
-       if(isNaN(price) ){	
-         $(this).children().each(function(){ 
-           if($(this).data("value") == global_price){
-             final_price = parseFloat($(this).data("price"));
-           }
-         }); 
-       }else{
-         final_price = parseFloat(price);
-       }
-       cp_element.val(final_price);
-       cp_element_2.val(final_price);
-       cp_element.change();
-       cp_element_2.change();
-      
-     });
-   
-     $(document).on("change","#list_price",function(){
-       var golbal = $(this).val();
-       $('table#purchase_entry_table .purchase_unit_cost_without_discount_s').each( function() {
-         var price_item      = $(this); 
-         var price      = $(this).closest("tr"); 
-         var prices     = price.find(".list_price"); 
-         var list_price = price.find(".list_price").find(":selected").val(); 
-         if(list_price == "" || list_price == null){
-           prices.children().each(function(){ 
-           if($(this).data("value") == golbal){
-             price_item.val($(this).data("price"));
-             price_item.change();
-           }
-         }); 
-         }
-       });
-       $('table#purchase_entry_table .purchase_unit_cost_without_discount').each( function() {
-         var price_item      = $(this); 
-         var price      = $(this).closest("tr"); 
-         var prices     = price.find(".list_price"); 
-         var list_price = price.find(".list_price").find(":selected").val(); 
-         if(list_price == "" || list_price == null){
-           prices.children().each(function(){ 
-           if($(this).data("value") == golbal){
-             price_item.val($(this).data("price"));
-             price_item.change();
-           }
-         }); 
-         }
-       });
+      function updatePattern(){
+        pattern = $("#pattern_id").val();
+        row     = $(".purchase_quantity").val();
+        type    = "Edit Purchase";
+        button  = $(".sub").html("");
+        button  = $(".sub").html("<a data-href='{{action('SellController@check_msg')}}'  id='submit-purchase' data-container='.view_modal' class='update_transfer btn btn-modal btn-primary pull-right btn-flat'>@lang('messages.update')</a>");
+        html    = "{{\URL::to('alert-check/show')}}"+"?pattern="+pattern+"&complete="+row+"&type="+type;
+        $("#submit-purchase").attr("data-href", html) ;
+      }
+      // #2024-8-6
+      $('table#purchase_entry_table').on('change', 'select.list_price', function() {
         
+        var tr                      = $(this).closest('tr');
+        var base_unit_cost          = tr.find('input.base_unit_cost').val();
+        var base_unit_selling_price = tr.find('input.base_unit_selling_price').val();
+        var global_price            = $("#list_price").val();
+        var price = parseFloat(
+          $(this)
+            .find(':selected')
+            .data('price')
+          );
+        var cp_element = tr.find('input.purchase_unit_cost_without_discount_s');
+        var cp_element_2 = tr.find('input.purchase_unit_cost_without_discount');
+        
+        if(isNaN(price) ){	
+          $(this).children().each(function(){ 
+            if($(this).data("value") == global_price){
+              final_price = parseFloat($(this).data("price"));
+            }
+          }); 
+        }else{
+          final_price = parseFloat(price);
+        }
+        cp_element.val(final_price);
+        cp_element_2.val(final_price);
+        cp_element.change();
+        cp_element_2.change();
+        
+      });
+   
+      $(document).on("change","#list_price",function(){
+        var golbal = $(this).val();
+        $('table#purchase_entry_table .purchase_unit_cost_without_discount_s').each( function() {
+          var price_item      = $(this); 
+          var price      = $(this).closest("tr"); 
+          var prices     = price.find(".list_price"); 
+          var list_price = price.find(".list_price").find(":selected").val(); 
+          if(list_price == "" || list_price == null){
+            prices.children().each(function(){ 
+            if($(this).data("value") == golbal){
+              price_item.val($(this).data("price"));
+              price_item.change();
+            }
+          }); 
+          }
+      });
+
+      $('table#purchase_entry_table .purchase_unit_cost_without_discount').each( function() {
+          var price_item      = $(this); 
+          var price      = $(this).closest("tr"); 
+          var prices     = price.find(".list_price"); 
+          var list_price = price.find(".list_price").find(":selected").val(); 
+          if(list_price == "" || list_price == null){
+            prices.children().each(function(){ 
+            if($(this).data("value") == golbal){
+              price_item.val($(this).data("price"));
+              price_item.change();
+            }
+          }); 
+          }
+      });
+          
         
      });
   </script>

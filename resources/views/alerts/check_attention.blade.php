@@ -22,6 +22,10 @@
                         $type = "Approve Quotation"; 
                     }elseif($type == "Edit Draft"){
                         $type = "Draft"; 
+                    }elseif($type == "Add Purchase"){
+                        $type = "Add Purchase"; 
+                    }elseif($type == "Edit Purchase"){
+                        $type = "Edit Purchase"; 
                     }else{
                         $type = ""; 
                     }
@@ -60,9 +64,9 @@
    
     function click_function(){
         window.onbeforeunload = null;
-        form  = $("#add_sell_form");
-        old   = $("#add_sell_form").attr("action");
-        url   = $("#add_sell_form").attr("action");
+        form   = $("#add_sell_form");
+        old    = $("#add_sell_form").attr("action");
+        url    = $("#add_sell_form").attr("action");
         form.attr("action",url);
 
         $(".save_submit_button").attr('disabled', true);
@@ -74,6 +78,44 @@
         url2   = $("#edit_sell_form").attr("action");
         form2.attr("action",url2);
         form2.submit();
-         
+ 
+        form3  = $("#add_purchase_form");
+        old3   = $("#add_purchase_form").attr("action");
+        url3   = $("#add_purchase_form").attr("action");
+        form3.attr("action",url3);
+        $('form#add_purchase_form').validate({
+            rules: {
+                ref_no: {
+                    remote: {
+                        url: '/purchases/check_ref_number',
+                        type: 'post',
+                        data: {
+                            ref_no: function() {
+                                return $('#ref_no').val();
+                            },
+                            contact_id: function() {
+                                return $('#supplier_id').val();
+                            },
+                            purchase_id: function() {
+                                if ($('#purchase_id').length > 0) {
+                                    return $('#purchase_id').val();
+                                } else {
+                                    return '';
+                                }
+                            },
+                        },
+                    },
+                },
+            },
+            messages: {
+                ref_no: {
+                    remote: LANG.ref_no_already_exists,
+                },
+            },
+        });
+        if ($('form#add_purchase_form').valid()) {
+            form3.submit();
+        }
+
     }
 </script>

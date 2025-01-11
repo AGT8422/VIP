@@ -23,6 +23,7 @@ use App\Utils\TransactionUtil;
 use App\Variation;
 use App\TransactionSellLine;
 use App\Models\Warehouse;
+use Illuminate\Support\Facades\Config;
 use App\Models\WarehouseInfo;
 use App\Models\RecievedPrevious;
 use App\Models\RecievedWrong;
@@ -442,7 +443,14 @@ class PurchaseController extends Controller
         if (auth()->user()->can('supplier.create') && auth()->user()->can('customer.create')) {
             $types['both'] = __('lang_v1.both_supplier_customer');
         }
-
+        $patterns  = [];
+        if(request()->session()->get("user.id") == 1){
+            $all_patterns = \App\Models\Pattern::select()->get();
+        }else{
+            $user         = \App\Models\User::find(request()->session()->get("user.id"));
+            $all_patterns = \App\Models\Pattern::whereIn("id",json_decode($user->pattern_id))->select()->get();
+        } 
+        foreach($all_patterns as $it){ $patterns[$it->id] = $it->name; }
         $customer_groups    = CustomerGroup::forDropdown($business_id);
         $business_details   = $this->businessUtil->getDetails($business_id);
         $shortcuts          = json_decode($business_details->keyboard_shortcuts, true);
@@ -460,7 +468,7 @@ class PurchaseController extends Controller
         }$row = 1;
         $list_of_prices         = \App\Product::getListPrices($row);
         return view('purchase.create')
-            ->with(compact('taxes','ship_from' , 'list_of_prices','currencies','orderStatuses',"cost_centers", 'business_locations','mainstore_categories', 'currency_details', 'default_purchase_status', 'customer_groups', 'types', 'shortcuts', 'payment_line', 'payment_types', 'accounts', 'bl_attributes'));
+            ->with(compact('taxes','ship_from' ,'patterns' , 'list_of_prices','currencies','orderStatuses',"cost_centers", 'business_locations','mainstore_categories', 'currency_details', 'default_purchase_status', 'customer_groups', 'types', 'shortcuts', 'payment_line', 'payment_types', 'accounts', 'bl_attributes'));
     }
  
     /** *F
@@ -491,6 +499,7 @@ class PurchaseController extends Controller
                                                 , "purchase_note"   
                                                 , "cost_center_id"
                                                 , 'status'
+                                                , 'pattern_id'
                                                 , "sup_ref_no"
                                                 , "ADD_SHIP" 
                                                 , 'store_id' 
@@ -586,7 +595,7 @@ class PurchaseController extends Controller
             $transaction_data['dis_type']                 = $request->dis_type; 
             $transaction_data['discount_type']            = $request->discount_type;
             $transaction_data['transaction_date']         = $this->productUtil->uf_date($transaction_data['transaction_date'], true);
-
+            
             DB::beginTransaction();
 
             //Update reference count
@@ -1036,7 +1045,7 @@ class PurchaseController extends Controller
         foreach ($Transaction_store  as  $store) {
             $store_id  = $store["store"];
         }
-
+        
         foreach ($purchase->purchase_lines as $key => $value) {
             if (!empty($value->sub_unit_id)) {
                 $formated_purchase_line         = $this->productUtil->changePurchaseLineUnit($value, $business_id);
@@ -1096,6 +1105,14 @@ class PurchaseController extends Controller
                 }        
             }
         }
+        $patterns  = [];
+        if(request()->session()->get("user.id") == 1){
+            $all_patterns = \App\Models\Pattern::select()->get();
+        }else{
+            $user         = \App\Models\User::find(request()->session()->get("user.id"));
+            $all_patterns = \App\Models\Pattern::whereIn("id",json_decode($user->pattern_id))->select()->get();
+        } 
+        foreach($all_patterns as $it){ $patterns[$it->id] = $it->name; }
         $customer_groups  = CustomerGroup::forDropdown($business_id);
         $business_details = $this->businessUtil->getDetails($business_id);
         $shortcuts        = json_decode($business_details->keyboard_shortcuts, true);
@@ -1105,6 +1122,7 @@ class PurchaseController extends Controller
         return view('purchase.edit')
             ->with(compact(
                 'taxes',
+                'patterns',
                 'list_of_prices',
                 'ship_from',
                 'cost_centers',
@@ -1172,6 +1190,7 @@ class PurchaseController extends Controller
 
             $old_date               = $transaction->transaction_date;
             $old_status             = $transaction->status;
+            $old_pattern            = $transaction->pattern_id;
             $old_trans              = $transaction->cost_center_id;
             $old_account            = $transaction->contact_id;
             $old_discount           = $transaction->discount_amount;
@@ -1188,7 +1207,7 @@ class PurchaseController extends Controller
                                             'transaction_date', 'total_before_tax','store','document','project_no',
                                             'discount_type', 'discount_amount', 'tax_id','supplier_id','sup_id',
                                             'tax_amount', 'ADD_SHIP',"purchase_note",'cost_center_id',
-                                            'shipping_charges', 'final_total','sup_ref_no',
+                                            'shipping_charges', 'final_total','sup_ref_no','pattern_id',
                                             'currency_id','currency_id_amount' ,'amount_in_currency',
                                             'additional_notes', 'exchange_rate', 'pay_term_number', 'pay_term_type']
                                         );
@@ -1362,7 +1381,7 @@ class PurchaseController extends Controller
             \App\Models\AdditionalShipping::update_purchase($transaction->id,$additional_inputs,$document_expense);
             
             DB::beginTransaction();
-           
+             
             //....................................  update transaction  ........................
             //..................................................................................
             $transaction->update($update_data);
@@ -1584,7 +1603,7 @@ class PurchaseController extends Controller
               
                 if (!(($old_status !=  'final' && $old_status != 'received' ) && ($transaction->status == 'final' ||  $transaction->status == 'received' )) ) {
                     //.. 3 ..........  update expenses 
-                    \App\AccountTransaction::update_purchase($transaction,$total_ship,$old_trans,$old_account,$old_discount,$old_tax,$old_date);
+                    \App\AccountTransaction::update_purchase($transaction,$total_ship,$old_trans,$old_account,$old_discount,$old_tax,$old_date,$old_pattern);
                 }
                 \App\Models\StatusLive::update_data_p($business_id,$transaction,$request->status);
 

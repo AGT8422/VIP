@@ -158,7 +158,7 @@ class IzoUser extends Model
                 ];
                 
                 session(['user_main'  => $payload]);
-                session(['password'   => $data['password']]);
+                // session(['password'   => $data['password']]);
                  
                 return   $outPut = [
                     'status'          => true,

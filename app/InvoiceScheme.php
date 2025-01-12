@@ -52,6 +52,6 @@ class InvoiceScheme extends Model
     public static function FirstLocation($business_id)
     {
         $InvoiceScheme  = InvoiceScheme::where("business_id",$business_id)->first();
-        if($InvoiceScheme->id != null){ return $InvoiceScheme->id; }else{ return null; }
+        if($InvoiceScheme != null){ return $InvoiceScheme->id; }else{ return null; }
     }
 }

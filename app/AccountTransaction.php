@@ -304,7 +304,6 @@ class AccountTransaction extends Model
         // .F......................................................
         public static function update_purchase($data,$total=null,$old_cost=null,$old_account=null,$old_discount=null,$old_tax=null,$old_date=null,$old_pattern = null)
         {
-                            
             if($old_date != null){
                 $dateFinal  = ($old_date<$data->transaction_date)?$old_date:$data->transaction_date;
             }else{
@@ -315,11 +314,12 @@ class AccountTransaction extends Model
                 $setting->where('pattern_id',$data->pattern_id);
             }
             $setting = $setting->first();
-             
+            $databaseName     =  "izo26102024_esai" ; $dab =  Config::get('database.connections.mysql.database'); 
             $entry   =  \App\Models\Entry::where('account_transaction',$data->id)->first();
             //purchase account 
             $amount           =  $data->final_total - $data->tax_amount;
             $discount_amount  =  $data->discount_amount;
+            
             
             if ($data->discount_type == 'percentage') {
                 $discount_amount = $data->total_before_tax*($data->discount_amount/100);
@@ -365,8 +365,8 @@ class AccountTransaction extends Model
             $purchase_id    = ($setting)?$setting->purchase:Account::add_main('Purchases');
             if($old_pattern != null){
                 $oldSetting        =  \App\Models\SystemAccount::where('business_id',$data->business_id)->where("pattern_id",$old_pattern)->first();
-                $purchase_id       = ($oldSetting)?$oldSetting->purchase:null;
-                AccountTransaction::update_main_id($purchase_id,round($data->total_before_tax,2),'debit',$data,'Add Purchase',$data->cost_center_id,$purchase_id,$old_date);
+                $purchase_id_old       = ($oldSetting)?$oldSetting->purchase:null;
+                AccountTransaction::update_main_id($purchase_id,round($data->total_before_tax,2),'debit',$data,'Add Purchase',$data->cost_center_id,$purchase_id_old,$old_date);
             }else{
                 AccountTransaction::update_main_id($purchase_id,round($data->total_before_tax,2),'debit',$data,'Add Purchase',$data->cost_center_id,null,$old_date);
             }
@@ -476,7 +476,7 @@ class AccountTransaction extends Model
                         $purchase_discount_id_new  = ($setting)?$setting->purchase_discount:Account::add_main('Purchase Discount');
                         $discount_account_         = AccountTransaction::where('transaction_id',$data->id)
                                                                                 ->where("type","credit")
-                                                                                ->where("note",["Add Purchase"])
+                                                                                // ->where("note",["Add Purchase"])
                                                                                 ->where("account_id",$purchase_discount_id)
                                                                                 ->get();
                             
@@ -500,7 +500,7 @@ class AccountTransaction extends Model
                         $purchase_discount_id  = ($setting)?$setting->purchase_discount:Account::add_main('Purchases Discount');
                         $discount_account_  = AccountTransaction::where('transaction_id',$data->id)
                                                                 ->where("type","credit")
-                                                                ->where("note",["Add Purchase"])
+                                                                // ->where("note",["Add Purchase"])
                                                                 ->where("account_id",$purchase_discount_id)
                                                                 ->get();
                             
@@ -540,12 +540,12 @@ class AccountTransaction extends Model
                                                             ->where("note","Add Discount")
                                                             ->where("account_id",$data->cost_center_id)
                                                             ->delete();
-                        $discount_account      = AccountTransaction::where('transaction_id',$data->id)
+                        $discount_account1      = AccountTransaction::where('transaction_id',$data->id)
                                                             ->where("type","credit")
-                                                            ->where("note","Add Purchase")
+                                                            // ->where("note","Add Purchase")
                                                             ->where("account_id",$purchase_discount_id)
                                                             ->get();
-                        foreach($discount_account as $o){
+                        foreach($discount_account1 as $o){
                             $account_transaction  = $o->account_id;
                             $action_date          = $o->operation_date;
                             $ac                   = \App\Account::find($account_transaction);
@@ -556,18 +556,21 @@ class AccountTransaction extends Model
                             }
                         }
                     }else{
+                        
                         $purchase_discount_id  = ($setting)?$setting->purchase_discount:Account::add_main('Purchases Discount');
                         $discount_account_ = AccountTransaction::where('transaction_id',$data->id)
                                                             ->where("type","credit")
                                                             ->where("note","Add Discount")
                                                             ->where("account_id",$data->cost_center_id)
                                                             ->delete();
-                        $discount_account  = AccountTransaction::where('transaction_id',$data->id)
+                        
+                        $discount_account1  = AccountTransaction::where('transaction_id',$data->id)
                                                                 ->where("type","credit")
-                                                                ->where("note","Add Purchase")
+                                                                // ->where("note","Add Purchase")
                                                                 ->where("account_id",$purchase_discount_id)
                                                                 ->get();
-                        foreach($discount_account as $o){
+                        
+                        foreach($discount_account1 as $o){
                             $account_transaction  = $o->account_id;
                             $action_date          = $o->operation_date;
                             $ac                   = \App\Account::find($account_transaction);
@@ -680,7 +683,7 @@ class AccountTransaction extends Model
 
                 } 
             }
-        
+            
             //........ supplier ....................................................
             $account  =  Account::where('contact_id',$data->contact_id)->first();
             $old      =  Account::where('contact_id',$old_account)->first();

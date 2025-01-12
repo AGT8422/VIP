@@ -16,6 +16,12 @@
      
         <div class="col-md-3">
             <div class="form-group">
+                {!! Form::label('pattern_type',  __('business.type') . ':') !!}
+                {!! Form::select('pattern_type',['sale'=>__('business.sale'),'purchase'=>__('business.purchase')] , null, ['class' => 'form-control select2','id'=>'pattern_type', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
                 {!! Form::label('location_id',  __('purchase.business_location') . ':') !!}
                 {!! Form::select('location_id',$business_locations , null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
             </div>
@@ -67,13 +73,14 @@
                     <th>@lang('invoice.invoice_scheme')</th>
                     <th>@lang('invoice.invoice_layout')</th>
                     <th>@lang('business.pos')</th>
+                    <th>@lang('business.type')</th>
                     <th>@lang('messages.date')</th>
                     <th>@lang('lang_v1.added_by')</th>
                 </tr>
             </thead>
             <tfoot> 
                 <tr class="bg-gray font-17 text-center footer-total">
-                    <td colspan="8"></td>
+                    <td colspan="9"></td>
                 </tr>
             </tfoot>
         </table>

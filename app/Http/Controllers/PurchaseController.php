@@ -20,6 +20,7 @@ use App\Utils\ModuleUtil;
 use App\Utils\ProductUtil;
 use App\Utils\TransactionUtil;
 
+use App\InvoiceScheme;
 use App\Variation;
 use App\TransactionSellLine;
 use App\Models\Warehouse;
@@ -483,7 +484,8 @@ class PurchaseController extends Controller
             abort(403, 'Unauthorized action.');
         }
         try {
-            $business_id = $request->session()->get('user.business_id');
+            $databaseName =  "izo26102024_esai" ; $dab =  Config::get('database.connections.mysql.database'); 
+            $business_id  = $request->session()->get('user.business_id');
             //Check if subscribed or not
             if (!$this->moduleUtil->isSubscribed($business_id)) {
                 if (!$this->moduleUtil->isSubscribedPermitted($business_id)) {
@@ -599,10 +601,46 @@ class PurchaseController extends Controller
             DB::beginTransaction();
 
             //Update reference count
-            $ref_count                            = $this->productUtil->setAndGetReferenceCount($transaction_data['type']);
+            $ref_count                            = $this->productUtil->setAndGetReferenceCount($transaction_data['type']); $invoice_scheme_id = null;
             //Generate reference number
             if (empty($transaction_data['ref_no'])) {
-                $transaction_data['ref_no']       = $this->productUtil->generateReferenceNumber($transaction_data['type'], $ref_count);
+                if($databaseName == $dab ){
+                    $pat_id        = null;
+                    if ($request->pattern_id != null) {
+                        $pat       = \App\Models\Pattern::find($request->pattern_id);
+                        $pat_id    = ($pat)?$pat->id:null; 
+                        if(!empty($pat)){
+                            $invoice_scheme_id = $pat->invoice_scheme;
+                        }
+                    }
+                    if (empty($invoice_scheme_id)) {
+                        // $scheme = $this->getInvoiceScheme($business_id, $location_id);
+                        $transaction_data['ref_no']       = $this->productUtil->generateReferenceNumber($transaction_data['type'], $ref_count);
+                    } else {
+                        $scheme = InvoiceScheme::where('business_id', $business_id)->find($invoice_scheme_id);
+                                                
+                        if ($scheme->scheme_type == 'blank') {
+                            $prefix =   $scheme->prefix;
+                        } else {
+                            $prefix =   $scheme->prefix . date('Y') . config('constants.invoice_scheme_separator');
+                        }
+    
+                        //Count
+                        $count = $scheme->start_number + $scheme->invoice_count;
+                        $count = str_pad($count, $scheme->total_digits, '0', STR_PAD_LEFT);
+                        
+                        //Prefix + count
+                        $invoice_no = $prefix . $count;
+                        $transaction_data['ref_no']       = $invoice_no ;
+                        //Increment the invoice count
+                        $scheme->invoice_count = $scheme->invoice_count + 1;
+                        $scheme->save();
+                    }
+                }else{
+                    $transaction_data['ref_no']       = $this->productUtil->generateReferenceNumber($transaction_data['type'], $ref_count);
+                }
+                
+                #......................................................
             }
             //upload document
             $company_name      = request()->session()->get("user_main.domain");

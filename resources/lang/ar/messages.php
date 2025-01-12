@@ -27,6 +27,7 @@
 "settings" => "إعدادات",
 "business_location_settings" => "إعدادات موقع الشركة",
 "print" => "طباعة",
+"print_by_pattern" => " طباعة حسب النمط",
 "submit" => "إرسال",
 "purchase_sell_mismatch_exception" => "خطأ: غير مصرح به: عدم التوافق بين الكمية المباعة والكمية التي تم شراؤها المنتج : product:",
 "purchase_stock_adjustment_mismatch_exception" => "خطأ: غير مسموح: عدم التوافق بين تعديل المخزون والكمية التي تم شراؤها المنتج : product:",

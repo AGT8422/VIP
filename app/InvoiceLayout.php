@@ -78,6 +78,6 @@ class InvoiceLayout extends Model
     public static function FirstLocation($business_id)
     {
         $InvoiceLayout  = InvoiceLayout::where("business_id",$business_id)->first();
-        if($InvoiceLayout->id != null){ return $InvoiceLayout->id; }else{ return null; }
+        if($InvoiceLayout != null){ return $InvoiceLayout->id; }else{ return null; }
     }
 }

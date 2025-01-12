@@ -7,15 +7,22 @@
     {!! Form::open(['url' => action('PatternController@update', [$pattern->id]), 'method' => 'post', 'id' => 'add_patterns', 'files' => true ]) !!}
        @component("components.widget" , ["title"=>__("business.Edit_patterns")])
 
+        {{-- pattern type  --}}
+        <div class="col-md-6">
+        <div class="form-group">
+            {!! Form::label('pattern_type', __('business.type') . ':*') !!}
+            {!! Form::select('pattern_type', [ 'sale' => __('business.sale') , 'purchase' => __('business.purchase')] , $pattern->type, ['class' => 'form-control' , 'required']); !!}
+            </div>
+        </div>
        {{-- pattern name  --}}
        <div class="col-md-6">
             <div class="form-group">
-                {!! Form::label('name', __('business.name') . ':*') !!}
+                {!! Form::label('name', __('business.pattern_name') . ':*') !!}
                 {!! Form::text('name', $pattern->name, ['class' => 'form-control' ,"placeholder" => __("business.enter pattern name"),   'required']); !!}
             </div>
         </div>
         {{-- pos    --}}
-        <div class="col-md-6">
+        <div class="col-md-6 hide">
              <div class="form-group">
                  {!! Form::label('pos', __('business.pos') . ':*') !!}
                  {!! Form::text('pos', $pattern->pos, ['class' => 'form-control' ,"placeholder" => __("business.enter pos name"),   'required']); !!}
@@ -36,7 +43,7 @@
             </div>
         </div>
         {{-- location  --}}
-        <div class="col-md-6">
+        <div class="col-md-6 hide">
             <div class="form-group">
                 {!! Form::label('location_id', __('purchase.business_location') . ':*') !!}
                 {!! Form::select('location_id',$business_locations, $pattern->location_id, ['class' => 'form-control' ,"placeholder" => __("messages.please_select"),   'required']); !!}
@@ -49,7 +56,13 @@
                 {!! Form::select('invoice_layout',$invoice_layout,  $pattern->invoice_layout, ['class' => 'form-control' ,"placeholder" => __("messages.please_select"),  'required']); !!}
             </div>
         </div>
-        
+        {{-- Printer layout  --}}
+        <div class="col-md-6">
+            <div class="form-group">
+                {!! Form::label('printer_type', __('business.printer_type') . ':*') !!}
+                {!! Form::select('printer_type',$printer_layout, $pattern->printer_type, ['class' => 'form-control' ,"placeholder" => __("messages.please_select"),  'required']); !!}
+            </div>
+        </div>
         @endcomponent
         @component("components.widget" )
            <div class="row">

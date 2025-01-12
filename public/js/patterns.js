@@ -16,6 +16,7 @@ $(document).ready(function() {
                 d.invoice_scheme = $("#invoice_scheme").val();
                 d.invoice_layout = $("#invoice_layout").val();
                 d.pos            = $("#pos_id").val();
+                d.pattern_type   = $("#pattern_type").val();
                 // d.user_id        = $("#user_id").val();
                 d = __datatable_ajax_callback(d);
             }
@@ -28,6 +29,7 @@ $(document).ready(function() {
             { data: 'invoice_scheme', name: 'invoice_scheme' },
             { data: 'invoice_layout', name: 'invoice_layout' },
             { data: 'pos', name: 'pos' },
+            { data: 'type', name: 'type' },
             { data: 'created_at', name: 'created_at' },
             { data: 'user_id', name: 'user_id' },
         ],
@@ -75,7 +77,7 @@ $(document).ready(function() {
     pattern_table.ajax.reload();
     pos_index_table.ajax.reload();
 
-    $(document).on("change","#location_id,#pattern_name,#invoice_scheme,#invoice_layout,#pos",function(){
+    $(document).on("change","#location_id,#pattern_type,#pattern_name,#invoice_scheme,#invoice_layout,#pos",function(){
         pattern_table.ajax.reload();
     });
 

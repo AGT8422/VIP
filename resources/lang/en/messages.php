@@ -80,6 +80,6 @@ return [
     "there_is_cheques"                             => "There are Related Cheques",
     "there_is_invoices"                            => "There are Related Invoices",
     "sure"                                         => "Sure",   
-
+    "print_by_pattern"                             => "Print By Pattern",
  
 ];

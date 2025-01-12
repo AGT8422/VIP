@@ -160,7 +160,7 @@ class BusinessLocation extends Model
     public static function FirstLocation($business_id)
     {
         $business_location  = BusinessLocation::where("business_id",$business_id)->first();
-        if($business_location->id != null){ return $business_location->id; }else{ return null; }
+        if($business_location != null){ return $business_location->id; }else{ return null; }
     }
 
 

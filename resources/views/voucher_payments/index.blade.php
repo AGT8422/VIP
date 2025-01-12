@@ -198,6 +198,11 @@
                                         <a style="text-decoration:none" href="{{ URL::to('reports/p-vh/'.$item->id) }}" target="_blank"><i class="fas fa-print"></i>&nbsp;&nbsp;@lang('messages.print')</a>
                                     @endif
                                 </li>
+                                <li>
+                                    @php  $types_s = ($item->account_type == 0)?(($item->contact->type == "customer")?0:1):0;  @endphp
+                                    <a class="btn-modal " data-href="{{ URL::to('payment-voucher/choose-pattern/'.$item->id  ) }}" data-container=".view_modal"><i class="fas fa-print" ></i> @lang('messages.print_by_pattern')</a>
+                                 
+                                </li>
                                 @if($item->document && $item->document != [])
                                     <li>
                                         {{-- @php dd($item->image); @endphp --}}

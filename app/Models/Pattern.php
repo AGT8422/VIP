@@ -21,7 +21,9 @@ class Pattern extends Model
         $pattern->name           =  $data["name"];  
         $pattern->invoice_scheme =  $data["invoice_scheme"];  
         $pattern->invoice_layout =  $data["invoice_layout"];  
+        $pattern->type           =  $data["pattern_type"]; 
         $pattern->pos            =  $data["pos"]; 
+        $pattern->printer_type   =  $data["printer_type"]; 
         $pattern->user_id        =  $user_id; 
         $pattern->save();
 
@@ -29,6 +31,7 @@ class Pattern extends Model
 
     public static function edit($id,$data,$business_id,$user_id)
     {
+      
         $pattern                 =  Pattern::find($id);
         $pattern->code           =  $data["code"];  
         $pattern->business_id    =  $business_id;  
@@ -37,6 +40,8 @@ class Pattern extends Model
         $pattern->invoice_scheme =  $data["invoice_scheme"];  
         $pattern->invoice_layout =  $data["invoice_layout"];  
         $pattern->pos            =  $data["pos"]; 
+        $pattern->type           =  $data["pattern_type"]; 
+        $pattern->printer_type   =  $data["printer_type"]; 
         $pattern->user_id        =  $user_id; 
         $pattern->update();
 
@@ -101,6 +106,10 @@ class Pattern extends Model
     public function layout()
     {
        return $this->belongsTo(\App\InvoiceLayout::class,"invoice_layout");
+    }
+    public function printer()
+    {
+       return $this->belongsTo(\App\Models\PrinterTemplate::class,"printer_type");
     }
     public function user()
     {

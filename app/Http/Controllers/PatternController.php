@@ -33,6 +33,10 @@ class PatternController extends Controller
                     $pattern_name = request()->pattern_name;
                     $patterns->where("name" ,$pattern_name);
                 }
+                if(!empty(request()->pattern_type)){
+                    $pattern_type = request()->pattern_type;
+                    $patterns->where("type" ,$pattern_type);
+                }
                 if(!empty(request()->invoice_scheme)){
                     $invoice_scheme = request()->invoice_scheme;
                     $patterns->where("invoice_scheme" ,$invoice_scheme);
@@ -86,6 +90,9 @@ class PatternController extends Controller
                         ->editColumn("user_id",function($row){
                             return $row->user->username;
                         })
+                        ->editColumn("type",function($row){
+                            return $row->type;
+                        })
                         ->editColumn("invoice_scheme",function($row){
                             return $row->scheme->name;
                         })
@@ -124,7 +131,7 @@ class PatternController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $business_id   = request()->session()->get("user.business_id");
+        $business_id                = request()->session()->get("user.business_id");
 
         $business_locations         = \App\BusinessLocation::allLocation($business_id);
         $default_business_locations = \App\BusinessLocation::FirstLocation($business_id);
@@ -134,6 +141,9 @@ class PatternController extends Controller
         
         $invoice_schemes            = \App\InvoiceScheme::allLocation($business_id);
         $default_invoice_schemes    = \App\InvoiceScheme::FirstLocation($business_id);
+
+        $printer_layout             = \App\Models\PrinterTemplate::allLocation($business_id);
+        $default_printer_layout     = \App\Models\PrinterTemplate::FirstLocation($business_id);
         
         return view("patterns.create")->with(compact([
                                     "business_locations",
@@ -142,6 +152,8 @@ class PatternController extends Controller
                                     "default_invoice_layout",
                                     "invoice_schemes",
                                     "default_invoice_schemes",
+                                    "printer_layout",
+                                    "default_printer_layout",
                                 ]));
                                 
                             }
@@ -159,12 +171,14 @@ class PatternController extends Controller
         $business_locations         = \App\BusinessLocation::allLocation($business_id);
         $invoice_layout             = \App\InvoiceLayout::allLocation($business_id);
         $invoice_schemes            = \App\InvoiceScheme::allLocation($business_id);
-
+        $printer_layout             = \App\Models\PrinterTemplate::allLocation($business_id);
+       
         return view("patterns.edit")->with(compact([
                                         "invoice_layout",
                                         "invoice_schemes",
                                         "business_locations",
                                         "pattern",
+                                        "printer_layout",
                                     ]));
         
     }
@@ -180,7 +194,7 @@ class PatternController extends Controller
         try{
             $business_id   = request()->session()->get("user.business_id");
             $user_id       = request()->session()->get("user.id");
-            $data          = $request->only(["name","pos","invoice_scheme","location_id","invoice_layout","code"]);
+            $data          = $request->only(["name","pos","invoice_scheme","location_id","invoice_layout","code","pattern_type","printer_type"]);
             
             DB::beginTransaction();
              
@@ -188,8 +202,9 @@ class PatternController extends Controller
 
             DB::commit();
             
-            $output = ["success"=> 1 ,
-                "msg"=> "add Successfull"
+            $output = [
+                "success" => 1 ,
+                "msg"     => "add Successfull"
             ];
 
         }catch(Exception $e){
@@ -232,11 +247,11 @@ class PatternController extends Controller
         }
         $business_id   = request()->session()->get("user.business_id");
         $user_id       = request()->session()->get("user.id");
-        $data          = $request->only(["code","name","pos","invoice_scheme","location_id","invoice_layout"]);
+        $data          = $request->only(["code","name","pos","invoice_scheme","location_id","invoice_layout","pattern_type","printer_type"]);
         
         
         try{
-          
+           
             DB::beginTransaction();
             \App\Models\Pattern::edit($id,$data,$business_id,$user_id);
             DB::commit();

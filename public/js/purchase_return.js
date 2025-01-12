@@ -630,7 +630,7 @@ function update_row(type = null){
      // ..... get info
       if(type != null){
          var price  =  el.children().find(".unit_price_before_dis_inc").val();
-         price_exc  =  el.children().find(".unit_price_before_dis_exc").val(parseFloat((price*100)/(100+tax)).toFixed(3));
+         price_exc  =  el.children().find(".unit_price_before_dis_exc").val(parseFloat((price*100)/(100+tax)).toFixed(2));
      } 
      
      var dis_perce  =  el.children().find(".discount_percent_return").val();
@@ -649,27 +649,27 @@ function update_row(type = null){
      var sub_total_price =  el.children().find(".pos_line_sub__total");
      
      //... tax 
-     var percent   =  (price_exc.val()*tax/100).toFixed(3);
+     var percent   =  (price_exc.val()*tax/100).toFixed(2);
      var exc_price_before_dis =  parseFloat(price_exc.val()) + parseFloat(percent);
      
      // console.log("percent : "+price_exc);
      //... tax after 
-     var percent_after   =  ((price_exc.val() - discount_amount_return)*tax/100).toFixed(3);
+     var percent_after   =  ((price_exc.val() - discount_amount_return)*tax/100).toFixed(2);
      var inc_price_af_dis =  parseFloat((price_exc.val() - discount_amount_return)) + parseFloat(percent_after);
       
      //.. set item values
-     price_inc.val(exc_price_before_dis.toFixed(3));
-     price_after_exc.val((price_exc.val() - discount_amount_return).toFixed(3));
+     price_inc.val(exc_price_before_dis.toFixed(2));
+     price_after_exc.val((price_exc.val() - discount_amount_return).toFixed(2));
      console.log(currancy);
      if(currancy != "" && currancy != null){
-         price_exc_before_new_currency.val((parseFloat(price_exc.val()).toFixed(3)/parseFloat(currancy)).toFixed(2));
+         price_exc_before_new_currency.val((parseFloat(price_exc.val()).toFixed(2)/parseFloat(currancy)).toFixed(2));
      console.log("#!1 " + price_exc.val());
      console.log(price_exc_before_new_currency.val());
      console.log(discount_amount_return);
          price_exc_after_new_currency.val( (parseFloat(price_exc_before_new_currency.val()) -  parseFloat(discount_amount_curr) ).toFixed(2));
      }
-     price_after_inc.val((inc_price_af_dis).toFixed(3));
-     sub_total_price.val((i*inc_price_af_dis).toFixed(3));
+     price_after_inc.val((inc_price_af_dis).toFixed(2));
+     sub_total_price.val((i*inc_price_af_dis).toFixed(2));
  });
  $(".pos_quantity").each(function(){
      // .... parent
@@ -681,7 +681,7 @@ function update_row(type = null){
      // ..... get info
       if(type != null){
          var price  =  el.children().find(".unit_price_before_dis_inc").val();
-         price_exc  =  el.children().find(".unit_price_before_dis_exc").val(parseFloat((price*100)/(100+tax)).toFixed(3));
+         price_exc  =  el.children().find(".unit_price_before_dis_exc").val(parseFloat((price*100)/(100+tax)).toFixed(2));
      } 
      
      var dis_perce  =  el.children().find(".discount_percent_return").val();
@@ -697,12 +697,12 @@ function update_row(type = null){
      var currancy =  $(".currency_id_amount").val();
      
      //... tax 
-     var percent   =  (price_exc.val()*tax/100).toFixed(3);
+     var percent   =  (price_exc.val()*tax/100).toFixed(2);
      var exc_price_before_dis =  parseFloat(price_exc.val()) + parseFloat(percent);
      
      // console.log("percent : "+price_exc);
      //... tax after 
-     var percent_after   =  ((price_exc.val() - discount_amount_return)*tax/100).toFixed(3);
+     var percent_after   =  ((price_exc.val() - discount_amount_return)*tax/100).toFixed(2);
      var inc_price_af_dis =  parseFloat((price_exc.val() - discount_amount_return)) + parseFloat(percent_after);
       
      //.. set item values
@@ -713,8 +713,8 @@ function update_row(type = null){
          price_exc_before_new_currency.val((parseFloat(price_exc.val()).toFixed(4)/parseFloat(currancy)).toFixed(2));
          price_exc_after_new_currency.val( (parseFloat(price_exc_before_new_currency.val()) - ( parseFloat( price_exc_before_new_currency.val() ) *dis_perce )  /100).toFixed(2));
      }
-     price_after_inc.val((inc_price_af_dis).toFixed(3));
-     sub_total_price.val((i*inc_price_af_dis).toFixed(3));
+     price_after_inc.val((inc_price_af_dis).toFixed(2));
+     sub_total_price.val((i*inc_price_af_dis).toFixed(2));
  });
  
  total_final();
@@ -738,16 +738,16 @@ function update_row_curr(type = null){
      // ..... get info
      //  if(type != null){
      //     var price  =  el.children().find(".unit_price_before_dis_inc").val();   
-     //     price_exc  =  el.children().find(".unit_price_before_dis_exc").val(parseFloat((price*100)/(100+tax)).toFixed(3));
+     //     price_exc  =  el.children().find(".unit_price_before_dis_exc").val(parseFloat((price*100)/(100+tax)).toFixed(2));
      // } 
      
      if(currancy != "" && currancy != null){
          if(type != null){
-             var opposit_amount = (parseFloat(price_exc_currency.val()) * parseFloat(currancy)).toFixed(3); 
+             var opposit_amount = (parseFloat(price_exc_currency.val()) * parseFloat(currancy)).toFixed(2); 
              el.children().find(".unit_price_before_dis_exc").val( opposit_amount );
              var price      =  el.children().find(".unit_price_before_dis_exc").val();
              var new_amount =  parseFloat(price)  + (price*tax/100);
-             el.children().find(".unit_price_before_dis_inc").val(parseFloat(new_amount).toFixed(3));
+             el.children().find(".unit_price_before_dis_inc").val(parseFloat(new_amount).toFixed(2));
          } 
      }
      
@@ -768,12 +768,12 @@ function update_row_curr(type = null){
      var sub_total_price =  el.children().find(".pos_line_sub__total");
      
      //... tax 
-     var percent   =  (price_exc.val()*tax/100).toFixed(3);
+     var percent   =  (price_exc.val()*tax/100).toFixed(2);
      var exc_price_before_dis =  parseFloat(price_exc.val()) + parseFloat(percent);
      
      // console.log("percent : "+price_exc);
      //... tax after 
-     var percent_after   =  ((price_exc.val() - discount_amount_return)*tax/100).toFixed(3);
+     var percent_after   =  ((price_exc.val() - discount_amount_return)*tax/100).toFixed(2);
      var inc_price_af_dis =  parseFloat((price_exc.val() - discount_amount_return)) + parseFloat(percent_after);
       
      //.. set item values
@@ -784,8 +784,8 @@ function update_row_curr(type = null){
          // price_exc_before_new_currency.val((parseFloat(price_exc.val()).toFixed(4)/parseFloat(currancy)).toFixed(2));
          // price_exc_after_new_currency.val( (parseFloat(price_exc_before_new_currency.val()) - ( parseFloat( price_exc_before_new_currency.val() ) *dis_perce )  /100).toFixed(2));
      }
-     price_after_inc.val((inc_price_af_dis).toFixed(3));
-     sub_total_price.val((i*inc_price_af_dis).toFixed(3));
+     price_after_inc.val((inc_price_af_dis).toFixed(2));
+     sub_total_price.val((i*inc_price_af_dis).toFixed(2));
  });
  $(".pos_quantity").each(function(){
      // .... parent
@@ -797,7 +797,7 @@ function update_row_curr(type = null){
      // ..... get info
       if(type != null){
          var price  =  el.children().find(".unit_price_before_dis_inc").val();
-         price_exc  =  el.children().find(".unit_price_before_dis_exc").val(parseFloat((price*100)/(100+tax)).toFixed(3));
+         price_exc  =  el.children().find(".unit_price_before_dis_exc").val(parseFloat((price*100)/(100+tax)).toFixed(2));
      } 
      
      var dis_perce  =  el.children().find(".discount_percent_return").val();
@@ -813,12 +813,12 @@ function update_row_curr(type = null){
      var currancy =  $(".currency_id_amount").val();
      
      //... tax 
-     var percent   =  (price_exc.val()*tax/100).toFixed(3);
+     var percent   =  (price_exc.val()*tax/100).toFixed(2);
      var exc_price_before_dis =  parseFloat(price_exc.val()) + parseFloat(percent);
      
      // console.log("percent : "+price_exc);
      //... tax after 
-     var percent_after   =  ((price_exc.val() - discount_amount_return)*tax/100).toFixed(3);
+     var percent_after   =  ((price_exc.val() - discount_amount_return)*tax/100).toFixed(2);
      var inc_price_af_dis =  parseFloat((price_exc.val() - discount_amount_return)) + parseFloat(percent_after);
       
      //.. set item values
@@ -829,8 +829,8 @@ function update_row_curr(type = null){
          price_exc_before_new_currency.val((parseFloat(price_exc.val()).toFixed(4)/parseFloat(currancy)).toFixed(2));
          price_exc_after_new_currency.val( (parseFloat(price_exc_before_new_currency.val()) - ( parseFloat( price_exc_before_new_currency.val() ) *dis_perce )  /100).toFixed(2));
      }
-     price_after_inc.val((inc_price_af_dis).toFixed(3));
-     sub_total_price.val((i*inc_price_af_dis).toFixed(3));
+     price_after_inc.val((inc_price_af_dis).toFixed(2));
+     sub_total_price.val((i*inc_price_af_dis).toFixed(2));
  });
  
  total_final();
@@ -879,8 +879,8 @@ function change_currency(){
             var  unit_tax   = ((tax_amount/100)*vl) + parseFloat(vl);
             var  percent    = currancy*vl;
             var  percent_tax    = ((tax_amount/100)*(currancy*vl)) + parseFloat(currancy*vl);
-            exc_vat.val(percent.toFixed(3)); 
-            inc_vat.val(percent_tax.toFixed(3));
+            exc_vat.val(percent.toFixed(2)); 
+            inc_vat.val(percent_tax.toFixed(2));
         } 
         var tax_price      = parseFloat(exc_vat.val()) + parseFloat((tax_rate/100)*exc_vat.val());
         
@@ -888,9 +888,9 @@ function change_currency(){
         var tax_amount_    = tax_price  -   dis_amount ;
         
         
-        exc_dis_vat.val(amount.toFixed(3));
-        inc_dis_vat.val(((tax_amount/100)*(amount) + parseFloat(amount)).toFixed(3));
-        exc_dis_vat_curr.val((amount.toFixed(3)/currancy).toFixed(3));
+        exc_dis_vat.val(amount.toFixed(2));
+        inc_dis_vat.val(((tax_amount/100)*(amount) + parseFloat(amount)).toFixed(2));
+        exc_dis_vat_curr.val((amount.toFixed(2)/currancy).toFixed(2));
         
         update_table_total();
         
@@ -924,14 +924,14 @@ function total_final(){
 
  //.. set item values
  qty_total.html(total_qty);
- amount_total.html(total_amount.toFixed(3));
+ amount_total.html(total_amount.toFixed(2));
  currancy = $(".currency_id_amount").val();
  if(currancy != "" && currancy != null){
      grand_total.text(total_amount_curr.toFixed(2));
      grand_total_hidden_curr.val(total_amount_curr.toFixed(2));
  }
- amount_total.html(total_amount.toFixed(3));
- final_sub_total.val(total_amount.toFixed(3));
+ amount_total.html(total_amount.toFixed(2));
+ final_sub_total.val(total_amount.toFixed(2));
  update_table_total();
  discount_final();
  vats();
@@ -950,14 +950,14 @@ function discount_final(){
      if(currancy != "" && currancy != 0){
          fin_dis = dis_amount;
          tax     = $("#tax_id option:selected").data("tax_amount");
-         dis_text.html(parseFloat(fin_dis*currancy).toFixed(3));
-         discount.val((fin_dis*currancy).toFixed(3));
+         dis_text.html(parseFloat(fin_dis*currancy).toFixed(2));
+         discount.val((fin_dis*currancy).toFixed(2));
         
          $('#discount_calculated_amount_cur').text(parseFloat(fin_dis).toFixed(2));
      }else{
          fin_dis = dis_amount;
          tax     = $("#tax_id option:selected").data("tax_amount");
-         dis_text.html(parseFloat(fin_dis).toFixed(3));
+         dis_text.html(parseFloat(fin_dis).toFixed(2));
          discount.val((fin_dis));
          
      }
@@ -973,14 +973,14 @@ function discount_final(){
          perc    = (dis_c*tax)/(100+tax);
          fin_dis =  dis_c - perc ;
 
-         dis_text.html(parseFloat(fin_dis).toFixed(3));
+         dis_text.html(parseFloat(fin_dis).toFixed(2));
          discount.val((fin_dis));
-         $('#discount_calculated_amount_cur').text(parseFloat(fin_dis_curr).toFixed(3));
+         $('#discount_calculated_amount_cur').text(parseFloat(fin_dis_curr).toFixed(2));
      }else{
          tax     = $("#tax_id option:selected").data("tax_amount");
          perc    = (dis_amount*tax)/(100+tax);
          fin_dis =  dis_amount - perc ;
-         dis_text.html(parseFloat(fin_dis).toFixed(3));
+         dis_text.html(parseFloat(fin_dis).toFixed(2));
          discount.val((fin_dis));
          
      }
@@ -1020,9 +1020,9 @@ function fl_price(){
         finals_curr    = ( parseFloat(sub_total_curr) - parseFloat(discount_curr)) + parseFloat(((sub_total_curr-discount_curr)*tax/100).toFixed(2));
         // $("#total_final_i_curr").html(parseFloat(finals_curr).toFixed(2)) ;
     }
-    $("#total_finals").html(parseFloat(finals).toFixed(3)) ;
-    $("#total_finals_").val(parseFloat(finals).toFixed(3)) ;
-    $("#total_final_input").val(parseFloat(finals).toFixed(3)) ;
+    $("#total_finals").html(parseFloat(finals).toFixed(2)) ;
+    $("#total_finals_").val(parseFloat(finals).toFixed(2)) ;
+    $("#total_final_input").val(parseFloat(finals).toFixed(2)) ;
 }
 function final_price(){
     var sub_total = $("#total_return_input").val();
@@ -1040,9 +1040,9 @@ function final_price(){
         finals_curr    = ( parseFloat(sub_total_curr) - parseFloat(discount_curr)) + parseFloat(((sub_total_curr-discount_curr)*tax/100).toFixed(2));
         // $("#total_final_i_curr").html(parseFloat(finals_curr).toFixed(2)) ;
     }
-    $("#total_finals").html(parseFloat(finals).toFixed(3)) ;
-    $("#total_finals_").val(parseFloat(finals).toFixed(3)) ;
-    $("#total_final_input").val(parseFloat(finals).toFixed(3)) ;
+    $("#total_finals").html(parseFloat(finals).toFixed(2)) ;
+    $("#total_finals_").val(parseFloat(finals).toFixed(2)) ;
+    $("#total_final_input").val(parseFloat(finals).toFixed(2)) ;
 }
 function vats(){
     var sub_total = $("#total_return_input").val();
@@ -1053,8 +1053,8 @@ function vats(){
     var vat_input = $("#tax_amount2");
     var tax       = $("#tax_id option:selected").data("tax_amount");
     var vat       = (fin*tax)/100;
-    vat_text.html(vat.toFixed(3));
-    vat_input.val(vat.toFixed(3));
+    vat_text.html(vat.toFixed(2));
+    vat_input.val(vat.toFixed(2));
     currancy = $(".currency_id_amount").val();
     if(currancy != "" && currancy != 0){
         discount_curr  = (discount/currancy).toFixed(2);

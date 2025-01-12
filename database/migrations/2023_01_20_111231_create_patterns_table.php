@@ -21,6 +21,7 @@ class CreatePatternsTable extends Migration
             $table->integer("location_id")->unsigned();
             $table->foreign("location_id")->references("id")->on("business_locations")->onDelete("cascade")->onUpdate("cascade");
             $table->string("name",191)->nullable();
+            $table->enum('type', ['purchase', 'sale'])->default('sale');
             $table->integer("invoice_scheme")->unsigned();
             $table->foreign("invoice_scheme")->references("id")->on("invoice_schemes")->onDelete("cascade")->onUpdate("cascade");
             $table->integer("invoice_layout")->unsigned();
@@ -28,6 +29,8 @@ class CreatePatternsTable extends Migration
             $table->string("pos",255)->nullable();
             $table->integer("user_id")->unsigned();
             $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade")->onUpdate("cascade");
+            $table->integer("printer_type")->nullable();
+            // $table->foreign("printer_type")->references("id")->on("printer_templates")->onDelete("cascade")->onUpdate("cascade");
             $table->tinyInteger("default_p")->default(0)->nullable();
             $table->timestamps();
         });

@@ -100,11 +100,15 @@
 'Edit_patterns' => 'تعديل الأنماط',
 'Create_patterns' => 'إنشاء الأنماط',
 'patterns' => 'لائحة الأنماط',
-'name' => 'الاسم',
+'pattern_name' => 'الاسم',
 'pos' => 'نقاط البيع المرتبطة',
 'enter pos name' => '   اسم نقطة البيع',
+'enter pattern type' => 'ادخل نوع النمط',
 'enter pattern name' => 'ادخل اسم النمط',
 'enter pattern code' => 'ادخل كود النمط',
+'purchase' => ' المشتريات',
+'sale' => 'المبيعات',
+'type' => 'النوع',
 'code' => 'الكود',
 'patterns_name' => 'اسم النمط',
 'currency_add' => 'العملة الإضافية',
@@ -114,5 +118,6 @@
 'default' => 'الافتراضي',
 'unit_other' => 'قيمة العملة ',
 'unit_basic' => 'قيمة العملة الرئيسية',
+'printer_type' => 'نمط الطباعة ',
 
 ];

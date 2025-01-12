@@ -980,5 +980,18 @@ class PrinterTemplate extends Model
         }
     }
 
+    // 
+    public static function allLocation($business_id)
+    {
+        $array = [];
+        $PrinterTemplate  = PrinterTemplate::where("business_id",$business_id)->get();
+        foreach($PrinterTemplate as $key => $value){$array[$value->id] = $value->name_template;}
+        return $array;
+    }
+    public static function FirstLocation($business_id)
+    {
+        $PrinterTemplate  = PrinterTemplate::where("business_id",$business_id)->first();
+        if($PrinterTemplate != null){ return $PrinterTemplate->id; }else{ return null; }
+    }
 
 }

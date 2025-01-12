@@ -25,6 +25,15 @@
             <div class="col-sm-6">
                 <strong>@lang('business.pos') :  </strong>   {{ $pattern->pos }}  
             </div>
+            <div class="col-sm-6">
+                <strong>@lang('business.type') :  </strong>   {{ $pattern->type }}  
+            </div>
+            <div class="col-sm-6">
+                <strong>@lang('business.printer_type') :  </strong>   {{ $pattern->type }}  
+            </div>
+            <div class="col-sm-6">
+                <strong>@lang('business.printer_type') :  </strong>   {{ $pattern->printer->name_template }}  
+            </div>
         </div>
         </div>
         <div class="modal-footer">

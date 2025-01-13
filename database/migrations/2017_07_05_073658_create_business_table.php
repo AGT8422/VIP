@@ -105,6 +105,7 @@ class CreateBusinessTable extends Migration
             $table->text('return_purchase_print_module')->nullable();
             $table->text('default_price_unit')->nullable();
             $table->text('front_dashboard_style')->nullable();
+            $table->integer('additional_expense')->nullable();
             
             $table->timestamps();
          });

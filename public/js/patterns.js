@@ -2,7 +2,7 @@ $(document).ready(function() {
     
     
 
-     var pattern_table = $("#patterns_table").DataTable({
+    var pattern_table = $("#patterns_table").DataTable({
         processing:     true,
         serverSide:     true,
         scrollY:      "75vh",
@@ -38,7 +38,7 @@ $(document).ready(function() {
         },
         // "footerCallback": function ( row, data, start, end, display ) {}
     });
-     var pos_index_table = $("#pos_index_table").DataTable({
+    var pos_index_table = $("#pos_index_table").DataTable({
         processing:     true,
         serverSide:     true,
         scrollY:      "75vh",
@@ -90,7 +90,6 @@ $(document).ready(function() {
             pattern_form.submit();
         }
     });
-     
 
     $('table#patterns_table tbody').on('click', 'a.delete-patterns', function(e) {
         e.preventDefault();
@@ -119,6 +118,6 @@ $(document).ready(function() {
         });
     });
 
-
+    
 
 });

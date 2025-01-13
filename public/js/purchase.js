@@ -1494,7 +1494,7 @@ $(document).ready(function() {
             var tax_price     =  parseFloat(el.children().find('.purchase_unit_cost_with_tax').val())
             currancy = $(".currency_id_amount").val();
             if(currancy != "" && currancy != 0){
-                var pp_price_currency      =  parseFloat(el.children().find('.purchase_unit_cost_new_currency').val((final_amount_origin/currancy).toFixed(2)));
+                var pp_price_currency      =  parseFloat(el.children().find('.purchase_unit_cost_new_currency').val((pp_price_origin/currancy).toFixed(2)));
                 var tax_price_currency     =  parseFloat(el.children().find('.purchase_unit_cost_with_tax_new_currency').val((tax_price/currancy).toFixed(2)));
             }else{
                 var pp_price_currency      =  parseFloat(el.children().find('.purchase_unit_cost_new_currency').val(0))
@@ -1704,7 +1704,7 @@ $(document).ready(function() {
             // var before_cur_tax  = el.children().find('.purchase_unit_cost_without_discount').val(price);
             currancy = $(".currency_id_amount").val();
             if(currancy != "" && currancy != 0){
-                el.children().find('.purchase_unit_cost_new_currency').val(price/currancy);
+                el.children().find('.purchase_unit_cost_new_currency').val(before_cur_tax_origin/currancy);
                 el.children().find('.purchase_unit_cost_with_tax_new_currency').val($(this).val()/currancy);
             }else{
                 el.children().find('.purchase_unit_cost_new_currency').val(0);

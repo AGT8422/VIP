@@ -21,7 +21,7 @@ class CreatePatternsTable extends Migration
             $table->integer("location_id")->unsigned();
             $table->foreign("location_id")->references("id")->on("business_locations")->onDelete("cascade")->onUpdate("cascade");
             $table->string("name",191)->nullable();
-            $table->enum('type', ['purchase', 'sale'])->default('sale');
+            $table->enum('type', ['purchase', 'sale','cheques','vouchers'])->default('sale');
             $table->integer("invoice_scheme")->unsigned();
             $table->foreign("invoice_scheme")->references("id")->on("invoice_schemes")->onDelete("cascade")->onUpdate("cascade");
             $table->integer("invoice_layout")->unsigned();

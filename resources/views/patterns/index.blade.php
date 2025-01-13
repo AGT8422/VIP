@@ -20,7 +20,7 @@
                 {!! Form::select('pattern_type',['sale'=>__('business.sale'),'purchase'=>__('business.purchase')] , null, ['class' => 'form-control select2','id'=>'pattern_type', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 hide">
             <div class="form-group">
                 {!! Form::label('location_id',  __('purchase.business_location') . ':') !!}
                 {!! Form::select('location_id',$business_locations , null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
@@ -28,7 +28,7 @@
         </div>
         <div class="col-md-3">
             <div class="form-group">
-                {!! Form::label('pattern_name',  __('business.name') . ':') !!}
+                {!! Form::label('pattern_name',  __('business.pattern_name') . ':') !!}
                 {!! Form::select('pattern_name', $pattern_name, null, ['class' => 'form-control select2', 'style' => 'width:100%', 'placeholder' => __('lang_v1.all')]); !!}
             </div>
         </div>
@@ -68,7 +68,7 @@
             <thead>
                 <tr>
                     <th>@lang('messages.action')</th>
-                    <th>@lang('business.name')</th>
+                    <th>@lang('business.pattern_name')</th>
                     <th>@lang('purchase.location')</th>
                     <th>@lang('invoice.invoice_scheme')</th>
                     <th>@lang('invoice.invoice_layout')</th>

@@ -210,11 +210,11 @@
                         $currency = $purchase->exchange_price; 
                     @endphp
                     <td @if($purchase->exchange_price > 1) class="curr_column  cur_check  " @else class="curr_column  cur_check hide " @endif>
-                        {!! Form::text('purchases[' . $loop->index . '][purchase_unit_cost_new_currency]', number_format(($currency!= null && $currency != 0)?( $purchase_line->pp_without_discount/$purchase->exchange_rate)/$currency:0, $currency_precision, $currency_details->decimal_separator, $currency_details->thousand_separator),
+                        {!! Form::text('purchases[' . $loop->index . '][purchase_unit_cost_new_currency]', number_format((($currency!= null && $currency != 0)?( $purchase_line->pp_without_discount/$purchase->exchange_rate)/$currency:0), $currency_precision, $currency_details->decimal_separator, $currency_details->thousand_separator),
                         ['class' => 'form-control input-sm purchase_pos_inc  purchase_unit_cost_new_currency  input_number', "data-number" =>  $loop->index , 'required']); !!}
                     </td>
                     <td @if($purchase->exchange_price > 1) class=" hide" @else class=" hide " @endif>
-                        {!! Form::text('purchases[' . $loop->index . '][purchase_unit_cost_with_tax_new_currency]', number_format(($currency!= null && $currency != 0)?($before_dis_inc_vat/$purchase->exchange_rate)/$currency:0, $currency_precision, $currency_details->decimal_separator, $currency_details->thousand_separator),
+                        {!! Form::text('purchases[' . $loop->index . '][purchase_unit_cost_with_tax_new_currency]', number_format((($currency!= null && $currency != 0)?($before_dis_inc_vat/$purchase->exchange_rate)/$currency:0), $currency_precision, $currency_details->decimal_separator, $currency_details->thousand_separator),
                         ['class' => 'form-control input-sm purchase_pos_inc  purchase_unit_cost_with_tax_new_currency  input_number', "data-number" =>  $loop->index , 'required']); !!}
                     </td>
                     {{-- */* discount % && fixed --}}

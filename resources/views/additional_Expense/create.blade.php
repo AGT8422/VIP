@@ -1,10 +1,37 @@
-<div class="modal-dialog" role="document" style="width:90%">
+<div class="modal-dialog" role="document" style="width:100%">
       <div class="modal-content">
        <?php 
               $contacts    =  \App\Contact::suppliers();
               $cost_center =  \App\Account::cost_center_list();
               $expenses    =  \App\Account::main('Expenses');
-         ?>    
+              $mBusiness                = \App\Business::find(request()->session()->get('user.business_id'));
+              if(!empty($mBusiness)){
+                  $accountType              = \App\AccountType::find($mBusiness->additional_expense);
+                  $expenseID                = $mBusiness->additional_expense;
+                  // $databaseName =  "izo26102024_esai" ; $dab =  Illuminate\Support\Facades\Config::get('database.connections.mysql.database'); 
+                  
+                  if(!empty($accountType)){
+                     $additional_expenses = [];
+                      $additional_exp  =\App\Account::whereHas('account_type',function($query) use($expenseID){
+                                $query->where('id',$expenseID);
+                                $query->orWhere('parent_account_type_id',$expenseID);
+                      })->get();
+                      foreach ($additional_exp as $key => $value) {
+                        # code...
+                        $additional_expenses[$value->id] = $value->name . " || " . $value->account_number; 
+                      }
+                    }else{
+                      
+                      $additional_expenses      = \App\Account::items();
+                    }
+                  }else{ 
+                    $additional_expenses      = \App\Account::items();
+                    
+                  }
+              if($databaseName == $dab){
+                // dd($additional_expenses);
+              }
+          ?>    
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <div class="row">
@@ -172,7 +199,7 @@
               '<td class="col-xs-1 ship_curr hide">{{ Form::number('shipping_amount_curr[]',0,['class'=>'form-control  shipping_amount_curr','required','step'=>'any','min'=>0]) }}</td>' +
               '<td class="col-xs-1 ship_curr hide">{{ Form::number('shipping_vat_curr[]',0,['class'=>'form-control shipping_tax_curr','required','step'=>'any','min'=>0]) }}</td>' +
               '<td class="col-xs-1 ship_curr hide">{{ Form::number('shipping_total_curr[]',0,['class'=>'form-control shipping_total_curr','required','step'=>'any','min'=>0,'readOnly']) }}</td>' +
-              '<td class="col-xs-1">{{ Form::select('shipping_account_id[]',$expenses,null,['class'=>'form-control select_edit shipping-select2 ','required']) }}</td>'+
+              '<td class="col-xs-1">{{ Form::select('shipping_account_id[]',$additional_expenses,null,['class'=>'form-control select_edit shipping-select2 ','required']) }}</td>'+
               '<td class="col-xs-1">{{ Form::select('shipping_cost_center_id[]',$cost_center,null,['class'=>'form-control select_edit shipping-select2 cost-center','placeholder'=>trans('home.please account')]) }}</td>' +
               '<td class="col-xs-1">{{ Form::text('shiping_text[]',null,['class'=>'form-control ' ]) }}</td>' +
               '<td class="col-xs-1 ship_curr currency_check hide" style="width:300px;"><div class="col-md-12"><div class="form-group"><div class="multi-input text-center"> '+ 
@@ -192,7 +219,7 @@
               '<td class="col-xs-1 ship_curr ">{{ Form::number('shipping_amount_curr[]',0,['class'=>'form-control  shipping_amount_curr','required','step'=>'any','min'=>0]) }}</td>' +
               '<td class="col-xs-1 ship_curr ">{{ Form::number('shipping_vat_curr[]',0,['class'=>'form-control shipping_tax_curr','required','step'=>'any','min'=>0]) }}</td>' +
               '<td class="col-xs-1 ship_curr ">{{ Form::number('shipping_total_curr[]',0,['class'=>'form-control shipping_total_curr','required','step'=>'any','min'=>0,'readOnly']) }}</td>' +
-              '<td class="col-xs-1">{{ Form::select('shipping_account_id[]',$expenses,null,['class'=>'form-control select_edit shipping-select2 ','required']) }}</td>'+
+              '<td class="col-xs-1">{{ Form::select('shipping_account_id[]',$additional_expenses,null,['class'=>'form-control select_edit shipping-select2 ','required']) }}</td>'+
               '<td class="col-xs-1">{{ Form::select('shipping_cost_center_id[]',$cost_center,null,['class'=>'form-control select_edit shipping-select2 cost-center','placeholder'=>trans('home.please account')]) }}</td>' +
               '<td class="col-xs-1">{{ Form::text('shiping_text[]',null,['class'=>'form-control ' ]) }}</td>' +
               '<td class="col-xs-1 ship_curr currency_check" style="width:300px;"><div class="col-md-12"><div class="form-group"><div class="multi-input text-center">  '+ 

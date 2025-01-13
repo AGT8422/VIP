@@ -427,7 +427,7 @@ class SellController extends Controller
                         }
                         
                         if ($row->type == 'sell' || $row->type == 'sale' ) { 
-                            if (auth()->user()->can("print_invoice")) {
+                            if (auth()->user()->can("sales.print_invoice")) {
                                 
                                $business_module = \App\Business::find($row->business_id);
 
@@ -455,8 +455,6 @@ class SellController extends Controller
                                                 }
                                             }
                                             $html .= '</div>';
-                                            
-                                            
                                             $html .= '</li> <li><a href="#" class="print-invoice" data-href="' . route('sell.printInvoice', [$row->id]) . '?package_slip=true"><i class="fas fa-file-alt" aria-hidden="true"></i> ' . __("lang_v1.packing_slip") . '</a></li>';
                                         }else{
                                             $html .= '<li>
@@ -476,14 +474,12 @@ class SellController extends Controller
                                                 }
                                             }
                                             $html .= '</div>';
-                                            
-                                            
                                             $html .= '</li> <li><a href="#" class="print-invoice" data-href="' . route('sell.printInvoice', [$row->id]) . '?package_slip=true"><i class="fas fa-file-alt" aria-hidden="true"></i> ' . __("lang_v1.packing_slip") . '</a></li>';
                                         }else{
                                             $html .= '<li><a href="'.\URL::to('reports/sell/'.$row->id.'?invoice_no='.$row->invoice_no).'" target="_blank"><i class="fas fa-print" aria-hidden="true"></i> ' . __("lang_v1.print_invoice") . '</a> </li>
                                             <li><a href="#" class="print-invoice" data-href="' . route('sell.printInvoice', [$row->id]) . '?package_slip=true"><i class="fas fa-file-alt" aria-hidden="true"></i> ' . __("lang_v1.packing_slip") . '</a></li>';
                                     
-                                  }
+                                        }
                                      
                                  }
                                 

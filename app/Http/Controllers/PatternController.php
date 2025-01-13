@@ -141,7 +141,7 @@ class PatternController extends Controller
         
         $invoice_schemes            = \App\InvoiceScheme::allLocation($business_id);
         $default_invoice_schemes    = \App\InvoiceScheme::FirstLocation($business_id);
-
+        $accounts                   = \App\Account::items();
         $printer_layout             = \App\Models\PrinterTemplate::allLocation($business_id);
         $default_printer_layout     = \App\Models\PrinterTemplate::FirstLocation($business_id);
         
@@ -150,6 +150,7 @@ class PatternController extends Controller
                                     "default_business_locations",
                                     "invoice_layout",
                                     "default_invoice_layout",
+                                    "accounts",
                                     "invoice_schemes",
                                     "default_invoice_schemes",
                                     "printer_layout",

@@ -9,12 +9,36 @@
     font-size: 24px;
   }
 </style>
-<div class="modal-dialog" role="document" style="width:90%">
+<div class="modal-dialog" role="document" style="width:100%">
   <div class="modal-content">
    <?php 
           $contacts                 = \App\Contact::suppliers();
           $cost_center              = \App\Account::cost_centers();
           $expenses                 = \App\Account::main('Expenses');
+          $mBusiness                = \App\Business::find(request()->session()->get('user.business_id'));
+          if(!empty($mBusiness)){
+          $accountType              = \App\AccountType::find($mBusiness->additional_expense);
+          $expenseID                = $mBusiness->additional_expense;
+          // $databaseName =  "izo26102024_esai" ; $dab =  Illuminate\Support\Facades\Config::get('database.connections.mysql.database'); 
+          
+          if(!empty($accountType)){
+              $additional_expenses = [];
+              $additional_exp  =\App\Account::whereHas('account_type',function($query) use($expenseID){
+                        $query->where('id',$expenseID);
+                        $query->orWhere('parent_account_type_id',$expenseID);
+              })->get();
+              foreach ($additional_exp as $key => $value) {
+                # code...
+                $additional_expenses[$value->id] = $value->name . " || " . $value->account_number; 
+              }
+            }else{
+              
+              $additional_expenses      = \App\Account::items();
+            }
+          }else{ 
+            $additional_expenses      = \App\Account::items();
+            
+          }
           $transactions             = $purchase;
           $currency_global_id       = ($purchase->currency_id != null)?$purchase->currency_id:null;
           $currency_global_amount   = ($purchase->currency_id != null)?$purchase->exchange_price:null; 
@@ -29,19 +53,20 @@
         <div @if( $currency_global_id == null ) class="add_section hide  col-md-4" @else class="add_section    col-md-4" @endif>
           <div class="form-group">
             @php
-            $main_curr_id     = null;
-                $main_curr_amount = null;
+             $main_curr_id     = null;
+             $main_curr_amount = null;
              if($purchase->additional_shipings->first() != null){
-              if($purchase->additional_shipings->first()->currency_id != null){
-                $main_curr_id     = $purchase->additional_shipings->first()->currency_id;
-                $main_curr_amount = $purchase->additional_shipings->first()->exchange_rate;
-              }}
+                if($purchase->additional_shipings->first()->currency_id != null){
+                  $main_curr_id     = $purchase->additional_shipings->first()->currency_id;
+                  $main_curr_amount = $purchase->additional_shipings->first()->exchange_rate;
+                }
+              }
             @endphp
             <div class="multi-input text-center">
-                    {!! Form::label('add_currency_id', __('business.currency') . ':') !!} 
-                    <br> 
-                    {!! Form::select('add_currency_id', $currencies, ($main_curr_id != null)?$main_curr_id:$currency_global_id, ['class' => 'form-control   add_currency_id  select2', "style" => 'width:49%','placeholder' => __('messages.please_select') ]); !!}
-                    {!! Form::text('add_currency_id_amount', ($main_curr_amount != null)?$main_curr_amount:$currency_global_amount, ['class' => 'form-control  pull-right add_currency_id_amount' , "style" => 'width:51%',  ]); !!}
+                {!! Form::label('add_currency_id', __('business.currency') . ':') !!} 
+                <br> 
+                {!! Form::select('add_currency_id', $currencies, ($main_curr_id != null)?$main_curr_id:$currency_global_id, ['class' => 'form-control   add_currency_id  select2', "style" => 'width:49%','placeholder' => __('messages.please_select') ]); !!}
+                {!! Form::text('add_currency_id_amount', ($main_curr_amount != null)?$main_curr_amount:$currency_global_amount, ['class' => 'form-control  pull-right add_currency_id_amount' , "style" => 'width:51%',  ]); !!}
             
             </div>
           </div>
@@ -97,7 +122,7 @@
                           <td @if($currency_global_id == null) class="col-xs-1  ship_curr hide" @else class="col-xs-1  ship_curr " @endif>{{ Form::number('old_shipping_amount_curr[]',0,['class'=>'form-control  shipping_amount_curr','required','step'=>'any','min'=>0]) }}</td> 
                           <td @if($currency_global_id == null) class="col-xs-1  ship_curr hide" @else class="col-xs-1  ship_curr " @endif>{{ Form::number('old_shipping_vat_curr[]',0,['class'=>'form-control shipping_tax_curr','required','step'=>'any','min'=>0]) }}</td> 
                           <td @if($currency_global_id == null) class="col-xs-1  ship_curr hide" @else class="col-xs-1  ship_curr " @endif>{{ Form::number('old_shipping_total_curr[]',0,['class'=>'form-control shipping_total_curr','required','step'=>'any','min'=>0,'readOnly']) }}</td> 
-                          <td class="col-xs-1">{{ Form::select('old_shipping_account_id[]',$expenses,$item->account_id,['class'=>'form-control select2 ','required']) }}</td>
+                          <td class="col-xs-1">{{ Form::select('old_shipping_account_id[]',$additional_expenses,$item->account_id,['class'=>'form-control select2 ','required']) }}</td>
                           <td class="col-xs-1">{{ Form::select('old_shipping_cost_center_id[]',$cost_center,$item->cost_center_id,['class'=>'form-control select2  shipping-select2 cost_center_id','placeholder'=>trans('home.please account')]) }}</td>
                           <td class="col-xs-1">{{ Form::text('old_shiping_text[]',$item->text,['class'=>'form-control ' ]) }}</td>
                           <td @if($currency_global_id == null) class="col-xs-1 ship_curr currency_check hide" @else class="col-xs-1 ship_curr currency_check" @endif  style="width:300px;">
@@ -137,7 +162,7 @@
                           <td @if($currency_global_id == null) class="col-xs-1  ship_curr hide" @else class="col-xs-1  ship_curr " @endif>{{ Form::number('old_shipping_amount_curr[]',0,['class'=>'form-control  shipping_amount_curr','required','step'=>'any','min'=>0]) }}</td> 
                           <td @if($currency_global_id == null) class="col-xs-1  ship_curr hide" @else class="col-xs-1  ship_curr " @endif>{{ Form::number('old_shipping_vat_curr[]',0,['class'=>'form-control shipping_tax_curr','required','step'=>'any','min'=>0]) }}</td> 
                           <td @if($currency_global_id == null) class="col-xs-1  ship_curr hide" @else class="col-xs-1  ship_curr " @endif>{{ Form::number('old_shipping_total_curr[]',0,['class'=>'form-control shipping_total_curr','required','step'=>'any','min'=>0,'readOnly']) }}</td> 
-                          <td class="col-xs-1">{{ Form::select('old_shipping_account_id[]',$expenses,$item->account_id,['class'=>'form-control select2 ','required']) }}</td>
+                          <td class="col-xs-1">{{ Form::select('old_shipping_account_id[]',$additional_expenses,$item->account_id,['class'=>'form-control select2 ','required']) }}</td>
                           <td class="col-xs-1">{{ Form::select('old_shipping_cost_center_id[]',$cost_center,$item->cost_center_id,['class'=>'form-control select2  shipping-select2 cost_center_id','placeholder'=>trans('home.please account')]) }}</td>
                           <td class="col-xs-1">{{ Form::text('old_shiping_text[]',$item->text,['class'=>'form-control ' ]) }}</td>
                           <td @if($currency_global_id == null) class="col-xs-1 ship_curr currency_check hide" @else class="col-xs-1 ship_curr currency_check" @endif  style="width:300px;">
@@ -285,7 +310,7 @@
               '<td class="col-xs-1 ship_curr hide">{{ Form::number('shipping_amount_curr[]',0,['class'=>'form-control  shipping_amount_curr','required','step'=>'any','min'=>0]) }}</td>' +
               '<td class="col-xs-1 ship_curr hide">{{ Form::number('shipping_vat_curr[]',0,['class'=>'form-control shipping_tax_curr','required','step'=>'any','min'=>0]) }}</td>' +
               '<td class="col-xs-1 ship_curr hide">{{ Form::number('shipping_total_curr[]',0,['class'=>'form-control shipping_total_curr','required','step'=>'any','min'=>0,'readOnly']) }}</td>' +
-              '<td class="col-xs-1">{{ Form::select('shipping_account_id[]',$expenses,null,['class'=>'form-control select_edit shipping-select2 ','required']) }}</td>'+
+              '<td class="col-xs-1">{{ Form::select('shipping_account_id[]',$additional_expenses,null,['class'=>'form-control select_edit shipping-select2 ','required']) }}</td>'+
               '<td class="col-xs-1">{{ Form::select('shipping_cost_center_id[]',$cost_center,null,['class'=>'form-control select_edit shipping-select2 cost-center','placeholder'=>trans('home.please account')]) }}</td>' +
               '<td class="col-xs-1">{{ Form::text('shiping_text[]',null,['class'=>'form-control ' ]) }}</td>' +
               '<td class="col-xs-1 ship_curr currency_check hide" style="width:300px;"><div class="col-md-12"><div class="form-group"><div class="multi-input text-center"> '+ 
@@ -305,7 +330,7 @@
               '<td class="col-xs-1 ship_curr ">{{ Form::number('shipping_amount_curr[]',0,['class'=>'form-control  shipping_amount_curr','required','step'=>'any','min'=>0]) }}</td>' +
               '<td class="col-xs-1 ship_curr ">{{ Form::number('shipping_vat_curr[]',0,['class'=>'form-control shipping_tax_curr','required','step'=>'any','min'=>0]) }}</td>' +
               '<td class="col-xs-1 ship_curr ">{{ Form::number('shipping_total_curr[]',0,['class'=>'form-control shipping_total_curr','required','step'=>'any','min'=>0,'readOnly']) }}</td>' +
-              '<td class="col-xs-1">{{ Form::select('shipping_account_id[]',$expenses,null,['class'=>'form-control select_edit shipping-select2 ','required']) }}</td>'+
+              '<td class="col-xs-1">{{ Form::select('shipping_account_id[]',$additional_expenses,null,['class'=>'form-control select_edit shipping-select2 ','required']) }}</td>'+
               '<td class="col-xs-1">{{ Form::select('shipping_cost_center_id[]',$cost_center,null,['class'=>'form-control select_edit shipping-select2 cost-center','placeholder'=>trans('home.please account')]) }}</td>' +
               '<td class="col-xs-1">{{ Form::text('shiping_text[]',null,['class'=>'form-control ' ]) }}</td>' +
               '<td class="col-xs-1 ship_curr currency_check" style="width:300px;"><div class="col-md-12"><div class="form-group"><div class="multi-input text-center">  '+ 

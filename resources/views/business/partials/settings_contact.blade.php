@@ -56,6 +56,18 @@
         </div>
         <div class="col-md-6 col-sm-6 ">
             <div class="form-group">
+                {!! Form::label('additional_expense', __('lang_v1.additional_expense') . ':*') !!}
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fas fa-edit"></i>
+                    </span>
+                    {!! Form::select('additional_expense',  $additional_expenses, $business->additional_expense, ['class' => 'form-control select2','style'=>'width:100%', 'placeholder' => __( 'messages.please_select' ),'id'=>'additional_expense']); !!}
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-6 col-sm-6 ">
+            <div class="form-group">
                 {!! Form::label('customer_type_id', __('lang_v1.customer_account') . ':*') !!}
                 <div class="input-group">
                     <span class="input-group-addon">

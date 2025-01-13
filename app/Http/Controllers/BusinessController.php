@@ -418,13 +418,16 @@ class BusinessController extends Controller
         $business_id   = request()->session()->get('user.business_id');
         $product_price = \App\Models\ProductPrice::where("business_id",$business_id)->whereNull("product_id")->get();
         $business      = Business::where('id', $business_id)->first();
-        $accounts      =  Account:: items();
+        $accounts      =  Account:: items(); 
         $accounts_type =  \App\AccountType::where("business_id",$business_id)->get();
         $account_type_ = [];
         foreach($accounts_type as $it){
                 $account_type_[$it->id] = $it->name;
         }
+         
+        $additional_expenses      = $account_type_;
         
+         
         $units         = Unit::forDropdown($business_id);
         $unitsP        = Unit::forDropdownInPrice($business_id);
         $currencies    = $this->businessUtil->allCurrencies();
@@ -442,10 +445,10 @@ class BusinessController extends Controller
             ];
 
         $commission_agent_dropdown = [
-                '' => __('lang_v1.disable'),
+                ''               => __('lang_v1.disable'),
                 'logged_in_user' => __('lang_v1.logged_in_user'),
-                'user' => __('lang_v1.select_from_users_list'),
-                'cmsn_agnt' => __('lang_v1.select_from_commisssion_agents_list')
+                'user'           => __('lang_v1.select_from_users_list'),
+                'cmsn_agnt'      => __('lang_v1.select_from_commisssion_agents_list')
             ];
 
         $itemMfg            =   $business->itemMfg;
@@ -510,7 +513,7 @@ class BusinessController extends Controller
 
         $weighing_scale_setting = !empty($business->weighing_scale_setting) ? $business->weighing_scale_setting : [];
 
-        return view('business.settings', compact('business','continuous_inventory','default_price_unit','listModules','listModulesPurchase','units','unitsP','separate_sell','separate_pay_sell','product_price','source_sell_price','patterns','excange_rates','app_account','app_store_id','app_pattern_id','Stores' , 'store_mfg' ,'account_type_', 'accounts', 'itemMfg', 'profitMfg', 'wastageMfg', 'currencies', 'tax_rates', 'timezone_list', 'months', 'accounting_methods', 'commission_agent_dropdown', 'units_dropdown', 'date_formats', 'shortcuts', 'pos_settings', 'modules', 'theme_colors', 'email_settings', 'sms_settings', 'mail_drivers', 'allow_superadmin_email_settings', 'custom_labels', 'common_settings', 'weighing_scale_setting'));
+        return view('business.settings', compact('business','additional_expenses','continuous_inventory','default_price_unit','listModules','listModulesPurchase','units','unitsP','separate_sell','separate_pay_sell','product_price','source_sell_price','patterns','excange_rates','app_account','app_store_id','app_pattern_id','Stores' , 'store_mfg' ,'account_type_', 'accounts', 'itemMfg', 'profitMfg', 'wastageMfg', 'currencies', 'tax_rates', 'timezone_list', 'months', 'accounting_methods', 'commission_agent_dropdown', 'units_dropdown', 'date_formats', 'shortcuts', 'pos_settings', 'modules', 'theme_colors', 'email_settings', 'sms_settings', 'mail_drivers', 'allow_superadmin_email_settings', 'custom_labels', 'common_settings', 'weighing_scale_setting'));
     }
 
     /**
@@ -545,7 +548,7 @@ class BusinessController extends Controller
                 'stop_selling_before', 'default_unit', 'expiry_type', 'date_format','customer_type_id','supplier_type_id',
                 'time_format', 'ref_no_prefixes', 'theme_color', 'email_settings','app_store_id','app_pattern_id','app_account',
                 'sms_settings', 'rp_name', 'amount_for_unit_rp','bank','cash','store_mfg','separate_sell','separate_pay_sell',
-                'itemMfg', 'profitMfg', 'account_assets','account_liability','source_sell_price', 
+                'itemMfg', 'profitMfg', 'account_assets','account_liability','source_sell_price', 'additional_expense',
                 'min_order_total_for_rp', 'max_rp_per_order','currency_price','name_add','unit_idd','return_purchase_print_module','purchase_print_module','return_sale_print_module',
                 'redeem_amount_per_unit_rp', 'min_order_total_for_redeem','source_sell_price','sale_print_module','quotation_print_module','approve_quotation_print_module','draft_print_module',
                 'min_redeem_point', 'max_redeem_point', 'rp_expiry_period',
@@ -791,11 +794,9 @@ class BusinessController extends Controller
                 $ForDelete                    = ExchangeRate::whereNotIn("currency_id",$list_of_currency)->get();
                 foreach($ForDelete as $oneDelete){
                     $oneDelete->delete();
-                }
-                
+                }                
             }
-            if($request->currency_date){
-               
+            if($request->currency_date){           
                 foreach($request->currency_date as $key => $it){
                     $array_id[$key]       = $request->currency_name[$key]; 
                     $exc                  = new ExchangeRate;
@@ -810,12 +811,11 @@ class BusinessController extends Controller
                 }
             }
             if($request->cur_default){
-                 
                 foreach($request->cur_default as $key => $i){
                     $exc_rate = \App\Models\ExchangeRate::where("currency_id","!=",$key)->get();
                     foreach($exc_rate  as $ii){
-                            $ii->default = 0;
-                            $ii->update();
+                        $ii->default = 0;
+                        $ii->update();
                     }
                 }
                 $exch_rate = \App\Models\ExchangeRate::where("currency_id",$key)->first();

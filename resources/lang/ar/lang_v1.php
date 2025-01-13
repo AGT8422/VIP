@@ -1517,6 +1517,7 @@ return [
 'DeletePaymentPurchase'   => 'حذف دفعة شراء',
 'AddReturnPurchase'       => 'إضافة مرتجع شراء',
 'viewReturnPurchase'      => 'عرض مرتجع شراء',
-'Continuous Inventory'    => 'الجرد المستمر'
+'Continuous Inventory'    => 'الجرد المستمر',
+'additional_expense'      => 'التكاليف الاضافية',
 
 ];

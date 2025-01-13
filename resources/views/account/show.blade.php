@@ -228,19 +228,11 @@
 
                 <div class="box-body">
 
-                    @can('ReadOnly.views')
-
+                    @can('account.access')
                         @include("account.action_parents.account_book")
-
-                    @elsecan('warehouse.views')
-
-                        @include("account.action_parents.account_book")
-
-                    @elsecan('manufuctoring.views')
-
-                        @include("account.action_parents.account_book")
-
                     @endcan
+
+                    
                     
                     {{-- <div class="table-responsive">
  
@@ -625,21 +617,21 @@
 
         printWindow.document.write( '<table style="width:100%; ; font-weight:bold;"><tr >' );
 
-        printWindow.document.write( '<td style="width:30%; border:0px solid black;text-align:left"><img src="{{ asset( $img_url ) }}"   style="max-width: 400px;height:100px"> </td>');
+        printWindow.document.write( '<td style="width:100%; border:0px solid black;text-align:center"><img src="{{ asset( $img_url ) }}"   style="max-width: 400px;height:100px"> <br><br>General Ledger</td>');
 
-        printWindow.document.write( '<td style="width:30%;font-size:19px; border:0px solid black;text-align:left"><br><br>General Ledger</td>' );
+        // printWindow.document.write( '<td style="width:30%;font-size:19px; border:0px solid black;text-align:left"></td>' );
 
-        printWindow.document.write( '<td style="width:30%; border:0px solid black;text-align:left"></td>' );
+        // printWindow.document.write( '<td style="width:30%; border:0px solid black;text-align:left"></td>' );
 
-        printWindow.document.write( '<td style="width:0%; border:0px solid black;text-align:left"></td>' );
+        // printWindow.document.write( '<td style="width:0%; border:0px solid black;text-align:left"></td>' );
 
-        printWindow.document.write( '<td style="width:0%; border:0px solid black;text-align:left"></td>' );
+        // printWindow.document.write( '<td style="width:0%; border:0px solid black;text-align:left"></td>' );
 
-        printWindow.document.write( '<td style="width:0%; border:0px solid black;text-align:left"></td>' );
+        // printWindow.document.write( '<td style="width:0%; border:0px solid black;text-align:left"></td>' );
 
-        printWindow.document.write( '<td style="width:35%; border:0px solid black;text-align:right"><span style="font-size:17px">{!!$header_text!!}</span>');
+        printWindow.document.write( '</td></tr></table ><table style="width:100%;border-top:3px solid {{$business_color}};padding-top:10px;"><tr><td style="width:50%;><b> Account name : <span> '+printContainer2.html()+'</span></b><br><b> Balance: '+printContainer1.html()+'</b><br><b>Opening Balance: '+printContainer3.val()+'</b><br><b> Date: '+transaction_date_range.val()+'</b></td><td style="width:50%; border:0px solid black;text-align:right"><span style="font-size:13px">{!!$header_text!!}</span>');
 
-        printWindow.document.write( '</td></tr></table ><table style="width:100%;border-top:3px solid {{$business_color}};padding-top:10px;"><tr><td><b> Account name : <span> '+printContainer2.html()+'</span></b><br><b> Balance: '+printContainer1.html()+'</b><br><b>Opening Balance: '+printContainer3.val()+'</b><br><b> Date: '+transaction_date_range.val()+'</b></td></tr></table>' );
+        printWindow.document.write( '</td></tr></table >' );
 
         printWindow.document.write( '<table  >'+printContainer.html()+'</table>');
 

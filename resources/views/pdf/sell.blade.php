@@ -13,6 +13,7 @@
     @php 
         $text_align     = "center" ;
         $font_text      = "15px" ;
+        $font_text_table      = "13px" ;
         $color          =  "#b0906c";
         $font_bill_text = "18px" ;
         $font_table_bill_text = "15px" ;
@@ -495,39 +496,39 @@
                     </tbody>
                 </table>
                 <table class="table" style="  width: 100%;border:0px solid black;">
-                    <tbody >
+                    <tbody style="height: auto">
                     
-                        <tr style=" background-color:#dbdee1">
-                        <td style="width:50%;line-height:1px;font-size:{{$font_text}};padding:15px;">
-                            <h3 style="margin-bottom: 15px; font-size:{{$font_table_bill_text}} !important">{{ 'BILLED TO : ' }} </h3>
+                        <tr style=" background-color:#dbdee1;height:100px !important;line-height:1px">
+                        <td style="width:50%;line-height:initial;font-size:{{$font_text}};padding:15px 0px 5px 15px;height:auto">
+                            <h3 style="margin-bottom: 15px; font-size:{{$font_table_bill_text}} !important ;padding:0px;margin:0px">{{ 'BILLED TO : ' }} </h3>
                        
-                            <p>
+                            <p style="padding:0px;margin:0px">
                                  
                                 {{ trans('home.Company Name')  }}  : <span style="word-break: break-all:position:relative;line-height:12px;">{{ $invoice->contact?$invoice->contact->name:' ' }} </span>
                                 
                             </p>
                             
-                            <p >
+                            <p  style="padding:0px;margin:0px">
                                
                                     {{ trans('home.Address') }} : 
                                     {!! ( $invoice->contact)? ( $invoice->contact->address_line_1 . " " .  $invoice->contact->city  . " " . $invoice->contact->country ):' ' !!} 
                                 
                             </p>
                             
-                            <p>
+                            <p style="padding:0px;margin:0px">
                                  
                                 {{ trans('home.Attention') }} : 
                                 {{ $invoice->contact?($invoice->contact->supplier_business_name ." ". $invoice->contact->middle_name ." ". $invoice->contact->last_name  ):' ' }}
                             </p>
                             
                              
-                            <p >
+                            <p style="padding:0px;margin:0px">
                                 
                                 {{ trans('Tel No. ') }} : 
                                 {{ ( $invoice->contact)? $invoice->contact->mobile:' ' }} 
                                 
                             </p>
-                            <p >
+                            <p  style="padding:0px;margin:0px">
                                   
                                 {{ trans('lang_v1.email_address') }} : 
                                 {{ ( $invoice->contact)? $invoice->contact->email:' ' }} 
@@ -535,7 +536,7 @@
                                
                             </p>
                              
-                            <p>
+                            <p style="padding:0px;margin:0px">
                                  
                                 {{ trans('TRN. ') }}: 
                                 {{ $invoice->contact?($invoice->contact->tax_number ):"" }}
@@ -552,25 +553,29 @@
                             
                         </td>
                        
-                            <td style=" width:40%;line-height:1px;font-size:{{$font_text}};padding:15px;">
+                            <td style=" width:40%;line-height:initial;font-size:{{$font_text}};padding:15px 0px 5px 15px;height:auto">
                                
                                   
                                    
-                                    <p >
+                                    <p style="padding:0px;margin:0px">
+                                    
                                         @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' )
                                             {{ trans('Invoice#') }}. : {{$invoice->invoice_no }}
                                         @else
                                             {{ trans('home.Ref No') }}.# : {{$invoice->invoice_no }}
                                         @endif
                                     </p>
-                                    <p>
+                                    <p style="padding:0px;margin:0px">
+                                   
                                        Invoice Date  :  {{ date('M-d-Y',strtotime($invoice->transaction_date)) }}
                                     </p>
-                                    <p>
+                                    <p style="padding:0px;margin:0px">
+                                   
                                         Project No.  : {{ $invoice->project_no }}
                                     </p>
                                     
-                                     <p>
+                                    <p style="padding:0px;margin:0px">
+                                    
                                         @php
                                         $it = \App\Transaction::agent($invoice->agent_id,$invoice->transaction_id);
                                         @endphp
@@ -580,23 +585,24 @@
                                     </p>
                                     @php $note =   $invoice->note ; @endphp
                                     @if($note != null || $note != "")
-                                    <p  >
+                                    <p style="padding:0px;margin:0px">
+                                    
                                             
                                         {{__('sale.note') }}:  <span style="word-break: break-all:position:relative;line-height:12px;">{!! $note !!} </span>
                                     
                                     </p>
                                     @endif
-                                    <p style="visibility: hidden">
+                                    <p style="display: none">
                                          AMOUNT DUE :{{ number_format($invoice->final_total,$number_format_digit) }} {{  isset($currency)?$currency->symbol:""}}  
                                          
                                     </p>      
-                                    <p style="visibility: hidden">
+                                    <p  style="display: none">
                                          
                                         @php $user =  \App\User::find($invoice->created_by); @endphp
                                         Prepared by : {{  ($user)?$user->first_name:"" }}
                                      
                                     </p>
-                                    <p>&nbsp;</p>
+                                    <p style="display: none">&nbsp;</p>
                                    
                         </td>
                         </tr> 
@@ -611,40 +617,40 @@
                 <thead>
     
                     <tr>
-                        <th style="font-size:{{$font_text}};max-width:20px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black; text-align:{{$text_align}};">{{ trans('home.NO') }}</th>
+                        <th style="font-size:{{$font_text_table}};max-width:20px;font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black; text-align:{{$text_align}};">{{ trans('home.NO') }}</th>
                         @php $se = 0; @endphp
                         @foreach($allData as $data) @if( $data->se_note != null && $data->se_note !="")    @php $se = 1; @endphp @endif @if( $data->product->brand != null &&$data->product->brand !="")    @php $brand_check = 1; @endphp @endif  @endforeach
                         @if($se != 0)    
-                            <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{ trans('home.SE') }}</th>
+                            <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{ trans('home.SE') }}</th>
                         @else
                             
                         @endif
-                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:5%;text-align:{{$text_align}};">ITEM &  {{   trans('home.DESCRIPTION') }}</th>
+                        <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:5%;text-align:{{$text_align}};">ITEM &  {{   trans('home.DESCRIPTION') }}</th>
                         @if($brand_check != 0)    
-                            <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:4%;text-align:{{$text_align}};">{{ trans('product.brand') }}</th>
+                            <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:4%;text-align:{{$text_align}};">{{ trans('product.brand') }}</th>
                         @else
                             
                         @endif
-                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:{{$text_align}};">{{ trans('product.model_no') }}</th>
-                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;width:5%;text-align:{{$text_align}};">{{ trans('home.QTY') }}</th> 
+                        <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:{{$text_align}};">{{ trans('product.model_no') }}</th>
+                        <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;width:5%;text-align:{{$text_align}};">{{ trans('home.QTY') }}</th> 
                         @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ')
                         {{--  <th style="font-size:10px;font-weight: bold;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:left;">{{ trans('home.PHOTO') }}</th>--}}
                         @else
-                        <th style="font-size:{{$font_text}};font-weight: bold;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{ trans('home.PHOTO') }}</th>  
+                        <th style="font-size:{{$font_text_table}};font-weight: bold;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{ trans('home.PHOTO') }}</th>  
                         @endif 
                         
                         @php $dis = 0; @endphp
                         @foreach($allData as $data) @if(($data->unit_price_before_discount - $data->unit_price) != 0) @php $dis = 1; @endphp @endif  @endforeach
                         @if($dis != 0)
-                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{"Price"}}</th> 
-                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{"Disc"}}</th> 
+                        <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{"Price"}}</th> 
+                        <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{"Disc"}}</th> 
                         @endif
-                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{"Unit Price"}}</th> 
+                        <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{"Unit Price"}}</th> 
                         
-                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{  "Tot Price" }}</th>
-                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:{{$text_align}};">{{ ($invoice->tax)?$invoice->tax->name . ":" : "";  }}</th>
+                        <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};">{{  "Tot Price" }}</th>
+                        <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px; text-align:{{$text_align}};">{{ ($invoice->tax)?$invoice->tax->name . ":" : "";  }}</th>
 
-                        <th style="font-size:{{$font_text}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};font-family:arial">{{"Tot Incld.vat"}}</th> 
+                        <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:10px;text-align:{{$text_align}};font-family:arial">{{"Tot Incld.vat"}}</th> 
                         
                     </tr>
     
@@ -663,37 +669,37 @@
                             ?>
                             <tr style="margin-bottom:1px; !important;padding:0px !important">
                                 @php $count += $data->quantity; @endphp
-                                <td style="font-size:{{$font_text}};width:1%;border-bottom: 1px solid grey;padding:1px !important">{{ $count_id++;  }}</td>
+                                <td style="font-size:{{$font_text_table}};width:1%;border-bottom: 1px solid grey;padding:1px !important">{{ $count_id++;  }}</td>
                                 @if($data->se_note != null && $data->se_note != "")
-                                        <td style="font-size:{{$font_text}};max-width:5px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ $data->se_note }}</td>
+                                        <td style="font-size:{{$font_text_table}};max-width:5px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ $data->se_note }}</td>
                                         @else
                                         
                                         
                                         @endif
                                     @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' )
                                     
-                                        <td style="font-size:{{$font_text}};max-width:30px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:0px !important ">
-                                            <b style="font-size:{{$font_text}};">{{ $data->product->name }}</b> 
-                                            <pre style="font-size:9px; text-align:left; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre>
+                                        <td style="font-size:{{$font_text_table}};max-width:30px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:0px !important ">
+                                            <b style="font-size:{{$font_text_table}};">{{ $data->product->name }}</b> 
+                                            @if($data->sell_line_note != null && $data->sell_line_note != "")<pre style="font-size:9px; text-align:left; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre>@endif
                                         </td>
                                     @else 
                                         {{--   $data->sell_line_note  --}} 
-                                        <td style="font-size:{{$font_text}};max-width:40px;text-align:{{$text_align}};  border-bottom: 1px solid grey;padding:0px !important ">
+                                        <td style="font-size:{{$font_text_table}};max-width:40px;text-align:{{$text_align}};  border-bottom: 1px solid grey;padding:0px !important ">
                                             
-                                            <b style="font-size:{{$font_text}};"style="font-size:{{$font_text}};"> {{ $data->product->name }} </b>
-                                    
-                                            <pre style="width:100px;text-align:left; font-size:9px; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre>
+                                            <b style="font-size:{{$font_text_table}};"style="font-size:{{$font_text_table}};"> {{ $data->product->name }} </b>
+                                            @if($data->sell_line_note != null && $data->sell_line_note != "")<pre style="font-size:9px; text-align:left; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre>@endif
+                                            {{-- <pre style="width:100px;text-align:left; font-size:9px; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre> --}}
                                         </td>
                                         
                                     
                                     @endif
                                     @if($brand_check != 0)    
-                                        <td style="font-size:{{$font_text}};max-width:5%;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ ($data->product->brand)?$data->product->brand->name:"" }}</td>
+                                        <td style="font-size:{{$font_text_table}};max-width:5%;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ ($data->product->brand)?$data->product->brand->name:"" }}</td>
                                     @else
                                         
                                     @endif
-                                <td style="font-size:{{$font_text}};max-width:5px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ $data->product->sku }}</td>
-                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ $data->quantity }}</td>
+                                <td style="font-size:{{$font_text_table}};max-width:5px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:1px !important">{{ $data->product->sku }}</td>
+                                <td style="font-size:{{$font_text_table}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ $data->quantity }}</td>
                                     
                                 @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final ' )
                                    
@@ -708,7 +714,7 @@
                                 @endif
                                 
                                 @if(!empty($data->warranties->first()))
-                                    <small  style=" padding:20px;font-size:{{$font_text}};background-color:#f1f1f1 ;text-align:{{$text_align}}; padding:10px;margin: 00px 0px !important;padding:1px !important">
+                                    <small  style=" padding:20px;font-size:{{$font_text_table}};background-color:#f1f1f1 ;text-align:{{$text_align}}; padding:10px;margin: 00px 0px !important;padding:1px !important">
                                         
                                         {{$data->warranties->first()->display_name ?? ''}} 
                                     </small>
@@ -725,21 +731,21 @@
                                 
                                
                                 @if($discount!=0)
-                                    <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price_before_discount,$number_format_digit) }} {{  isset($currency)?"":""}} </td> 
-                                    <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($discount,$number_format_digit) }} {{  isset($currency)?"":""}}  </td> 
+                                    <td style="font-size:{{$font_text_table}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price_before_discount,$number_format_digit) }} {{  isset($currency)?"":""}} </td> 
+                                    <td style="font-size:{{$font_text_table}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($discount,$number_format_digit) }} {{  isset($currency)?"":""}}  </td> 
                                 @elseif($dis != 0)
-                                    <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{0}}</td> 
-                                    <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{0}}</td> 
+                                    <td style="font-size:{{$font_text_table}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{0}}</td> 
+                                    <td style="font-size:{{$font_text_table}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{0}}</td> 
                                 @endif
                                 @php
                                     $vatValue =  ($invoice->tax)?$invoice->tax->amount : 0;
                                 @endphp
-                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price,$number_format_digit) }} {{  isset($currency)?"":""}} </td>
+                                <td style="font-size:{{$font_text_table}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price,$number_format_digit) }} {{  isset($currency)?"":""}} </td>
                                 
-                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price*$data->quantity,$number_format_digit) }} {{  isset($currency)?"":""}} </td> 
-                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format( ($data->unit_price*$data->quantity * $vatValue/100),$number_format_digit) }} {{  isset($currency)?"":""}}  </td> 
+                                <td style="font-size:{{$font_text_table}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price*$data->quantity,$number_format_digit) }} {{  isset($currency)?"":""}} </td> 
+                                <td style="font-size:{{$font_text_table}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format( ($data->unit_price*$data->quantity * $vatValue/100),$number_format_digit) }} {{  isset($currency)?"":""}}  </td> 
                                  
-                                <td style="font-size:{{$font_text}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format((($data->unit_price*$data->quantity * $vatValue/100)+$data->unit_price*$data->quantity),$number_format_digit) }} {{  isset($currency)?"":""}} </td>
+                                <td style="font-size:{{$font_text_table}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format((($data->unit_price*$data->quantity * $vatValue/100)+$data->unit_price*$data->quantity),$number_format_digit) }} {{  isset($currency)?"":""}} </td>
                             
                             </tr>
     

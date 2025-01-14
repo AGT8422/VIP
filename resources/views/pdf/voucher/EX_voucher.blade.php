@@ -108,7 +108,9 @@
         .border_style{
             font-size: 10px;
             border-bottom: 1px solid black;
-            padding: 5px;
+            padding: 2px;
+             
+            line-height: initial    
         }
         b{
             font-weight:bold;
@@ -168,6 +170,70 @@
         @php   $payment = \App\TransactionPayment::where("payment_voucher_id",$invoice->id)->first(); @endphp
         @php  if(!empty($payment))  { $trans  = \App\Transaction::where("id",$payment->transaction_id)->first(); }   @endphp
         <div class="bodies">
+            <table class="tab">
+                <thead >
+                    <tr class="head">
+                        <th style="border:1px solid white ; max-width:10%">  Credit  </th>
+                        <th style="border:1px solid white ; max-width:10%">  Debit   </th>
+                        <th style="border:1px solid white ; max-width:100px">  Amount  </th>
+                        <th style="border:1px solid white ; max-width:10%">  Cost Center</th>
+                        {{-- <th style="border:1px solid white ; max-width:10%">  Tax %</th> --}}
+                        <th style="border:1px solid white">  Tax Amount  </th>
+                        <th style="border:1px solid white ; max-width:10%">  Net Amount  </th>
+                        <th style="border:1px solid white ; max-width:20%">  Note  </th>
+                     
+
+                   
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $total_debit   =  0;
+                        $total_credit  =  0;
+                    @endphp
+                    @foreach($items as $it)
+                    @php
+                        $credit_ac     = \App\Account::where("id",$it->credit_account_id)->first();
+                        $debit_ac_tax  = \App\Account::where("id",$it->tax_account_id)->first();
+                        $debit_ac      = \App\Account::where("id",$it->debit_account_id)->first();
+                        $total_debit  += (!empty($debit_ac))?($it->amount-$it->tax_amount):0;
+                        $total_debit  += (!empty($debit_ac_tax))?($it->tax_amount):0;
+                        $total_credit += (!empty($credit_ac))?($it->amount):0;
+                    @endphp
+                     
+                    <tr>
+                        <td class="border_style"  style="max-width:10%">{{$credit_ac->account_number . " || " . $credit_ac->name}}</td>
+                        <td class="border_style"  style="max-width:10%">{{$debit_ac->account_number . " || " . $debit_ac->name }}</td>
+                        <td class="border_style"  style="max-width:10%">{{number_format($it->amount,2)}}</td>
+                        <td class="border_style"  style="max-width:10%">{{($it->cost_center)?$it->cost_center->name:"--"}}</td>
+                        <td class="border_style"  style="max-width:10%">{{($it->tax_amount != 0)?($it->tax_amount):0}}</td>
+                        {{-- <td class="border_-width:2%"></td> --}}
+                        <td class="border_style"  style="max-width:10%">{{($it->tax_amount != 0)?(($it->amount - $it->tax_amount)):0}}</td>
+                        <td class="border_style"  style="max-width:40%">{{$it->text}}</td>
+                    </tr>
+                         
+                    
+
+                @endforeach
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
+                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
+                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
+                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
+                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
+                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
+                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
+                        {{-- <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199);font-weight:bold; display:none"  class="border_style"> Total   </td>
+                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(113, 113, 113);font-weight:bold; display:none"  class="border_style"> {{number_format($total_debit,2)}}</td>
+                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(113, 113, 113);font-weight:bold; display:none"  class="border_style"> {{number_format($total_credit,2)}}</td> --}}
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        {{-- <div class="bodies">
             <table class="tab">
                 <thead >
                     <tr class="head">
@@ -240,7 +306,7 @@
                     </tr>
                 </tfoot>
             </table>
-        </div>
+        </div> --}}
 
         <div>&nbsp;</div>
         <div>&nbsp;</div>

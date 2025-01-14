@@ -446,9 +446,12 @@ class SellPosController extends Controller
                 } else if(($input["status"] == "draft" && $sub_status_ != "quotation")   ){ $type_ref = 'draft';
                 } else if($input["status"] == "quotation" || ($input["status"] == "draft" && $sub_status_ == "quotation")){ $type_ref = 'quotation';
                 }
-                $ref_count           = $this->transactionUtil->setAndGetReferenceCount($type_ref,$business_id,$pat_id);
-                $number              = $this->transactionUtil->generateReferenceNumber($type_ref,$ref_count,null,null,$pat_id);
-                $input['invoice_no'] = $number;
+                
+                if($type_ref != ""){
+                    $ref_count           = $this->transactionUtil->setAndGetReferenceCount($type_ref,$business_id,$pat_id);
+                    $number              = $this->transactionUtil->generateReferenceNumber($type_ref,$ref_count,null,null,$pat_id);
+                    $input['invoice_no'] = $number;
+                }
               
                 # Types of service
                 if ($this->moduleUtil->isModuleEnabled('types_of_service')) {

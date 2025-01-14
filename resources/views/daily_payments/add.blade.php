@@ -545,6 +545,8 @@
 			$('#save_entry').attr('disabled','disabled');
 		}
 	}) 
-	  
+	window.onbeforeunload = function() {
+			return LANG.sure;
+		}
   </script>
 @endsection

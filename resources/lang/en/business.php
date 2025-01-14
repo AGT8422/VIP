@@ -127,10 +127,11 @@ return [
     'name' => 'Name Of Currency ',
     'type' => 'Type',
     'symbol' => 'Symbol',
-    'unit_other' => 'Unit Currency',
-    'unit_basic' => 'Unit Source Currency',
+    'unit_other'   => 'Unit Currency',
+    'unit_basic'   => 'Unit Source Currency',
     'printer_type' => 'Printer Type',
-    'default' => 'Default',
-    
+    'default'      => 'Default',
+    'cheque'       => 'Cheque',
+    'voucher'      => 'Voucher',
   
 ];

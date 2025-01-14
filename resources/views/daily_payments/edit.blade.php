@@ -593,7 +593,9 @@
 				
 			})
 		}
-
+		window.onbeforeunload = function() {
+			return LANG.sure;
+		}
 	 
   </script>
 @endsection

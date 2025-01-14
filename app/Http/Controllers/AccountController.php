@@ -2271,7 +2271,7 @@ class AccountController extends Controller
     }
 
     public function typeAccount($name)
-    {
+    {   
         if(request()->ajax()){
             $business_id = request()->session()->get("user.business_id");
 
@@ -2494,6 +2494,8 @@ class AccountController extends Controller
     public function repairBalance(){
         try{
             if(request()->ajax()){
+                ini_set('max_execution_time', 0);
+                ini_set('memory_limit', -1);
                 $business_id  = session()->get('user.business_id');
                 $all_accounts = \App\AccountTransaction::groupBy('account_id')->pluck('account_id');
                 \DB::beginTransaction();

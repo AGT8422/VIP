@@ -74,6 +74,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     //.....................
     // ... get
     Route::get("user-activation/activate-check","ApiController\UserActivateController@codecheck");
+    Route::get("user-activation/pos-report","ApiController\UserActivateController@posReport");
 // :::.................... End Sale Routes ..
  
  

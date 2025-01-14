@@ -2458,6 +2458,14 @@
                             <div class="checkbox">
                                 <label>
                                     {!! Form::checkbox('permissions[]', 'list_drafts', in_array('list_drafts', $role_permissions),
+                                    [ 'class' => 'input-icheck']); !!} {{ __( 'lang_v1.list_drafts1' ) }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="checkbox">
+                                <label>
+                                    {!! Form::checkbox('permissions[]', 'list_QuatationApproved', in_array('list_QuatationApproved', $role_permissions),
                                     [ 'class' => 'input-icheck']); !!} {{ __( 'lang_v1.list_drafts' ) }}
                                 </label>
                             </div>

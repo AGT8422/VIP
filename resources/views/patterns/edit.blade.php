@@ -11,7 +11,7 @@
         <div class="col-md-6">
         <div class="form-group">
             {!! Form::label('pattern_type', __('business.type') . ':*') !!}
-            {!! Form::select('pattern_type', [ 'sale' => __('business.sale') , 'purchase' => __('business.purchase')] , $pattern->type, ['class' => 'form-control' , 'required']); !!}
+            {!! Form::select('pattern_type', [ 'sale' => __('business.sale') , 'purchase' => __('business.purchase'), 'cheque' => __('business.cheque')  ] , $pattern->type, ['class' => 'form-control' ,'placeholder' => __('messages.please_select'),   'required']); !!}
             </div>
         </div>
        {{-- pattern name  --}}
@@ -63,6 +63,86 @@
                 {!! Form::select('printer_type',$printer_layout, $pattern->printer_type, ['class' => 'form-control' ,"placeholder" => __("messages.please_select"),  'required']); !!}
             </div>
         </div>
+        @endcomponent
+        @component("components.widget" ,[ 'class' => 'box-primary' , 'title' => __('home.Edit_system_account') ] )
+            <div class="row">
+                <div class="col-sm-12 body_of_patterns"   >
+                    @if( $pattern->type == 'sale' )
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                {!! Form::label('sale', __('home.Sale').':*') !!} 
+                                {!! Form::select('sale', $accounts,($data)?$data->sale:null, ["required", 'class' => 'form-control select2 font_number', 'placeholder' => __('messages.please_select')]); !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                {!! Form::label('sale_return', __('home.Sale Return').':*') !!} 
+                                {!! Form::select('sale_return', $accounts,($data)?$data->sale_return:null, ["required", 'class' => 'form-control select2 font_number', 'placeholder' => __('messages.please_select')]); !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                {!! Form::label('sale_tax', __('home.Sale Tax').':*') !!} 
+                                {!! Form::select('sale_tax', $accounts,($data)?$data->sale_tax:null, ["required", 'class' => 'form-control select2 font_number', 'placeholder' => __('messages.please_select')]); !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                {!! Form::label('sale_discount', __('home.Sale Discount').':*') !!} 
+                                {!! Form::select('sale_discount', $accounts,($data)?$data->sale_discount:null, ["required", 'class' => 'form-control select2 font_number', 'placeholder' => __('messages.please_select')]); !!}
+                            </div>
+                        </div>
+                    @endif
+
+                    @if( $pattern->type == 'purchase' )
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                {!! Form::label('purchase', __('home.Purchase').':*') !!} 
+                                {!! Form::select('purchase', $accounts,($data)?$data->purchase:null, ["required", 'class' => 'form-control select2 font_number', 'placeholder' => __('messages.please_select')]); !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                {!! Form::label('purchase_return', __('home.Purchase Return').':*') !!} 
+                                {!! Form::select('purchase_return', $accounts,($data)?$data->purchase_return:null, ["required", 'class' => 'form-control select2 font_number', 'placeholder' => __('messages.please_select')]); !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                {!! Form::label('purchase_tax', __('home.Purchase Tax').':*') !!} 
+                                {!! Form::select('purchase_tax', $accounts,($data)?$data->purchase_tax:null, ["required", 'class' => 'form-control select2 font_number', 'placeholder' => __('messages.please_select')]); !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                {!! Form::label('purchase_discount', __('home.Purchase Discount').':*') !!} 
+                                {!! Form::select('purchase_discount', $accounts,($data)?$data->purchase_discount:null, ["required", 'class' => 'form-control select2 font_number', 'placeholder' => __('messages.please_select')]); !!}
+                            </div>
+                        </div>
+                    @endif
+
+                    @if( $pattern->type == 'cheque' )
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                {!! Form::label('cheque_debit', __('home.Cheque Debit').':*') !!} 
+                                {!! Form::select('cheque_debit', $accounts, ($data)?$data->cheque_debit:null, ["required", 'class' => 'form-control select2 font_number', 'placeholder' => __('messages.please_select')]); !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                {!! Form::label('cheque_collection', __('home.Cheque Collection').':*') !!} 
+                                {!! Form::select('cheque_collection', $accounts,($data)?$data->cheque_collection:null, ["required", 'class' => 'form-control select2 font_number', 'placeholder' => __('messages.please_select')]); !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                {!! Form::label('journal_expense_tax', __('home.Journal Expense Tax').':*') !!} 
+                                {!! Form::select('journal_expense_tax', $accounts,($data)?$data->journal_expense_tax:null, ["required", 'class' => 'form-control select2 font_number','id'=>'journal_expense_tax', 'placeholder' => __('messages.please_select')]); !!}
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
         @endcomponent
         @component("components.widget" )
            <div class="row">

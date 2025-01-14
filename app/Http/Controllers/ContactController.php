@@ -695,11 +695,13 @@ class ContactController extends Controller
             if (!empty($term)) {
                 $contacts->where(function ($query) use ($term) {
                     $query->where('contacts.name', 'like', '%' . $term .'%')
-                            ->orWhere('supplier_business_name', 'like', '%' . $term .'%')
-                            ->orWhere('mobile', 'like', '%' . $term .'%')
-                            ->orWhere('contacts.contact_id', 'like', '%' . $term .'%');
+                        ->orWhere('contacts.first_name', 'like', '%' . $term .'%')
+                        ->orWhere('supplier_business_name', 'like', '%' . $term .'%')
+                        ->orWhere('mobile', 'like', '%' . $term .'%')
+                        ->orWhere('contacts.contact_id', 'like', '%' . $term .'%');
                 });
             }
+             
             $contacts->select(
                 'contacts.id',
                 DB::raw("IF(contacts.contact_id IS NULL OR contacts.contact_id='', contacts.name, CONCAT(contacts.name, ' (', contacts.contact_id, ')')) AS text"),

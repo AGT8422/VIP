@@ -265,6 +265,7 @@
 				amount_currency.val(0);				
 			}
 		}
+
 	  </script>
       @yield('child_script')
 @endsection

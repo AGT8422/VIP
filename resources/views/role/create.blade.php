@@ -779,8 +779,16 @@
                         <div class="col-md-12">
                             <div class="checkbox">
                                 <label>
-                                    {!! Form::checkbox('permissions[]', 'list_drafts', false,
+                                    {!! Form::checkbox('permissions[]', 'list_QuatationApproved', false,
                                     [ 'class' => 'input-icheck']); !!} {{ __( 'lang_v1.list_drafts' ) }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="checkbox">
+                                <label>
+                                    {!! Form::checkbox('permissions[]', 'list_drafts', false,
+                                    [ 'class' => 'input-icheck']); !!} {{ __( 'lang_v1.list_drafts1' ) }}
                                 </label>
                             </div>
                         </div>

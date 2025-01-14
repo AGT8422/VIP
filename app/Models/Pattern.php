@@ -26,7 +26,7 @@ class Pattern extends Model
         $pattern->printer_type   =  $data["printer_type"]; 
         $pattern->user_id        =  $user_id; 
         $pattern->save();
-
+        return $pattern;
     }
 
     public static function edit($id,$data,$business_id,$user_id)
@@ -44,7 +44,7 @@ class Pattern extends Model
         $pattern->printer_type   =  $data["printer_type"]; 
         $pattern->user_id        =  $user_id; 
         $pattern->update();
-
+        return $pattern;
     }
     
     public static function remove($id)

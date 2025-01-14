@@ -878,10 +878,10 @@ class SellController extends Controller
         }
         $patterns  = [];
         if(request()->session()->get("user.id") == 1){
-            $patterns_ = \App\Models\Pattern::select()->get();
+            $patterns_ = \App\Models\Pattern::where('type',"sale")->select()->get();
         }else{
             $userd     = \App\Models\User::find(request()->session()->get("user.id"));
-            $patterns_ = \App\Models\Pattern::whereIn("id",json_decode($userd->pattern_id))->select()->get();
+            $patterns_ = \App\Models\Pattern::where('type',"sale")->whereIn("id",json_decode($userd->pattern_id))->select()->get();
         } 
         foreach($patterns_ as $it){
                 $patterns[$it->id] = $it->name;
@@ -1444,8 +1444,13 @@ class SellController extends Controller
         foreach($currency as $i){
             $currencies[$i->currency->id] = $i->currency->country . " " . $i->currency->currency . " ( " . $i->currency->code . " )";
         }
-        $patterns  = [];
-        $patterns_ = \App\Models\Pattern::select()->get();
+        $patterns  = []; 
+        if(request()->session()->get("user.id") == 1){
+            $patterns_ = \App\Models\Pattern::where('type',"sale")->select()->get();
+        }else{
+            $userd     = \App\Models\User::find(request()->session()->get("user.id"));
+            $patterns_ = \App\Models\Pattern::where('type',"sale")->whereIn("id",json_decode($userd->pattern_id))->select()->get();
+        } 
         foreach($patterns_ as $it){
                 $patterns[$it->id] = $it->name;
         }

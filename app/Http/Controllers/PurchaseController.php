@@ -445,11 +445,18 @@ class PurchaseController extends Controller
             $types['both'] = __('lang_v1.both_supplier_customer');
         }
         $patterns  = [];
+        $databaseName =  "izo26102024_elke" ; $dab =  Config::get('database.connections.mysql.database'); 
+        if($databaseName == $dab){
+            $type_pattern = "sale";
+        }else{
+            $type_pattern ="purchase";
+
+        }
         if(request()->session()->get("user.id") == 1){
-            $all_patterns = \App\Models\Pattern::select()->get();
+            $all_patterns = \App\Models\Pattern::where('type',$type_pattern)->select()->get();
         }else{
             $user         = \App\Models\User::find(request()->session()->get("user.id"));
-            $all_patterns = \App\Models\Pattern::whereIn("id",json_decode($user->pattern_id))->select()->get();
+            $all_patterns = \App\Models\Pattern::where('type',$type_pattern)->whereIn("id",json_decode($user->pattern_id))->select()->get();
         } 
         foreach($all_patterns as $it){ $patterns[$it->id] = $it->name; }
         $customer_groups    = CustomerGroup::forDropdown($business_id);
@@ -1144,11 +1151,18 @@ class PurchaseController extends Controller
             }
         }
         $patterns  = [];
+        $databaseName =  "izo26102024_elke" ; $dab =  Config::get('database.connections.mysql.database'); 
+        if($databaseName == $dab){
+            $type_pattern = "sale";
+        }else{
+            $type_pattern ="purchase";
+
+        }
         if(request()->session()->get("user.id") == 1){
-            $all_patterns = \App\Models\Pattern::select()->get();
+            $all_patterns = \App\Models\Pattern::where('type',$type_pattern)->select()->get();
         }else{
             $user         = \App\Models\User::find(request()->session()->get("user.id"));
-            $all_patterns = \App\Models\Pattern::whereIn("id",json_decode($user->pattern_id))->select()->get();
+            $all_patterns = \App\Models\Pattern::where('type',$type_pattern)->whereIn("id",json_decode($user->pattern_id))->select()->get();
         } 
         foreach($all_patterns as $it){ $patterns[$it->id] = $it->name; }
         $customer_groups  = CustomerGroup::forDropdown($business_id);

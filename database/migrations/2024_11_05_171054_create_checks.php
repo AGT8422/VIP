@@ -27,7 +27,7 @@ class CreateChecks extends Migration
             $table->bigInteger("contact_bank_id")->unsigned()->nullable();
             $table->integer("type")->default(0)->nullable();
             $table->integer("status")->default(0)->nullable();
-            $table->decimal("amount",8,2);
+            $table->decimal("amount",22,4);
             $table->date("write_date");
             $table->date("due_date");
             $table->string("cheque_no",255)->nullable();

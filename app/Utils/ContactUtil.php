@@ -119,7 +119,7 @@ class ContactUtil extends Util
             if (isset($input['opening_balance'])) {
                 unset($input['opening_balance']);
             }
-            
+            $input['contact_status'] = 'active';
             $contact = Contact::create($input);
           
             //Add opening balance

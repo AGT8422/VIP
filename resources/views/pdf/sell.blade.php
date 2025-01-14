@@ -286,7 +286,7 @@
 </head>
 
 <body >
-    @php $company_name = request()->session()->get("user_main.domain"); $brand_check = 0; @endphp
+    @php $company_name = request()->session()->get("user_main.domain"); $brand_check = 0; $business= \App\Business::find(session()->get('business.id')); @endphp
 
     <!--<header>-->
     <!--    Fixed Header Content-->
@@ -307,8 +307,11 @@
                                             Validity Date  :  {{ date('M-d-Y',strtotime($invoice->transaction_date. ' +2 weeks')) }}
                                         </p>
                                 @endif
-                                @if(!empty(Session::get('business.logo')))
-                                    <img style="width:100%" src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
+                                @if(!empty($business))
+                                    @if(!empty($business->logo))
+
+                                    <img style="width:100%" src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . $business->logo ) }}" alt="Logo">
+                                    @endif 
                                 @endif 
                                 </td>
                                 <td style="width:60% ;text-align:center;line-height:10px;">
@@ -345,32 +348,32 @@
                 {{-- <img src="{{asset("/uploads/img/aljazira.png")}}"   style="margin-left:-20%; width: 100%; height:150px;margin-top:-100px;"> --}}
                 
                 <table style=" position:relative; top:-50px;width: 100%;margin-bottom:0px; border-bottom:7px solid {{$color}} ; padding-bottom:0px">
-                    <tbody  >
+                    <tbody>
                         <tr>
-                           
                             <td colspan="2" style="width: 100%">
-                                @if(!empty(Session::get('business.logo')))
-                                    <img style="width:100%" src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}" alt="Logo">
+                                @if(!empty($business))
+                                    @if(!empty($business->logo))
+                                    <img style="width:100%" src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . $business->logo ) }}" alt="Logo">
+                                    @endif 
                                 @endif 
+                                
                             </td>
                         </tr> 
                         <tr>
                             <td style="width: 40%;"><h3 style="text-align:left !important;width:100% !important;  ;margin-left:0px;font-size:19px;">&nbsp;</h3></td>
                             <td style="width: 100%;text-align:right;color:#000;text-align:center;padding-right:200px;"> 
                                 <h1 style=" width:100% !important; text-align:center !important;  font-size:{{$font_bill_text}};  ">
-                                        @if($invoice->sub_status == 'quotation')
-                                        QUOTATION
-                                        @elseif(($invoice->sub_status == '' && $invoice->status == 'draft'  )  )
-                                        DRAFT
-                                        @elseif(($invoice->sub_status == 'proforma' && $invoice->status == 'draft' )|| $invoice->status == 'ApprovedQuotation')
-                                        Approved <br>Quotation
-                                        @elseif($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' )
-                                        TAX INVOICE  
-                                        @endif
-                                    </h1>
-                                    
+                                    @if($invoice->sub_status == 'quotation')
+                                    QUOTATION
+                                    @elseif(($invoice->sub_status == '' && $invoice->status == 'draft'  )  )
+                                    DRAFT
+                                    @elseif(($invoice->sub_status == 'proforma' && $invoice->status == 'draft' )|| $invoice->status == 'ApprovedQuotation')
+                                    Proforma <br>Invoice
+                                    @elseif($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' )
+                                    TAX INVOICE  
+                                    @endif
+                                </h1>
                              </td>
-                           
                         </tr>
                     </tbody>
                 </table>
@@ -466,8 +469,11 @@
                         <td style="width: 40%;"></td>
                         <td style="width: 100%;padding-right:20px;">
                             {{-- <img src="{{asset("/uploads/img/aljazira.png")}}"   style="margin-left:-20%;max-width: 100%;max-height:520px"> --}}
-                            @if(!empty(Session::get('business.logo')))
-                                 <img src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . Session::get('business.logo') ) }}"  style="margin-left:-20%;width: 500px;max-height:420px" alt="Logo">
+                            @if(!empty( $business))
+                                @if(!empty( $business->logo))
+                                {{-- @php dd(asset( 'uploads/companies/'.$company_name.'/business_logo/' . $business->logo )); @endphp --}}
+                                    <img src="{{ asset( 'uploads/companies/'.$company_name.'/business_logo/' . $business->logo ) }}"  style="margin-left:-20%;width: 500px;max-height:420px" alt="Logo">
+                                @endif 
                             @endif 
                             
                         </td>
@@ -483,7 +489,7 @@
                                     @elseif(($invoice->sub_status == '' && $invoice->status == 'draft'  )  )
                                     Draft
                                     @elseif(($invoice->sub_status == 'proforma' && $invoice->status == 'draft' )|| $invoice->status == 'ApprovedQuotation')
-                                    Approved <br>Quotation
+                                    Proforma <br>Invoice
                                     @elseif($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' || $invoice->sub_status == 'final '   )
                                     TAX INVOICE  
                                     @endif
@@ -586,10 +592,7 @@
                                     @php $note =   $invoice->note ; @endphp
                                     @if($note != null || $note != "")
                                     <p style="padding:0px;margin:0px">
-                                    
-                                            
                                         {{__('sale.note') }}:  <span style="word-break: break-all:position:relative;line-height:12px;">{!! $note !!} </span>
-                                    
                                     </p>
                                     @endif
                                     <p style="display: none">
@@ -728,8 +731,6 @@
                             
                                 {{-- <pre style="font-size:9px; line-height:9px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!}</pre>  --}}
                             
-                                
-                               
                                 @if($discount!=0)
                                     <td style="font-size:{{$font_text_table}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($data->unit_price_before_discount,$number_format_digit) }} {{  isset($currency)?"":""}} </td> 
                                     <td style="font-size:{{$font_text_table}};max-width:10px;text-align:{{$text_align}};border-bottom: 1px solid grey;padding:1px !important">{{ number_format($discount,$number_format_digit) }} {{  isset($currency)?"":""}}  </td> 
@@ -843,7 +844,22 @@
                     </tr>
                 </tbody>
             </table>
-            <table class=" " style="position:relative; top:-30px;width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px;margin-top:50px; border:0px solid black; "  dir="ltr" >
+            @if(($invoice->status != 'final' && $invoice->sub_status != 'final')  || ($invoice->sub_status == 'f' && $invoice->status == 'final') )
+                         
+                @if(!empty($trm))
+                    <h3 style="text-align: left">{{"Terms & And Conditions"}}</h3>
+                    <table class="table" style="width:100%;font-size:0.6rem; outline: 1px solid #BCBAB9;border-radius:10px;margin-bottom:0px;"  dir="ltr" >
+                        <tbody style="border:0px">
+                            <tr>
+                                <td>
+                                    {!!  $trm->description  !!}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                @endif
+            @endif
+            <table class=" " style="position:relative; top:-30px;width:100%;  border: 0px solid #BCBAB9;margin-bottom:0px;margin-top:30px; border:0px solid black; "  dir="ltr" >
                 <tbody>
                     <tr>
                         <td style="width:49%;font-size:15px">
@@ -897,21 +913,9 @@
                 $trm = \App\Models\QuatationTerm::where("id",$invoice->additional_notes)->first();
             @endphp
            
-            @if($invoice->sub_status == 'quotation')
-                         
-                @if(!empty($trm))
-                    <table class="table" style="width:100%;font-size:1.3mm; border: 1px solid #BCBAB9;margin-bottom:5px;"  dir="ltr" >
-                        <tbody>
-                            <tr>
-                                <td>
-                                    {!!  $trm->description  !!}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                @endif
+            
                  
-            @else
+            @if($invoice->sub_status != 'quotation')
                 <div class="footer" style="display:none;">
                     @php
                         $trm = \App\Models\QuatationTerm::where("id",$invoice->additional_notes)->first();

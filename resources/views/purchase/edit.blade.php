@@ -73,7 +73,11 @@
                       <div class="form-group">
                         {!! Form::label('ref_no', __('purchase.ref_no') . '*') !!}
                         @show_tooltip(__('lang_v1.leave_empty_to_autogenerate'))
-                        {!! Form::text('ref_no', $purchase->ref_no, ['class' => 'form-control', 'readonly' => true ,'required']); !!}
+                        @if(auth()->user()->hasRole('Admin#' . session('business.id'))) 
+                          {!! Form::text('ref_no', $purchase->ref_no, ['class' => 'form-control', 'required']); !!}
+                        @else
+                          {!! Form::text('ref_no', $purchase->ref_no, ['class' => 'form-control', 'readonly' => true ,'required']); !!}
+                        @endif
                       </div>
                     </div>
                     {{-- *2/3/1-3* Pay Term  --}}

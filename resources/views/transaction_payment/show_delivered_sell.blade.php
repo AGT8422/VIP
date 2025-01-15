@@ -130,20 +130,20 @@
             @if(request()->type == "s_return")
                 <div class="row">
                     <div class="col-md-12">
-                        @if((auth()->user()->can('purchase.payments') && (in_array($transaction->type, ['purchase', 'purchase_return']) )) || (auth()->user()->can('sell.payments') && (in_array($transaction->type, ['sell', 'sell_return']))) || (auth()->user()->can('expense.access') ) || (auth()->user()->can('warehouse.views') ) )
-                                @if(request()->approved)    
-                                    <a href="{{ action('DeliveryPageController@create', ["id" => $transaction->id,"reciept"=>"e","type"=>"return_sale","approved"=>"approved"]) }}" class="btn btn-primary btn-xs pull-right   no-print"><i class="fa fa-plus" aria-hidden="true"></i> @lang("purchase.add_Delivery_response")</a>
-                                @else
-                                    <a href="{{ action('DeliveryPageController@create', ["id" => $transaction->id,"reciept"=>"e","type"=>"return_sale"]) }}" class="btn btn-primary btn-xs pull-right   no-print"><i class="fa fa-plus" aria-hidden="true"></i> @lang("purchase.add_Delivery_response")</a>
-                                @endif
+                        @if(auth()->user()->can('warehouse.add_delivered'))
+                            @if(request()->approved)    
+                                <a href="{{ action('DeliveryPageController@create', ["id" => $transaction->id,"reciept"=>"e","type"=>"return_sale","approved"=>"approved"]) }}" class="btn btn-primary btn-xs pull-right   no-print"><i class="fa fa-plus" aria-hidden="true"></i> @lang("purchase.add_Delivery_response")</a>
+                            @else
+                                <a href="{{ action('DeliveryPageController@create', ["id" => $transaction->id,"reciept"=>"e","type"=>"return_sale"]) }}" class="btn btn-primary btn-xs pull-right   no-print"><i class="fa fa-plus" aria-hidden="true"></i> @lang("purchase.add_Delivery_response")</a>
                             @endif
+                        @endif
                     </div>
                 </div>
             @else 
                 @if(($TraSeLine - $DelPrevious) > 0)  
                     <div class="row">
                         <div class="col-md-12">
-                            @if((auth()->user()->can('purchase.payments') && (in_array($transaction->type, ['purchase', 'purchase_return']) )) || (auth()->user()->can('sell.payments') && (in_array($transaction->type, ['sell', 'sell_return']))) || (auth()->user()->can('expense.access') )|| (auth()->user()->can('warehouse.views') ) )
+                            @if(auth()->user()->can('warehouse.add_delivered'))
                                 @if(request()->approved)    
                                     <a href="{{ action('DeliveryPageController@create', ["id" => $transaction->id,"reciept"=>"e","approved"=>"approved"]) }}" class="btn btn-primary btn-xs pull-right   no-print"><i class="fa fa-plus" aria-hidden="true"></i> @lang("purchase.add_delivery")</a>
                                 @else

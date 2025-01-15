@@ -176,7 +176,7 @@ class PatternController extends Controller
         $printer_layout             = \App\Models\PrinterTemplate::allLocation($business_id);
 
         $data                       =  \App\Models\SystemAccount::where('business_id',$business_id)->where('pattern_id','=',$id)->first();
-        $accounts                   =  \App\Account:: items();
+        $accounts                   =  \App\Account::items();
         
         return view("patterns.edit")->with(compact([
                                         "invoice_layout",
@@ -194,7 +194,7 @@ class PatternController extends Controller
     //.....................
     public function store(Request $request)
     {    
-        if(!auth()->user()->can("pattern.save")){
+        if(!auth()->user()->can("pattern.create")){
             abort(403, 'Unauthorized action.');
         }
         
@@ -290,7 +290,7 @@ class PatternController extends Controller
     //.....................
     public function update(Request $request,$id)
     {
-        if(!auth()->user()->can("pattern.update")){
+        if(!auth()->user()->can("pattern.edit")){
             abort(403, 'Unauthorized action.');
         }
         $business_id   = request()->session()->get("user.business_id");
@@ -303,7 +303,41 @@ class PatternController extends Controller
         try{
            
             DB::beginTransaction();
-            \App\Models\Pattern::edit($id,$data,$business_id,$user_id);
+            $pattern = \App\Models\Pattern::edit($id,$data,$business_id,$user_id);
+            if(!empty($pattern)){
+                $Data                      =  \App\Models\SystemAccount::where('business_id',$business_id)->where("pattern_id",$id)->first();
+                if (empty($Data)) {
+                    $Data                  =  new \App\Models\SystemAccount;
+                }
+                
+                $Data->pattern_id          =  $id;
+                $Data->business_id         =  $business_id;
+                #........................
+                if(count($purchase)>0){
+                    $Data->purchase            =  $purchase['purchase'];
+                    $Data->purchase_tax        =  $purchase['purchase_tax'];
+                    $Data->purchase_return     =  $purchase['purchase_return'];
+                    $Data->purchase_discount   =  $purchase['purchase_discount'];
+                    #........................
+                }
+
+                if(count($sale)>0){
+                    $Data->sale                =  $sale['sale'];
+                    $Data->sale_tax            =  $sale['sale_tax'];
+                    $Data->sale_return         =  $sale['sale_return'];
+                    $Data->sale_discount       =  $sale['sale_discount'];
+                    #........................
+                }
+
+                if(count($check)>0){
+                    $Data->cheque_debit        =  $check['cheque_debit'];
+                    $Data->cheque_collection   =  $check['cheque_collection'];
+                    #........................
+                }
+                // $Data->journal_expense_tax =  $request->journal_expense_tax;
+                $Data->save();
+                // dd($Data,$pattern,$purchase,$sale,$check);
+            }
             DB::commit();
             $output = ["success"=> 1 ,
                     "msg"=> "Updated Successfully"

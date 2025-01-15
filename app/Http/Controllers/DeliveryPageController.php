@@ -98,7 +98,7 @@ class DeliveryPageController extends Controller
      
     $business_id = request()->session()->get('user.business_id');
 
-    if (!(auth()->user()->can('superadmin') || auth()->user()->can('warehouse.views') || auth()->user()->can('sell.create') || auth()->user()->can('SalesMan.views') || ($this->moduleUtil->hasThePermissionInSubscription($business_id, 'repair_module') && auth()->user()->can('admin_supervisor.create')&& auth()->user()->can('manufuctoring.views')&& auth()->user()->can('warehouse.views')))) {
+    if (!auth()->user()->can('warehouse.add_delivered')) {
         abort(403, 'Unauthorized action.');
     }
  
@@ -246,12 +246,12 @@ class DeliveryPageController extends Controller
    public function edit_delivery(Request $request,$id)
    {
      
-    $business_id = request()->session()->get('user.business_id');
-
-    if (!(auth()->user()->can('superadmin') || auth()->user()->can('warehouse.views') || auth()->user()->can('admin_supervisor.create') || auth()->user()->can('manufuctoring.views') ||   auth()->user()->can('warehouse.views') || auth()->user()->can('sell.create') || ($this->moduleUtil->hasThePermissionInSubscription($business_id, 'repair_module') && auth()->user()->can('repair.create')))) {
+       
+    if (!auth()->user()->can('warehouse.add_delivered')) {
         abort(403, 'Unauthorized action.');
     }
- 
+        
+    $business_id = request()->session()->get('user.business_id');
     $sub_type = request()->get('sub_type');
     
     $walk_in_customer = $this->contactUtil->getWalkInCustomer($business_id);
@@ -347,9 +347,9 @@ class DeliveryPageController extends Controller
     */
    public function index()
    {
-       if (!auth()->user()->can('warehouse.create') &&  !auth()->user()->can('SalesMan.views') && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('admin_without.views') && !auth()->user()->can('manufuctoring.views')  ) {
-           abort(403, 'Unauthorized action.');
-       }
+        if (!auth()->user()->can('warehouse.delivered')) {
+            abort(403, 'Unauthorized action.');
+        }
 
        $business_id = request()->session()->get('user.business_id');
 
@@ -390,9 +390,9 @@ class DeliveryPageController extends Controller
     */
    public function edit()
    {
-       if (!auth()->user()->can('warehouse.create')  &&  !auth()->user()->can('SalesMan.views') && !auth()->user()->can('warehouse.views')&& !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('admin_without.views') && !auth()->user()->can('manufuctoring.views') ) {
-           abort(403, 'Unauthorized action.');
-       }
+        if (!auth()->user()->can('warehouse.add_delivered')) {
+            abort(403, 'Unauthorized action.');
+        }
 
        $business_id = request()->session()->get('user.business_id');
 
@@ -425,9 +425,9 @@ class DeliveryPageController extends Controller
     */
    public function show()
    {
-       if (!auth()->user()->can('warehouse.create')  &&  !auth()->user()->can('SalesMan.views')  && !auth()->user()->can('warehouse.views')  && !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('admin_without.views') && !auth()->user()->can('manufuctoring.views') ) {
-           abort(403, 'Unauthorized action.');
-       }
+        if (!auth()->user()->can('warehouse.delivered')) {
+            abort(403, 'Unauthorized action.');
+        }
 
        $business_id = request()->session()->get('user.business_id');
 
@@ -462,7 +462,7 @@ class DeliveryPageController extends Controller
      */
     public function allStores(Request $request)
     {
-        if (!auth()->user()->can('allStores')   &&  !auth()->user()->can('SalesMan.views') && !auth()->user()->can('warehouse.views')  && !auth()->user()->can('admin_supervisor.views')&& !auth()->user()->can('admin_without.views') && !auth()->user()->can('manufuctoring.views') ) {
+        if (!auth()->user()->can('warehouse.delivered')) {
             abort(403, 'Unauthorized action.');
         }
         $business_id           = request()->session()->get('user.business_id');

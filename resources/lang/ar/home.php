@@ -327,4 +327,8 @@
 'Add Contact Bank' => 'إضافة بنك للزبون',
 'Edit Contact Bank' => 'تعديل بنك للزبون',
 
+'create_pattern'     => 'إنشاء الانماط',
+'edit_pattern'     => 'تعديل  الانماط',
+'delete_pattern'     => 'حذف الانماط',
+
 ];

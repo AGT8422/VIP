@@ -134,12 +134,12 @@
                                 {!! Form::select('cheque_collection', $accounts,($data)?$data->cheque_collection:null, ["required", 'class' => 'form-control select2 font_number', 'placeholder' => __('messages.please_select')]); !!}
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        {{-- <div class="col-sm-4">
                             <div class="form-group">
                                 {!! Form::label('journal_expense_tax', __('home.Journal Expense Tax').':*') !!} 
                                 {!! Form::select('journal_expense_tax', $accounts,($data)?$data->journal_expense_tax:null, ["required", 'class' => 'form-control select2 font_number','id'=>'journal_expense_tax', 'placeholder' => __('messages.please_select')]); !!}
-                            </div>
-                        </div>
+                            </div> 
+                        </div> --}}
                     @endif
                 </div>
             </div>
@@ -156,5 +156,86 @@
 </section>
 @stop
 @section("javascript")
-        <script src="{{ asset('js/patterns.js?v=' . $asset_v) }}"></script>
+    <script src="{{ asset('js/patterns.js?v=' . $asset_v) }}"></script>
+    <script type="text/javascript">
+        $("#pattern_type").on('change',function(){
+        $('.body_of_patterns').html("");
+            if($(this).val() == 'purchase'){
+                html = '<div class="col-sm-3">';
+                html += '<div class="form-group">';
+                html += '{!! Form::label('purchase', __("home.Purchase").":*") !!} ';
+                html += '{!! Form::select('purchase', $accounts,($data)?$data->purchase:null, ['required', 'class' => 'form-control select2 font_number', 'placeholder' => __("messages.please_select")]); !!}';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-sm-3">';
+                html += '<div class="form-group">';
+                html += '{!! Form::label('purchase_return', __("home.Purchase Return").":*") !!} ';
+                html += '{!! Form::select('purchase_return', $accounts,($data)?$data->purchase_return:null, ['required', 'class' => 'form-control select2 font_number', 'placeholder' => __("messages.please_select")]); !!}';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-sm-3">';
+                html += '<div class="form-group">';
+                html += '{!! Form::label('purchase_tax', __("home.Purchase Tax").":*") !!} ';
+                html += '{!! Form::select('purchase_tax', $accounts,($data)?$data->purchase_tax:null, ['required', 'class' => 'form-control select2 font_number', 'placeholder' => __("messages.please_select")]); !!}';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-sm-3">';
+                html += '<div class="form-group">';
+                html += '{!! Form::label('purchase_discount', __("home.Purchase Discount").":*") !!} ';
+                html += '{!! Form::select('purchase_discount', $accounts,($data)?$data->purchase_discount:null, ['required', 'class' => 'form-control select2 font_number','placeholder' => __("messages.please_select")]); !!}';
+                html += '</div>';
+                html += '</div>';
+                $('.body_of_patterns').html(html);
+            }
+            if($(this).val() == 'sale'){
+                html = '<div class="col-sm-3">';
+                html += '<div class="form-group">';
+                html += '{!! Form::label('sale', __("home.Sale").":*") !!} ';
+                html += '{!! Form::select('sale', $accounts,($data)?$data->sale:null, ['required', 'class' => 'form-control select2 font_number', 'placeholder' => __("messages.please_select")]); !!}';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-sm-3">';
+                html += '<div class="form-group">';
+                html += '{!! Form::label('sale_return', __("home.Sale Return").":*") !!} ';
+                html += '{!! Form::select('sale_return', $accounts,($data)?$data->sale_return:null, ['required', 'class' => 'form-control select2 font_number', 'placeholder' => __("messages.please_select")]); !!}';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-sm-3">';
+                html += '<div class="form-group">';
+                html += '{!! Form::label('sale_tax', __("home.Sale Tax").":*") !!} ';
+                html += '{!! Form::select('sale_tax', $accounts,($data)?$data->sale_tax:null, ['required', 'class' => 'form-control select2 font_number', 'placeholder' => __("messages.please_select")]); !!}';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-sm-3">';
+                html += '<div class="form-group">';
+                html += '{!! Form::label('sale_discount', __("home.Sale Discount").":*") !!} ';
+                html += '{!! Form::select('sale_discount', $accounts,($data)?$data->sale_discount:null, ['required', 'class' => 'form-control select2 font_number','placeholder' => __("messages.please_select")]); !!}';
+                html += '</div>';
+                html += '</div>';
+                $('.body_of_patterns').html(html);
+            }
+            if($(this).val() == 'cheque'){
+                html  = '<div class="col-sm-4">';
+                html += '<div class="form-group">';
+                html += '{!! Form::label('cheque_debit', __("home.Cheque Debit").":*") !!}';
+                html += '{!! Form::select('cheque_debit', $accounts, ($data)?$data->cheque_debit:null, ["required", 'class' => 'form-control select2 font_number', 'placeholder' => __("messages.please_select")]); !!}';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-sm-4">';
+                html += '<div class="form-group">';
+                html += '{!! Form::label('cheque_collection', __("home.Cheque Collection").":*") !!}';
+                html += '{!! Form::select('cheque_collection', $accounts,($data)?$data->cheque_collection:null, ["required", 'class' => 'form-control select2 font_number', 'placeholder' => __("messages.please_select")]); !!}';
+                html += '</div>';
+                html += '</div>';
+                // html += '<div class="col-sm-4">';
+                // html += '<div class="form-group">';
+                // html += '{!! Form::label('journal_expense_tax', __("home.Journal Expense Tax").":*") !!}';
+                // html += '{!! Form::select('journal_expense_tax', $accounts,null, ["required", 'class' => 'form-control select2 font_number','id'=>'journal_expense_tax', 'placeholder' => __("messages.please_select")]); !!}';
+                // html += '</div>';
+                // html += '</div>';
+
+                $('.body_of_patterns').html(html);
+            }
+        })
+    </script>
 @endsection

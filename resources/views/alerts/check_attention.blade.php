@@ -26,6 +26,10 @@
                         $type = "Add Purchase"; 
                     }elseif($type == "Edit Purchase"){
                         $type = "Edit Purchase"; 
+                    }elseif($type == "Add Purchase Return"){
+                        $type = "Add Purchase Return"; 
+                    }elseif($type == "Edit Purchase Return"){
+                        $type = "Edit Purchase Return"; 
                     }else{
                         $type = ""; 
                     }
@@ -116,6 +120,14 @@
         if ($('form#add_purchase_form').valid()) {
             form3.submit();
         }
+
+        form4  = $("#purchase_return_form");
+        old4   = $("#purchase_return_form").attr("action");
+        url4   = $("#purchase_return_form").attr("action");
+        form4.attr("action",url4);
+        // if ($('form#purchase_return_form').valid()) {
+            form4.submit();
+        // }
 
     }
 </script>

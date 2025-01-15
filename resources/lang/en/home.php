@@ -370,4 +370,7 @@ return [
     'Due Date To'=>'Due Date To',
     'Add Contact Bank' => 'Add Contact Bank',
     'Edit Contact Bank' => 'Edit Contact Bank',
-    ];
+    'create_pattern'     => 'Create Pattern',
+    'edit_pattern'      => 'Edit Pattern',
+    'delete_pattern'     => 'Delete Pattern',    
+];

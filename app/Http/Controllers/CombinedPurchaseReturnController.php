@@ -15,6 +15,7 @@ use App\MovementWarehouse;
 use App\Models\TransactionRecieved;
 use App\Models\RecievedPrevious;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 
 class CombinedPurchaseReturnController extends Controller
@@ -68,7 +69,21 @@ class CombinedPurchaseReturnController extends Controller
             $currencies[$i->currency->id] = $i->currency->country . " " . $i->currency->currency . " ( " . $i->currency->code . " )";
         }
         $business_locations = BusinessLocation::forDropdown($business_id);
+        $patterns  = [];
+        $databaseName =  "izo26102024_elke" ; $dab =  Config::get('database.connections.mysql.database'); 
+        if($databaseName == $dab){
+            $type_pattern = "sale";
+        }else{
+            $type_pattern ="purchase";
 
+        }
+        if(request()->session()->get("user.id") == 1){
+            $all_patterns = \App\Models\Pattern::where('type',$type_pattern)->select()->get();
+        }else{
+            $user         = \App\Models\User::find(request()->session()->get("user.id"));
+            $all_patterns = \App\Models\Pattern::where('type',$type_pattern)->whereIn("id",json_decode($user->pattern_id))->select()->get();
+        } 
+        foreach($all_patterns as $it){ $patterns[$it->id] = $it->name; }
         $taxes                = TaxRate::where('business_id', $business_id)->ExcludeForTaxGroup()->get();
         $ship_from            = 1;
         $mainstore_categories = \App\Models\Warehouse::childs($business_id);
@@ -89,7 +104,7 @@ class CombinedPurchaseReturnController extends Controller
         $customer_groups = \App\CustomerGroup::forDropdown($business_id);
     
         return view('purchase_return.create')
-            ->with(compact('business_locations','types','customer_groups','list_of_prices','currencies', 'orderStatuses', 'ship_from', 'taxes', 'mainstore_categories', 'cost_centers'));
+            ->with(compact('business_locations','patterns','types','customer_groups','list_of_prices','currencies', 'orderStatuses', 'ship_from', 'taxes', 'mainstore_categories', 'cost_centers'));
     }
 
     /**
@@ -109,7 +124,7 @@ class CombinedPurchaseReturnController extends Controller
             DB::beginTransaction();
            
             $input_data = $request->only([ 
-                'location_id', 'transaction_date', 'final_total','total_finals_','status', 
+                'location_id', 'transaction_date', 'final_total','total_finals_','status', 'pattern_id',
                 'ref_no','cost_center_id','store_id','discount_amount2','discount_type','currency_id','currency_id_amount',
                 'tax_id', 'tax_amount2', 'contact_id','sup_ref_no','shipping_details','additional_notes'
                 ]);
@@ -529,6 +544,21 @@ class CombinedPurchaseReturnController extends Controller
         foreach($pur as $it){
             $product_list[] = $it->product_id;
         }
+        $patterns  = [];
+        $databaseName =  "izo26102024_elke" ; $dab =  Config::get('database.connections.mysql.database'); 
+        if($databaseName == $dab){
+            $type_pattern = "sale";
+        }else{
+            $type_pattern ="purchase";
+
+        }
+        if(request()->session()->get("user.id") == 1){
+            $all_patterns = \App\Models\Pattern::where('type',$type_pattern)->select()->get();
+        }else{
+            $user         = \App\Models\User::find(request()->session()->get("user.id"));
+            $all_patterns = \App\Models\Pattern::where('type',$type_pattern)->whereIn("id",json_decode($user->pattern_id))->select()->get();
+        } 
+        foreach($all_patterns as $it){ $patterns[$it->id] = $it->name; }
         $Purchaseline     = PurchaseLine::where("transaction_id",$purchase_return->id)->whereIn("product_id",$product_list)->select(DB::raw("SUM(quantity) as total"))->first()->total;
         $RecievedPrevious = RecievedPrevious::where("transaction_id",$purchase_return->id)->whereIn("product_id",$product_list)->select(DB::raw("SUM(current_qty) as total"))->first()->total;
         if($Purchaseline <= $RecievedPrevious){
@@ -573,7 +603,7 @@ class CombinedPurchaseReturnController extends Controller
         }
         $customer_groups    = CustomerGroup::forDropdown($business_id);
         return view('purchase_return.edit')
-            ->with(compact('business_locations','list_of_prices','customer_groups','currencies','types','mainstore_categories' ,'orderStatuses' ,'TranRecieved' ,'state','ship_from' ,'cost_centers' , 'taxes', 'purchase_return', 'purchase_lines'));
+            ->with(compact('business_locations','patterns','list_of_prices','customer_groups','currencies','types','mainstore_categories' ,'orderStatuses' ,'TranRecieved' ,'state','ship_from' ,'cost_centers' , 'taxes', 'purchase_return', 'purchase_lines'));
     }
 
     /**
@@ -611,7 +641,8 @@ class CombinedPurchaseReturnController extends Controller
                             'contact_id',
                             'sup_ref_no',
                             'shipping_details',
-                            'additional_notes'
+                            'additional_notes',
+                            'pattern_id',
                         ]);
 
             $business_id    = $request->session()->get('user.business_id');
@@ -632,6 +663,7 @@ class CombinedPurchaseReturnController extends Controller
             $products           = $request->input('products');
             $purchase_return_id = $request->input('purchase_return_id');
             $purchase_return    = Transaction::where('business_id', $business_id)->where('type', 'purchase_return')->find($purchase_return_id);
+            $old_pattern        = $purchase_return->pattern_id;
             $old_date           = $purchase_return->transaction_date;
             $edit_days          = request()->session()->get('business.transaction_edit_days');
             $edit_date          = request()->session()->get('business.transaction_edit_date');
@@ -833,7 +865,7 @@ class CombinedPurchaseReturnController extends Controller
                     foreach($allTransaction as $o){
                         $account_transaction = \App\Account::find($o->account_id); 
                         if($account_transaction->cost_center!=1){
-                             \App\AccountTransaction::nextRecords($account_transaction->id,$purchase_return->business_id,$purchase_return->transaction_date);
+                           \App\AccountTransaction::nextRecords($account_transaction->id,$purchase_return->business_id,$purchase_return->transaction_date);
                         }
                     }
                 }   
@@ -905,8 +937,9 @@ class CombinedPurchaseReturnController extends Controller
             if(($request->status == "received" || $request->status == "final")){
                 \App\Models\AdditionalShipping::update_purchase($purchase_return->id,$additional_inputs,$document_expense);
                 \App\Models\AdditionalShipping::add_purchase_payment($purchase_return->id,null,null,1);
-                \App\AccountTransaction::update_return_purchase($purchase_return,$input_data['discount_amount2'],$request->total_finals_,$sub_total_rt_purchase,$input_data['tax_amount2'],$old_return,null,$old_date);
+                \App\AccountTransaction::update_return_purchase($purchase_return,$input_data['discount_amount2'],$request->total_finals_,$sub_total_rt_purchase,$input_data['tax_amount2'],$old_return,null,$old_date,$old_pattern);
             }
+
             if( ($request->status == "received" || $request->status == "final") && ($old_return->status != "received" && $old_return->status != "final" )){
                 $type="PReturn";
                 \App\Models\Entry::create_entries($purchase_return,$type,null,null,null,null,$purchase_return->id);
@@ -923,6 +956,7 @@ class CombinedPurchaseReturnController extends Controller
                     }
                 }
             }
+
             $output = [
                     'success' => 1,
                     'msg'     => __('lang_v1.purchase_return_updated_success')
@@ -933,6 +967,7 @@ class CombinedPurchaseReturnController extends Controller
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             $output = [
                 'success' => 0,
+                // 'msg'     => "File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage()
                 'msg'     => __('messages.something_went_wrong')
             ];
         }

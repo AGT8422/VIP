@@ -948,6 +948,55 @@
             </div>
            <hr>
 
+           {{--Pattern--}}
+           <div class="row check_group ">
+            <div class="col-md-2">
+                <h4 class="font_text">@lang( 'home.patterns' )</h4>
+            </div>
+            <div class="col-md-2">
+                <div class="checkbox">
+                    <label class="ch_all">
+                        <input type="checkbox" class="check_all input-icheck" > {{ __( 'role.select_all' ) }}
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="col-md-4">
+                    <div class="checkbox">
+                        <label>
+                            {!! Form::checkbox('permissions[]', 'pattern.index',  in_array('pattern.index', $role_permissions),
+                            [ 'class' => 'input-icheck']); !!} {{ __( 'home.pattern' ) }}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="checkbox">
+                        <label>
+                            {!! Form::checkbox('permissions[]', 'pattern.create', in_array('pattern.create', $role_permissions),
+                            ['class' => 'input-icheck']); !!} {{ __('home.create_pattern') }}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="checkbox">
+                        <label>
+                            {!! Form::checkbox('permissions[]', 'pattern.edit', in_array('pattern.edit', $role_permissions),
+                            ['class' => 'input-icheck']); !!} {{ __('home.edit_pattern') }}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="checkbox">
+                        <label>
+                            {!! Form::checkbox('permissions[]', 'pattern.destroy',  in_array('pattern.destroy', $role_permissions),
+                            ['class' => 'input-icheck']); !!} {{ __('home.delete_pattern') }}
+                        </label>
+                    </div>
+                </div>  
+            </div>
+        </div>
 
         {{--Expenses--}}
            <div class="row check_group">
@@ -1006,6 +1055,7 @@
                    </div>
                </div>
            </div>
+
           <hr>
 
             {{--cash_register    الوردية--}}

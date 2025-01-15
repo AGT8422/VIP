@@ -254,6 +254,7 @@ $(document).ready(function() {
                  string += ' (' + item.sub_sku + ') (Out of stock) </li>';
                  return $(string).appendTo(ul);
              } else if (item.enable_stock != 1) {
+                
                  return ul;
              } else {
                  var string = '<div>' + item.name;
@@ -430,6 +431,7 @@ function purchase_return_product_row(variation_id,curr=null) {
          });
          update_row();
          all_changes();
+         updatePattern();
          change_currency();
          update_table_total();
          $('#product_row_index').val(row_index + 1);

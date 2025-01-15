@@ -384,11 +384,14 @@ class SellReturnController extends Controller
         foreach($us as $it){
             $users[$it->id] = $it->first_name;
         }
-        $patterns         = [];
-        $patterns_        = \App\Models\Pattern::select()->get();
-        foreach($patterns_ as $it){
-                $patterns[$it->id] = $it->name;
-        }
+        $patterns         = []; 
+        if(request()->session()->get("user.id") == 1){
+            $all_patterns = \App\Models\Pattern::where('type',"sale")->select()->get();
+        }else{
+            $user         = \App\Models\User::find(request()->session()->get("user.id"));
+            $all_patterns = \App\Models\Pattern::where('type',"sale")->whereIn("id",json_decode($user->pattern_id))->select()->get();
+        } 
+        foreach($all_patterns as $it){ $patterns[$it->id] = $it->name; }
         $walk_in_customer = $this->contactUtil->getWalkInCustomer($business_id);
         $currency         =  \App\Models\ExchangeRate::where("source","!=",1)->get();
         $currencies       = [];
@@ -447,11 +450,14 @@ class SellReturnController extends Controller
         foreach($us as $it){
             $users[$it->id] = $it->first_name;
         }
-        $patterns  = [];
-        $patterns_ = \App\Models\Pattern::select()->get();
-        foreach($patterns_ as $it){
-                $patterns[$it->id] = $it->name;
-        }
+        $patterns         = []; 
+        if(request()->session()->get("user.id") == 1){
+            $all_patterns = \App\Models\Pattern::where('type',"sale")->select()->get();
+        }else{
+            $user         = \App\Models\User::find(request()->session()->get("user.id"));
+            $all_patterns = \App\Models\Pattern::where('type',"sale")->whereIn("id",json_decode($user->pattern_id))->select()->get();
+        } 
+        foreach($all_patterns as $it){ $patterns[$it->id] = $it->name; }
         $walk_in_customer = $this->contactUtil->getWalkInCustomer($business_id);
         $Purchaseline     = \App\TransactionSellLine::where("transaction_id",$id)->select(DB::raw("SUM(quantity) as total"))->first()->total;
         $RecievedPrevious = \App\Models\DeliveredPrevious::where("transaction_id",$id)->select(DB::raw("SUM(current_qty) as total"))->first()->total;

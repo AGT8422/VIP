@@ -219,6 +219,7 @@
                     <p >
                             {{ trans('home.Quote Ref') }}.: {{$Delivery->reciept_no }}
                     </p>
+                    
                     <p >
                             {{ trans('home.Address') }}: {{ ( $transaction->contact)? $transaction->contact->address_line_1:' ' }} 
                     </p>
@@ -232,9 +233,10 @@
                         {{ trans('home.Loctaion') }} : Silicon Oasis, Duba
                     </p> --}}
                     
-                   </td>
-                   <td style="width: 40%;text-align:center;color:#fff;text-align:center;padding-right:30px">
-                    {{ QrCode::format('svg')->size(150,150)->generate(url('reports/delivery/'.$Delivery->id )) }}
+                    </td>
+                    <td style="width: 40%;text-align:center;color:#fff;text-align:center;padding-right:30px">
+                        &nbsp;
+                        {{-- {{ QrCode::format('svg')->size(150,150)->generate(url('reports/delivery/'.$Delivery->id )) }} --}}
                     </td>
                    
                     <td style=" width:40%;line-height:20px;font-size:16px;">
@@ -245,19 +247,18 @@
                                 Date {{ date('M-d-Y',strtotime($Delivery->date)) }}
                             </p>
                             <p>
-                                 
                                 Status.:  {{  ($transaction->status == "delivered" )? $transaction->status : (($Delivery->id != null)? trans("home.Partial_delivery") : $transaction->status) }}
-                                      
-                                        
-                                        
                             </p>
                             <p>
                                 Project No.:  {{  $transaction->project_no }}
                             </p>
+                            <p >
+                                {{ trans('Invoice No') }}: {{ ( $transaction->invoice_no)? $transaction->invoice_no : $transaction->ref_no }} 
+                            </p>
+                            
                             <p>
                                 <!--Sales Rep.: RD-->
                             </p>      
-                            
                             <p>&nbsp;</p>
                    </td>
                 </tr> 
@@ -374,8 +375,12 @@
                  </div>
                  <div class="col-6" style="margin:10px;margin-top:20px;float:right;width:40%;font-size:12px;">
                      <div>{{"Prepared By : "}}</div><br>
-                     <div>{{"Accounts : "}}</div><br>
+                     {{-- <div>{{"Accounts : "}}</div><br> --}}
                      <div>{{"Delivered By : "}}</div><br>
+                     {{-- <div>{{"Receiver's Name : "}}</div><br>
+                     <div>{{"Signature : "}}</div><br>
+                     <div>{{"Mob : "}}</div><br>
+                     <div>{{"Stamp : "}}</div><br> --}}
                  </div>
             
         </div>

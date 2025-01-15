@@ -15,7 +15,7 @@ class SystemAccountController extends Controller
     public function index()
     { 
         
-        if(!auth()->user()->can("business.create")){
+        if(!auth()->user()->can("pattern.create")){
             abort(403, 'Unauthorized action.');
         }
 

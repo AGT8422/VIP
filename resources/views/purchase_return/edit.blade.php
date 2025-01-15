@@ -150,6 +150,12 @@
 								</div>
 							</div>
 						</div>
+						<div class="col-sm-6 ">
+							<div class="form-group">
+							  {!! Form::label('pattern_id', __('business.patterns') . ':*') !!}
+							  {!! Form::select('pattern_id', $patterns,  $purchase_return->pattern_id , ['class' => 'form-control select2','required', 'placeholder' => __('messages.please_select')]); !!}
+							</div>
+						  </div>
 						<div class="col-sm-6">
 							<div class="form-group">
 								{!! Form::label('store_id', __('warehouse.warehouse').':*') !!}

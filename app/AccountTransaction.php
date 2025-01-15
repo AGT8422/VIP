@@ -815,7 +815,12 @@ class AccountTransaction extends Model
         {
             //...global information 
             $business_id = ($user)?$user->business_id:request()->session()->get("user.business_id");
-            $setting = \App\Models\SystemAccount::where("business_id",$business_id)->first();
+            $setting =  \App\Models\SystemAccount::where('business_id',$data->business_id);
+            if($data->pattern_id != 0){
+                $setting->where("pattern_id",$data->pattern_id);
+            }
+            $setting = $setting->first();
+            
             //.... total before global discount
             $amount      =  $sub_total;
 
@@ -856,8 +861,7 @@ class AccountTransaction extends Model
                 }
             }
 
-            //... purchase ..
-            $setting        =  \App\Models\SystemAccount::where('business_id',$data->business_id)->first();
+            //... purchase .
             $return_account =  \App\AccountTransaction::where('account_id',$setting->purchase_return)
                                                         ->whereNotNull('return_transaction_id')
                                                         ->where('transaction_id',$data->id)
@@ -1051,15 +1055,20 @@ class AccountTransaction extends Model
 
         }
         // ...F.....................................................
-        public static  function update_return_purchase($data=null,$discount_final=null,$final_total=null,$sub_total=null,$tax=null,$old=null,$user=null,$old_date=null)
+        public static  function update_return_purchase($data=null,$discount_final=null,$final_total=null,$sub_total=null,$tax=null,$old=null,$user=null,$old_date=null,$old_pattern=null)
         {
 
-            // dd($old);
+            $business_id = ($user)?$user->business_id:request()->session()->get("user.business_id");
+            $setting     =  \App\Models\SystemAccount::where('business_id',$data->business_id);
+            if($data->pattern_id  != null){
+                $setting->where('pattern_id',$data->pattern_id);
+            }
+            $setting = $setting->first();
+            
             //...global information 
-            $business_id =  ($user)?$user->business_id:request()->session()->get("user.business_id");
-            $setting     = \App\Models\SystemAccount::where("business_id",$business_id)->first();
+
             //.... total before global discount
-            $amount      =  $sub_total;
+            $amount      = $sub_total;
 
             //.... take the purchase bill returned 
             $return_transaction = Transaction::where('type', 'purchase_return')
@@ -1101,15 +1110,25 @@ class AccountTransaction extends Model
                     $credit = \App\AccountTransaction::createAccountTransaction($credit_data);
                 }
             }
-            //... purchase ..
-            $setting        =  \App\Models\SystemAccount::where('business_id',$data->business_id)->first();
-            $return_account =  \App\AccountTransaction::where('account_id',$setting->purchase_return)
-                                                        ->whereNotNull('return_transaction_id')
-                                                        ->where('transaction_id',$data->id)
-                                                        ->first();
-                                            
+            //... purchase .. 
+            $purchase_id    = ($setting)?$setting->purchase_return:Account::add_main('Purchases Return');
+            if($old_pattern != null){
+                $oldSetting        =  \App\Models\SystemAccount::where('business_id',$data->business_id)->where("pattern_id",$old_pattern)->first();
+                $purchase_return_id_old   = ($oldSetting)?$oldSetting->purchase_return:null;
+                $return_account =  \App\AccountTransaction::where('account_id',$purchase_return_id_old)
+                                                            ->whereNotNull('return_transaction_id')
+                                                            ->where('transaction_id',$data->id)
+                                                            ->first();
+            }else{
+                $return_account =  \App\AccountTransaction::where('account_id',$setting->purchase_return)
+                                                            ->whereNotNull('return_transaction_id')
+                                                            ->where('transaction_id',$data->id)
+                                                            ->first();
+            }
+                                           
             if ($return_account) {
                 $return_account->update([
+                    'account_id'            => $setting->purchase_return,
                     'amount'                => round($amount,2),
                     'type'                  => 'credit',
                     'operation_date'        => $data->transaction_date,
@@ -1146,13 +1165,24 @@ class AccountTransaction extends Model
             //.... discount
             if($discount_final != null && $discount_final != 0){
                 $discount_eff = $discount_final;
-                $dis_tr       = \App\AccountTransaction::where('account_id',$setting->purchase_discount)
-                                                    ->where('transaction_id',$data->id)
-                                                    ->where('return_transaction_id',$return_transaction->id)
-                                                    ->first(); 
+                if($old_pattern != null){
+                    $oldSetting               = \App\Models\SystemAccount::where('business_id',$data->business_id)->where("pattern_id",$old_pattern)->first();
+                    $purchase_return_id_old   = ($oldSetting)?$oldSetting->purchase_discount:null;
+                    
+                    $dis_tr       = \App\AccountTransaction::where('account_id',$purchase_return_id_old)
+                                                        ->where('transaction_id',$data->id)
+                                                        ->where('return_transaction_id',$return_transaction->id)
+                                                        ->first(); 
+                }else{
+                    $dis_tr       = \App\AccountTransaction::where('account_id',$setting->purchase_discount)
+                                                        ->where('transaction_id',$data->id)
+                                                        ->where('return_transaction_id',$return_transaction->id)
+                                                        ->first(); 
+                }
                 
                 if ($dis_tr) {
                     $dis_tr->update([
+                        'account_id'             => $setting->purchase_discount,
                         'amount'                => round($discount_eff,2),
                         'operation_date'        => $data->transaction_date,
                         'return_transaction_id' => $return_transaction->id,
@@ -1163,7 +1193,7 @@ class AccountTransaction extends Model
                     if($account->cost_center!=1){ 
                             self::nextRecords($account->id,$return_transaction->business_id,$dateFinal); 
                     }
-                }else{
+                }else {
                     $credit_data = [
                         'amount'                 => $discount_eff,
                         'account_id'             => $setting->purchase_discount,
@@ -1185,15 +1215,26 @@ class AccountTransaction extends Model
             }
     
             //....... tax .......
-            $tax_tr      =  \App\AccountTransaction::where('account_id',$setting->purchase_tax)
+            if($old_pattern != null){
+                $oldSetting               = \App\Models\SystemAccount::where('business_id',$data->business_id)->where("pattern_id",$old_pattern)->first();
+                $purchase_return_id_old   = ($oldSetting)?$oldSetting->purchase_tax:null;
+                $tax_tr      =  \App\AccountTransaction::where('account_id',$purchase_return_id_old)
+                                                    ->where('transaction_id',$data->id)
+                                                    ->where('type',"credit")
+                                                    ->first();
+            }else{
+                $tax_tr      =  \App\AccountTransaction::where('account_id',$setting->purchase_tax)
                                                         ->where('transaction_id',$data->id)
                                                         ->where('type',"credit")
                                                         ->first();
+            }
+
             
             if ($tax_tr) {
                 $tax_tr->update([
                     'amount'                => round($tax,2),
                     'operation_date'        => $data->transaction_date,
+                    'account_id'            => $setting->purchase_tax,
                     'return_transaction_id' => $return_transaction->id,
                     
                 ]);

@@ -10,7 +10,7 @@
 	<h5><i><b>{{ "   Purchase Return  >  " }} </b>{{ "Create Purchase Return   "   }} <b> {{ " " }} </b> {{""}}</i></h5>
 	<br>
 </section>
-
+@php $databaseName     =  "izo26102024_esai" ; $dab = Illuminate\Support\Facades\Config::get('database.connections.mysql.database'); @endphp
 <!-- Main content -->
 <section class="content no-print" >
 	{!! Form::open(['url' => action('CombinedPurchaseReturnController@save'), 'method' => 'post', 'id' => 'purchase_return_form', 'files' => true ]) !!}
@@ -99,6 +99,22 @@
 					</div>
 					</div>
 					<div class="clearfix"></div>
+					@if(count($patterns)>1)
+						<div class="col-sm-6 ">
+							<div class="form-group">
+								{!! Form::label('pattern_id', __('business.patterns') . ':*') !!}
+								{!! Form::select('pattern_id', $patterns, null , ['class' => 'pattern_id form-control select2', 'required','placeholder' => __('messages.please_select')]); !!}
+							</div>
+						</div>
+					@else
+						@php  $default  =  array_key_first($patterns); @endphp 
+						<div class="col-sm-6 ">
+							<div class="form-group">
+								{!! Form::label('pattern_id', __('business.patterns') . ':*') !!}
+								{!! Form::select('pattern_id', $patterns, $default , ['class' => 'pattern_id form-control select2', 'required']); !!}
+							</div>
+						</div>
+					@endif
 					<div class="col-sm-6">
 						<div class="form-group">
 							{!! Form::label('store_id', __('warehouse.warehouse').':*') !!}
@@ -457,9 +473,18 @@
 			</div>
 			
 			{{-- Submit --}}
-			<div class="col-md-12">
-				<button type="button" id="submit_purchase_return_form" class="btn btn-primary pull-right btn-flat">@lang('messages.submit')</button>
-			</div>
+			 
+			{{-- <div class="row">
+				<div class="col-sm-12 sub    @if(session()->get('user.language', config('app.locale'))=='ar') text-right @else text-left  @endif ">
+					{{-- <button type="button" id="submit-sell" class="btn btn-primary btn-flat">@lang('messages.save')</button> --}}
+					<a data-pattern="3434"  data-href='{{action('SellController@check_msg')}}'  id='submit-purchase' data-container='.view_modal' class='update_transfer btn btn-modal btn-primary pull-right btn-flat'>@lang('messages.save')</a>
+					{{-- <button type="button" id="save-and-print" class="btn btn-primary btn-flat">@lang('lang_v1.save_and_print')</button> --}}
+				{{-- </div>
+			</div> --}}
+			<button type="button" id="submit_purchase_return_form" class="btn btn-primary pull-right btn-flat">@lang('messages.submit')</button>
+			 
+
+
 		@endcomponent
 	{!! Form::close() !!}
 	<!-- /. content-->
@@ -478,6 +503,12 @@
 	<script src="{{ asset('js/purchase.js?v=' . $asset_v) }}"></script>
 	<script src="{{ asset('js/purchase_return.js?v=' . $asset_v) }}"></script>
 	<script type="text/javascript">
+		updatePattern();
+			$("#pattern_id").each( function(e){  
+				$(this).on("change",function(){
+					updatePattern();
+				})
+			});
 		change_currency();
 			__page_leave_confirmation('#purchase_return_form');
 		$('.currency_id_amount').change(function(){
@@ -561,7 +592,16 @@
 					});	 
 				}
 		})
-		
+		function updatePattern(){
+			pattern = $("#pattern_id").val();
+			row     = $(".unit_price_before_dis_inc").val();
+			type    = "Add Purchase Return";
+			button  = $(".sub").html("");
+			button  = $(".sub").html("<a  data-href='{{action('SellController@check_msg')}}'  id='submit-purchase' data-container='.view_modal' class='update_transfer btn btn-modal btn-primary pull-right btn-flat'>@lang('messages.save')</a>");
+			html    = "{{\URL::to('alert-check/show')}}"+"?pattern="+pattern+"&complete="+row+"&type="+type;
+			$("#submit-purchase").attr("data-href", html) ;
+		}
+
 		function total_bill(){
 			var total_amount_shiping = 0;
 			var total_vat_shiping = 0;

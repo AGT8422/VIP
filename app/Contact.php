@@ -332,6 +332,10 @@ class Contact extends Authenticatable
             $account->business_id     =  $business_id;
             $account->created_by      =  ($business_id!=null)?1:request()->session()->get('user.business_id');
             $account->is_closed       =  0;
+            $account->is_second_curr  =  1;
+            $account->cost_center     =  0;
+            $account->balance         =  0;
+            $account->code            =  $data->contact_id;
             $account->save();
         }
         return $account->id;

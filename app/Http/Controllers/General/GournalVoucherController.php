@@ -14,6 +14,7 @@ use App\Models\Entry;
 use App\Account;
 use App\Models\GournalVoucherItem;
 use DB;
+use Illuminate\Support\Facades\Config;
 class GournalVoucherController extends Controller
 {
     public function __construct(ModuleUtil $moduleUtil, Util $commonUtil, ProductUtil $productUtil, TransactionUtil $transactionUtil, AccountController $accountMainData)
@@ -61,10 +62,13 @@ class GournalVoucherController extends Controller
         }
         $accounts     =  Account::main('cash',null,'bank');
         $reportSetting = \App\Models\ReportSetting::first();
+        $expenses = [];
+        $databaseName =  "izo26102024_esai" ; $dab =  Config::get('database.connections.mysql.database'); 
+        
         if($reportSetting){
-            $expenses = [];
             if($reportSetting->expense != null){
-               $all_expenses =  $this->accountMainData->childOfType($reportSetting->expense);
+               $all_expenses                          =  $this->accountMainData->childOfType($reportSetting->expense);
+               $all_expenses[$reportSetting->expense] = \App\AccountType::find($reportSetting->expense)->name;
             }
             foreach($all_expenses as $ie => $exp_id){
                 $get_expenses = \App\Account::where('account_type_id',$ie)
@@ -78,6 +82,9 @@ class GournalVoucherController extends Controller
                 }
             }
             // $expenses     =  Account::main('Expenses');
+        //     if($databaseName == $dab){
+        //         dd( $reportSetting,$expenses,$all_expenses);
+        //    }
         } 
         $taxes        =  Account::main('Tax Vat 100355364900003');
         $cost_centers =  Account::cost_centers();
@@ -234,8 +241,8 @@ class GournalVoucherController extends Controller
         }
         $accounts     =  Account::main('cash',null,'bank');
         $reportSetting = \App\Models\ReportSetting::first();
+        $expenses = [];
         if($reportSetting){
-            $expenses = [];
             if($reportSetting->expense != null){
                $all_expenses =  $this->accountMainData->childOfType($reportSetting->expense);
             }

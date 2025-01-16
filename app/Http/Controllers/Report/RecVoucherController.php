@@ -29,7 +29,7 @@ class RecVoucherController extends Controller
         $list_of_cash =  [$business->cash,$business->bank];
         $paymentType  =  "";
         foreach($list_of_cash as $i => $aid){
-            $typ_account  = \App\Account::where('account_type_id',$aid)
+            $typ_account  = \App\Account::where('account_type_id',$aid)->select(['id','name','account_number']) 
                                         ->orWhereHas('account_type',function($query) use($aid){
                                                 $query->where('parent_account_type_id',$aid);
                                                 $query->orWhere('id',$aid);
@@ -38,15 +38,14 @@ class RecVoucherController extends Controller
             $array_accounts = [];
             foreach($typ_account as $iid){
                 $array_accounts[] = $iid;
-            }
-            if(in_array($account_id,$array_accounts) && $i == 0){
-                $paymentType = "<b>Payment Type : </b> Cash";
-            }elseif(in_array($account_id,$array_accounts) && $i == 1){
-                $paymentType = "<b>Payment Type : </b> Bank Transfer";
+            } 
+            // dd($array_accounts,$account_id);
+            if(in_array($account_id,$array_accounts)){
+                $paymentType = ($i==0)?"<b>Payment Type : </b> Cash":"<b>Payment Type : </b> Bank Transfer";
+                break;
             }else{
                 $paymentType = "";
-                
-            }                          
+            }                         
         } 
        
         if ($invoice) {

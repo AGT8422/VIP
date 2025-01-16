@@ -80,54 +80,63 @@
         form2  = $("#edit_sell_form");
         old2   = $("#edit_sell_form").attr("action");
         url2   = $("#edit_sell_form").attr("action");
-        form2.attr("action",url2);
-        form2.submit();
- 
+        
+        if(form2.html() != undefined){
+            form2.attr("action",url2);
+            form2.submit();
+        } 
+
         form3  = $("#add_purchase_form");
         old3   = $("#add_purchase_form").attr("action");
         url3   = $("#add_purchase_form").attr("action");
-        form3.attr("action",url3);
-        $('form#add_purchase_form').validate({
-            rules: {
-                ref_no: {
-                    remote: {
-                        url: '/purchases/check_ref_number',
-                        type: 'post',
-                        data: {
-                            ref_no: function() {
-                                return $('#ref_no').val();
-                            },
-                            contact_id: function() {
-                                return $('#supplier_id').val();
-                            },
-                            purchase_id: function() {
-                                if ($('#purchase_id').length > 0) {
-                                    return $('#purchase_id').val();
-                                } else {
-                                    return '';
-                                }
+
+        if(form3.html() != undefined){
+            form3.attr("action",url3);
+            $('form#add_purchase_form').validate({
+                rules: {
+                    ref_no: {
+                        remote: {
+                            url: '/purchases/check_ref_number',
+                            type: 'post',
+                            data: {
+                                ref_no: function() {
+                                    return $('#ref_no').val();
+                                },
+                                contact_id: function() {
+                                    return $('#supplier_id').val();
+                                },
+                                purchase_id: function() {
+                                    if ($('#purchase_id').length > 0) {
+                                        return $('#purchase_id').val();
+                                    } else {
+                                        return '';
+                                    }
+                                },
                             },
                         },
                     },
                 },
-            },
-            messages: {
-                ref_no: {
-                    remote: LANG.ref_no_already_exists,
+                messages: {
+                    ref_no: {
+                        remote: LANG.ref_no_already_exists,
+                    },
                 },
-            },
-        });
-        if ($('form#add_purchase_form').valid()) {
-            form3.submit();
+            });
+            if ($('form#add_purchase_form').valid()) {
+                form3.submit();
+            }
         }
 
         form4  = $("#purchase_return_form");
         old4   = $("#purchase_return_form").attr("action");
         url4   = $("#purchase_return_form").attr("action");
-        form4.attr("action",url4);
-        // if ($('form#purchase_return_form').valid()) {
-            form4.submit();
-        // }
+
+        if(form4.html() != undefined){
+            form4.attr("action",url4);
+            if ($('form#purchase_return_form').valid()) {
+                form4.submit();
+            }
+        }
 
     }
 </script>

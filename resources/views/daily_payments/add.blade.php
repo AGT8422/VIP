@@ -8,6 +8,11 @@
     <h1>{{ $title }} </h1>
 </section>
 
+
+@php
+	$databaseName = 'izo26102024_esai' ; $dob =  Illuminate\Support\Facades\Config::get('database.connections.mysql.database');
+@endphp
+
 <!-- Main content -->
 <section class="content">
 	{!! Form::open(['url' => 'daily-payment/add', 'method' => 'post', 'id' => 'daily_payment_form', 'files' => true ]) !!}
@@ -54,8 +59,14 @@
 					  <thead>
 						<tr>
 						  <th>{{ trans('home.Account') }}</th>
+						  @if($databaseName == $dob)
+							<th>{{ trans('home.Credit Curr') }}</th>
+						  @endif
 						  <th>{{ trans('home.Credit') }}</th>
 						  <th>{{ trans('home.Debit') }}</th>
+						  @if($databaseName == $dob)
+							<th>{{ trans('home.Debit Curr') }}</th>
+						  @endif
 						  <th>@lang("home.Cost Center")</th>
 						  <th>{{ trans('home.Note') }}</th>
 						  <th></th>
@@ -66,14 +77,30 @@
 						  <td class="col-xs-1">
 							{{ Form::select('account_id[]',$accounts,null,['class'=>'form-control select2','placeholder'=>trans('home.please account'),'required']) }}
 						  </td>
-                            <td class="col-xs-1 crd-amount">
-								{{ Form::number('credit[]',0,['class'=>'form-control credit','data_able'=>0,'style'=>'width:90%','required','step'=>'any','min'=>0]) }}
+							@if($databaseName == $dob)
+								<td class="col-xs-1  "  style="width: 30%">
+									{{ Form::number('credit_curr[]',0,['class'=>'form-control credit_curr','id'=>'credit_curr','data_able'=>'##','style'=>'width:50%','required','step'=>'any','min'=>0]) }}
+									{{-- <span class="rows_balances btn btn-primary" data-disabled="false" ><i class="fas fa-arrows-alt-h"></i></span> --}}
+								</td>
+							@endif
+                            
+						 	 <td class="col-xs-1 crd-amount">
+								{{ Form::number('credit[]',0,['class'=>'form-control credit','data_able'=>0,'style'=>'width:85%','required','step'=>'any','min'=>0]) }}
 								<span class="rows_balances btn btn-primary" data-disabled="false" ><i class="fas fa-arrows-alt-h"></i></span>
 							</td>
+							
+							
 							<td class="col-xs-1 deb-amount">
 								{{ Form::number('debit[]',0,['class'=>'form-control debit','required','data_able'=>0,'style'=>'width:100%','step'=>'any','min'=>0]) }}
 								<!--<span class="rows_balances btn btn-primary" data-disabled="false"><i class="fas fa-arrows-alt-h"></i></span>-->
 							</td>
+							@if($databaseName == $dob)
+								<td class="col-xs-1 "  style="width: 30%">
+									{{ Form::number('debit_cur[]',0,['class'=>'form-control debit_cur','id'=>'debit_cur','required','data_able'=>'#','style'=>'width:50%','step'=>'any','min'=>0]) }}
+									<!--<span class="rows_balances btn btn-primary" data-disabled="false"><i class="fas fa-arrows-alt-h"></i></span>-->
+								</td>
+							@endif
+							
 						  <td class="col-xs-1">
 							{{ Form::select('cost_center_id[]',$costs,null,['class'=>'form-control select2','placeholder'=>trans('home.please account') ]) }}
 						   </td>
@@ -93,14 +120,32 @@
 							</td>
 							
 							
+							@if($databaseName == $dob)
+								<td class="col-xs-1  " style="width: 30%">
+									{{ Form::number('credit_curr[]',0,['class'=>'form-control credit_curr','id'=>'credit_curr','data_able'=>'##','style'=>'width:50%','required','step'=>'any','min'=>0]) }}
+									{{-- <span class="rows_balances btn btn-primary" data-disabled="false" ><i class="fas fa-arrows-alt-h"></i></span> --}}
+								</td>
+							@endif
+
+
 	                        <td class="col-xs-1 crd-amount">
-								{{ Form::number('credit[]',0,['class'=>'form-control credit','data_able'=>'##','style'=>'width:90%','required','step'=>'any','min'=>0]) }}
+								{{ Form::number('credit[]',0,['class'=>'form-control credit','data_able'=>'##','style'=>'width:85%','required','step'=>'any','min'=>0]) }}
 								<span class="rows_balances btn btn-primary" data-disabled="false" ><i class="fas fa-arrows-alt-h"></i></span>
 							</td>
+
+							
 							<td class="col-xs-1 deb-amount">
 								{{ Form::number('debit[]',0,['class'=>'form-control debit','required','data_able'=>'#','style'=>'width:100%','step'=>'any','min'=>0]) }}
 								<!--<span class="rows_balances btn btn-primary" data-disabled="false"><i class="fas fa-arrows-alt-h"></i></span>-->
 							</td>
+							
+							@if($databaseName == $dob)
+								<td class="col-xs-1 "  style="width: 30%">
+									{{ Form::number('debit_cur[]',0,['class'=>'form-control debit_cur','id'=>'debit_cur','required','data_able'=>'#','style'=>'width:50%','step'=>'any','min'=>0]) }}
+									<!--<span class="rows_balances btn btn-primary" data-disabled="false"><i class="fas fa-arrows-alt-h"></i></span>-->
+								</td>
+							@endif
+							
 							<td class="col-xs-1">
 								{{ Form::select('cost_center_id[]',$costs,null,['class'=>'form-control select2','placeholder'=>trans('home.please account') ]) }}
 							</td>
@@ -137,16 +182,14 @@
 @endsection
 @section('javascript')
   
-  <script>
-      $('#date').datetimepicker({
-            format: moment_date_format + ' ' + moment_time_format,
-            ignoreReadonly: true,
-        });
-
-  
+  <script type="text/javascript">
+	$('#date').datetimepicker({
+		format: moment_date_format + ' ' + moment_time_format,
+		ignoreReadonly: true,
+	});
     $('.debit, .credit').on("click" , function(){
          $(this).select();
-     });
+	});
 	function addByClick(isn){
 	    set = $('#entry_table .debit');
        
@@ -261,7 +304,7 @@
           
     }
     addByClick($("#index_rows").val());
-   addByClickCredit($("#index_rows").val());
+   	addByClickCredit($("#index_rows").val());
 	function formatRows(main, prefer, common,index) {
 	 
 		return '<tr><td class="col-xs-1">{{ Form::select('account_id[]',$accounts,null,['class'=>'form-control select2 ','placeholder'=>trans('home.please account'),'required']) }}</td>' +
@@ -284,49 +327,48 @@
 		}, 1000);
 	};
 	$('.currency_id_amount').change(function(){
-			update_currency();
-		})
-		$('.currency_id').change(function(){
-				var id = $(this).val();
-				if(id == ""){
-					$(".currency_id_amount").val("");
-					$(".curr_column").addClass("hide");
-				}else{
-					$.ajax({
-							url:"/symbol/amount/"+id,
-						dataType: 'html',
-						success:function(data){
-							var object  = JSON.parse(data);
-							$(".currency_id_amount").val(object.amount);
-							// $(".curr_column").removeClass("hide");
-							update_currency();
-						},
-					});	 
-				}
-		})
-		$('.amount_currency').change(function(){
-				var id = $(this).val();
-				var currency = $('.currency_id_amount').val(); 
-				if(currency != ""){
-					$('.amount').val((id*currency).toFixed(4));
-				}else{
-					$('.amount').val((id).toFixed(4));
-				}
-				 
-		})
+		update_currency();
+	})
+	$('.currency_id').change(function(){
+			var id = $(this).val();
+			if(id == ""){
+				$(".currency_id_amount").val("");
+				$(".curr_column").addClass("hide");
+			}else{
+				$.ajax({
+						url:"/symbol/amount/"+id,
+					dataType: 'html',
+					success:function(data){
+						var object  = JSON.parse(data);
+						$(".currency_id_amount").val(object.amount);
+						// $(".curr_column").removeClass("hide");
+						update_currency();
+					},
+				});	 
+			}
+	})
+	$('.amount_currency').change(function(){
+			var id = $(this).val();
+			var currency = $('.currency_id_amount').val(); 
+			if(currency != ""){
+				$('.amount').val((id*currency).toFixed(4));
+			}else{
+				$('.amount').val((id).toFixed(4));
+			}
+				
+	})
 	
-    	function update_currency(){
-    		var currency        = $('.currency_id_amount').val(); 
-    		var amount          = $(".amount") ;
-    		var amount_currency = $(".amount_currency") ;
-    		if(currency != "" && currency != 0){
-    			amount_currency.val(amount.val()/currency);				
-    		}else{
-    			amount_currency.val(0);				
-    		}
-    	}
+	function update_currency(){
+		var currency        = $('.currency_id_amount').val(); 
+		var amount          = $(".amount") ;
+		var amount_currency = $(".amount_currency") ;
+		if(currency != "" && currency != 0){
+			amount_currency.val(amount.val()/currency);				
+		}else{
+			amount_currency.val(0);				
+		}
+	}
 	
-	 
 	function addRow() {
 		var main = $('.addMain').val();
 		var index = $('#index').val();
@@ -354,8 +396,9 @@
 				
 	function allChanged() {
 		$('.debit, .credit').each(function(){
-			   var  debit =  0;
+			   var  debit  =  0;
 		       var  credit =  0;
+			   
 			   $('.debit').each(function(){
 					if ($(this).val()) {
 						debit +=  parseFloat($(this).val()) ;
@@ -379,15 +422,34 @@
 	}			
 	function update_deptit () {
 		$('.debit, .credit').change(function(){
-			   var  debit =  0;
-		       var  credit =  0;
-			   $('.debit').each(function(){
+			    var  debit    =  0;
+		        var  credit   =  0;
+				var  currency =  1;
+			    $('.debit').each(function(){
 					if ($(this).val()) {
+						@if($databaseName == $dob)
+							if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+								e_value     = $(this).val();
+								c           = $(this).parent().parent().find('.debit_cur');
+								currency    = $('.currency_id_amount').val(); 
+								in_currency = (currency!=0)?e_value/currency:e_value; 
+								c.val(in_currency.toFixed(2));
+							}
+						@endif
 						debit +=  parseFloat($(this).val()) ;
 					}
 				})
 				$('.credit').each(function(){
 					if ($(this).val()) {
+							@if($databaseName == $dob)
+								if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+									e_value     = $(this).val();
+									c           = $(this).parent().parent().find('.credit_curr');
+									currency    = $('.currency_id_amount').val(); 
+									in_currency = (currency!=0)?e_value/currency:e_value; 
+									c.val(in_currency.toFixed(2));
+								}
+							@endif
 						credit += parseFloat($(this).val());
 					}
 				})
@@ -401,6 +463,40 @@
 					credit:credit.toFixed(2)
 				};
 	    })
+		$('.debit_cur, .credit_curr').change(function(){
+			    var  debit    =  0;
+		        var  credit   =  0;
+				var  currency =  1;
+			    $('.debit_cur').each(function(){
+					if ($(this).val()) {
+						@if($databaseName == $dob)
+							if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+								e_value     = $(this).val();
+								c           = $(this).parent().parent().find('.debit');
+								currency    = $('.currency_id_amount').val(); 
+								in_currency = (currency!=0)?e_value*currency:e_value; 
+								c.val(in_currency.toFixed(2));
+							}
+						@endif
+					}
+				})
+				$('.credit_curr').each(function(){
+					if ($(this).val()) {
+						@if($databaseName == $dob)
+							if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+							e_value     = $(this).val();
+							c           = $(this).parent().parent().find('.credit');
+							currency    = $('.currency_id_amount').val(); 
+							in_currency = (currency!=0)?e_value*currency:e_value; 
+								c.val(in_currency.toFixed(2));
+							}
+						@endif
+					}
+				})
+				allChanged();
+				 
+	    })
+
     	$('#entry_table .debit').each(function(){
         		var el = $(this).on("change",function(){
         			if($(this).val() == 0 || $(this).val() == ""){
@@ -491,9 +587,9 @@
     					        
     					    }
     					}else{
-    				// 		e.parent().parent().find('.credit').val(  parseFloat(old_val) ) ;
-    						allChanged();
-    					}
+    					// 		e.parent().parent().find('.credit').val(  parseFloat(old_val) ) ;
+						allChanged();
+					}
     					
     				// 	if(e.parent().parent().find('.credit').val() == 0 || e.parent().parent().find('.credit').val() == ""){
     				// 		// alert("balance : " + total_balance + " _______ " + "old : " + old_val);
@@ -528,12 +624,12 @@
     				} 
     			})
     			
-    		})
+		})
 		
 		
 	}
     $('#save-daily').on("click",function(e){
-			$(this).attr('disabled','disabled');
+			// $(this).attr('disabled','disabled');
 		 
 	})
     $('#daily_payment_form').submit(function(e){
@@ -542,7 +638,7 @@
 			alert("{{ trans('home.Total Debit  and total credit must be equaled') }}");
 			
 		}else{
-			$('#save_entry').attr('disabled','disabled');
+			// $('#save_entry').attr('disabled','disabled');
 		}
 	}) 
 	window.onbeforeunload = function() {

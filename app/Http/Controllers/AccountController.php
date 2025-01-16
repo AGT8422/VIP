@@ -1412,15 +1412,18 @@ class AccountController extends Controller
             $account_s->get();
                 return DataTables::of($account_s)
                 ->addColumn( 'action',
-                        '<button  data-href="{{action(\'AccountController@edit\',[$id])}}" data-container=".account_model" class="btn btn-xs btn-primary btn-modal"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
-                        <a  href="{{action(\'AccountController@show\',[$id])}}" class="btn btn-warning btn-xs  "><i class="fa fa-book"></i> @lang("account.account_book")</a>&nbsp;
-                        @can("account.create")
-                        @if($is_closed == 0)
-                        <button  data-url="{{action(\'AccountController@close\',[$id])}}" class="btn btn-xs btn-danger close_account  "><i class="fa fa-power-off"></i> @lang("messages.close")</button>
-                        @elseif($is_closed == 1)
-                            <button data-url="{{action(\'AccountController@activate\',[$id])}}" class="btn btn-xs btn-success activate_account  "><i class="fa fa-power-off"></i> @lang("messages.activate")</button>
-                        @endif@endcan'
-                 )
+                    function($row){
+                            $html  = '<button  data-href="'.action('AccountController@edit',[$row->id]).'" data-container=".account_model" class="btn btn-xs btn-primary btn-modal"><i class="glyphicon glyphicon-edit"></i>'. __("messages.edit").'</button>&nbsp;';
+                            $html .= '<a  href="'.action('AccountController@show',[$row->id]).'" class="btn btn-warning btn-xs  "><i class="fa fa-book"></i> '.__("account.account_book").'</a>&nbsp;';
+                            if(auth()->user()->can("account.create")){
+                                if($row->is_closed == 0){
+                                    $html .= '<button  data-url="'.action('AccountController@close',[$row->id]).'" class="btn btn-xs btn-danger close_account  "><i class="fa fa-power-off"></i>'.__("messages.close").'</button>&nbsp;';
+                                }elseif($row->is_closed == 1){
+                                    $html .= '<button data-url="'.action('AccountController@activate',[$row->id]).'" class="btn btn-xs btn-success activate_account  "><i class="fa fa-power-off"></i>' .__("messages.activate").'</button>&nbsp;';
+                                }
+                            }
+                        return $html;   
+                })
                 ->addColumn("number",function($row) {
                     $html = '<a    href="' . \URL::to('account/account/'.$row->id)   . '"    >' . $row->account_number . '</a>';
                     return $html;
@@ -1502,21 +1505,21 @@ class AccountController extends Controller
             if(!empty(request()->accounts)){
                 $account = request()->accounts;
                 $account_s->where("id",$account);
-             }
+            }
             $account_s->get();
             return DataTables::of($account_s)
-                        ->addColumn( 'action',
-                                    '<button data-href="{{action(\'AccountController@edit\',[$id])}}" data-container=".account_model" class="btn btn-xs btn-primary btn-modal"><i class="glyphicon glyphicon-edit"></i> @lang("messages.edit")</button>
-                                    <a href="{{action(\'AccountController@show\',[$id])}}" class="btn btn-warning btn-xs"><i class="fa fa-book"></i> @lang("account.account_book")</a>&nbsp;
-                                    @can("account.create")
-                                    @if($is_closed == 0)
-
-
-                                    <button data-url="{{action(\'AccountController@close\',[$id])}}" class="btn btn-xs btn-danger close_account "><i class="fa fa-power-off"></i> @lang("messages.close")</button>
-                                    @elseif($is_closed == 1)
-                                        <button data-url="{{action(\'AccountController@activate\',[$id])}}" class="btn btn-xs btn-success activate_account "><i class="fa fa-power-off"></i> @lang("messages.activate")</button>
-                                    @endif@endcan'
-                            )
+                        ->addColumn( 'action' , function($row){
+                            $html  = '<button data-href="'.action('AccountController@edit',[$row->id]).'" data-container=".account_model" class="btn btn-xs btn-primary btn-modal"><i class="glyphicon glyphicon-edit"></i> '.__("messages.edit").'</button>&nbsp;';
+                            $html .= '<a href="'.action('AccountController@show',[$row->id]).'" class="btn btn-warning btn-xs"><i class="fa fa-book"></i> '.__("account.account_book").'</a>&nbsp;';
+                            if(auth()->user()->can("account.create")){
+                                if($row->is_closed == 0){
+                                    $html .= '<button data-url="'.action('AccountController@close',[$row->id]).'" class="btn btn-xs btn-danger close_account "><i class="fa fa-power-off"></i> '.__("messages.close").'</button>&nbsp;';
+                                }elseif($row->is_closed == 1){
+                                    $html .=  '<button data-url="'.action('AccountController@activate',[$row->id]).'" class="btn btn-xs btn-success activate_account "><i class="fa fa-power-off"></i>'. __("messages.activate").'</button>&nbsp;';
+                                }
+                            }
+                            return  $html;
+                        })
                         ->addColumn("number",function($row) {
                             $html = '<a    href="' . \URL::to('account/account/'.$row->id)   . '"    >' . $row->account_number . '</a>';
                             return $html;

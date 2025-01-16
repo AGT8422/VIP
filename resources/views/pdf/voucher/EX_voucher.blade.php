@@ -189,8 +189,9 @@
                 </thead>
                 <tbody>
                     @php
-                        $total_debit   =  0;
-                        $total_credit  =  0;
+                        $total_debit      =  0;
+                        $total_credit     =  0;
+                        $total_debit_tax  =  0;
                     @endphp
                     @foreach($items as $it)
                     @php
@@ -198,7 +199,7 @@
                         $debit_ac_tax  = \App\Account::where("id",$it->tax_account_id)->first();
                         $debit_ac      = \App\Account::where("id",$it->debit_account_id)->first();
                         $total_debit  += (!empty($debit_ac))?($it->amount-$it->tax_amount):0;
-                        $total_debit  += (!empty($debit_ac_tax))?($it->tax_amount):0;
+                        $total_debit_tax  += (!empty($debit_ac_tax))?($it->tax_amount):0;
                         $total_credit += (!empty($credit_ac))?($it->amount):0;
                     @endphp
                      
@@ -209,7 +210,7 @@
                         <td class="border_style"  style="max-width:10%">{{($it->cost_center)?$it->cost_center->name:"--"}}</td>
                         <td class="border_style"  style="max-width:10%">{{($it->tax_amount != 0)?($it->tax_amount):0}}</td>
                         {{-- <td class="border_-width:2%"></td> --}}
-                        <td class="border_style"  style="max-width:10%">{{($it->tax_amount != 0)?(($it->amount - $it->tax_amount)):0}}</td>
+                        <td class="border_style"  style="max-width:10%">{{($it->tax_amount != 0)?(($it->amount - $it->tax_amount)):$it->amount}}</td>
                         <td class="border_style"  style="max-width:40%">{{$it->text}}</td>
                     </tr>
                          
@@ -221,10 +222,10 @@
                     <tr>
                         <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
                         <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
+                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style">{{$total_credit}}</td>
                         <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
-                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
-                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
-                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
+                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style">{{$total_debit_tax}}</td>
+                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style">{{$total_debit}}</td>
                         <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
                         {{-- <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199);font-weight:bold; display:none"  class="border_style"> Total   </td>
                         <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(113, 113, 113);font-weight:bold; display:none"  class="border_style"> {{number_format($total_debit,2)}}</td>

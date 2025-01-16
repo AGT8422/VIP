@@ -215,10 +215,10 @@ class HomeController extends Controller
     {
       try{
          
-         \DB::beginTransaction();
-         
-         $TranRed      = TransactionRecieved::find($id);  
-         $data         = Transaction::find($TranRed->transaction_id);  
+            \DB::beginTransaction();
+            // DD($request);
+            $TranRed      = TransactionRecieved::find($id);  
+            $data         = Transaction::find($TranRed->transaction_id);  
          
          // ** delete old main removed lines
             $exist_items  = $request->recieve_previous_id?$request->recieve_previous_id:[];
@@ -252,19 +252,19 @@ class HomeController extends Controller
             $wrongs       = RecievedWrong::where('transaction_id',$data->id)->where("transaction_deliveries_id",$id)->whereNotIn('id',$wrong_id)->get();
             $check_for_wrong = 0;
             foreach ($wrongs as $re) {
-               //.1.//
+                  //.1.//
                   $info =  WarehouseInfo::where('store_id',$re->store_id)
                            ->where('product_id',$re->product_id)->first();
                   if ($info) {
                         $info->decrement('product_qty',$re->current_qty);
                         $info->save();
                   }
-               //.2.//
+                  //.2.//
                   MovementWarehouse::where('recieved_wrong_id',$re->id)->delete();
-               //.3.// 
+                  //.3.// 
                   $q  =  $re->current_qty*-1;
                   $this->update_variation($re->product_id,$q,$re->transaction->location_id);
-               //.4.// 
+                  //.4.// 
                   $array_del      = [];   $line_id        = [];
                   $product_id     = [];   $move_id        = []; 
                   if(!in_array($re->product_id,$line_id)){
@@ -281,7 +281,7 @@ class HomeController extends Controller
                      // *** refresh in new way #$%
                      \App\Models\ItemMove::updateRefresh($wrongMove,$wrongMove,$move_id,$date);
                   }
-               //.5.//
+                  //.5.//
                   $re->delete();
             }
          // ** end second section

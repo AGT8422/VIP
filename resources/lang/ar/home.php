@@ -327,8 +327,11 @@
 'Add Contact Bank' => 'إضافة بنك للزبون',
 'Edit Contact Bank' => 'تعديل بنك للزبون',
 
-'create_pattern'     => 'إنشاء الانماط',
+'create_pattern'   => 'إنشاء الانماط',
 'edit_pattern'     => 'تعديل  الانماط',
-'delete_pattern'     => 'حذف الانماط',
+'delete_pattern'   => 'حذف الانماط',
 
+'Credit Curr'     => 'الدائن بالعملة',
+'Debit Curr'      => 'المدين بالعملة',
+ 
 ];

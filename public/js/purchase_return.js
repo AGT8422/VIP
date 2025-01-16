@@ -254,7 +254,7 @@ $(document).ready(function() {
                  string += ' (' + item.sub_sku + ') (Out of stock) </li>';
                  return $(string).appendTo(ul);
              } else if (item.enable_stock != 1) {
-                
+
                  return ul;
              } else {
                  var string = '<div>' + item.name;
@@ -298,6 +298,7 @@ $(document).ready(function() {
                      .remove();
                  update_table_total();             
                  update_row();
+                 updatePattern();
                  discount_final();
                  vats();
                  final_price();

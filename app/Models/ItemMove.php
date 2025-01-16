@@ -3380,6 +3380,7 @@ class ItemMove extends Model
      */ 
     public static function updateItemMove($type,$account,$itemMove,$source,$pli,$cost_inc_exp,$line,$move_id,$receive=null,$prices=null,$style=null) {
         try{
+            
             if($type == "receive" || $type == "wrong_receive" || $type == "wrong_receivex" || $type == "wrong_delivered_r"){
                 $price_x                          = ($type == "wrong_receivex"|| $type == "wrong_delivered_r")?$prices[1]:$prices[0];
                 $costs                            = ItemMove::costs($source->id,$receive,$price_x,null,$itemMove,$receive->current_qty,null,$source->transaction_date);

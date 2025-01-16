@@ -373,4 +373,8 @@ return [
     'create_pattern'     => 'Create Pattern',
     'edit_pattern'      => 'Edit Pattern',
     'delete_pattern'     => 'Delete Pattern',    
+
+    'Credit Curr'     => 'Credit In Currency',
+    'Debit Curr'      => 'Debit In Currency',
+
 ];

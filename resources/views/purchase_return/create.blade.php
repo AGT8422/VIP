@@ -474,14 +474,14 @@
 			
 			{{-- Submit --}}
 			 
-			{{-- <div class="row">
+			<div class="row">
 				<div class="col-sm-12 sub    @if(session()->get('user.language', config('app.locale'))=='ar') text-right @else text-left  @endif ">
 					{{-- <button type="button" id="submit-sell" class="btn btn-primary btn-flat">@lang('messages.save')</button> --}}
 					<a data-pattern="3434"  data-href='{{action('SellController@check_msg')}}'  id='submit-purchase' data-container='.view_modal' class='update_transfer btn btn-modal btn-primary pull-right btn-flat'>@lang('messages.save')</a>
 					{{-- <button type="button" id="save-and-print" class="btn btn-primary btn-flat">@lang('lang_v1.save_and_print')</button> --}}
-				{{-- </div>
-			</div> --}}
-			<button type="button" id="submit_purchase_return_form" class="btn btn-primary pull-right btn-flat">@lang('messages.submit')</button>
+				  </div>
+			</div>  
+			{{-- <button type="button" id="submit_purchase_return_form" class="btn btn-primary pull-right btn-flat">@lang('messages.submit')</button> --}}
 			 
 
 
@@ -490,7 +490,7 @@
 	<!-- /. content-->
 
 	<!-- quick product modal -->	
-	{{-- *3*  SECTION MODAL --}}
+	{{-- *3*  SECTION MODAL --}}l
 	{{-- **************************************** --}}
 	<div class="modal fade quick_add_product_modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle"></div>
 	<div class="modal fade contact_modal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
@@ -504,13 +504,13 @@
 	<script src="{{ asset('js/purchase_return.js?v=' . $asset_v) }}"></script>
 	<script type="text/javascript">
 		updatePattern();
-			$("#pattern_id").each( function(e){  
-				$(this).on("change",function(){
-					updatePattern();
-				})
-			});
+		$("#pattern_id").each( function(e){  
+			$(this).on("change",function(){
+				updatePattern();
+			})
+		});
 		change_currency();
-			__page_leave_confirmation('#purchase_return_form');
+		__page_leave_confirmation('#purchase_return_form');
 		$('.currency_id_amount').change(function(){
 			if($('.currency_id').val() != ""){
 				// os_total_sub();
@@ -592,6 +592,7 @@
 					});	 
 				}
 		})
+		
 		function updatePattern(){
 			pattern = $("#pattern_id").val();
 			row     = $(".unit_price_before_dis_inc").val();

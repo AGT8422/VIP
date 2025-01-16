@@ -401,16 +401,16 @@
                                  
                                 <p >
                                     {{ trans('Tel No. ') }} : 
-                                    {{ ( $invoice->contact)? $invoice->contact->mobile:' ' }} 
+                                    {{ $invoice->contact? $invoice->contact->mobile:' ' }} 
                                 </p>
                                 <p >
                                     {{ trans('lang_v1.email_address') }} : 
-                                    {{ ( $invoice->contact)? $invoice->contact->email:' ' }} 
+                                    {{ $invoice->contact?$invoice->contact->email:' ' }} 
                                 </p>
                              
                                 <p>
                                     {{ trans('TRN. ') }}: 
-                                    {{ ($invoice->contact)?($invoice->contact->tax_number ):"" }}</p>
+                                    {{ $invoice->contact?$invoice->contact->tax_number:"" }}</p>
                                 </td>
                         <td style="width: 5%;text-align:right;color:#fff;text-align:center;padding-right:30px;">
                             
@@ -517,7 +517,7 @@
                             <p  style="padding:0px;margin:0px">
                                
                                     {{ trans('home.Address') }} : 
-                                    {!! ( $invoice->contact)? ( $invoice->contact->address_line_1 . " " .  $invoice->contact->city  . " " . $invoice->contact->country ):' ' !!} 
+                                    {!! $invoice->contact? ( $invoice->contact->address_line_1 . " " .  $invoice->contact->city  . " " . $invoice->contact->country ):' ' !!} 
                                 
                             </p>
                             
@@ -531,21 +531,21 @@
                             <p style="padding:0px;margin:0px">
                                 
                                 {{ trans('Tel No. ') }} : 
-                                {{ ( $invoice->contact)? $invoice->contact->mobile:' ' }} 
+                                {{ $invoice->contact? $invoice->contact->mobile:' ' }} 
                                 
                             </p>
                             <p  style="padding:0px;margin:0px">
                                   
                                 {{ trans('lang_v1.email_address') }} : 
-                                {{ ( $invoice->contact)? $invoice->contact->email:' ' }} 
+                                {{ $invoice->contact? $invoice->contact->email:' ' }} 
                               
                                
                             </p>
                              
                             <p style="padding:0px;margin:0px">
-                                 
+                                {{-- @php dd($invoice->contact); @endphp --}}
                                 {{ trans('TRN. ') }}: 
-                                {{ $invoice->contact?($invoice->contact->tax_number ):"" }}
+                                {{ $invoice->contact?$invoice->contact->tax_number:"" }}
                                 
                             </p>
                            

@@ -26,7 +26,9 @@
 <section class="content-header">
     <h1>{{ $title }} </h1>
 </section>
-
+@php
+	$databaseName = 'izo26102024_esai' ; $dob =  Illuminate\Support\Facades\Config::get('database.connections.mysql.database');
+@endphp
 <!-- Main content -->
 <section class="content">
 	{!! Form::open(['url' => 'daily-payment/edit/'.$data->id, 'method' => 'post', 'id' => 'daily_payment_form', 'files' => true ]) !!}
@@ -83,6 +85,9 @@
 						  <th>{{ trans('home.Account') }}</th>
 						  <th>{{ trans('home.Credit') }}</th>
 						  <th>{{ trans('home.Debit') }}</th>
+						  @if($databaseName == $dob)
+							<th>{{ trans('home.Debit Curr') }}</th>
+						  @endif
 						  <th>{{ trans('home.Cost Center') }}</th>
 						  <th>{{ trans('home.Note') }}</th>
 						  <th></th>
@@ -130,6 +135,12 @@
 								</td>
 						  
 						  @endif
+						  @if($databaseName == $dob)
+							<td class="col-xs-1  ">
+								{{ Form::number('old_debit_curr[]',$item->debit,['class'=>'form-control ',($item->debit == 0)?"readOnly":"",'required','data_able'=>'0','style'=>'width:100%','step'=>'any','min'=>0]) }}
+									<!--<span class="rows_balances btn btn-primary" @if($item->debit == 0) disabled  data-disabled="true"  @else    data-disabled="false" @endif><i class="fas fa-arrows-alt-h"></i></span>	-->
+							</td>
+						  @endif
 								<td class="col-xs-1">
 									{{ Form::select('old_cost_center_id[]',$costs,$item->cost_center_id,['class'=>'form-control select2','placeholder'=>trans('home.please account') ]) }}
 								</td>
@@ -169,8 +180,8 @@
 
 @endsection
 @section('javascript')
-  <script>
-       $('#date').datetimepicker({
+  <script type="text/javascript">
+        $('#date').datetimepicker({
             format: moment_date_format + ' ' + moment_time_format,
             ignoreReadonly: true,
         });
@@ -475,7 +486,6 @@
 				};
 			})
 		}
-		
 		
 		$('#daily_payment_form').submit(function(e){
 			if (terms.debit != terms.credit  ||  terms.debit == 0) {

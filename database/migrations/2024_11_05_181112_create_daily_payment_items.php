@@ -16,9 +16,14 @@ class CreateDailyPaymentItems extends Migration
         Schema::create('daily_payment_items', function (Blueprint $table) {
             $table->increments("id");
             $table->bigInteger("daily_payment_id")->unsigned();  
-            $table->double('credit');  
-            $table->double('debit');  
-            $table->bigInteger("account_id")->unsigned();  
+            $table->decimal('credit',22,4)->default(0)->nullable();  
+            $table->decimal('debit',22,4)->default(0)->nullable();  
+            $table->decimal('credit_curr',22,4)->default(0)->nullable();  
+            $table->decimal('debit_curr',22,4)->default(0)->nullable();  
+            $table->integer("currency_id")->unsigned()->nullable();  
+            $table->decimal("amount_in_currency",22,4)->default(0)->nullable();  
+            $table->decimal("exchange_price",22,4)->default(0)->nullable();   
+            $table->bigInteger("account_id")->unsigned();
             $table->text('text')->nullable();  
             $table->integer("cost_center_id")->nullable();  
             $table->timestamps();

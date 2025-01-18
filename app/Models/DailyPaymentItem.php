@@ -20,5 +20,6 @@ class DailyPaymentItem extends Model
     {
         return $this->belongsTo('App\Account','cost_center_id');
     }
+
     
 }

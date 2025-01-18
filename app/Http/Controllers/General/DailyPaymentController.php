@@ -155,6 +155,10 @@ class DailyPaymentController extends Controller
           $item->account_id       =  $account_id;
           $item->credit           =  round($request->credit[$key],2);
           $item->debit            =  round($request->debit[$key],2);
+          if($data->currency_id != null){
+              $item->credit_curr           =  (isset($request->credit_curr))?(round($request->credit_curr[$key],2)):0;
+              $item->debit_curr            =  (isset($request->debit_cur))?(round($request->debit_cur[$key],2)):0;
+          }
           $item->text             =  $request->text[$key];
           $item->cost_center_id   =  $request->cost_center_id[$key];
           $item->daily_payment_id =  $data->id;
@@ -331,6 +335,10 @@ class DailyPaymentController extends Controller
             $item->account_id       =  $request->old_account_id[$key];
             $item->credit           =  round( $request->old_credit[$key] ,2);
             $item->debit            =  round( $request->old_debit[$key] ,2);
+            if($data->currency_id != null){
+                $item->credit_curr           =  (isset($request->credit_curr))?(round($request->credit_curr[$key],2)):0;
+                $item->debit_curr            =  (isset($request->debit_cur))?(round($request->debit_cur[$key],2)):0;
+            }
             $item->text             =  $request->old_text[$key];
             $item->cost_center_id   =  $request->old_cost_center_id[$key];
             $item->update();

@@ -715,7 +715,9 @@
           order_tax = sub_total*(vat/100);
           
           if ($('#discount_amount').val() > 0 ) {
-              discount_amount =  $('#discount_amount').val();
+            discount_amount =  $('#discount_amount').val();
+            discount_amount =  parseFloat(discount_amount).toFixed(2);
+            $('#discount_amount').val(discount_amount);
           }
           if (type == 'fixed_before_vat') {
               $('#total_discount').text(discount_amount);

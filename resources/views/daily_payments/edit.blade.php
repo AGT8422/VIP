@@ -77,30 +77,42 @@
 					
 				</div>
 				@endif --}}
+				@php
+					$hide = ( $data->currency_id != null)?"":"hide";
+				@endphp
+				
 				<div class="col-md-12 loader-holder">
 					<div class="loader"></div>
 					<table class="table" id="entry_table">
 					  <thead>
 						<tr>
-						  <th>{{ trans('home.Account') }}</th>
-						  <th>{{ trans('home.Credit') }}</th>
-						  <th>{{ trans('home.Debit') }}</th>
+						  <th class="width_max_th">{{ trans('home.Account') }}</th>
 						  @if($databaseName == $dob)
-							<th>{{ trans('home.Debit Curr') }}</th>
+							<th class="width_max_th curr_column {{$hide}}">{{ trans('home.Credit') . " "  }}  <span class="symbol_currency ">{{($data->currency)?"( ".$data->currency->symbol." )":""}}</span>  </th>
 						  @endif
-						  <th>{{ trans('home.Cost Center') }}</th>
-						  <th>{{ trans('home.Note') }}</th>
-						  <th></th>
+						  <th class="width_max_th">{{ trans('home.Credit') }}</th>
+						  @if($databaseName == $dob)
+							<th class="width_max_th curr_column {{$hide}}"> {{ trans('home.Debit')  . " " }}  <span class="symbol_currency ">{{($data->currency)? "( ".$data->currency->symbol." )":""}}</span></th> 
+						  @endif
+						  <th class="width_max_th">{{ trans('home.Debit') }}</th>
+						  <th class="width_max_th">{{ trans('home.Cost Center') }}</th>
+						  <th class="width_max_th">{{ trans('home.Note') }}</th>
+						  <th class="width_max_th"></th>
 						</tr>
-					  </thead>
+					  </thead>  
 					  <tbody>
 						<tr>
-							<td class="col-xs-3"></td>
-							<td class="col-xs-3"></td>
-							<td class="col-xs-3"></td>
-							<td class="col-xs-2"></td>
-							<td class="col-xs-1 text-center">
-								<span class="addBtn">
+							<td class="width_max_th">&nbsp;</td>
+							@if($databaseName == $dob)
+								<td class="width_max_th curr_column {{$hide}}">&nbsp;</td>
+							@endif
+							<td class="width_max_th">&nbsp;</td>
+							@if($databaseName == $dob)
+								<td class="width_max_th curr_column {{$hide}}">&nbsp;</td>
+							@endif
+							<td class="width_max_th">&nbsp;</td>
+							<td class="width_max_th text-center">
+								<span class="addBtn pull-right">
 								<i class="fa fa-plus"></i>
 							    </span>
 							</td>
@@ -108,58 +120,76 @@
 					    @php $counts = count($data->items); @endphp
 						@foreach ($data->items as $key=>$item)
 						   <tr >
-								<td class="col-xs-1">
+								<td class="">
 									<input type="hidden" name="old_item[]" value="{{ $item->id }}">
 								    {{ Form::select('old_account_id[]',$accounts,$item->account_id,['class'=>'form-control select2','placeholder'=>trans('home.please account'),'required']) }}
 								</td>
+						  @if($databaseName == $dob)
+							<td class="  curr_column {{$hide}}">
+								{{ Form::number('old_credit_curr[]',$item->credit_curr,['class'=>'form-control credit',($item->credit_curr == 0)?"readOnly":"",'required','data_able'=>'##','style'=>'width:90%','step'=>'any','min'=>0]) }}
+									<!--<span class="rows_balances btn btn-primary" @if($item->debit == 0) disabled  data-disabled="true"  @else    data-disabled="false" @endif><i class="fas fa-arrows-alt-h"></i></span>	-->
+							</td>
+						  @endif
 						 @if( $key  == ($counts-1) )
-								<td class="col-xs-1  crd-amount">
+								<td class="  crd-amount">
 								{{ Form::number('old_credit[]',$item->credit,['class'=>'form-control credit',($item->credit == 0)?"readOnly":"",'required','data_able'=>'##','style'=>'width:90%','step'=>'any','min'=>0]) }}
 									<span class="rows_balances btn btn-primary"@if($item->credit == 0)    data-disabled="false"  @else    data-disabled="false" @endif><i class="fas fa-arrows-alt-h"></i></span>	
 								</td>
 						 @else
-								<td class="col-xs-1  crd-amount">
+								<td class="  crd-amount">
 								{{ Form::number('old_credit[]',$item->credit,['class'=>'form-control credit',($item->credit == 0)?"readOnly":"",'required','data_able'=>'0','style'=>'width:90%','step'=>'any','min'=>0]) }}
 									<span class="rows_balances btn btn-primary"@if($item->credit == 0)    data-disabled="false"  @else    data-disabled="false" @endif><i class="fas fa-arrows-alt-h"></i></span>	
 								</td>
-						 @endif
+						@endif
+						@if($databaseName == $dob)
+							<td class="  curr_column {{$hide}}">
+								{{ Form::number('old_debit_curr[]',$item->debit_curr,['class'=>'form-control ',($item->debit_curr == 0)?"readOnly":"",'required','data_able'=>'0','style'=>'width:100%','step'=>'any','min'=>0]) }}
+									<!--<span class="rows_balances btn btn-primary" @if($item->debit == 0) disabled  data-disabled="true"  @else    data-disabled="false" @endif><i class="fas fa-arrows-alt-h"></i></span>	-->
+							</td>
+						@endif
 						  @if( $key  == ($counts-1) )
-								<td class="col-xs-1  deb-amount">
+								<td class="  deb-amount">
 								{{ Form::number('old_debit[]',$item->debit,['class'=>'form-control debit',($item->debit == 0)?"readOnly":"",'required','data_able'=>'#','style'=>'width:100%','step'=>'any','min'=>0]) }}
 									<!--<span class="rows_balances btn btn-primary" @if($item->debit == 0) disabled  data-disabled="true"  @else    data-disabled="false" @endif><i class="fas fa-arrows-alt-h"></i></span>	-->
 								</td>
 						  @else
-								<td class="col-xs-1  deb-amount">
+								<td class="  deb-amount">
 								{{ Form::number('old_debit[]',$item->debit,['class'=>'form-control debit',($item->debit == 0)?"readOnly":"",'required','data_able'=>'0','style'=>'width:100%','step'=>'any','min'=>0]) }}
 									<!--<span class="rows_balances btn btn-primary" @if($item->debit == 0) disabled  data-disabled="true"  @else    data-disabled="false" @endif><i class="fas fa-arrows-alt-h"></i></span>	-->
 								</td>
 						  
 						  @endif
-						  @if($databaseName == $dob)
-							<td class="col-xs-1  ">
-								{{ Form::number('old_debit_curr[]',$item->debit,['class'=>'form-control ',($item->debit == 0)?"readOnly":"",'required','data_able'=>'0','style'=>'width:100%','step'=>'any','min'=>0]) }}
-									<!--<span class="rows_balances btn btn-primary" @if($item->debit == 0) disabled  data-disabled="true"  @else    data-disabled="false" @endif><i class="fas fa-arrows-alt-h"></i></span>	-->
-							</td>
-						  @endif
-								<td class="col-xs-1">
+								<td class="">
 									{{ Form::select('old_cost_center_id[]',$costs,$item->cost_center_id,['class'=>'form-control select2','placeholder'=>trans('home.please account') ]) }}
 								</td>
-								<td class="col-xs-1">
+								<td class="">
 									{{ Form::text('old_text[]',$item->text,['class'=>'form-control']) }}
 									</td>
-								<td class="col-xs-1 text-center">@can("daily_payment.delete_row")<a href="#" onClick="deleteRow(this);"><i class="fas fa-trash" aria-hidden="true"></a>@endcan</td>
+								<td class=" text-center">@can("daily_payment.delete_row")<a href="#" onClick="deleteRow(this);"><i class="fas fa-trash" aria-hidden="true"></a>@endcan</td>
 						  </tr>
 						  
 						@endforeach
 						
 						<tr id="addRow">
-							<td class="col-xs-3"></td>
-							<td class="col-xs-3">
+							<td class=""></td>
+							@if($databaseName == $dob)
+								<td class=" curr_column {{$hide}}">
+									 <label class="label-control">  {{ trans('home.Total Credit')  . " "}}   <span class="symbol_currency "></span>  : <span id="total-credit-currency">0</span> </label>
+									<input id="total-credit-input-currency" name="total_credit_currency" type="hidden" value="0">
+								</td>
+							@endif
+							<td class="">
 						    	 <label class="label-control">  {{ trans('home.Total Credit') }} : 
 									<span id="total-credit">{{ $amount }}</span> </label>
 								<input id="total-credit-input" name="total_credit" type="hidden" value="{{ $amount }}">
 						    </td>
-							<td class="col-xs-3">
+							@if($databaseName == $dob)
+								<td class=" curr_column {{$hide}}">
+									<label class="label-control">  {{ trans('home.Total Debit')  . " "}}   <span class="symbol_currency "></span>  : <span id="total-debit-currency">0</span> </label>
+									<input id="total-debit-input-currency" name="total_debit_currency" type="hidden" value="0">
+								</td>
+							@endif
+							<td class="">
 								<label class="label-control">  {{ trans('home.Total Debit') }} : 
 									<span id="total-debit">{{ $debit }}</span> </label>
 								<input id="total-debit-input" name="total_debit" type="hidden" value="{{ $debit }}">
@@ -317,7 +347,8 @@
 						success:function(data){
 							var object  = JSON.parse(data);
 							$(".currency_id_amount").val(object.amount);
-							// $(".curr_column").removeClass("hide");
+							$(".symbol_currency").html(" ( " + object.symbol + " ) ");
+							$(".curr_column").removeClass("hide");
 							update_currency();
 						},
 					});	 
@@ -349,12 +380,12 @@
 	    $('.loader-holder').addClass('loaded');
 	    
 		function formatRows(main, prefer, common) {
-			return '<tr><td class="col-xs-1">{{ Form::select('account_id[]',$accounts,null,['class'=>'form-control select2 ','placeholder'=>trans('home.please account'),'required']) }}</td>' +
-				'<td class="col-xs-1 crd-amount">{{ Form::number('credit[]',0,['class'=>'form-control credit','required','data_able'=>'##','style'=>'width:90%','step'=>'any','min'=>0]) }}<span class="rows_balances btn btn-primary" data-disabled="false" ><i class="fas fa-arrows-alt-h"></i></span></td>' +
-				'<td class="col-xs-1 deb-amount">{{ Form::number('debit[]',0,['class'=>'form-control debit','required','data_able'=>'#','style'=>'width:100%','step'=>'any','min'=>0]) }} </td>' +
-				'<td class="col-xs-1">{{ Form::select('cost_center_id[]',$costs,null,['class'=>'form-control select2 ','placeholder'=>trans('home.please account')]) }}</td>' +
-				'<td class="col-xs-1">{{ Form::text('text[]',null,['class'=>'form-control ']) }}</td>' +
-				'<td class="col-xs-1 text-center"><a href="#" onClick="deleteRow(this)">' +
+			return '<tr><td class="">{{ Form::select('account_id[]',$accounts,null,['class'=>'form-control select2 ','placeholder'=>trans('home.please account'),'required']) }}</td>' +
+				'<td class=" crd-amount">{{ Form::number('credit[]',0,['class'=>'form-control credit','required','data_able'=>'##','style'=>'width:90%','step'=>'any','min'=>0]) }}<span class="rows_balances btn btn-primary" data-disabled="false" ><i class="fas fa-arrows-alt-h"></i></span></td>' +
+				'<td class=" deb-amount">{{ Form::number('debit[]',0,['class'=>'form-control debit','required','data_able'=>'#','style'=>'width:100%','step'=>'any','min'=>0]) }} </td>' +
+				'<td class="">{{ Form::select('cost_center_id[]',$costs,null,['class'=>'form-control select2 ','placeholder'=>trans('home.please account')]) }}</td>' +
+				'<td class="">{{ Form::text('text[]',null,['class'=>'form-control ']) }}</td>' +
+				'<td class=" text-center"><a href="#" onClick="deleteRow(this)">' +
 				'<i class="fas fa-trash" aria-hidden="true"></a></td></tr>';
 		}
 		function deleteRow(trash) {

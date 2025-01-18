@@ -21,4 +21,8 @@ class DailyPayment extends Model
     {
         return json_decode($this->attributes['document']);
     }
+    public function currency()
+    {
+        return $this->belongsTo('App\Currency','currency_id');
+    }
 }

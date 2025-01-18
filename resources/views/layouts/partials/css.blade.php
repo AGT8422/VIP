@@ -230,6 +230,13 @@
 	.modal-content{
 		border-radius:10px !important;
 	}
+
+	.width_max_th{
+		 width: calc(100%/7) !important;
+	}
+	.width_max_td{
+		 width:  100%  !important;
+	}
 </style>
 @if(!empty($__system_settings['additional_css']))
     {!! $__system_settings['additional_css'] !!}

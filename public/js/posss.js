@@ -2940,10 +2940,13 @@ function os_discount() {
     $('.pos_line_total').each(function(){
         sub_total +=  parseFloat($(this).val());
     })
+    
     order_tax = sub_total*(vat/100);
     
-    if ($('#discount_amount').val() > 0 ) {
+    if ($('#discount_amount').val() > 0 ) { 
         discount_amount =  $('#discount_amount').val();
+        discount_amount =  parseFloat(discount_amount).toFixed(2);
+        $('#discount_amount').val(discount_amount);
       
     }
     currancy = $(".currency_id_amount").val();

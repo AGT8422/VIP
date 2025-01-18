@@ -92,10 +92,9 @@ class GournalVoucherController extends Controller
                 ->with('accounts',$accounts)
                 ->with('cost_centers',$cost_centers)
                 ->with('currencies',$currencies)
-                 ->with('expenses',$expenses)
-                 ->with('taxes',$taxes)
-                 ->with('title',trans('home.expenseJurnal'))
-                            ;
+                ->with('expenses',$expenses)
+                ->with('taxes',$taxes)
+                ->with('title',trans('home.expenseJurnal'));
     }
     public function post_add(Request $request)
     {

@@ -99,9 +99,9 @@ class DailyPaymentController extends Controller
                 }else{
                     if ($file->getSize() <= config('constants.document_size_limit')) {
                         $new_file_name = time().'_'.$referencesNewStyle.'_'.$count_doc1++.'_'.$file->getClientOriginalName();
-                        $data          = getimagesize($file);
-                        $width         = $data[0];
-                        $height        = $data[1];
+                        $Data          = getimagesize($file);
+                        $width         = $Data[0];
+                        $height        = $Data[1];
                         $half_width    = $width/2;
                         $half_height   = $height/2; 
                         $imgs = \Image::make($file)->resize($half_width,$half_height); //$request->$file_name->storeAs($dir_name, $new_file_name)  ||\public_path($new_file_name)
@@ -117,7 +117,7 @@ class DailyPaymentController extends Controller
                         //     $uploaded_file_name = $new_file_name;
                         // }
                         $sources      = $file;
-                        $destination  = $file_name;
+                        $destination  = $source_file_name;
                         $quality      = 99; // 0 (worst quality) to 100 (best quality)
 
                         if($Data[0] > $Data[1] ){

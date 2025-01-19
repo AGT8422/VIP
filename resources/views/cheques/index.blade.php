@@ -256,7 +256,7 @@
                                     </li>
                                     @endif
                                 <li>
-                                    <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "check","id" => $item->id]) }}" target="_blank"  class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>@lang('Add Attachment')</a>
+                                    <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "check","id" => $item->id]) }}" target="_blank"  class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>@lang('home.Add Attachment')</a>
                                 </li>
                                 @if($item->document && $item->document != [])
                                     <li>

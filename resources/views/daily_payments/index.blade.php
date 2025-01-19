@@ -117,7 +117,7 @@
                             <li>
                                 <a class="btn-modal" data-href="{{ URL::to('daily-payment/entry/'.$item->id) }}" data-container=".view_modal" >
                                     <i class="fa fa-align-justify"></i>
-                                    &nbsp;&nbsp;@lang('home.Entry')
+                                    &nbsp;@lang('home.Entry')
                                 </a>
                             </li> 
                             @if(isset($item->document) && $item->document != [] )
@@ -133,7 +133,7 @@
                                 <a href="{{ URL::to('reports/jv-vh/'.$item->id) }}" target="_blank" ><i class="fas fa-print"></i>&nbsp;&nbsp;@lang('messages.print')</a>
                             </li>
                             <li>
-                                <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "daily_payment","id" => $item->id]) }}" target="_blank"  class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;@lang('Add Attachment')</a>
+                                <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "daily_payment","id" => $item->id]) }}" target="_blank"  class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;@lang('home.Add Attachment')</a>
                             </li>
                             @can('daily_payment.delete')
                                 @if($item->status == 0)

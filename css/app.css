@@ -1558,7 +1558,7 @@ div.pos-tab-menu div.list-group>a:after{
 background-color: transparent !important;
 }
 .rows_balances{
-  position : absolute;
+  /* position : absolute; */
   top:0px;
-  top:-100px;
+  /* top:-100px; */
 }

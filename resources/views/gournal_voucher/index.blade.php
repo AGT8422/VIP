@@ -128,7 +128,7 @@
                             @endcan
                              <li> 
                                 <a href="#"  data-href="{{ URL::to('gournal-voucher/entry/'.$item->id) }}" class="views-modal" data-container=".view_model"><i class="fa fa-align-justify"></i>
-                                    &nbsp;&nbsp;@lang("home.Entry")</a> 
+                                   &nbsp;@lang("home.Entry")</a> 
                              </li> 
                              @if($item->document && $item->document != [])
                                 <li>
@@ -150,7 +150,7 @@
                                 </li>
                             @endcan
                             <li>
-                                <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "expense_voucher","id" => $item->id]) }}" target="_blank" class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;@lang('Add Attachment')</a>
+                                <a href="#" data-href="{{  action('HomeController@formAttach', ["type" => "expense_voucher","id" => $item->id]) }}" target="_blank" class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;@lang('home.Add Attachment')</a>
                             </li>
                             @can('gournal_voucher.delete')
                                 @if($item->status == 0)

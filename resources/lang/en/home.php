@@ -274,7 +274,7 @@ return [
     "ItemMove"=>"Items Movement",
     "account"=>"Account Name",
 
-    "attachment"=>"attachments",
+    "attachment"=>"Attachments",
     "more_than_zero"=>"More Than Zero",
     "less_than_zero"=>"Less Than Zero",
     "without_image"=>"Without Image",
@@ -376,5 +376,6 @@ return [
 
     'Credit Curr'     => 'Credit In Currency',
     'Debit Curr'      => 'Debit In Currency',
+    'Add Attachment'     => 'Add Attachment',
 
 ];

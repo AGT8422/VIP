@@ -9,9 +9,19 @@
 </section>
 
 
-@php
-	$databaseName = 'izo26102024_esai' ; $dob =  Illuminate\Support\Facades\Config::get('database.connections.mysql.database');
+@php 
+	$databaseName     = 'izo26102024_esai' ; $dob =  Illuminate\Support\Facades\Config::get('database.connections.mysql.database');
 @endphp
+
+
+@section('special_css')
+	<style>
+		.width_max_th{
+			width: calc(100%/6) !important;
+		}
+		 
+	</style>
+@endsection
 
 <!-- Main content -->
 <section class="content">
@@ -63,13 +73,14 @@
 							<th class="width_max_th  curr_column hide">{{ trans('home.Credit')    }}  <span class="symbol_currency "></span> </th>
 						  @endif
 						  <th class="width_max_th  ">{{ trans('home.Credit') }} </th>
+						  <th class="width_max_th_btn  "  >&nbsp;</th>
 						  @if($databaseName == $dob)
 							<th class="width_max_th curr_column hide">{{ trans('home.Debit')   }}  <span class="symbol_currency "></span>    </th>
 						  @endif
 						  <th class="width_max_th  ">{{ trans('home.Debit') }} </th>
-						  <th class="width_max_th  ">@lang("home.Cost Center")</th>
+						  <th class="cost_width" >@lang("home.Cost Center")</th>
 						  <th class="width_max_th  ">{{ trans('home.Note') }}</th>
-						  <th class="width_max_th  "></th>
+						  <th class="  "></th>
 						</tr>
 					  </thead>
 					  <tbody>
@@ -86,9 +97,13 @@
                             
 						 	 <td class=" crd-amount">
 								{{ Form::number('credit[]',0,['class'=>'width_max_td form-control credit','data_able'=>0,'style'=>'width:85%','required','step'=>'any','min'=>0]) }}
-								<span class="rows_balances btn btn-primary" data-disabled="false" ><i class="fas fa-arrows-alt-h"></i></span>
 							</td>
 							
+						 	 <td class="">
+								 <span class="rows_balances btn btn-primary" data-disabled="false" ><i class="fas fa-arrows-alt-h"></i></span>
+							</td>
+							
+
 							@if($databaseName == $dob)
 								<td class=" curr_column hide"  >
 									{{ Form::number('debit_cur[]',0,['class'=>'width_max_td form-control debit_cur','id'=>'debit_cur','required','data_able'=>'#', 'step'=>'any','min'=>0]) }}
@@ -129,6 +144,10 @@
 
 	                        <td class=" crd-amount">
 								{{ Form::number('credit[]',0,['class'=>'width_max_td form-control credit','data_able'=>'##','style'=>'width:85%','required','step'=>'any','min'=>0]) }}
+								
+							</td>
+
+	                        <td class="">
 								<span class="rows_balances btn btn-primary" data-disabled="false" ><i class="fas fa-arrows-alt-h"></i></span>
 							</td>
 
@@ -161,8 +180,11 @@
 							@endif
 							<td class="width_max_th">
 									<label class="label-control">  {{ trans('home.Total Credit') }} : <span id="total-credit">0</span> </label>
-								<input id="total-credit-input" name="total_credit" type="hidden" value="0">
-								</td>
+									<input id="total-credit-input" name="total_credit" type="hidden" value="0">
+							</td>
+							<td class="width_max_th_btn">
+								<p style="position: relative;"><span class="ball_check">&nbsp;&nbsp;</span></p>
+							</td>
 							@if($databaseName == $dob)
 								<td class="width_max_th curr_column hide">
 									<label class="label-control">  {{ trans('home.Total Debit')  . " "}}   <span class="symbol_currency "></span>  : <span id="total-debit-currency">0</span> </label>
@@ -173,12 +195,16 @@
 								<label class="label-control">  {{ trans('home.Total Debit')  }} : <span id="total-debit">0</span> </label>
 								<input id="total-debit-input" name="total_debit" type="hidden" value="0">
 							</td>
+							<td class="cost_width" ></td>
+							<td class="width_max_th"></td>
+							<td class=""></td>
 						  </tr>
 					  </tbody>
 					</table>
-					  <div class="col-md-1 pull-right">
+					
+					<div class="col-md-1 pull-right">
 						<button id="save_entry" class="btn btn-primary pull-right save-daily">{{ trans('home.Save') }}</button>
-					  </div>
+					</div>
 					</div>
 					<input type="text" id="symbol_currencies" hidden value="">
 					<input type="text" id="index" hidden value="3">
@@ -453,7 +479,8 @@
 		@if($databaseName == $dob) 
 			result += '<td class=" curr_column '+hide_class+'"  >{{ Form::number('credit_curr[]',0,['class'=>'form-control credit_curr','id'=>'credit_curr','data_able'=>'##', 'required','step'=>'any','min'=>0]) }}</td>' ;
 		@endif ;
-		result += '<td class=" crd-amount">{{ Form::number('credit[]',0,['class'=>'form-control credit','required','data_able'=>'#','style'=>'width:90%','step'=>'any','min'=>0]) }}<span class="rows_balances btn btn-primary" data-disabled="false" ><i class="fas fa-arrows-alt-h"></i></span></td>' ;
+		result += '<td class=" crd-amount">{{ Form::number('credit[]',0,['class'=>'form-control credit','required','data_able'=>'#','style'=>'width:100%','step'=>'any','min'=>0]) }}</td>' ;
+		result += '<td class=""><span class="rows_balances btn btn-primary" data-disabled="false" ><i class="fas fa-arrows-alt-h"></i></span> </td>' ;
 		@if($databaseName == $dob) 
 			result += '<td class=" curr_column '+hide_class+'"  >{{ Form::number('debit_cur[]',0,['class'=>'form-control debit_cur','id'=>'debit_cur','required','data_able'=>'#', 'step'=>'any','min'=>0]) }}</td>' ;
 		@endif ;
@@ -479,7 +506,8 @@
 	$('.currency_id_amount').change(function(){
 		update_currency();
 		allChanged();
-	})
+	});
+
 	$('.currency_id').change(function(){
 			var id = $(this).val();
 			if(id == ""){
@@ -487,6 +515,8 @@
 				$(".curr_column").addClass("hide");
 				$("#symbol_currencies").attr('value','');
 				$(".symbol_currency").html('');
+				$(".width_max_th").css({"width":"calc(100%/6) !important"});
+				$(".cost_width").css({"width":"calc(100%/6) !important"});
 			}else{
 				$.ajax({
 						url:"/symbol/amount/"+id,
@@ -497,6 +527,8 @@
 						$(".curr_column").removeClass("hide");
 						$("#symbol_currencies").attr('value',object.symbol);
 						$(".symbol_currency").html( "( " + object.symbol + " )" );
+						$(".width_max_th").css({"width":"calc(100%/8) !important"});
+						$(".cost_width").css({"width":"80px !important"});
 						update_currency();
 						allChanged();
 						addByClick($("#index_rows").val());
@@ -504,17 +536,17 @@
 					},
 				});	 
 			}
-	})
+	});
+
 	$('.amount_currency').change(function(){
-			var id = $(this).val();
-			var currency = $('.currency_id_amount').val(); 
-			if(currency != ""){
-				$('.amount').val((id*currency).toFixed(4));
-			}else{
-				$('.amount').val((id).toFixed(4));
-			}
-				
-	})
+		var id = $(this).val();
+		var currency = $('.currency_id_amount').val(); 
+		if(currency != ""){
+			$('.amount').val((id*currency).toFixed(4));
+		}else{
+			$('.amount').val((id).toFixed(4));
+		}
+	});
 	
 	function update_currency(){
 		var currency        = $('.currency_id_amount').val(); 
@@ -608,14 +640,19 @@
 				$('#total-debit-input-currency').val(cur_debit.toFixed(2));
 				$('#total-credit-input-currency').val(cur_credit.toFixed(2));
 				
-
+				if((debit.toFixed(2) == credit.toFixed(2)) && (debit!=0)){
+					$(".ball_check").css({"background-color":"#65e61a","box-shadow":"0px 0px 10px #3a3a3a33"});
+				}else{
+					$(".ball_check").css({"background-color":"red","box-shadow":"0px 0px 10px #3a3a3a33"});
+				}
 				terms  =    {
 					debit:debit.toFixed(2),
 					credit:credit.toFixed(2)
 				};
 	    })
 		 
-	}			
+	}	
+
 	function update_deptit () {
 		$('.debit, .credit').change(function(){
 			    var  cur_debit    =  0;
@@ -663,7 +700,11 @@
 
 				$('#total-debit-currency').text(cur_debit.toFixed(2));
 				$('#total-credit-currency').text(cur_credit.toFixed(2));
-
+				if((debit.toFixed(2) == credit.toFixed(2)) && (debit!=0)){
+					$(".ball_check").css({"background-color":"#65e61a","box-shadow":"0px 0px 10px #3a3a3a33"});
+				}else{
+					$(".ball_check").css({"background-color":"red","box-shadow":"0px 0px 10px #3a3a3a33"});
+				}
 				terms  =    {
 					debit:debit.toFixed(2),
 					credit:credit.toFixed(2)
@@ -717,6 +758,11 @@
 
 			$('#total-debit-input').val(debit.toFixed(2));
 			$('#total-credit-input').val(credit.toFixed(2));
+			if((debit.toFixed(2) == credit.toFixed(2)) && (debit!=0)){
+				$(".ball_check").css({"background-color":"#65e61a","box-shadow":"0px 0px 10px #3a3a3a33"});
+			}else{
+				$(".ball_check").css({"background-color":"red","box-shadow":"0px 0px 10px #3a3a3a33"});
+			}
 				 
 	    })
 		// debit
@@ -749,7 +795,7 @@
     		})
     	})
 		// balance
-    	$('#entry_table  .crd-amount .rows_balances').each(function(){
+    	$('#entry_table   .rows_balances').each(function(){
     			var e  = $(this); 
     			var el = $(this).on("click",function(){ 
     				if(e.attr("data-disabled") == "false" ){
@@ -810,6 +856,7 @@
             						e.parent().parent().find('.credit').val( (Math.abs(parseFloat(total_balance) + parseFloat(old_val_credit)) - parseFloat(old_val_debit) ).toFixed(2)) ;
             						e.parent().parent().find('.debit').val(0) ;
             					    e.parent().parent().find('.debit').attr("readOnly",true) ;   
+            					    e.parent().parent().find('.debit_cur').attr("readOnly",true) ;   
     					            e.parent().parent().find('.credit_curr').attr("readOnly",false) ;
     					            
     					        }
@@ -817,9 +864,9 @@
     					        
     					    }
     					}else{
-    					// 		e.parent().parent().find('.credit').val(  parseFloat(old_val) ) ;
-						allChanged();
-					}
+    						// 		e.parent().parent().find('.credit').val(  parseFloat(old_val) ) ;
+							allChanged();
+						}
     					
     				// 	if(e.parent().parent().find('.credit').val() == 0 || e.parent().parent().find('.credit').val() == ""){
     				// 		// alert("balance : " + total_balance + " _______ " + "old : " + old_val);
@@ -858,6 +905,7 @@
 		
 		
 	}
+
     $('#save-daily').on("click",function(e){
 			// $(this).attr('disabled','disabled');
 		 

@@ -181,6 +181,7 @@
             		<button type="submit" id="sub_cheque" class="btn btn-primary pull-right">@lang('messages.update')</button>
             	</div>
 			</div>
+
 		</div>
 	</div> <!--box end-->
 	

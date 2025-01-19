@@ -231,11 +231,24 @@
 		border-radius:10px !important;
 	}
 
-	.width_max_th{
-		 width: calc(100%/7) !important;
-	}
+	 
+	
 	.width_max_td{
 		 width:  100%  !important;
+	} 
+	.width_max_th_btn{
+		width: 50px !important;
+	}
+	.ball_check{
+		position: absolute;
+		left: 50%;
+		top: 10px;
+		transform: translateX(-50%);
+		width: 10px;
+		height: 10px;
+		border-radius: 100%;
+		box-shadow: 0px 0px 10px #3a3a3a33;
+		background-color: red; 
 	}
 </style>
 @if(!empty($__system_settings['additional_css']))

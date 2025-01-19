@@ -227,7 +227,7 @@
                                     @endif
                                 @endcan
                                 <li>
-                                    <a href="#"  style="text-decoration:none" data-href="{{  action('HomeController@formAttach', ["type" => "payment_voucher","id" => $item->id]) }}" target="_blank" class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;@lang('Add Attachment')</a>
+                                    <a href="#"  style="text-decoration:none" data-href="{{  action('HomeController@formAttach', ["type" => "payment_voucher","id" => $item->id]) }}" target="_blank" class="btn-modal"  data-container=".view_modal"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;@lang('home.Add Attachment')</a>
                                 </li>
                                 @if('payment_voucher.delete')
                                     @if($item->status == 0)

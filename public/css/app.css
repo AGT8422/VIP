@@ -1575,9 +1575,9 @@ background-color: transparent !important;
   text-shadow: 1px 1px 3px #00000033;
 }
 .rows_balances{
-  position : absolute;
+  /* position : absolute;
   top:6px;
-  right:5px;;
+  right:5px;; */
  }
 .deb-amount{
   position : relative !important;

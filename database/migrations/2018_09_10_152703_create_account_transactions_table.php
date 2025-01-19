@@ -21,7 +21,10 @@ class CreateAccountTransactionsTable extends Migration
             $table->enum('sub_type', ['opening_balance', 'fund_transfer', 'deposit'])->nullable();
             $table->decimal('amount', 22, 4);
             $table->decimal('current_balance', 22, 4);
+            $table->decimal('currency_amount', 22, 4)->default(0)->nullable();
+            $table->decimal('current_currency_balance', 22, 4)->nullable();
             $table->string('balance_type')->nullable();
+            $table->string('currency_balance_type')->nullable();
             $table->string('reff_no')->nullable();
             $table->dateTime('operation_date');
             $table->integer('created_by');
@@ -45,6 +48,10 @@ class CreateAccountTransactionsTable extends Migration
             $table->string('transaction_array')->nullable();
             $table->integer('cs_related_id')->nullable();
             $table->integer('entry_id')->nullable();
+
+            $table->integer("currency_id")->unsigned()->nullable();  
+            $table->decimal("amount_in_currency",22,4)->nullable();  
+            $table->decimal("exchange_price",22,4)->nullable();  
 
             $table->softDeletes();
             $table->timestamps();

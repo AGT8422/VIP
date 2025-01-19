@@ -698,8 +698,9 @@
 				$('#total-debit-currency').text(cur_debit.toFixed(2));
 				$('#total-credit-currency').text(cur_credit.toFixed(2));
 
-				$('#total-debit-currency').text(cur_debit.toFixed(2));
-				$('#total-credit-currency').text(cur_credit.toFixed(2));
+				$('#total-debit-input-currency').text(cur_debit.toFixed(2));
+				$('#total-credit-input-currency').text(cur_credit.toFixed(2));
+				
 				if((debit.toFixed(2) == credit.toFixed(2)) && (debit!=0)){
 					$(".ball_check").css({"background-color":"#65e61a","box-shadow":"0px 0px 10px #3a3a3a33"});
 				}else{

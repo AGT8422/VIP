@@ -298,7 +298,8 @@
     	function addByClickCredit(isn){
             if($('.currency_id').val() != '' && $('.currency_id').val() != null){
 				@if($databaseName == $dob)
-					set = $('#entry_table .credit,#entry_table .credit_curr');
+					set  = $('#entry_table .credit');
+					set2 = $('#entry_table .credit_curr');
 				@else
 					set = $('#entry_table .credit');
 				@endif
@@ -327,28 +328,30 @@
                     })
                 }
             });
+			 
 			@if($databaseName == $dob)
 				if($('.currency_id').val() != '' && $('.currency_id').val() != null){
- 
-					ro2      = thisVl.parent().find(".credit_curr")
-					ros2     = thisVl.parent().parent().find(".debit_cur")
-				
-					if( ro2.attr("data_able") == "##" ){
-						ro2.on("click",function(e){
-							if( $(this).attr("data_able") == "##"){
-								addRow();
-								changeRowsLine();
-								changeRowsLineCredit()
-								e.preventDefault(); 
-								ros2.attr("data_able","0");
-								$(this).attr("data_able","0");
-								$(this).select();
-								changeRowsLineHash();
-								
-							}
-						})
+					set2.each(function(index, element) {
+						thisVl   = $(this);
+						ro       = thisVl.parent().find(".credit_curr")
+						ros      = thisVl.parent().parent().find(".debit_cur")
 						
-					}
+						if( ro.attr("data_able") == "##"){
+							ro.on("click",function(e){
+								if( $(this).attr("data_able") == "##"){
+									addRow();
+									changeRowsLine();
+									changeRowsLineCredit()
+									e.preventDefault();
+									ros.attr("data_able","0");
+									$(this).attr("data_able","0");
+									$(this).select();
+									changeRowsLineHash();
+
+								}
+							})
+						}
+					});
 				}
 			@endif
     	     
@@ -395,7 +398,8 @@
 		function changeRowsLineCredit(){
             if($('.currency_id').val() != '' && $('.currency_id').val() != null){
 				@if($databaseName == $dob)  
-					set = $('#entry_table .credit,#entry_table .credit_curr');
+					set  = $('#entry_table .credit');
+					set2 = $('#entry_table .credit_curr');
 				@else 
 					set = $('#entry_table .credit');
 				@endif
@@ -538,12 +542,12 @@
 			result  = '';hide_class = ($('.currency_id').val() != '' && $('.currency_id').val() != null)?'':'hide';
 			result +=  '<tr><td class="">{{ Form::select('account_id[]',$accounts,null,['class'=>'form-control select2 ','placeholder'=>trans('home.please account'),'required']) }}</td>';
 			@if($databaseName == $dob) 
-				result += '<td class=" curr_column '+hide_class+'"  >{{ Form::number('credit[]',0,['class'=>'form-control credit_curr','required','data_able'=>'##','style'=>'width:100%','step'=>'any','min'=>0]) }}</td>' ;
+				result += '<td class=" curr_column '+hide_class+'"  >{{ Form::number('credit_curr[]',0,['class'=>'form-control credit_curr','required','data_able'=>'##','style'=>'width:100%','step'=>'any','min'=>0]) }}</td>' ;
 			@endif ;
 			result +=  '<td class=" crd-amount">{{ Form::number('credit[]',0,['class'=>'form-control credit','required','data_able'=>'##','style'=>'width:100%','step'=>'any','min'=>0]) }}</td>';
 			result +=  '<td><span class="rows_balances btn btn-primary" data-disabled="false" ><i class="fas fa-arrows-alt-h"></i></span></td>';
 			@if($databaseName == $dob) 
-				result += '<td class=" curr_column '+hide_class+'"  >{{ Form::number('debit[]',0,['class'=>'form-control debit_cur','required','data_able'=>'#','style'=>'width:100%','step'=>'any','min'=>0]) }}</td>' ;
+				result += '<td class=" curr_column '+hide_class+'"  >{{ Form::number('debit_cur[]',0,['class'=>'form-control debit_cur','required','data_able'=>'#','style'=>'width:100%','step'=>'any','min'=>0]) }}</td>' ;
 			@endif ;
 			result +=  '<td class=" deb-amount">{{ Form::number('debit[]',0,['class'=>'form-control debit','required','data_able'=>'#','style'=>'width:100%','step'=>'any','min'=>0]) }} </td>';
 			result +=  '<td class="">{{ Form::select('cost_center_id[]',$costs,null,['class'=>'form-control select2 ','placeholder'=>trans('home.please account')]) }}</td>';
@@ -552,18 +556,42 @@
 			result +=  '<i class="fas fa-trash" aria-hidden="true"></a></td></tr>';
 			return result;
 		}
+
 		function deleteRow(trash) {
 			$(trash).closest('tr').remove();
 				update_deptit();
-			    var  debit =  0;
-				var  credit =  0;
+			    var  debit        =  0;
+				var  credit       =  0;
+				var  cur_debit    =  0;
+				var  cur_credit   =  0;
+				var  currency     =  1;
 				$('.debit').each(function(){
 					if ($(this).val()) {
+						@if($databaseName == $dob)
+							if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+								e_value     = $(this).val();
+								c           = $(this).parent().parent().find('.debit_cur');
+								currency    = $('.currency_id_amount').val(); 
+								in_currency = (currency!=0)?parseFloat(e_value).toFixed(2)/currency:e_value; 
+								c.val(in_currency.toFixed(2));
+								cur_debit += parseFloat(in_currency);
+							}
+						@endif
 						debit +=  parseFloat($(this).val()) ;
 					}
 				})
 				$('.credit').each(function(){
 					if ($(this).val()) {
+						@if($databaseName == $dob)
+							if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+								e_value     = $(this).val();
+								c           = $(this).parent().parent().find('.credit_curr');
+								currency    = $('.currency_id_amount').val(); 
+								in_currency = (currency!=0)?parseFloat(e_value).toFixed(2)/currency:e_value; 
+								c.val(in_currency.toFixed(2));
+								cur_credit += parseFloat(in_currency);
+							}
+						@endif
 						credit += parseFloat($(this).val());
 					}
 				})
@@ -573,14 +601,25 @@
 				$('#total-debit-input').val(debit.toFixed(2));
 				$('#total-credit-input').val(credit.toFixed(2));
 
+				$('#total-debit-currency').text(cur_debit.toFixed(2));
+				$('#total-credit-currency').text(cur_credit.toFixed(2));
+
+				$('#total-debit-input-currency').val(cur_debit.toFixed(2));
+				$('#total-credit-input-currency').val(cur_credit.toFixed(2));
+				if((debit.toFixed(2) == credit.toFixed(2)) && (debit!=0)){
+					$(".ball_check").css({"background-color":"#65e61a","box-shadow":"0px 0px 10px #3a3a3a33"});
+				}else{
+					$(".ball_check").css({"background-color":"red","box-shadow":"0px 0px 10px #3a3a3a33"});
+				}
 				terms  =    {
-    					debit:debit.toFixed(2),
-    					credit:credit.toFixed(2)
-    				}
+					debit:debit.toFixed(2),
+					credit:credit.toFixed(2)
+				}
             changeRowsLineHash();
             changeRowsLine();
             changeRowsLineCredit();
 		}
+
 		function addRow() {
 			var main = $('.addMain').val();
 			var preferred = $('.addPrefer').val();
@@ -591,8 +630,8 @@
 			 update_change();
 			 addByClick($("#index_rows").val());
         	 addByClickCredit($("#index_rows").val());
-			 
 		}
+
 		$('.addBtn').click(function()  {
  			setTimeout(() => {
 				addRow();
@@ -601,22 +640,46 @@
                 changeRowsLineCredit();
 		}, 1000);
 		});
-		// update_deptit();
+		update_deptit();
 		var terms  =    {
-						debit:{{ $debit }},
-						credit:{{ $amount }}
-					};
+			debit:{{ $debit }},
+			credit:{{ $amount }}
+		};
 		function update_deptit() {
+
 			$('.debit, .credit').change(function(){
-				var  debit =  0;
-				var  credit =  0;
+				var  debit        =  0;
+				var  credit       =  0;
+				var  cur_debit    =  0;
+		        var  cur_credit   =  0;
+				var  currency     =  1;
 				    $('.debit').each(function(){
 						if ($(this).val()) {
+							@if($databaseName == $dob)
+								if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+									e_value     = $(this).val();
+									c           = $(this).parent().parent().find('.debit_cur');
+									currency    = $('.currency_id_amount').val(); 
+									in_currency = (currency!=0)?e_value/currency:e_value; 
+									c.val(in_currency.toFixed(2));
+									cur_debit += parseFloat(in_currency);
+								}
+							@endif
 							debit +=  parseFloat($(this).val()) ;
 						}
 					})
 					$('.credit').each(function(){
 						if ($(this).val()) {
+							@if($databaseName == $dob)
+								if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+									e_value     = $(this).val();
+									c           = $(this).parent().parent().find('.credit_curr');
+									currency    = $('.currency_id_amount').val(); 
+									in_currency = (currency!=0)?e_value/currency:e_value; 
+									c.val(in_currency.toFixed(2));
+									cur_credit += parseFloat(in_currency);
+								}
+							@endif
 							credit += parseFloat($(this).val());
 						}
 					})
@@ -625,6 +688,12 @@
 
 					$('#total-debit-input').val(debit.toFixed(2));
 					$('#total-credit-input').val(credit.toFixed(2));
+
+					$('#total-debit-currency').text(cur_debit.toFixed(2));
+					$('#total-credit-currency').text(cur_credit.toFixed(2));
+
+					$('#total-debit-currency').text(cur_debit.toFixed(2));
+					$('#total-credit-currency').text(cur_credit.toFixed(2));
 
 					if((debit.toFixed(2) == credit.toFixed(2)) && (debit!=0)){
 						$(".ball_check").css({"background-color":"#65e61a","box-shadow":"0px 0px 10px #3a3a3a33"});
@@ -637,21 +706,101 @@
     					credit:credit.toFixed(2)
     				};
 			})
+			$('.debit_cur, .credit_curr').change(function(){
+			    var  debit        =  0;
+		        var  credit       =  0;
+			    var  cur_debit    =  0;
+		        var  cur_credit   =  0;
+				var  currency     =  1;
+			    $('.debit_cur').each(function(){
+					if ($(this).val()) {
+						@if($databaseName == $dob)
+							if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+								e_value     = $(this).val();
+								c           = $(this).parent().parent().find('.debit');
+								currency    = $('.currency_id_amount').val(); 
+								in_currency = (currency!=0)?e_value*currency:e_value; 
+								c.val(in_currency.toFixed(2));
+								cur_debit +=  parseFloat($(this).val()) ;
+								debit +=  parseFloat(in_currency) ;
+							}
+						@endif
+					}
+				})
+				$('.credit_curr').each(function(){
+					if ($(this).val()) {
+						@if($databaseName == $dob)
+							if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+								e_value     = $(this).val();
+								c           = $(this).parent().parent().find('.credit');
+								currency    = $('.currency_id_amount').val(); 
+								in_currency = (currency!=0)?e_value*currency:e_value; 
+								c.val(in_currency.toFixed(2));
+								cur_credit +=  parseFloat($(this).val()) ;
+								credit +=  parseFloat(in_currency) ;
+							}
+						@endif
+					}
+				})
+				$('#total-debit-currency').text(cur_debit.toFixed(2));
+				$('#total-credit-currency').text(cur_credit.toFixed(2));
+
+				$('#total-debit-currency').text(cur_debit.toFixed(2));
+				$('#total-credit-currency').text(cur_credit.toFixed(2));
+
+				$('#total-debit').text(debit.toFixed(2));
+				$('#total-credit').text(credit.toFixed(2));
+
+				$('#total-debit-input').val(debit.toFixed(2));
+				$('#total-credit-input').val(credit.toFixed(2));
+
+				if((debit.toFixed(2) == credit.toFixed(2)) && (debit!=0)){
+					$(".ball_check").css({"background-color":"#65e61a","box-shadow":"0px 0px 10px #3a3a3a33"});
+				}else{
+					$(".ball_check").css({"background-color":"red","box-shadow":"0px 0px 10px #3a3a3a33"});
+				}
+				 
+	    	})
 		}		
+
 		allChanged();
 		update_total();
 		update_change();
+
     	function allChanged() {
     		$('.debit, .credit').each(function(){
-    			   var  debit =  0;
-    		       var  credit =  0;
+    			   var  debit      =  0;
+    		       var  credit     =  0;
+				   var  cur_debit  =  0;
+				   var  cur_credit =  0;
+				   var  currency   =  1;
     			   $('.debit').each(function(){
     					if ($(this).val()) {
+							@if($databaseName == $dob)
+								if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+									e_value     = $(this).val();
+									c           = $(this).parent().parent().find('.debit_cur');
+									currency    = $('.currency_id_amount').val(); 
+									in_currency = (currency!=0)?parseFloat(e_value).toFixed(2)/currency:e_value; 
+									c.val(in_currency.toFixed(2));
+									cur_debit += parseFloat(in_currency);
+								}
+							@endif
     						debit +=  parseFloat($(this).val()) ;
     					}
     				})
     				$('.credit').each(function(){
     					if ($(this).val()) {
+							@if($databaseName == $dob)
+								if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+									e_value     = $(this).val();
+									c           = $(this).parent().parent().find('.credit_curr');
+									currency    = $('.currency_id_amount').val(); 
+									in_currency = (currency!=0)?parseFloat(e_value).toFixed(2)/currency:e_value; 
+									c.val(in_currency.toFixed(2));
+									cur_credit += parseFloat(in_currency);
+								}
+							@endif
     						credit += parseFloat($(this).val());
     					}
     				})
@@ -660,28 +809,60 @@
     
     				$('#total-debit-input').val(debit.toFixed(2));
     				$('#total-credit-input').val(credit.toFixed(2));
+						
+					$('#total-debit-currency').text(cur_debit.toFixed(2));
+					$('#total-credit-currency').text(cur_credit.toFixed(2));
+
+					$('#total-debit-input-currency').val(cur_debit.toFixed(2));
+					$('#total-credit-input-currency').val(cur_credit.toFixed(2));
+
 					if((debit.toFixed(2) == credit.toFixed(2)) && (debit!=0)){
 						$(".ball_check").css({"background-color":"#65e61a","box-shadow":"0px 0px 10px #3a3a3a33"});
 					}else{
 						$(".ball_check").css({"background-color":"red","box-shadow":"0px 0px 10px #3a3a3a33"});
 					}
+
     				terms  =    {
     					debit:debit.toFixed(2),
     					credit:credit.toFixed(2)
     				};
     	    })
-    	}	 
+    	}
+
 		function update_total(){
 			$('.debit, .credit').change(function(){
-				var  debit =  0;
-		       var  credit =  0;
-			   $('.debit').each(function(){
+				var  debit      =  0;
+		       	var  credit     =  0;
+				var  cur_debit  =  0;
+				var  cur_credit =  0;
+				var  currency   =  1;
+			   	$('.debit').each(function(){
 				    if ($(this).val()) {
+						@if($databaseName == $dob)
+							if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+								e_value     = $(this).val();
+								c           = $(this).parent().parent().find('.debit_cur');
+								currency    = $('.currency_id_amount').val(); 
+								in_currency = (currency!=0)?parseFloat(e_value).toFixed(2)/currency:e_value; 
+								c.val(in_currency.toFixed(2));
+								cur_debit += parseFloat(in_currency);
+							}
+						@endif
     					debit +=  parseFloat($(this).val()) ;
     				}
     			})
     			$('.credit').each(function(){
     				if ($(this).val()) {
+						@if($databaseName == $dob)
+							if($('.currency_id').val() != '' && $('.currency_id').val() != null){
+								e_value     = $(this).val();
+								c           = $(this).parent().parent().find('.credit_curr');
+								currency    = $('.currency_id_amount').val(); 
+								in_currency = (currency!=0)?parseFloat(e_value).toFixed(2)/currency:e_value; 
+								c.val(in_currency.toFixed(2));
+								cur_credit += parseFloat(in_currency);
+							}
+						@endif
     					credit += parseFloat($(this).val());
     				}
     			})
@@ -690,11 +871,18 @@
     			
     			$('#total-debit-input').val(debit.toFixed(2));
 			    $('#total-credit-input').val(credit.toFixed(2));
+	
+				$('#total-debit-currency').text(cur_debit.toFixed(2));
+				$('#total-credit-currency').text(cur_credit.toFixed(2));
+
+				$('#total-debit-input-currency').val(cur_debit.toFixed(2));
+				$('#total-credit-input-currency').val(cur_credit.toFixed(2));
+
 				if((debit.toFixed(2) == credit.toFixed(2)) && (debit!=0)){
-						$(".ball_check").css({"background-color":"#65e61a","box-shadow":"0px 0px 10px #3a3a3a33"});
-					}else{
-						$(".ball_check").css({"background-color":"red","box-shadow":"0px 0px 10px #3a3a3a33"});
-					}
+					$(".ball_check").css({"background-color":"#65e61a","box-shadow":"0px 0px 10px #3a3a3a33"});
+				}else{
+					$(".ball_check").css({"background-color":"red","box-shadow":"0px 0px 10px #3a3a3a33"});
+				}
 				terms  =    {
 					debit:debit.toFixed(2),
 					credit:credit.toFixed(2)
@@ -710,18 +898,20 @@
 		})
 		
 	    function update_change(){
-			$('#entry_table .credit').each(function(){
+			$('#entry_table .credit,#entry_table .credit_curr').each(function(){
 				var e  = $(this);
 				var el = $(this).on("change",function(){
 					value  = $(this).val();
 					if($(this).val() == 0 || $(this).val() == ""){
 						el.parent().parent().find('.debit').attr("readOnly",false) ;
+						el.parent().parent().find('.debit_cur').attr("readOnly",false) ;
 						el.parent().parent().find('.rows_balances').attr("data-disabled","false") ;
 						
 					}else{
 						e.val( parseFloat(value).toFixed(2) ) ;
 						el.parent().parent().find('.debit').val(0) ;
 						el.parent().parent().find('.debit').attr("readOnly",true) ;
+						el.parent().parent().find('.debit_cur').attr("readOnly",true) ;
 						
 				
 					}
@@ -729,18 +919,20 @@
 			
 			})
 
-			$('#entry_table .debit').each(function(){
+			$('#entry_table .debit,#entry_table .debit_cur').each(function(){
 				var e  = $(this);
 				var el = $(this).on("change",function(){
 				value  = $(this).val();
 					if($(this).val() == 0 || $(this).val() == ""){
 						el.parent().parent().find('.credit').attr("readOnly",false) ;
+						el.parent().parent().find('.credit_curr').attr("readOnly",false) ;
 					
 						
 					}else{
 						e.val( parseFloat(value).toFixed(2) ) ;
 						el.parent().parent().find('.credit').val(0) ;
 						el.parent().parent().find('.credit').attr("readOnly",true) ;
+						el.parent().parent().find('.credit_curr').attr("readOnly",true) ;
 					
 					}
 				})
@@ -766,46 +958,58 @@
 						if(total_balance < 0){
 							if(Math.abs(total_balance) == e.parent().parent().find('.credit').val()){
 								e.parent().parent().find('.debit').attr("readOnly",false) ;
+								e.parent().parent().find('.debit_cur').attr("readOnly",false) ;
 								e.parent().parent().find('.debit').val(0) ;
 								e.parent().parent().find('.credit').val(0) ;
 								e.parent().parent().find('.credit').attr("readOnly",false) ;
+								e.parent().parent().find('.credit_curr').attr("readOnly",false) ;
 								allChanged();
 							}else{
 								if(Math.abs(parseFloat(old_val_credit)) > Math.abs(parseFloat( total_balance))){
+									e.parent().parent().find('.credit_curr').attr("readOnly",false) ;
 									e.parent().parent().find('.credit').attr("readOnly",false) ;
 									e.parent().parent().find('.credit').val( (Math.abs(parseFloat(old_val_credit) - Math.abs(parseFloat( total_balance)))).toFixed(2) ) ;
 									e.parent().parent().find('.debit').val(0) ;
 									e.parent().parent().find('.debit').attr("readOnly",true) ;
+									e.parent().parent().find('.debit_cur').attr("readOnly",true) ;
 								}else{
+									e.parent().parent().find('.debit_cur').attr("readOnly",false) ;
 									e.parent().parent().find('.debit').attr("readOnly",false) ;
 									e.parent().parent().find('.debit').val( (Math.abs(parseFloat(old_val_debit) + Math.abs(parseFloat( total_balance) ) - Math.abs(parseFloat(old_val_credit)))).toFixed(2) ) ;
 									e.parent().parent().find('.credit').val(0) ;
 									e.parent().parent().find('.credit').attr("readOnly",true) ;
+									e.parent().parent().find('.credit_curr').attr("readOnly",true) ;
 								}
 								allChanged();
 								
 							}
 						}else if(total_balance > 0){
-							if(Math.abs(total_balance) == e.parent().parent().find('.debit').val()){
+							if(Math.abs(total_balance) ==  parseFloat(e.parent().parent().find('.debit').val())){
 								e.parent().parent().find('.credit').attr("readOnly",false) ;
+								e.parent().parent().find('.credit_curr').attr("readOnly",false) ;
 								e.parent().parent().find('.credit').val(  0  ) ;
 								e.parent().parent().find('.debit').val(0) ;
+								e.parent().parent().find('.debit_cur').attr("readOnly",false) ;
 								e.parent().parent().find('.debit').attr("readOnly",false) ;
-							
+								allChanged();
 							}else{
 								if(Math.abs(parseFloat(old_val_debit)) > Math.abs(parseFloat( total_balance))){
 									e.parent().parent().find('.debit').attr("readOnly",false) ;
+									e.parent().parent().find('.debit_cur').attr("readOnly",false) ;
 									e.parent().parent().find('.debit').val( (Math.abs(parseFloat(old_val_debit) - parseFloat(total_balance))).toFixed(2) ) ;
 									e.parent().parent().find('.credit').val(0) ;
 									e.parent().parent().find('.credit').attr("readOnly",true) ;
+									e.parent().parent().find('.credit_curr').attr("readOnly",true) ;
 								}else{
+									e.parent().parent().find('.credit_curr').attr("readOnly",false) ;
 									e.parent().parent().find('.credit').attr("readOnly",false) ;
 									e.parent().parent().find('.credit').val( (Math.abs(parseFloat(total_balance) + parseFloat(old_val_credit)) - parseFloat(old_val_debit)).toFixed(2) ) ;
 									e.parent().parent().find('.debit').val(0) ;
 									e.parent().parent().find('.debit').attr("readOnly",true) ;   
+									e.parent().parent().find('.debit_cur').attr("readOnly",true) ;   
 									
 								}
-									allChanged();
+								allChanged();
 								
 							}
 						}else{

@@ -3290,6 +3290,226 @@ class AccountTransaction extends Model
             return true;
 
         }
+        ## refresh all next records with Currency
+        public static function nextRecordsCurr($id,$business_id,$date) {
+            
+            /**
+             * # select from account transaction table all records that not equal to zero . 
+             * # less than the action date .
+             * # and filter of repeated rows because two rows relation by payment vouchers .
+             * # reverse ordered by date and id
+             * # here show the new record and last one before action date.
+             * # get usually second row and get ( current_balance ) value from it .    
+             * 
+             */
+            $first         = \App\AccountTransaction::whereHas("account",function($query) use($id,$business_id){ 
+                                                                $query->where("id",$id); 
+                                                                $query->where('business_id', $business_id);
+                                                                $query->where("cost_center","=",0);
+                                                            })
+                                                            ->where("amount",">",0) 
+                                                            ->whereNull("deleted_at") 
+                                                            ->whereNull('for_repeat')  
+                                                            ->orderBy('operation_date','asc')
+                                                            ->orderBy('id','asc') 
+                                                            ->select([
+                                                                'id',
+                                                                'account_id',
+                                                                'type',
+                                                                'for_repeat',
+                                                                'amount',
+                                                                'currency_amount',
+                                                                'operation_date',
+                                                                'deleted_at',
+                                                                'current_balance',
+                                                                'current_currency_balance',
+                                                                'balance_type', 
+                                                                'currency_balance_type' 
+                                                            ]) 
+                                                            ->first();
+            $balance_account = 0; 
+            $before_one_day  = (strlen($date)<19)?(\Carbon::createFromFormat('Y-m-d',$date)->subDay()->format('Y-m-d')):(\Carbon::createFromFormat('Y-m-d H:i:s',$date)->subDay()->format('Y-m-d H:i:s')); 
+            $before_id       = \App\AccountTransaction::whereHas("account",function($query) use($id,$business_id){ 
+                                                                $query->where("id",$id); 
+                                                                $query->where('business_id', $business_id);
+                                                                $query->where("cost_center","=",0);
+                                                            })
+                                                            ->where("amount",">",0) 
+                                                            ->where("operation_date","<=",$before_one_day) 
+                                                            ->whereNull("deleted_at") 
+                                                            ->whereNull('for_repeat')  
+                                                            ->orderBy('operation_date','desc')
+                                                            ->orderBy('id','desc') 
+                                                            ->select([
+                                                                'id',
+                                                                'account_id',
+                                                                'type',
+                                                                'for_repeat',
+                                                                'amount',
+                                                                'currency_amount',
+                                                                'operation_date',
+                                                                'deleted_at',
+                                                                'current_balance',
+                                                                'current_currency_balance',
+                                                                'balance_type', 
+                                                                'currency_balance_type' 
+                                                            ]) 
+                                                            ->limit(2)
+                                                            ->get();
+            $current_balance = 0;
+            
+            if(count($before_id)>0){
+                if(count($before_id)==1){
+                    foreach($before_id as $ii){
+                        $current_balance                =  ($ii->type == "credit")?$ii->currency_amount*-1:$ii->currency_amount;
+                        $ii->current_currency_balance   =  $current_balance ;
+                        $ii->currency_balance_type      =  ($current_balance<0)?"credit":"debit" ;
+                        $before_one_day                 =  $ii->operation_date; 
+                        $ii->update();
+                    }
+                }else{
+                    $line  = null;
+                    foreach($before_id as $key => $ii){
+                        if($key == 0){$line = $ii;}
+                        if($ii->id == $first->id){
+                            $current_balance = ($ii->type == "credit")?$ii->currency_amount*-1:$ii->currency_amount;
+                            $ii->current_currency_balance = $current_balance;
+                            $ii->update();
+                        }else{
+                            $current_balance = $ii->current_currency_balance ;
+                        }
+                    }
+                    if($line!=null){
+                        $current_amount                 =  ($line->type == "credit")?$line->currency_amount*-1:$line->currency_amount;
+                        $line->current_currency_balance =  $current_balance + $current_amount ;
+                        $line->currency_balance_type    =  (($current_balance + $current_amount)<0)?"credit":"debit" ;
+                        $before_one_day                 =  $line->operation_date;
+                        $line->update();
+                        $current_balance = $current_balance + $current_amount;
+                    }
+                }
+                $balance_account = $current_balance; 
+            }else{
+                $before_id       = \App\AccountTransaction::whereHas("account",function($query) use($id,$business_id){ 
+                                                                $query->where("id",$id); 
+                                                                $query->where('business_id', $business_id);
+                                                                $query->where("cost_center","=",0);
+                                                            })
+                                                            ->where("amount",">",0) 
+                                                            ->where("operation_date","<=",$date) 
+                                                            ->whereNull("deleted_at") 
+                                                            ->whereNull('for_repeat')  
+                                                            ->orderBy('operation_date', 'desc')
+                                                            ->orderBy('id', 'desc') 
+                                                            ->select([
+                                                                'id',
+                                                                'account_id',
+                                                                'type',
+                                                                'for_repeat',
+                                                                'amount',
+                                                                'currency_amount',
+                                                                'operation_date',
+                                                                'deleted_at',
+                                                                'current_balance',
+                                                                'current_currency_balance',
+                                                                'balance_type',
+                                                                'currency_balance_type'  
+                                                            ]) 
+                                                            ->limit(2)
+                                                            ->get();
+                if(count($before_id)==1){
+                    foreach($before_id as $ii){
+                        $current_balance                =  ($ii->type == "credit")?$ii->currency_amount*-1:$ii->currency_amount;
+                        $ii->current_currency_balance   =  $current_balance ;
+                        $ii->currency_balance_type      =  ($current_balance<0)?"credit":"debit" ;
+                        $before_one_day                 =  $ii->operation_date; 
+                        $ii->update(); 
+                    }
+                }else{
+                    if(count($before_id)!=0){
+                        $line  = null;
+                        foreach($before_id as $key => $ii){
+                            if($key == 0){$line = $ii;}
+                            if($ii->id == $first->id){
+                                $current_balance = ($ii->type == "credit")?$ii->currency_amount*-1:$ii->currency_amount;
+                                $ii->current_currency_balance = $current_balance;
+                                $ii->update();
+                            }else{
+                                $current_balance = $ii->current_currency_balance ;
+                            }
+                        }
+                        if($line!=null){
+                            $current_amount                  =  ($line->type == "credit")?$line->currency_amount*-1:$line->currency_amount;
+                            $line->current_currency_balance  =  $current_balance + $current_amount ;
+                            $line->currency_balance_type     =  (($current_balance + $current_amount)<0)?"credit":"debit" ;
+                            $before_one_day                  =  $line->operation_date;
+                            $line->update();
+                            $current_balance = $current_balance + $current_amount ;
+                        }
+                    }
+                }
+                $balance_account = $current_balance; 
+            }
+            $balance_current_first  = 0; 
+            // .........................................................................refresh #..
+            $list_after_id   = \App\AccountTransaction::whereHas("account",function($query) use($id,$business_id){ 
+                                                                $query->where("id",$id); 
+                                                                $query->where('business_id', $business_id);
+                                                                $query->where("cost_center","=",0);
+                                                            })
+                                                            ->where("amount",">",0) 
+                                                            ->where("operation_date",">=",$before_one_day) 
+                                                            ->whereNull("deleted_at") 
+                                                            ->whereNull('for_repeat')  
+                                                            ->orderBy('operation_date', 'asc')
+                                                            ->orderBy('id', 'asc') 
+                                                            ->select([
+                                                                'id',
+                                                                'account_id',
+                                                                'for_repeat',
+                                                                'amount',
+                                                                'currency_amount',
+                                                                'type',
+                                                                'operation_date',
+                                                                'deleted_at',
+                                                                'current_balance',
+                                                                'current_currency_balance',
+                                                                'balance_type', 
+                                                                'currency_balance_type'  
+                                                            ]) 
+                                                            ->get();
+            // if($id == 28){
+            //     dd($before_one_day ,$list_after_id,$before_id,$balance_account,$current_balance,$first);
+            // }
+            if(count($list_after_id)>0){
+                foreach($list_after_id as $key => $one){
+                    $main                 = ($one->type == "credit")?$one->currency_amount*-1:$one->currency_amount ;
+                    $epsilon              = 0.000001;
+                    if($key == 0){
+                        $balance_current_first    = (count($before_id)==0)?$main:$one->current_currency_balance;
+                        $type                     = ($balance_current_first<0)?"credit":(($balance_current_first == 0)?"":"debit");
+                        if(count($before_id)==0){
+                            $one->current_currency_balance = $balance_current_first;
+                            $one->currency_balance_type    = $type;
+                            $one->update(); 
+                        }
+                    }else{
+                        $balance                = ($main < 0)?(-1*abs($main)):(abs($main)) ;
+                        $balance_current_first += $balance;
+                        $type                   = ($balance_current_first<0)?"credit":(($balance_current_first == 0)?"":"debit");
+                        $one->current_currency_balance   = $balance_current_first;
+                        $one->currency_balance_type      = $type;
+                        $one->update(); 
+                    }  
+                }  
+                $balance_account = $balance_current_first;
+            }  
+            $acc                      = \App\Account::find($id);
+            $acc->currency_balance    = $balance_account;
+            $acc->update();
+            return true;
+
+        }
     // ************************************************* \\
 
     //  **1** ********* RELATION SECTION  *********** \\

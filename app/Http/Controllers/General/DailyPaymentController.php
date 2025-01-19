@@ -165,10 +165,12 @@ class DailyPaymentController extends Controller
           $item->save();
           # .................................................
           $amount                 = ($request->credit[$key] -  $request->debit[$key]);
+          $currency_amount        = (isset($request->credit_curr))?($request->credit_curr[$key] -  $request->debit_cur[$key]):0;
           $state                  = ($amount > 0) ?'credit':'debit';
           # effect account
           $credit_data = [
                 'amount'                => round(abs($amount),2),
+                'currency_amount'       => round(abs($currency_amount),2),
                 'account_id'            => $item->account_id,
                 'type'                  => $state,
                 'sub_type'              => 'deposit',
@@ -183,10 +185,14 @@ class DailyPaymentController extends Controller
            if($account->cost_center!=1){
                 \App\AccountTransaction::nextRecords($account->id,$account->business_id,$credit->operation_date);
            }
+           if($data->currency_id != null){
+                if($account->cost_center!=1){ \App\AccountTransaction::nextRecordsCurr($account->id,$account->business_id,$credit->operation_date); }
+            }
            if($item->cost_center_id != null){
                 #  cost_center_id
                 $credit_data_ = [
                     'amount'                =>  round(abs($amount),2),
+                    'currency_amount'       =>  round(abs($currency_amount),2),
                     'account_id'            => $item->cost_center_id,
                     'type'                  => $state,
                     'sub_type'              => 'deposit',
@@ -326,7 +332,10 @@ class DailyPaymentController extends Controller
                 $account = \App\Account::find($account_transaction); 
                 if($account->cost_center!=1){
                     \App\AccountTransaction::nextRecords($account->id,$account->business_id,$action_date);
-               }
+                }
+                if($data->currency_id != null){
+                    if($account->cost_center!=1){ \App\AccountTransaction::nextRecordsCurr($account->id,$account->business_id,$action_date); }
+                }
             }
             $it->delete();
         }  
@@ -336,13 +345,15 @@ class DailyPaymentController extends Controller
             $item->credit           =  round( $request->old_credit[$key] ,2);
             $item->debit            =  round( $request->old_debit[$key] ,2);
             if($data->currency_id != null){
-                $item->credit_curr           =  (isset($request->credit_curr))?(round($request->credit_curr[$key],2)):0;
-                $item->debit_curr            =  (isset($request->debit_cur))?(round($request->debit_cur[$key],2)):0;
+                $item->credit_curr           =  (isset($request->old_credit_curr))?(round($request->old_credit_curr[$key],2)):0;
+                $item->debit_curr            =  (isset($request->old_debit_curr))?(round($request->old_debit_curr[$key],2)):0;
             }
+            
             $item->text             =  $request->old_text[$key];
             $item->cost_center_id   =  $request->old_cost_center_id[$key];
             $item->update();
             $amount                 =  ($request->old_credit[$key] -  $request->old_debit[$key]);
+            $currency_amount        =  (isset($request->old_credit_curr))?($request->old_credit_curr[$key] -  $request->old_debit_curr[$key]):0;
             $state                  =  ($amount > 0) ?'credit':'debit';
             # effect account
             $accounts_items         = \App\AccountTransaction::where('daily_payment_item_id',$old_id)->whereHas("account",function($query){
@@ -357,6 +368,7 @@ class DailyPaymentController extends Controller
                 $dateNew                   = $this->productUtil->uf_date($request->date, true);
                 # .................................................
                 $itemOne->amount           = round(abs($amount),2)  ; 
+                $itemOne->currency_amount  = round(abs($currency_amount),2)  ; 
                 $itemOne->account_id       = $request->old_account_id[$key]  ; 
                 $itemOne->operation_date   = $this->productUtil->uf_date($request->date, true)  ; 
                 $itemOne->type             = $state  ; 
@@ -368,8 +380,14 @@ class DailyPaymentController extends Controller
                 $dateFinal              = ($dateOld<$dateNew)?$dateOld:$dateNew;
                 if($oldA != $request->old_account_id[$key]){ 
                     if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecords($accountOld->id,$data->business_id,$dateFinal); }
+                    if($data->currency_id != null){
+                        if($accountOld->cost_center!=1){ \App\AccountTransaction::nextRecordsCurr($accountOld->id,$data->business_id,$dateFinal); }
+                    }
                 }
                 if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecords($accountNew->id,$data->business_id,$dateFinal); }
+                if($data->currency_id != null){
+                    if($accountNew->cost_center!=1){ \App\AccountTransaction::nextRecordsCurr($accountNew->id,$data->business_id,$dateFinal); }
+                }
             }
 
             if($request->old_cost_center_id[$key] == null){
@@ -384,6 +402,7 @@ class DailyPaymentController extends Controller
                         $query->where("cost_center",">",0);
                 })->update([
                     'amount'         => round(abs($amount),2),
+                    'currency_amount'=> round(abs($currency_amount),2),
                     'account_id'     => $request->old_cost_center_id[$key],
                     'type'           => $state,
                     'operation_date' => $this->productUtil->uf_date($request->date, true),
@@ -400,16 +419,22 @@ class DailyPaymentController extends Controller
                 $item->account_id       =  $account_id;
                 $item->credit           =  round($request->credit[$key],2);
                 $item->debit            =  round($request->debit[$key],2);
+                if($data->currency_id != null){
+                    $item->credit_curr           =  (isset($request->credit_curr))?(round($request->credit_curr[$key],2)):0;
+                    $item->debit_curr            =  (isset($request->debit_cur))?(round($request->debit_cur[$key],2)):0;
+                }
                 $item->text             =  $request->text[$key];
                 $item->cost_center_id   =  $request->cost_center_id[$key];
                 $item->daily_payment_id =  $data->id;
                 $item->save();
                 # ...............................................
                 $amount                 =  ($request->credit[$key] -  $request->debit[$key]);
+                $currency_amount        =  (isset($request->credit_curr))?($request->credit_curr[$key] -  $request->debit_cur[$key]):0;
                 $state                  =  ($amount > 0) ?'credit':'debit';
                 # effect account
                 $credit_data = [
                       'amount'                => round(abs($amount),2),
+                      'currency_amount'       => round(abs($currency_amount),2),
                       'account_id'            => $item->account_id,
                       'type'                  => $state,
                       'sub_type'              => 'deposit',
@@ -423,6 +448,9 @@ class DailyPaymentController extends Controller
                 $credit  = \App\AccountTransaction::createAccountTransaction($credit_data);
                 $account = \App\Account::find($item->account_id);
                 if($account->cost_center!=1){ \App\AccountTransaction::nextRecords($account->id,$data->business_id,$this->productUtil->uf_date($request->date, true)); }
+                if($data->currency_id != null){
+                    if($account->cost_center!=1){ \App\AccountTransaction::nextRecordsCurr($account->id,$data->business_id,$this->productUtil->uf_date($request->date, true)); }
+                }
              } 
         }
         $output = [

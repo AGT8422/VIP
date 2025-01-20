@@ -12,9 +12,11 @@
                     
                     <tbody>
                         <?php
-                              $total_debit  = 0;
-                              $total_credit = 0;
-                              $entry_ref    = [];
+                              $total_debit       = 0;
+                              $total_credit      = 0;
+                              $total_credit_curr = 0;
+                              $total_debit_curr  = 0;
+                              $entry_ref         = [];
                           ?>
                         @foreach($allData as $key=>$item)
                            @foreach($entry as $key=>$ref) 
@@ -23,13 +25,17 @@
                                     @php array_push($entry_ref,$ref->refe_no_e); @endphp 
                                     <thead>
                                        <tr>
-                                          <td colspan="5" style="background-color:#f1f1f1 !important;color:black">{{$ref->refe_no_e}}</td>
+                                          <td @if($data->currency_id != null) colspan="6"  @else colspan="4" @endif style="background-color:#f1f1f1 !important;color:black">{{$ref->refe_no_e}}</td>
                                        </tr>
                                           <tr role="row">
                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 187px;">Account</th>
                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 187px;">Date</th>
                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 79px;">Debit</th>
                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 188px;">Credit</th>
+                                           @if($data->currency_id != null)
+                                             <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 79px;">Debit - ( {{($data->currency)?$data->currency->symbol:""}} ) </th>
+                                             <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 188px;">Credit - ( {{($data->currency)?$data->currency->symbol:""}} ) </th>
+                                          @endif
                                           </tr>
                                        </thead>
                                  @endif
@@ -40,8 +46,10 @@
                            if($item->account->cost_center ==   0){
                               if (($item->type == 'debit')) {
                                  $total_debit +=$item->amount;
+                                 $total_debit_curr +=$item->currency_amount;
                               }else {
                                  $total_credit +=$item->amount;
+                                 $total_credit_curr +=$item->currency_amount;
                               }
                            }
                              
@@ -82,6 +90,14 @@
                            <td>
                              <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'credit')?number_format($item->amount,2):0 }} </span>
                            </td>
+                           @if($data->currency_id != null)
+                              <td>
+                                 <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'debit')?number_format($item->currency_amount,config("constants.currency_precision")):0 }}</span>
+                              </td>
+                              <td>
+                                 <span class="display_currency" data-currency_symbol="true">{{ ($item->type == 'credit')?number_format($item->currency_amount,config("constants.currency_precision")):0 }} </span>
+                              </td>
+                           @endif
                           
                        </tr>
                        @endforeach
@@ -93,12 +109,21 @@
                         <td>
                         </td>
                         <td>
-                          <span class="display_currency" data-currency_symbol="true">
+                          <span class="display_currency font_number" data-currency_symbol="true">
                              {{ number_format($total_debit,2) }}</span>
                            </td>
                         <td>
-                           <span class="display_currency" data-currency_symbol="true">{{ number_format($total_credit,2) }} </span>
+                           <span class="display_currency font_number" data-currency_symbol="true">{{ number_format($total_credit,2) }} </span>
                         </td>
+                           @if($data->currency_id != null)
+                              <td>
+                                 <span class="display_currency font_number" data-currency_symbol="true">
+                                    {{ number_format($total_debit_curr,config("constants.currency_precision")) }}</span>
+                                 </td>
+                              <td>
+                                 <span class="display_currency font_number" data-currency_symbol="true">{{ number_format($total_credit_curr ,config("constants.currency_precision")) }} </span>
+                              </td>
+                           @endif
                         </tfoot>
                         
                      </tr>

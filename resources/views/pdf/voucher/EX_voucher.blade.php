@@ -172,14 +172,18 @@
         <div class="bodies">
             <table class="tab">
                 <thead >
+                    @php $cost_center = 0; @endphp
+                    @foreach($items as $data) @if( $data->cost_center != null && $data->cost_center !="")    @php $cost_center = 1; @endphp @endif    @endforeach
                     <tr class="head">
                         <th style="border:1px solid white ; max-width:10%">  Credit  </th>
                         <th style="border:1px solid white ; max-width:10%">  Debit   </th>
-                        <th style="border:1px solid white ; max-width:100px">  Amount  </th>
-                        <th style="border:1px solid white ; max-width:10%">  Cost Center</th>
+                        <th style="border:1px solid white ; max-width:100px"> Tot Amount  </th>
+                        @if($cost_center != 0)
+                            <th style="border:1px solid white ; max-width:10%">  Cost Center</th>
+                        @endif
                         {{-- <th style="border:1px solid white ; max-width:10%">  Tax %</th> --}}
                         <th style="border:1px solid white">  Tax Amount  </th>
-                        <th style="border:1px solid white ; max-width:10%">  Net Amount  </th>
+                        <th style="border:1px solid white ; max-width:10%">  Exp Amount  </th>
                         <th style="border:1px solid white ; max-width:20%">  Note  </th>
                      
 
@@ -204,14 +208,16 @@
                     @endphp
                      
                     <tr>
-                        <td class="border_style"  style="max-width:10%">{{$credit_ac->account_number . " || " . $credit_ac->name}}</td>
-                        <td class="border_style"  style="max-width:10%">{{$debit_ac->account_number . " || " . $debit_ac->name }}</td>
-                        <td class="border_style"  style="max-width:10%">{{number_format($it->amount,2)}}</td>
-                        <td class="border_style"  style="max-width:10%">{{($it->cost_center)?$it->cost_center->name:"--"}}</td>
-                        <td class="border_style"  style="max-width:10%">{{($it->tax_amount != 0)?($it->tax_amount):0}}</td>
+                        <td class="border_style"  style="max-width:10%;border-bottom:2px solid #3a3a3a33 !important" >{{$credit_ac->account_number . " || " . $credit_ac->name}}</td>
+                        <td class="border_style"  style="max-width:10%;border-bottom:2px solid #3a3a3a33 !important" >{{$debit_ac->account_number . " || " . $debit_ac->name }}</td>
+                        <td class="border_style"  style="max-width:10%;border-bottom:2px solid #3a3a3a33 !important" >{{number_format($it->amount,2)}}</td>
+                        @if($cost_center != 0)
+                            <td class="border_style"  style="max-width:10%;border-bottom:2px solid #3a3a3a33 !important" >{{($it->cost_center)?$it->cost_center->name:"--"}}</td>
+                        @endif
+                        <td class="border_style"  style="max-width:10%;border-bottom:2px solid #3a3a3a33 !important" >{{($it->tax_amount != 0)?($it->tax_amount):0}}</td>
                         {{-- <td class="border_-width:2%"></td> --}}
-                        <td class="border_style"  style="max-width:10%">{{($it->tax_amount != 0)?(($it->amount - $it->tax_amount)):$it->amount}}</td>
-                        <td class="border_style"  style="max-width:40%">{{$it->text}}</td>
+                        <td class="border_style"  style="max-width:10%;border-bottom:2px solid #3a3a3a33 !important" >{{($it->tax_amount != 0)?(($it->amount - $it->tax_amount)):$it->amount}}</td>
+                        <td class="border_style"  style="max-width:40%;border-bottom:2px solid #3a3a3a33 !important" >{{$it->text}}</td>
                     </tr>
                          
                     
@@ -223,7 +229,9 @@
                         <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
                         <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
                         <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style">{{$total_credit}}</td>
-                        <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
+                        @if($cost_center != 0)
+                            <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>
+                        @endif
                         <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style">{{$total_debit_tax}}</td>
                         <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style">{{$total_debit}}</td>
                         <td style="background-color:rgb(199, 199, 199); border:1px solid rgb(199, 199, 199)"  class="border_style"> </td>

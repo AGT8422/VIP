@@ -14,6 +14,9 @@
 
 @section('content')
 
+@php 
+	$databaseName     = 'izo26102024_esai' ; $dob =  Illuminate\Support\Facades\Config::get('database.connections.mysql.database');
+@endphp
 
 
 <!-- Content Header (Page header) -->
@@ -53,6 +56,8 @@
 	<input type="hidden" id="p_thousand" value="{{$currency_details->thousand_separator}}">
 
 	<input type="hidden" id="p_decimal" value="{{$currency_details->decimal_separator}}">
+
+	<input type="hidden" id="additional_currency" value="">
 
     <div class="row">
 
@@ -211,7 +216,35 @@
                         </div>
 
                     </div>
+                    @if( $databaseName == $dob ) 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="multi-input">
+                                    {!! Form::label('currency_id', __('business.currency') . ':') !!}  
+                                    @show_tooltip(__('tooltip.currency_blank'))
+                                    <br/>
+                                    {!! Form::select('currency_id', $currencies, null, ['class' => 'form-control width-60 currency_id  select2', 'placeholder' => __('messages.please_select') ]); !!}
+                                    {!! Form::text('currency_id_amount', null, ['class' => 'form-control width-40 pull-right currency_id_amount'   ]); !!}
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                        <div class="col-sm-6">
 
+                            <div class="form-group box_check">
+    
+                                <div class="checkbox">
+    
+                                    <label for="check_box_currency">@lang( 'Show All Columns ' )</label>
+                                    <input type="checkbox"  id="check_box_currency"    value="1"   > 
+    
+                                </div>
+    
+                            </div>
+                            </div>
+    
+                        </div>
+                    @endif
                 </div>
 
             </div>
@@ -581,6 +614,13 @@
 
         transaction_date_range   = $("#transaction_date_range");
 
+        $("#transaction_date_range").each(function () {
+            // Replace the " - " with " Til "
+            const updatedText = $(this).val().replace(/ - /g, " Til ");
+            date_range = updatedText;
+        });
+
+
         account_book_paginate    = $("#account_book_paginate");
 
         if (element_first && account_book_info && account_book_paginate) {
@@ -609,13 +649,13 @@
 
         printWindow.document.write( '<html><head><title>Print</title></head>');
 
-        printWindow.document.write( '<style>body{font-family:arial} @media print {.no-print{ display:none }} table th{background-color:#929090;color:#000} table tfoot{background-color:#929090;color:#000} table th:nth-child(3),table  td:nth-child(3),table  td:nth-child(5),table  td:nth-child(6),table  th:nth-child(6),table  th:nth-child(5){display:none} table  th:nth-child(2),table  td:nth-child(2){width:12%} table{width:100%;text-align:left;} table td{font-size:10px;padding:5px;}  </style>');
+        printWindow.document.write( '<style>body{font-family:arial} @media print {.no-print{ display:none }} table th{background-color:#929090;color:#000} table tfoot{background-color:#929090;color:#000} ,table  td:nth-child(5),table  td:nth-child(6),table  th:nth-child(6),table  th:nth-child(5){display:none} table  th:nth-child(2),table  td:nth-child(2){width:12%} table{width:100%;text-align:left;} table td{font-size:10px;padding:5px;}  </style>');
 
         printWindow.document.write( '<body>' );
 
         printWindow.document.write( '<table style="width:100%"><td><button class="btn btn-primary no-print" style="background-color:#000 ;color:#fff;padding:10px" onClick="window.print();">@lang("messages.print") &nbsp; </button></td><tr></tr></table>');
 
-        printWindow.document.write( '<table style="width:100%; ; font-weight:bold;"><tr >' );
+        printWindow.document.write( '<table style="width:100%; ; font-weight:bold;"><tr>' );
 
         printWindow.document.write( '<td style="width:100%; border:0px solid black;text-align:center"><img src="{{ asset( $img_url ) }}"   style="max-width: 400px;height:100px"> <br><br>General Ledger</td>');
 
@@ -629,7 +669,7 @@
 
         // printWindow.document.write( '<td style="width:0%; border:0px solid black;text-align:left"></td>' );
 
-        printWindow.document.write( '</td></tr></table ><table style="width:100%;border-top:3px solid {{$business_color}};padding-top:10px;"><tr><td style="width:50%;><b> Account name : <span> '+printContainer2.html()+'</span></b><br><b> Balance: '+printContainer1.html()+'</b><br><b>Opening Balance: '+printContainer3.val()+'</b><br><b> Date: '+transaction_date_range.val()+'</b></td><td style="width:50%; border:0px solid black;text-align:right"><span style="font-size:13px">{!!$header_text!!}</span>');
+        printWindow.document.write( '</tr></table ><table style="width:100%;border-top:3px solid {{$business_color}};padding-top:10px;"><tr><td style="width:50%;>  <b> Account name : <span> '+printContainer2.html()+'</span></b><br><b> Account name : '+printContainer2.html()+" </span></b><br><b> Balance:  "+printContainer1.html()+'</b><br><b>Opening Balance: '+printContainer3.val()+'</b><br><b> Date: '+date_range+'</b></td><td style="width:50%; border:0px solid black;text-align:right"><span style="font-size:13px">{!!$header_text!!}</span>');
 
         printWindow.document.write( '</td></tr></table >' );
 
@@ -679,7 +719,7 @@
             $("#check_box").prop('checked', value); 
              
         });
-        $(document).on("change","#check_box,#costcenter,#transaction_type",function(){
+        $(document).on("change","#check_box,#costcenter,#transaction_type,.currency_id_amount,#check_box_currency",function(){
             account_book.ajax.reload();
         });
 
@@ -704,10 +744,13 @@
                                 
                                 var balance_added =   $("#balance_added").val();
 
-                                cost_center   = $("#costcenter").val();
-
-                                checkboxs = $("#check_box:checked").val();
-
+                                cost_center          = $("#costcenter").val();
+                                checkboxs            = $("#check_box:checked").val();
+                                @if( $databaseName == $dob )
+                                    currency_id          = $(".currency_id").val();
+                                    currency_id_amount   = $(".currency_id_amount").val();
+                                    check_box_currency   = $("#check_box_currency:checked").val();
+                                @endif
                                 if($('#transaction_date_range').val()){
 
                                     start = $('input#transaction_date_range').data('daterangepicker').startDate.format('YYYY-MM-DD');
@@ -724,10 +767,13 @@
                                 // ... For Previous Balance
                                 d.balance_added = balance_added;
 
-                                d.cost_center = cost_center;
-
-                                d.check_box   = checkboxs;
-
+                                d.cost_center          = cost_center;
+                                d.check_box            = checkboxs;
+                                @if( $databaseName == $dob )
+                                    d.currency_id          = currency_id;
+                                    d.currency_id_amount   = currency_id_amount;
+                                    d.check_box_currency   = check_box_currency;
+                                @endif
                                 d.type = transaction_type;
 
                                 if(checkboxs != null){
@@ -815,7 +861,10 @@
                                 //     $('#account_book tbody').append(final_rows[i]);
                                      
                                 // } 
-                                __currency_convert_recursively($('#account_book'));
+                                if($("#additional_currency").val() == null || $("#additional_currency").val() == ""){
+
+                                    __currency_convert_recursively($('#account_book'));
+                                }
                         },   
 
                         "footerCallback": function ( row, data ) {
@@ -864,9 +913,12 @@
                                     date_row = start;
                                 }
                             //  .....................................................
+                                exchange_rate = ($("#additional_currency").val() != null && $("#additional_currency").val() != "")?(($(".currency_id_amount").val() != 0)?$(".currency_id_amount").val():1):1;
+                                dDebit  = ($("#additional_currency").val() != null && $("#additional_currency").val() != "")? $("#additional_currency").val() + " " + (debit/exchange_rate).toFixed(2):__currency_trans_from_en(debit);
+                                dCredit = ($("#additional_currency").val() != null && $("#additional_currency").val() != "")? $("#additional_currency").val()+  " "  + (credit/exchange_rate).toFixed(2):__currency_trans_from_en(credit);
                                 // initilize footer
-                                $('.debit_footer').html("<b style='font-family:arial !important'>" +__currency_trans_from_en(debit)+"</b>");
-                                $('.credit_footer').html("<b style='font-family:arial !important'>" +__currency_trans_from_en(credit)+"</b>");
+                                $('.debit_footer').html("<b style='font-family:arial !important'>" +dDebit+"</b>");
+                                $('.credit_footer').html("<b style='font-family:arial !important'>" +dCredit+"</b>");
                             // ........................................................
                                 //  if( id_row != "null"){
                                     $.ajax({
@@ -893,9 +945,9 @@
                                             if(checkboxs != null){
 
 
-                                                $('.debit_footer').html("<b style='font-family:arial !important'>" +__currency_trans_from_en(debit)+"</b>");
+                                                $('.debit_footer').html("<b style='font-family:arial !important'>" +dDebit+"</b>");
 
-                                                $('.credit_footer').html("<b style='font-family:arial !important'>" +__currency_trans_from_en(credit)+"</b>");
+                                                $('.credit_footer').html("<b style='font-family:arial !important'>" +dCredit+"</b>");
 
                                                 $(".header_credit").html("Credit");
 
@@ -914,14 +966,14 @@
                                             } else{
                                                 if(balances > 0){
                                                     
-                                                    $('.debit_footer').html("<b style='font-family:arial !important'>" +__currency_trans_from_en(debit+parseFloat(Math.abs(blc)))+"</b>");
+                                                    $('.debit_footer').html("<b style='font-family:arial !important'>" + debit+parseFloat(Math.abs(blc)) +"</b>");
                                                     
-                                                    $('.credit_footer').html("<b style='font-family:arial !important'>" + __currency_trans_from_en(credit)+"</b>" );
+                                                    $('.credit_footer').html("<b style='font-family:arial !important'>" +  dCredit+"</b>" );
                                                     
                                                     $(".header_debit").html("Debit _ " +__currency_trans_from_en(blc));
                                                     $('.header_blc').html( __currency_trans_from_en(blc) + " _ Debit"  );
                                                     $('#rounded_balance').html( __currency_trans_from_en(blc) + " _ Debit"  );
-                                                    margin = ( debit + parseFloat(Math.abs(blc)) ) -  credit  ;
+                                                    margin = ( debit + parseFloat(Math.abs(blc)) ) - credit  ;
 
                                                     if(margin < 0){
                                                         type_amount  = "   CR";
@@ -935,9 +987,9 @@
                                                 }else if( balances <  0){
  
                                                      
-                                                    $('.debit_footer').html("<b style='font-family:arial !important'>"+__currency_trans_from_en(debit)+"</b>" );
+                                                    $('.debit_footer').html("<b style='font-family:arial !important'>"+dDebit+"</b>" );
 
-                                                    $('.credit_footer').html("<b style='font-family:arial !important'>"+__currency_trans_from_en(credit+parseFloat(Math.abs(blc)))+"</b>" );
+                                                    $('.credit_footer').html("<b style='font-family:arial !important'>"+credit+parseFloat(Math.abs(blc))+"</b>" );
 
                                                     $(".header_credit").html("Credit _ " + __currency_trans_from_en(blc));
                                                     $('.header_blc').html( __currency_trans_from_en(blc) + " _ Credit"  );
@@ -963,9 +1015,9 @@
                                                     $('.header_blc').html( __currency_trans_from_en(0)   );
                                                     $('#rounded_balance').html( __currency_trans_from_en(0)   );
                                                      
-                                                    $('.debit_footer').html("<b style='font-family:arial !important'>"+__currency_trans_from_en(debit)+"</b>");
+                                                    $('.debit_footer').html("<b style='font-family:arial !important'>"+dDebit+"</b>");
 
-                                                    $('.credit_footer').html("<b style='font-family:arial !important'>"+__currency_trans_from_en(credit)+"</b>");
+                                                    $('.credit_footer').html("<b style='font-family:arial !important'>"+dCredit+"</b>");
         
                                                     $('#opening_balance').val(__currency_trans_from_en(blc));
                                 
@@ -1049,7 +1101,30 @@
         });
 
     });
-
+    $('.currency_id').change(function(){
+            var id = $(this).val();
+            if(id == ""){
+                $(".currency_id_amount").val("");
+                $(".curr_column").addClass("hide");
+                $("#additional_currency").val('');
+                $(".currency_symbol").html("");
+                account_book.ajax.reload();
+            }else{
+                $.ajax({
+                        url:"/symbol/amount/"+id,
+                    dataType: 'html',
+                    success:function(data){
+                        var object  = JSON.parse(data);
+                        $(".currency_id_amount").val(object.amount);
+                        $("#additional_currency").val(object.symbol);
+                        $(".currency_symbol").html(" ( " + object.symbol + " ) ");
+                        // $(".curr_column").removeClass("hide");
+                        // update_currency();
+                        account_book.ajax.reload();
+                    },
+                });	 
+            }
+    })
 
 
     function update_account_balance(argument) {

@@ -11,6 +11,7 @@
     <title>Sell</title>
 
     @php 
+        $text_align_item     = "left" ;
         $text_align     = "center" ;
         $font_text      = "15px" ;
         $font_text_table      = "13px" ;
@@ -628,7 +629,7 @@
                         @else
                             
                         @endif
-                        <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:5%;text-align:{{$text_align}};">ITEM &  {{   trans('home.DESCRIPTION') }}</th>
+                        <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:5%;text-align:{{$text_align_item}};">ITEM &  {{   trans('home.DESCRIPTION') }}</th>
                         @if($brand_check != 0)    
                             <th style="font-size:{{$font_text_table}};font-weight: bolder;background-color:transparents;color:#000;border-bottom:1px solid black;max-width:4%;text-align:{{$text_align}};">{{ trans('product.brand') }}</th>
                         @else
@@ -681,15 +682,15 @@
                                         @endif
                                     @if($invoice->sub_status == 'final' || $invoice->sub_status == 'delivered' || $invoice->sub_status == 'f' )
                                     
-                                        <td style="font-size:{{$font_text_table}};max-width:30px;text-align:{{$text_align}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:0px !important ">
-                                            <b style="font-size:{{$font_text_table}};">{{ $data->product->name }}</b> 
+                                        <td style="font-size:{{$font_text_table}};max-width:30px;text-align:{{$text_align_item}};  border-bottom: 1px solid grey; white-space: normal; word-break: break-word;padding:0px !important ">
+                                            <span style="font-size:{{$font_text_table}};">{{ $data->product->name }}</span> 
                                             @if($data->sell_line_note != null && $data->sell_line_note != "")<pre style="font-size:9px; text-align:left; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre>@endif
                                         </td>
                                     @else 
                                         {{--   $data->sell_line_note  --}} 
                                         <td style="font-size:{{$font_text_table}};max-width:40px;text-align:{{$text_align}};  border-bottom: 1px solid grey;padding:0px !important ">
                                             
-                                            <b style="font-size:{{$font_text_table}};"style="font-size:{{$font_text_table}};"> {{ $data->product->name }} </b>
+                                            <span style="font-size:{{$font_text_table}};"style="font-size:{{$font_text_table}};"> {{ $data->product->name }} </span>
                                             @if($data->sell_line_note != null && $data->sell_line_note != "")<pre style="font-size:9px; text-align:left; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre>@endif
                                             {{-- <pre style="width:100px;text-align:left; font-size:9px; line-height:10px !important;word-break: break-word;word-wrap: break-word;"> {!! $data->sell_line_note !!} </pre> --}}
                                         </td>

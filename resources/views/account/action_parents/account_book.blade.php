@@ -18,15 +18,15 @@
 
                 <th>@lang( 'lang_v1.description' )</th>
 
-                <th>@lang( 'brand.note' )</th>
+                <th>@lang( 'Invoice Note' )</th>
 
                 <th>@lang( 'lang_v1.added_by' )</th>
 
                 <th>@lang( 'home.Cost Center' )</th>
 
-                <th class="header_debit">@lang('account.debit')</th>
+                <th class="header_debit">@lang('account.debit') <small class="pull-right currency_symbol"></small> </th>
 
-                <th class="header_credit">@lang('account.credit')</th>
+                <th class="header_credit">@lang('account.credit')  <small class="pull-right currency_symbol"></small></th>
 
                 <th class="header_balance">@lang( 'lang_v1.balance' )</th>
 

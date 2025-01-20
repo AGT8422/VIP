@@ -241,7 +241,7 @@
                         </span>
                       </p>
                     <p style="color:#b0906c" >
-                            {{ trans('SUPPLIER QUOTE REF') }}. : <span  style="color:#000" > &nbsp;{{ $invoice->sup_refe }} </span>
+                            {{ trans('SUPPLIER REF') }}. : <span  style="color:#000" > &nbsp;{{ $invoice->sup_refe }} </span>
                     </p>
                     
                   

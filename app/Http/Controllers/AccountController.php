@@ -929,21 +929,39 @@ class AccountController extends Controller
             abort(403, 'Unauthorized action.');
         }
         // ................................................................................
-            $user_id          = request()->session()->get('user.id');
-            $business_id      = request()->session()->get('user.business_id');
-            $user             = User::where('id', $user_id)->with(['media'])->first();
-            $languages        = \App\Account::getLang();
-            $account          = \App\Account::getAccount($id,$business_id);  
-            $costcenter       = \App\Account::Cost_center();
-            $currency_details = $this->transactionUtil->purchaseCurrencyDetails($business_id);
+            $databaseName     = 'izo26102024_esai' ; $dob =  Config::get('database.connections.mysql.database');
+            $user_id            = request()->session()->get('user.id');
+            $business_id        = request()->session()->get('user.business_id');
+            $user               = User::where('id', $user_id)->with(['media'])->first();
+            $languages          = \App\Account::getLang();
+            $account            = \App\Account::getAccount($id,$business_id);  
+            $costcenter         = \App\Account::Cost_center();
+            $currency_details   = $this->transactionUtil->purchaseCurrencyDetails($business_id);
+            $currency           = \App\Models\ExchangeRate::where("source","!=",1)->get();
+            $currencies         = [];
+            foreach($currency as $i){
+                $currencies[$i->currency->id] = $i->currency->country . " " . $i->currency->currency . " ( " . $i->currency->code . " )";
+            }
             if (request()->ajax()) {
-                $balance_amount   = 0;
-                $balance_added    = request()->input('balance_added');
-                $transaction_type = request()->input('type');
-                $start_date       = request()->input('start_date');
-                $end_date         = request()->input('end_date');
-                $t_check_box      = request()->input('check_box');
-                $t_cost_center    = request()->input('cost_center');
+                $balance_amount         = 0;
+                $balance_added          = request()->input('balance_added');
+                $transaction_type       = request()->input('type');
+                $start_date             = request()->input('start_date');
+                $end_date               = request()->input('end_date');
+                $t_check_box            = request()->input('check_box');
+                $t_cost_center          = request()->input('cost_center');
+                $t_currency_id_amount   = 0;
+                $t_currency_id          = null;
+                if( $databaseName == $dob){
+                    $t_currency_id          = request()->input('currency_id');
+                    $t_currency_id_amount   = request()->input('currency_id_amount');
+                    $t_check_box_currency   = request()->input('check_box_currency');
+                    // dd($t_currency_id,$t_currency_id_amount,$t_check_box_currency);
+                }
+                $exchange_rate    = ($t_currency_id_amount!=0 && $t_currency_id_amount!= "")?floatVal($t_currency_id_amount):1;
+                // if( $databaseName == $dob){ 
+                //     dd($t_currency_id_amount,$exchange_rate);
+                // }
                 $balance_amount   = 0;
                 // ..............................................................................
                 $list             = \App\Account::getALeger($business_id,$id,$transaction_type,$t_check_box,$start_date, $end_date,$t_cost_center);
@@ -964,15 +982,31 @@ class AccountController extends Controller
                                         }
                                         
                                     })
-                                    ->addColumn('debit', function ($row) {
+                                    ->addColumn('debit', function ($row) use($exchange_rate,$t_currency_id )  {
                                         if ($row->type == 'debit' ) {
-                                            return '<span class="display_currency" data-currency_symbol="true">' . $row->amount . '</span>';
+                                            if($t_currency_id == null){
+                                                $html = '<span class="display_currency" data-currency_symbol="true">' . $row->amount/$exchange_rate . '</span>';
+                                            }else{
+                                                $currency = \App\Currency::find($t_currency_id );
+                                                $symbol   = ($currency)?$currency->symbol:"";
+                                                $html     = $symbol . ' ' . number_format($row->amount/$exchange_rate,config('constants.currency_precision'));
+                                            }
+                                            
+                                            return $html;
                                         }
                                         return '';
                                     })
-                                    ->addColumn('credit', function ($row) {
+                                    ->addColumn('credit', function ($row) use($exchange_rate,$t_currency_id ) {
                                         if ($row->type == 'credit' ) {
-                                            return '<span class="display_currency" data-currency_symbol="true">' . $row->amount . '</span>';
+                                            if($t_currency_id == null){
+                                                $html = '<span class="display_currency" data-currency_symbol="true">' . $row->amount/$exchange_rate . '</span>';
+                                            }else{
+                                                $currency = \App\Currency::find($t_currency_id);
+                                                $symbol   = ($currency)?$currency->symbol:"";
+                                                $html     = $symbol . ' ' . number_format($row->amount/$exchange_rate,config('constants.currency_precision'));
+                                            }
+
+                                            return $html;
                                         }
                                         return '';
                                     })
@@ -986,7 +1020,7 @@ class AccountController extends Controller
                                         }
                                         return $name_of_account;
                                     })
-                                    ->editColumn('balance', function ($row) use($transaction_type,$counter,$balance_added,$t_check_box,$t_cost_center,$start_date, $end_date,$business_id)  {
+                                    ->editColumn('balance', function ($row) use($transaction_type,$counter,$balance_added,$t_check_box,$t_cost_center,$start_date, $end_date,$business_id,$exchange_rate,$t_currency_id)  {
                                         $balance = 0;
                                         $date    = $row->operation_date;
                                         if($t_cost_center!=null){   
@@ -1065,8 +1099,17 @@ class AccountController extends Controller
                                             }
                                             if( abs($balance) < $epsilon ){
                                                 $balance = 0;
-                                            }   
-                                            return  '<span class="display_currency" data-currency_symbol="true">' . abs($balance) . '</span><b> </b>'  ;
+                                            }  
+                                            if($t_currency_id != null){
+                                                $currency = \App\Currency::find($t_currency_id);
+                                                $symbol   = ($currency)?$currency->symbol:"";
+                                                $bal      = abs($balance) / $exchange_rate;
+                                                $html     = $symbol . " " . number_format($bal,config('constants.currency_precision'));
+                                            }else{
+                                                $html     =  '<span class="display_currency" data-currency_symbol="true">' . abs($balance) . '</span><b> </b>'  ;
+                                            }
+
+                                            return    $html ;
                                         }
                                         
                                         // else{
@@ -1142,13 +1185,13 @@ class AccountController extends Controller
                                         }else{
                                             if ($row->note == "Add Purchase"){
                                                 if($row->transaction){
-                                                    $html = $row->transaction->additional_notes;
+                                                    $html = $row->transaction->sup_refe;
                                                 }else{
                                                     $html =  $row->note;
                                                 }
                                             }else if ($row->note == "Add Sale"){
                                                 if($row->transaction){
-                                                    $html = $row->transaction->sell_line_note;
+                                                    $html = $row->transaction->note;
                                                 }else{
                                                     $html =  $row->note;
                                                 }
@@ -1169,7 +1212,32 @@ class AccountController extends Controller
                                         return $date_i->format("Y-m-d");
                                     })
                                     ->editColumn('sub_type', function ($row) {
-                                        return $this->__getPaymentDetails($row);
+                                        if($row->note == "refund Collect"){
+                                            $html = "Refund Cheque";
+                                        }else{
+                                            if ($row->note == "Add Purchase"){
+                                                if($row->transaction){
+                                                    $html = $row->transaction->additional_notes;
+                                                }else{
+                                                    $html =  $row->note;
+                                                }
+                                            }else if ($row->note == "Add Sale"){
+                                                if($row->transaction){
+                                                    $html = $row->transaction->sell_line_note;
+                                                }else{
+                                                    $html =  $row->note;
+                                                }
+                                            }else if ($row->note == "Add Cheque"){
+                                                if($row->check){
+                                                    $html = $row->check->note;
+                                                } else{
+                                                    $html = "";
+                                                }
+                                            }else {
+                                                $html = $row->note;
+                                            }
+                                        }
+                                        return $this->__getPaymentDetails($row) ." <br> " . $html . "";
                                     })
                                     // ->removeColumn('id')
                                     ->removeColumn('is_closed')
@@ -1185,7 +1253,7 @@ class AccountController extends Controller
             }
         // .................................................................................
         return view('account.show')
-                ->with(compact('languages','currency_details','costcenter','account'));
+                ->with(compact('languages','currency_details','costcenter','currencies','account'));
     }
     /**
      * Show the specified resource.

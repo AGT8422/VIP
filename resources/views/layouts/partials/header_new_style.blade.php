@@ -36,6 +36,8 @@
             max-width: 1400px;
             }
     .company_name_style{
+        padding-left:40px; 
+        text-align: center;
         background-color: #f7f7f7;
         height: 79px;
         /* outline:1px solid #000; */
@@ -140,6 +142,8 @@
             max-width: 1400px;
             }
         .company_name_style{
+            padding-left:40px; 
+            text-align: center;
             background-color: #f7f7f7;
             height: 79px;
             /* outline:1px solid #000; */
@@ -313,6 +317,8 @@
             max-width: 1400px;
             }
         .company_name_style{
+            padding-left:40px; 
+            text-align: center;
             background-color: #f7f7f7;
             height: 79px;
             /* outline:1px solid #000; */
@@ -476,6 +482,8 @@
             max-width: 1400px;
             }
         .company_name_style{
+            padding-left:40px; 
+            text-align: center;
             background-color: #f7f7f7;
             height: 79px;
             /* outline:1px solid #000; */
@@ -583,6 +591,8 @@
             max-width: 1400px;
             }
         .company_name_style{
+            padding-left:40px; 
+            text-align: center;
             background-color: #f7f7f7;
             height: 79px;
             /* outline:1px solid #000; */
@@ -716,8 +726,9 @@
           $languages[$key] = $value['full_name'];
       }
     @endphp
-<header class="main-header-new no-print">
-        <div class="row row_header">
+<header class="main-header-new no-print" style="overflow: hidden">
+    <div class="row row_header" style="overflow: hidden">
+            <div class="col-md-3 col-3  text-center company_name_style">  <h3  style="font-size: 16px;max-width: 200px;font-weight:bolder;text-overflow: ellipsis;"> {{ Session::get('business.name') }}</h3> </div>
             <div class="col-md-3 col-3 parent_left_header">
                 {{-- <input type="search" class="form-control-search" placeholder="Search"> --}}
                 {{-- 1 --}}
@@ -728,7 +739,7 @@
             
                 <div class="col-md-12 m-8  mt-15 hidden-xs time_header"  ><strong>{{  \Carbon::now()->format($date_format) }}</strong></div> 
             </div>
-            <div class="col-md-3 col-3 text-center company_name_style">  <h3  style="font-size: 14px;max-width: 200px;font-weight:bolder;text-overflow: ellipsis;"> {{ Session::get('business.name') }}</h3> </div>
+            
             <div class="col-md-6 col-6 parent_right_header" @if(in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl'))) dir="ltr" @else dir="rtl" @endif>
                 <div class="item-one" >
                     <ul class="nav navbar-nav">
